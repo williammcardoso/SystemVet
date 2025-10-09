@@ -78,7 +78,12 @@ const ClientsPage = () => {
         </Button>
         <Link to="/clients/add">
           <Button>
-            <Plus className="mr-2 h-4 w-4" /> Adicionar
+            <Plus className="mr-2 h-4 w-4" /> Adicionar Responsável
+          </Button>
+        </Link>
+        <Link to="/animals/add"> {/* Novo botão para adicionar animal */}
+          <Button variant="secondary">
+            <Plus className="mr-2 h-4 w-4" /> Adicionar Animal
           </Button>
         </Link>
       </div>
