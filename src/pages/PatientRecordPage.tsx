@@ -9,10 +9,10 @@ import {
   Stethoscope,
   DollarSign,
   Syringe,
-  Weight, // Icone para Peso
-  FileText, // Icone para Documento
-  ClipboardList, // Icone para Receita
-  MessageSquare, // Icone para Observações
+  Weight,
+  FileText,
+  ClipboardList,
+  MessageSquare,
   Eye,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -22,6 +22,15 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+  DialogFooter,
+} from "@/components/ui/dialog";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 // Mock data (centralizado aqui para facilitar o exemplo, mas idealmente viria de um serviço)
 interface Animal {
@@ -135,11 +144,6 @@ const mockAppointments = [
   { id: "app2", date: "2024-03-10", type: "Vacinação Anual", vet: "Dra. Costa", notes: "Vacina V8 aplicada." },
 ];
 
-const mockExams = [
-  { id: "ex1", date: "2023-10-25", type: "Hemograma Completo", result: "Normal", vet: "Dr. Silva" },
-  { id: "ex2", date: "2024-03-09", type: "Exame de Fezes", result: "Negativo para parasitas", vet: "Dra. Costa" },
-];
-
 const mockSales = [
   { id: "sale1", date: "2023-10-26", item: "Ração Premium 1kg", quantity: 1, total: 50.00 },
   { id: "sale2", date: "2024-03-10", item: "Brinquedo para Cachorro", quantity: 1, total: 25.00 },
@@ -177,6 +181,36 @@ interface ObservationEntry {
   observation: string;
 }
 
+// Mock data para tipos de exame e veterinários
+const mockExamTypes = [
+  { id: "1", name: "Hemograma Completo" },
+  { id: "2", name: "Exame de Fezes" },
+  { id: "3", name: "Urinálise" },
+  { id: "4", name: "Raio-X" },
+];
+
+const mockVets = [
+  { id: "1", name: "Dr. Silva" },
+  { id: "2", name: "Dra. Costa" },
+  { id: "3", name: "Dr. Souza" },
+];
+
+// Interface para Exames (incluindo campos de hemograma)
+interface ExamEntry {
+  id: string;
+  date: string;
+  type: string;
+  result: string;
+  vet: string;
+  // Campos específicos para Hemograma
+  hemacias?: number;
+  hemoglobina?: number;
+  hematocrito?: number;
+  leucocitos?: number;
+  plaquetas?: number;
+  // Adicione outros campos de hemograma conforme necessário
+}
+
 const PatientRecordPage = () => {
   const { clientId, animalId } = useParams<{ clientId: string; animalId: string }>();
 
@@ -212,6 +246,24 @@ const PatientRecordPage = () => {
     { id: "o2", date: "2024-01-05", observation: "Recomendado check-up anual em 6 meses." },
   ]);
   const [newObservation, setNewObservation] = useState<string>("");
+
+  // State para a lista de exames e o modal de adição
+  const [examsList, setExamsList] = useState<ExamEntry[]>([
+    { id: "ex1", date: "2023-10-25", type: "Hemograma Completo", result: "Normal", vet: "Dr. Silva", hemacias: 5.5, leucocitos: 12.0, plaquetas: 300 },
+    { id: "ex2", date: "2024-03-09", type: "Exame de Fezes", result: "Negativo para parasitas", vet: "Dra. Costa" },
+  ]);
+  const [isAddExamDialogOpen, setIsAddExamDialogOpen] = useState(false);
+  const [newExamDate, setNewExamDate] = useState<string>(new Date().toISOString().split('T')[0]);
+  const [newExamType, setNewExamType] = useState<string | undefined>(undefined);
+  const [newExamResult, setNewExamResult] = useState<string>("");
+  const [newExamVet, setNewExamVet] = useState<string | undefined>(undefined);
+
+  // Campos específicos para Hemograma
+  const [newHemacias, setNewHemacias] = useState<string>("");
+  const [newHemoglobina, setNewHemoglobina] = useState<string>("");
+  const [newHematocrito, setNewHematocrito] = useState<string>("");
+  const [newLeucocitos, setNewLeucocitos] = useState<string>("");
+  const [newPlaquetas, setNewPlaquetas] = useState<string>("");
 
   if (!client || !animal) {
     return (
@@ -281,6 +333,52 @@ const PatientRecordPage = () => {
       setObservations([...observations, newEntry]);
       setNewObservation("");
     }
+  };
+
+  const handleAddExam = () => {
+    if (!newExamDate || !newExamType || !newExamVet) {
+      // Adicionar validação de campos obrigatórios
+      alert("Por favor, preencha a data, tipo de exame e veterinário.");
+      return;
+    }
+
+    let examData: ExamEntry = {
+      id: String(examsList.length + 1),
+      date: newExamDate,
+      type: newExamType,
+      result: newExamResult,
+      vet: newExamVet,
+    };
+
+    if (newExamType === "Hemograma Completo") {
+      examData = {
+        ...examData,
+        hemacias: parseFloat(newHemacias) || undefined,
+        hemoglobina: parseFloat(newHemoglobina) || undefined,
+        hematocrito: parseFloat(newHematocrito) || undefined,
+        leucocitos: parseFloat(newLeucocitos) || undefined,
+        plaquetas: parseFloat(newPlaquetas) || undefined,
+      };
+      examData.result = `Hemácias: ${newHemacias}, Leucócitos: ${newLeucocitos}, Plaquetas: ${newPlaquetas}`; // Resumo para a tabela
+    } else {
+      if (!newExamResult.trim()) {
+        alert("Por favor, preencha o resultado do exame.");
+        return;
+      }
+    }
+
+    setExamsList([...examsList, examData]);
+    setIsAddExamDialogOpen(false);
+    // Resetar campos do formulário
+    setNewExamDate(new Date().toISOString().split('T')[0]);
+    setNewExamType(undefined);
+    setNewExamResult("");
+    setNewExamVet(undefined);
+    setNewHemacias("");
+    setNewHemoglobina("");
+    setNewHematocrito("");
+    setNewLeucocitos("");
+    setNewPlaquetas("");
   };
 
   return (
@@ -413,12 +511,12 @@ const PatientRecordPage = () => {
           <Card>
             <CardHeader className="flex flex-row items-center justify-between">
               <CardTitle>Histórico de Exames</CardTitle>
-              <Button size="sm">
+              <Button size="sm" onClick={() => setIsAddExamDialogOpen(true)}>
                 <Plus className="h-4 w-4 mr-2" /> Adicionar Exame
               </Button>
             </CardHeader>
             <CardContent>
-              {mockExams.length > 0 ? (
+              {examsList.length > 0 ? (
                 <Table>
                   <TableHeader>
                     <TableRow>
@@ -430,7 +528,7 @@ const PatientRecordPage = () => {
                     </TableRow>
                   </TableHeader>
                   <TableBody>
-                    {mockExams.map((exam) => (
+                    {examsList.map((exam) => (
                       <TableRow key={exam.id}>
                         <TableCell>{exam.date}</TableCell>
                         <TableCell>{exam.type}</TableCell>
@@ -450,6 +548,157 @@ const PatientRecordPage = () => {
               )}
             </CardContent>
           </Card>
+
+          {/* Modal para Adicionar Exame */}
+          <Dialog open={isAddExamDialogOpen} onOpenChange={setIsAddExamDialogOpen}>
+            <DialogContent className="sm:max-w-[600px]">
+              <DialogHeader>
+                <DialogTitle>Adicionar Novo Exame</DialogTitle>
+                <DialogDescription>
+                  Preencha os detalhes do exame para adicionar ao prontuário.
+                </DialogDescription>
+              </DialogHeader>
+              <div className="grid gap-4 py-4">
+                <div className="grid grid-cols-4 items-center gap-4">
+                  <Label htmlFor="examDate" className="text-right">
+                    Data
+                  </Label>
+                  <Input
+                    id="examDate"
+                    type="date"
+                    value={newExamDate}
+                    onChange={(e) => setNewExamDate(e.target.value)}
+                    className="col-span-3"
+                  />
+                </div>
+                <div className="grid grid-cols-4 items-center gap-4">
+                  <Label htmlFor="examType" className="text-right">
+                    Tipo de Exame
+                  </Label>
+                  <Select onValueChange={setNewExamType} value={newExamType} >
+                    <SelectTrigger id="examType" className="col-span-3">
+                      <SelectValue placeholder="Selecione o tipo de exame" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {mockExamTypes.map((type) => (
+                        <SelectItem key={type.id} value={type.name}>
+                          {type.name}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div className="grid grid-cols-4 items-center gap-4">
+                  <Label htmlFor="examVet" className="text-right">
+                    Veterinário
+                  </Label>
+                  <Select onValueChange={setNewExamVet} value={newExamVet}>
+                    <SelectTrigger id="examVet" className="col-span-3">
+                      <SelectValue placeholder="Selecione o veterinário" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {mockVets.map((vet) => (
+                        <SelectItem key={vet.id} value={vet.name}>
+                          {vet.name}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+
+                {newExamType === "Hemograma Completo" ? (
+                  <>
+                    <div className="grid grid-cols-4 items-center gap-4">
+                      <Label htmlFor="hemacias" className="text-right">
+                        Hemácias
+                      </Label>
+                      <Input
+                        id="hemacias"
+                        type="number"
+                        placeholder="Ex: 5.5"
+                        value={newHemacias}
+                        onChange={(e) => setNewHemacias(e.target.value)}
+                        className="col-span-3"
+                      />
+                    </div>
+                    <div className="grid grid-cols-4 items-center gap-4">
+                      <Label htmlFor="hemoglobina" className="text-right">
+                        Hemoglobina
+                      </Label>
+                      <Input
+                        id="hemoglobina"
+                        type="number"
+                        placeholder="Ex: 15.0"
+                        value={newHemoglobina}
+                        onChange={(e) => setNewHemoglobina(e.target.value)}
+                        className="col-span-3"
+                      />
+                    </div>
+                    <div className="grid grid-cols-4 items-center gap-4">
+                      <Label htmlFor="hematocrito" className="text-right">
+                        Hematócrito
+                      </Label>
+                      <Input
+                        id="hematocrito"
+                        type="number"
+                        placeholder="Ex: 45.0"
+                        value={newHematocrito}
+                        onChange={(e) => setNewHematocrito(e.target.value)}
+                        className="col-span-3"
+                      />
+                    </div>
+                    <div className="grid grid-cols-4 items-center gap-4">
+                      <Label htmlFor="leucocitos" className="text-right">
+                        Leucócitos
+                      </Label>
+                      <Input
+                        id="leucocitos"
+                        type="number"
+                        placeholder="Ex: 12.0"
+                        value={newLeucocitos}
+                        onChange={(e) => setNewLeucocitos(e.target.value)}
+                        className="col-span-3"
+                      />
+                    </div>
+                    <div className="grid grid-cols-4 items-center gap-4">
+                      <Label htmlFor="plaquetas" className="text-right">
+                        Plaquetas
+                      </Label>
+                      <Input
+                        id="plaquetas"
+                        type="number"
+                        placeholder="Ex: 300"
+                        value={newPlaquetas}
+                        onChange={(e) => setNewPlaquetas(e.target.value)}
+                        className="col-span-3"
+                      />
+                    </div>
+                  </>
+                ) : (
+                  <div className="grid grid-cols-4 items-center gap-4">
+                    <Label htmlFor="examResult" className="text-right">
+                      Resultado
+                    </Label>
+                    <Input
+                      id="examResult"
+                      placeholder="Resultado do exame"
+                      value={newExamResult}
+                      onChange={(e) => setNewExamResult(e.target.value)}
+                      className="col-span-3"
+                    />
+                  </div>
+                )}
+              </div>
+              <DialogFooter>
+                <Button variant="outline" onClick={() => setIsAddExamDialogOpen(false)}>
+                  Cancelar
+                </Button>
+                <Button onClick={handleAddExam}>
+                  Salvar Exame
+                </Button>
+              </DialogFooter>
+            </DialogContent>
+          </Dialog>
         </TabsContent>
 
         <TabsContent value="sales" className="mt-4">
