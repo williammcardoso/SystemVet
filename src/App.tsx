@@ -8,8 +8,9 @@ import Dashboard from "./pages/Dashboard";
 import ClientsPage from "./pages/ClientsPage";
 import AddClientPage from "./pages/AddClientPage";
 import AddAnimalPage from "./pages/AddAnimalPage";
-import ClientDetailPage from "./pages/ClientDetailPage"; // Nova importação
-import PatientRecordPage from "./pages/PatientRecordPage"; // Nova importação
+import ClientDetailPage from "./pages/ClientDetailPage";
+import PatientRecordPage from "./pages/PatientRecordPage";
+import AddExamPage from "./pages/AddExamPage"; // Nova importação
 import SpeciesPage from "./pages/registrations/SpeciesPage";
 import BreedsPage from "./pages/registrations/BreedsPage";
 import CoatTypesPage from "./pages/registrations/CoatTypesPage";
@@ -29,8 +30,9 @@ const App = () => (
             <Route path="/clients" element={<ClientsPage />} />
             <Route path="/clients/add" element={<AddClientPage />} />
             <Route path="/animals/add" element={<AddAnimalPage />} />
-            <Route path="/clients/:clientId" element={<ClientDetailPage />} /> {/* Nova rota para detalhes do cliente */}
-            <Route path="/clients/:clientId/animals/:animalId/record" element={<PatientRecordPage />} /> {/* Nova rota para prontuário do paciente */}
+            <Route path="/clients/:clientId" element={<ClientDetailPage />} />
+            <Route path="/clients/:clientId/animals/:animalId/record" element={<PatientRecordPage />} />
+            <Route path="/clients/:clientId/animals/:animalId/add-exam" element={<AddExamPage />} /> {/* Nova rota */}
             <Route path="/registrations/species" element={<SpeciesPage />} />
             <Route path="/registrations/breeds" element={<BreedsPage />} />
             <Route path="/registrations/coat-types" element={<CoatTypesPage />} />
