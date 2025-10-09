@@ -7,11 +7,110 @@ import { ArrowLeft, Save, X } from "lucide-react";
 import { Link } from "react-router-dom";
 import React, { useState } from "react";
 
-// Mock data for clients (tutors)
-const mockClients = [
-  { id: "1", name: "William" },
-  { id: "2", name: "Maria" },
-  { id: "3", name: "João" },
+// Mock data for clients (tutors) - consistente com ClientsPage
+interface Animal {
+  id: string;
+  name: string;
+  species: string;
+  breed: string;
+  gender: string;
+  birthday: string;
+  coatColor: string;
+  weight: number;
+  microchip: string;
+  notes: string;
+}
+
+interface Client {
+  id: string;
+  name: string;
+  animals: Animal[];
+}
+
+const mockClients: Client[] = [
+  {
+    id: "1",
+    name: "William",
+    animals: [
+      {
+        id: "a1",
+        name: "Totó",
+        species: "Cachorro",
+        breed: "Labrador",
+        gender: "Macho",
+        birthday: "2020-01-15",
+        coatColor: "Dourado",
+        weight: 25.0,
+        microchip: "123456789",
+        notes: "Animal muito dócil e brincalhão.",
+      },
+      {
+        id: "a2",
+        name: "Bolinha",
+        species: "Cachorro",
+        breed: "Poodle",
+        gender: "Fêmea",
+        birthday: "2021-05-20",
+        coatColor: "Branco",
+        weight: 5.0,
+        microchip: "987654321",
+        notes: "Adora passear no parque.",
+      },
+    ],
+  },
+  {
+    id: "2",
+    name: "Maria",
+    animals: [
+      {
+        id: "a3",
+        name: "Fido",
+        species: "Cachorro",
+        breed: "Vira-lata",
+        gender: "Macho",
+        birthday: "2019-03-10",
+        coatColor: "Caramelo",
+        weight: 18.0,
+        microchip: "",
+        notes: "Resgatado, um pouco tímido.",
+      },
+      {
+        id: "a4",
+        name: "Miau",
+        species: "Gato",
+        breed: "Siamês",
+        gender: "Fêmea",
+        birthday: "2022-07-01",
+        coatColor: "Creme",
+        weight: 3.5,
+        microchip: "112233445",
+        notes: "Gosta de dormir no sol.",
+      },
+    ],
+  },
+  {
+    id: "3",
+    name: "João",
+    animals: [
+      {
+        id: "a5",
+        name: "Rex",
+        species: "Cachorro",
+        breed: "Pastor Alemão",
+        gender: "Macho",
+        birthday: "2018-11-22",
+        coatColor: "Preto e Marrom",
+        weight: 30.0,
+        microchip: "556677889",
+        notes: "Animal de guarda, muito leal.",
+      },
+    ],
+  },
+  {
+    id: "4",
+    name: "Ana",
+    animals: [],
+  },
 ];
 
 // Mock data for species (from SpeciesPage.tsx)

@@ -5,18 +5,112 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { Search, Plus, Filter, RotateCcw, Settings, Eye } from "lucide-react";
 import { Link } from "react-router-dom";
 
+// Mock data (centralizado aqui para facilitar o exemplo, mas idealmente viria de um serviço)
+interface Animal {
+  id: string;
+  name: string;
+  species: string;
+  breed: string;
+  gender: string;
+  birthday: string;
+  coatColor: string;
+  weight: number;
+  microchip: string;
+  notes: string;
+}
+
 interface Client {
   id: string;
   name: string;
-  animals: string[];
+  animals: Animal[];
 }
 
 const mockClients: Client[] = [
-  { id: "1", name: "William (1)", animals: ["Totó"] },
-  { id: "2", name: "Maria (2)", animals: ["Fido", "Miau"] },
-  { id: "3", name: "João (1)", animals: ["Rex"] },
-  { id: "4", name: "Ana (0)", animals: [] },
+  {
+    id: "1",
+    name: "William",
+    animals: [
+      {
+        id: "a1",
+        name: "Totó",
+        species: "Cachorro",
+        breed: "Labrador",
+        gender: "Macho",
+        birthday: "2020-01-15",
+        coatColor: "Dourado",
+        weight: 25.0,
+        microchip: "123456789",
+        notes: "Animal muito dócil e brincalhão.",
+      },
+      {
+        id: "a2",
+        name: "Bolinha",
+        species: "Cachorro",
+        breed: "Poodle",
+        gender: "Fêmea",
+        birthday: "2021-05-20",
+        coatColor: "Branco",
+        weight: 5.0,
+        microchip: "987654321",
+        notes: "Adora passear no parque.",
+      },
+    ],
+  },
+  {
+    id: "2",
+    name: "Maria",
+    animals: [
+      {
+        id: "a3",
+        name: "Fido",
+        species: "Cachorro",
+        breed: "Vira-lata",
+        gender: "Macho",
+        birthday: "2019-03-10",
+        coatColor: "Caramelo",
+        weight: 18.0,
+        microchip: "",
+        notes: "Resgatado, um pouco tímido.",
+      },
+      {
+        id: "a4",
+        name: "Miau",
+        species: "Gato",
+        breed: "Siamês",
+        gender: "Fêmea",
+        birthday: "2022-07-01",
+        coatColor: "Creme",
+        weight: 3.5,
+        microchip: "112233445",
+        notes: "Gosta de dormir no sol.",
+      },
+    ],
+  },
+  {
+    id: "3",
+    name: "João",
+    animals: [
+      {
+        id: "a5",
+        name: "Rex",
+        species: "Cachorro",
+        breed: "Pastor Alemão",
+        gender: "Macho",
+        birthday: "2018-11-22",
+        coatColor: "Preto e Marrom",
+        weight: 30.0,
+        microchip: "556677889",
+        notes: "Animal de guarda, muito leal.",
+      },
+    ],
+  },
+  {
+    id: "4",
+    name: "Ana",
+    animals: [],
+  },
 ];
+
 
 const ClientsPage = () => {
   const [responsibleSearch, setResponsibleSearch] = useState("");
@@ -30,7 +124,7 @@ const ClientsPage = () => {
     const results = mockClients.filter(client => {
       const matchesResponsible = client.name.toLowerCase().includes(lowerCaseResponsibleSearch);
       const matchesAnimal = client.animals.some(animal =>
-        animal.toLowerCase().includes(lowerCaseAnimalSearch)
+        animal.name.toLowerCase().includes(lowerCaseAnimalSearch)
       );
       return matchesResponsible && (animalSearch === "" || matchesAnimal);
     });
@@ -81,7 +175,7 @@ const ClientsPage = () => {
             <Plus className="mr-2 h-4 w-4" /> Adicionar Responsável
           </Button>
         </Link>
-        <Link to="/animals/add"> {/* Novo botão para adicionar animal */}
+        <Link to="/animals/add">
           <Button variant="secondary">
             <Plus className="mr-2 h-4 w-4" /> Adicionar Animal
           </Button>
@@ -100,10 +194,10 @@ const ClientsPage = () => {
           <TableBody>
             {filteredClients.map((client) => (
               <TableRow key={client.id}>
-                <TableCell className="font-medium">{client.name}</TableCell>
-                <TableCell>{client.animals.join(", ")}</TableCell>
+                <TableCell className="font-medium">{client.name} ({client.animals.length})</TableCell>
+                <TableCell>{client.animals.map(a => a.name).join(", ")}</TableCell>
                 <TableCell className="text-right">
-                  <Link to={`/clients/${client.id}`}> {/* Link to client detail page */}
+                  <Link to={`/clients/${client.id}`}> {/* Link para a página de detalhes do cliente */}
                     <Button variant="ghost" size="sm">
                       <Eye className="h-4 w-4 mr-2" /> Ver
                     </Button>

@@ -8,9 +8,11 @@ import Dashboard from "./pages/Dashboard";
 import ClientsPage from "./pages/ClientsPage";
 import AddClientPage from "./pages/AddClientPage";
 import AddAnimalPage from "./pages/AddAnimalPage";
-import SpeciesPage from "./pages/registrations/SpeciesPage"; // New import
-import BreedsPage from "./pages/registrations/BreedsPage";   // New import
-import CoatTypesPage from "./pages/registrations/CoatTypesPage"; // New import
+import ClientDetailPage from "./pages/ClientDetailPage"; // Nova importação
+import PatientRecordPage from "./pages/PatientRecordPage"; // Nova importação
+import SpeciesPage from "./pages/registrations/SpeciesPage";
+import BreedsPage from "./pages/registrations/BreedsPage";
+import CoatTypesPage from "./pages/registrations/CoatTypesPage";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -27,10 +29,12 @@ const App = () => (
             <Route path="/clients" element={<ClientsPage />} />
             <Route path="/clients/add" element={<AddClientPage />} />
             <Route path="/animals/add" element={<AddAnimalPage />} />
-            <Route path="/registrations/species" element={<SpeciesPage />} />     {/* New route */}
-            <Route path="/registrations/breeds" element={<BreedsPage />} />       {/* New route */}
-            <Route path="/registrations/coat-types" element={<CoatTypesPage />} /> {/* New route */}
-            {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+            <Route path="/clients/:clientId" element={<ClientDetailPage />} /> {/* Nova rota para detalhes do cliente */}
+            <Route path="/clients/:clientId/animals/:animalId/record" element={<PatientRecordPage />} /> {/* Nova rota para prontuário do paciente */}
+            <Route path="/registrations/species" element={<SpeciesPage />} />
+            <Route path="/registrations/breeds" element={<BreedsPage />} />
+            <Route path="/registrations/coat-types" element={<CoatTypesPage />} />
+            {/* ADICIONE TODAS AS ROTAS PERSONALIZADAS ACIMA DA ROTA CATCH-ALL "*" */}
             <Route path="*" element={<NotFound />} />
           </Routes>
         </Layout>
