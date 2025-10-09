@@ -1,5 +1,5 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { BarChart, LineChart } from "lucide-react"; // Using lucide-react for icons
+import { BarChart, LineChart, Calendar, Package } from "lucide-react"; // Adicionado Calendar e Package
 
 const Dashboard = () => {
   return (
