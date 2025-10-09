@@ -1,10 +1,27 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link, useParams } from "react-router-dom";
-import { ArrowLeft, Plus, Edit, Trash2, CalendarDays, Stethoscope, DollarSign, Syringe, Eye } from "lucide-react";
+import {
+  ArrowLeft,
+  Plus,
+  Edit,
+  Trash2,
+  CalendarDays,
+  Stethoscope,
+  DollarSign,
+  Syringe,
+  Weight, // Icone para Peso
+  FileText, // Icone para Documento
+  ClipboardList, // Icone para Receita
+  MessageSquare, // Icone para Observações
+  Eye,
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { Label } from "@/components/ui/label";
 
 // Mock data (centralizado aqui para facilitar o exemplo, mas idealmente viria de um serviço)
 interface Animal {
@@ -112,7 +129,7 @@ const mockClients: Client[] = [
   },
 ];
 
-// Mock data para atendimentos, exames, vendas
+// Mock data para atendimentos, exames, vendas, vacinas
 const mockAppointments = [
   { id: "app1", date: "2023-10-26", type: "Consulta de Rotina", vet: "Dr. Silva", notes: "Animal saudável." },
   { id: "app2", date: "2024-03-10", type: "Vacinação Anual", vet: "Dra. Costa", notes: "Vacina V8 aplicada." },
@@ -128,12 +145,73 @@ const mockSales = [
   { id: "sale2", date: "2024-03-10", item: "Brinquedo para Cachorro", quantity: 1, total: 25.00 },
 ];
 
+const mockVaccines = [
+  { id: "vac1", date: "2024-03-10", type: "V8", nextDue: "2025-03-10", vet: "Dra. Costa" },
+];
+
+// Mock data para as novas abas
+interface WeightEntry {
+  id: string;
+  date: string;
+  weight: number;
+}
+
+interface DocumentEntry {
+  id: string;
+  date: string;
+  name: string;
+  fileUrl: string; // Placeholder for a file URL
+}
+
+interface PrescriptionEntry {
+  id: string;
+  date: string;
+  medication: string;
+  dosage: string;
+  instructions: string;
+}
+
+interface ObservationEntry {
+  id: string;
+  date: string;
+  observation: string;
+}
 
 const PatientRecordPage = () => {
   const { clientId, animalId } = useParams<{ clientId: string; animalId: string }>();
 
   const client = mockClients.find(c => c.id === clientId);
   const animal = client?.animals.find(a => a.id === animalId);
+
+  // State para as novas abas
+  const [weightHistory, setWeightHistory] = useState<WeightEntry[]>([
+    { id: "w1", date: "2023-01-01", weight: 20.5 },
+    { id: "w2", date: "2023-07-15", weight: 22.1 },
+    { id: "w3", date: "2024-01-20", weight: 23.0 },
+  ]);
+  const [newWeight, setNewWeight] = useState<string>("");
+  const [newWeightDate, setNewWeightDate] = useState<string>(new Date().toISOString().split('T')[0]);
+
+  const [documents, setDocuments] = useState<DocumentEntry[]>([
+    { id: "d1", date: "2023-05-01", name: "Termo de Adoção", fileUrl: "#" },
+    { id: "d2", date: "2024-02-10", name: "Autorização Cirúrgica", fileUrl: "#" },
+  ]);
+  const [newDocumentName, setNewDocumentName] = useState<string>("");
+  const [newDocumentFile, setNewDocumentFile] = useState<File | null>(null);
+
+  const [prescriptions, setPrescriptions] = useState<PrescriptionEntry[]>([
+    { id: "p1", date: "2023-11-01", medication: "Antibiótico X", dosage: "5mg, 2x ao dia", instructions: "Administrar com alimento." },
+    { id: "p2", date: "2024-04-05", medication: "Anti-inflamatório Y", dosage: "1 comprimido, 1x ao dia", instructions: "Por 7 dias." },
+  ]);
+  const [newMedication, setNewMedication] = useState<string>("");
+  const [newDosage, setNewDosage] = useState<string>("");
+  const [newInstructions, setNewInstructions] = useState<string>("");
+
+  const [observations, setObservations] = useState<ObservationEntry[]>([
+    { id: "o1", date: "2023-09-20", observation: "Animal apresentou melhora significativa após tratamento." },
+    { id: "o2", date: "2024-01-05", observation: "Recomendado check-up anual em 6 meses." },
+  ]);
+  const [newObservation, setNewObservation] = useState<string>("");
 
   if (!client || !animal) {
     return (
@@ -147,6 +225,63 @@ const PatientRecordPage = () => {
       </div>
     );
   }
+
+  // Handlers para as novas funcionalidades
+  const handleAddWeight = () => {
+    if (newWeight.trim() && newWeightDate) {
+      const newEntry: WeightEntry = {
+        id: String(weightHistory.length + 1),
+        date: newWeightDate,
+        weight: parseFloat(newWeight),
+      };
+      setWeightHistory([...weightHistory, newEntry]);
+      setNewWeight("");
+      setNewWeightDate(new Date().toISOString().split('T')[0]);
+    }
+  };
+
+  const handleAddDocument = () => {
+    if (newDocumentName.trim() && newDocumentFile) {
+      // In a real application, you would upload the file and get a URL
+      const newEntry: DocumentEntry = {
+        id: String(documents.length + 1),
+        date: new Date().toISOString().split('T')[0],
+        name: newDocumentName.trim(),
+        fileUrl: URL.createObjectURL(newDocumentFile), // Placeholder URL
+      };
+      setDocuments([...documents, newEntry]);
+      setNewDocumentName("");
+      setNewDocumentFile(null);
+    }
+  };
+
+  const handleAddPrescription = () => {
+    if (newMedication.trim() && newDosage.trim()) {
+      const newEntry: PrescriptionEntry = {
+        id: String(prescriptions.length + 1),
+        date: new Date().toISOString().split('T')[0],
+        medication: newMedication.trim(),
+        dosage: newDosage.trim(),
+        instructions: newInstructions.trim(),
+      };
+      setPrescriptions([...prescriptions, newEntry]);
+      setNewMedication("");
+      setNewDosage("");
+      setNewInstructions("");
+    }
+  };
+
+  const handleAddObservation = () => {
+    if (newObservation.trim()) {
+      const newEntry: ObservationEntry = {
+        id: String(observations.length + 1),
+        date: new Date().toISOString().split('T')[0],
+        observation: newObservation.trim(),
+      };
+      setObservations([...observations, newEntry]);
+      setNewObservation("");
+    }
+  };
 
   return (
     <div className="p-6">
@@ -204,7 +339,7 @@ const PatientRecordPage = () => {
       </div>
 
       <Tabs defaultValue="appointments" className="w-full">
-        <TabsList className="grid w-full grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
+        <TabsList className="grid w-full grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-8">
           <TabsTrigger value="appointments">
             <Stethoscope className="h-4 w-4 mr-2" /> Atendimento
           </TabsTrigger>
@@ -217,7 +352,18 @@ const PatientRecordPage = () => {
           <TabsTrigger value="vaccines">
             <Syringe className="h-4 w-4 mr-2" /> Vacinas
           </TabsTrigger>
-          {/* Adicione mais abas conforme necessário */}
+          <TabsTrigger value="weight">
+            <Weight className="h-4 w-4 mr-2" /> Peso
+          </TabsTrigger>
+          <TabsTrigger value="documents">
+            <FileText className="h-4 w-4 mr-2" /> Documentos
+          </TabsTrigger>
+          <TabsTrigger value="prescriptions">
+            <ClipboardList className="h-4 w-4 mr-2" /> Receitas
+          </TabsTrigger>
+          <TabsTrigger value="observations">
+            <MessageSquare className="h-4 w-4 mr-2" /> Observações
+          </TabsTrigger>
         </TabsList>
 
         <TabsContent value="appointments" className="mt-4">
@@ -358,7 +504,255 @@ const PatientRecordPage = () => {
               </Button>
             </CardHeader>
             <CardContent>
-              <p className="text-muted-foreground">Nenhuma vacina registrada.</p>
+              {mockVaccines.length > 0 ? (
+                <Table>
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead>Data</TableHead>
+                      <TableHead>Tipo</TableHead>
+                      <TableHead>Próxima Dose</TableHead>
+                      <TableHead>Veterinário</TableHead>
+                      <TableHead className="text-right">Ações</TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    {mockVaccines.map((vaccine) => (
+                      <TableRow key={vaccine.id}>
+                        <TableCell>{vaccine.date}</TableCell>
+                        <TableCell>{vaccine.type}</TableCell>
+                        <TableCell>{vaccine.nextDue}</TableCell>
+                        <TableCell>{vaccine.vet}</TableCell>
+                        <TableCell className="text-right">
+                          <Button variant="ghost" size="sm">
+                            <Eye className="h-4 w-4" />
+                          </Button>
+                        </TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              ) : (
+                <p className="text-muted-foreground">Nenhuma vacina registrada.</p>
+              )}
+            </CardContent>
+          </Card>
+        </TabsContent>
+
+        {/* Nova aba: Peso */}
+        <TabsContent value="weight" className="mt-4">
+          <Card>
+            <CardHeader className="flex flex-row items-center justify-between">
+              <CardTitle>Histórico de Peso</CardTitle>
+              <div className="flex gap-2">
+                <Input
+                  type="date"
+                  value={newWeightDate}
+                  onChange={(e) => setNewWeightDate(e.target.value)}
+                  className="w-[150px]"
+                />
+                <Input
+                  type="number"
+                  placeholder="Peso (kg)"
+                  value={newWeight}
+                  onChange={(e) => setNewWeight(e.target.value)}
+                  className="w-[120px]"
+                />
+                <Button size="sm" onClick={handleAddWeight}>
+                  <Plus className="h-4 w-4 mr-2" /> Adicionar Peso
+                </Button>
+              </div>
+            </CardHeader>
+            <CardContent>
+              {weightHistory.length > 0 ? (
+                <Table>
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead>Data</TableHead>
+                      <TableHead className="text-right">Peso (kg)</TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    {weightHistory.map((entry) => (
+                      <TableRow key={entry.id}>
+                        <TableCell>{entry.date}</TableCell>
+                        <TableCell className="text-right">{entry.weight.toFixed(2)}</TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              ) : (
+                <p className="text-muted-foreground">Nenhum registro de peso.</p>
+              )}
+            </CardContent>
+          </Card>
+        </TabsContent>
+
+        {/* Nova aba: Documentos */}
+        <TabsContent value="documents" className="mt-4">
+          <Card>
+            <CardHeader className="flex flex-row items-center justify-between">
+              <CardTitle>Documentos</CardTitle>
+              <div className="flex gap-2 items-center">
+                <Input
+                  type="text"
+                  placeholder="Nome do Documento"
+                  value={newDocumentName}
+                  onChange={(e) => setNewDocumentName(e.target.value)}
+                  className="w-[200px]"
+                />
+                <Input
+                  type="file"
+                  onChange={(e) => setNewDocumentFile(e.target.files ? e.target.files[0] : null)}
+                  className="w-[200px]"
+                />
+                <Button size="sm" onClick={handleAddDocument} disabled={!newDocumentName || !newDocumentFile}>
+                  <Plus className="h-4 w-4 mr-2" /> Adicionar Documento
+                </Button>
+              </div>
+            </CardHeader>
+            <CardContent>
+              {documents.length > 0 ? (
+                <Table>
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead>Data</TableHead>
+                      <TableHead>Nome</TableHead>
+                      <TableHead className="text-right">Ações</TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    {documents.map((doc) => (
+                      <TableRow key={doc.id}>
+                        <TableCell>{doc.date}</TableCell>
+                        <TableCell>{doc.name}</TableCell>
+                        <TableCell className="text-right">
+                          <a href={doc.fileUrl} target="_blank" rel="noopener noreferrer">
+                            <Button variant="ghost" size="sm">
+                              <Eye className="h-4 w-4" /> Ver
+                            </Button>
+                          </a>
+                        </TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              ) : (
+                <p className="text-muted-foreground">Nenhum documento registrado.</p>
+              )}
+            </CardContent>
+          </Card>
+        </TabsContent>
+
+        {/* Nova aba: Receitas */}
+        <TabsContent value="prescriptions" className="mt-4">
+          <Card>
+            <CardHeader className="flex flex-row items-center justify-between">
+              <CardTitle>Receitas</CardTitle>
+              <Button size="sm">
+                <Plus className="h-4 w-4 mr-2" /> Adicionar Receita
+              </Button>
+            </CardHeader>
+            <CardContent>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                <div className="space-y-2">
+                  <Label htmlFor="medication">Medicação</Label>
+                  <Input
+                    id="medication"
+                    placeholder="Nome da medicação"
+                    value={newMedication}
+                    onChange={(e) => setNewMedication(e.target.value)}
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="dosage">Dosagem</Label>
+                  <Input
+                    id="dosage"
+                    placeholder="Ex: 5mg, 2x ao dia"
+                    value={newDosage}
+                    onChange={(e) => setNewDosage(e.target.value)}
+                  />
+                </div>
+                <div className="space-y-2 col-span-full">
+                  <Label htmlFor="instructions">Instruções</Label>
+                  <Textarea
+                    id="instructions"
+                    placeholder="Instruções de uso"
+                    rows={3}
+                    value={newInstructions}
+                    onChange={(e) => setNewInstructions(e.target.value)}
+                  />
+                </div>
+                <div className="col-span-full flex justify-end">
+                  <Button onClick={handleAddPrescription} disabled={!newMedication || !newDosage}>
+                    <Plus className="h-4 w-4 mr-2" /> Salvar Receita
+                  </Button>
+                </div>
+              </div>
+
+              {prescriptions.length > 0 ? (
+                <Table>
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead>Data</TableHead>
+                      <TableHead>Medicação</TableHead>
+                      <TableHead>Dosagem</TableHead>
+                      <TableHead>Instruções</TableHead>
+                      <TableHead className="text-right">Ações</TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    {prescriptions.map((rx) => (
+                      <TableRow key={rx.id}>
+                        <TableCell>{rx.date}</TableCell>
+                        <TableCell>{rx.medication}</TableCell>
+                        <TableCell>{rx.dosage}</TableCell>
+                        <TableCell>{rx.instructions}</TableCell>
+                        <TableCell className="text-right">
+                          <Button variant="ghost" size="sm">
+                            <Eye className="h-4 w-4" />
+                          </Button>
+                        </TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              ) : (
+                <p className="text-muted-foreground">Nenhuma receita registrada.</p>
+              )}
+            </CardContent>
+          </Card>
+        </TabsContent>
+
+        {/* Nova aba: Observações */}
+        <TabsContent value="observations" className="mt-4">
+          <Card>
+            <CardHeader className="flex flex-row items-center justify-between">
+              <CardTitle>Observações Gerais</CardTitle>
+              <Button size="sm" onClick={handleAddObservation} disabled={!newObservation.trim()}>
+                <Plus className="h-4 w-4 mr-2" /> Adicionar Observação
+              </Button>
+            </CardHeader>
+            <CardContent>
+              <div className="mb-4">
+                <Textarea
+                  placeholder="Adicione uma nova observação..."
+                  rows={3}
+                  value={newObservation}
+                  onChange={(e) => setNewObservation(e.target.value)}
+                />
+              </div>
+              {observations.length > 0 ? (
+                <div className="space-y-4">
+                  {observations.map((obs) => (
+                    <div key={obs.id} className="border p-3 rounded-md bg-muted/50">
+                      <p className="text-sm text-muted-foreground mb-1">{obs.date}</p>
+                      <p>{obs.observation}</p>
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <p className="text-muted-foreground">Nenhuma observação registrada.</p>
+              )}
             </CardContent>
           </Card>
         </TabsContent>
