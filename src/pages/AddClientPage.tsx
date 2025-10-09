@@ -3,6 +3,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Textarea } from "@/components/ui/textarea"; // Importar Textarea
 import { ArrowLeft, Plus, Save, X } from "lucide-react";
 import { Link } from "react-router-dom";
 
@@ -169,7 +170,7 @@ const AddClientPage = () => {
                     <SelectItem value="residential">Telefone residencial</SelectItem>
                   </SelectContent>
                 </Select>
-                <Input placeholder="Este número é WhatsApp?" className="flex-1" />
+                <Input placeholder="Número/Email" className="flex-1" /> {/* Changed placeholder */}
                 <Input placeholder="Observações" className="flex-1" />
                 <Button variant="outline" size="icon">
                   <Plus className="h-4 w-4" />
@@ -195,7 +196,69 @@ const AddClientPage = () => {
           </div>
         </TabsContent>
         <TabsContent value="address" className="mt-4">
-          <p className="text-muted-foreground">Conteúdo da aba Endereço (a ser implementado).</p>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            <div className="space-y-2">
+              <Label htmlFor="zipCode">CEP</Label>
+              <Input id="zipCode" placeholder="CEP" />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="street">Endereço</Label>
+              <Input id="street" placeholder="Rua, Avenida, etc." />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="number">Número</Label>
+              <Input id="number" placeholder="Número" />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="complement">Complemento</Label>
+              <Input id="complement" placeholder="Apartamento, Bloco, etc." />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="neighborhood">Bairro</Label>
+              <Input id="neighborhood" placeholder="Bairro" />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="city">Cidade</Label>
+              <Input id="city" placeholder="Cidade" />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="state">Estado</Label>
+              <Select>
+                <SelectTrigger id="state">
+                  <SelectValue placeholder="Selecione..." />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="AC">Acre</SelectItem>
+                  <SelectItem value="AL">Alagoas</SelectItem>
+                  <SelectItem value="AP">Amapá</SelectItem>
+                  <SelectItem value="AM">Amazonas</SelectItem>
+                  <SelectItem value="BA">Bahia</SelectItem>
+                  <SelectItem value="CE">Ceará</SelectItem>
+                  <SelectItem value="DF">Distrito Federal</SelectItem>
+                  <SelectItem value="ES">Espírito Santo</SelectItem>
+                  <SelectItem value="GO">Goiás</SelectItem>
+                  <SelectItem value="MA">Maranhão</SelectItem>
+                  <SelectItem value="MT">Mato Grosso</SelectItem>
+                  <SelectItem value="MS">Mato Grosso do Sul</SelectItem>
+                  <SelectItem value="MG">Minas Gerais</SelectItem>
+                  <SelectItem value="PA">Pará</SelectItem>
+                  <SelectItem value="PB">Paraíba</SelectItem>
+                  <SelectItem value="PR">Paraná</SelectItem>
+                  <SelectItem value="PE">Pernambuco</SelectItem>
+                  <SelectItem value="PI">Piauí</SelectItem>
+                  <SelectItem value="RJ">Rio de Janeiro</SelectItem>
+                  <SelectItem value="RN">Rio Grande do Norte</SelectItem>
+                  <SelectItem value="RS">Rio Grande do Sul</SelectItem>
+                  <SelectItem value="RO">Rondônia</SelectItem>
+                  <SelectItem value="RR">Roraima</SelectItem>
+                  <SelectItem value="SC">Santa Catarina</SelectItem>
+                  <SelectItem value="SP">São Paulo</SelectItem>
+                  <SelectItem value="SE">Sergipe</SelectItem>
+                  <SelectItem value="TO">Tocantins</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+          </div>
           <div className="flex justify-end gap-2 mt-6">
             <Button variant="outline">
               <X className="mr-2 h-4 w-4" /> Cancelar
@@ -206,7 +269,10 @@ const AddClientPage = () => {
           </div>
         </TabsContent>
         <TabsContent value="extras" className="mt-4">
-          <p className="text-muted-foreground">Conteúdo da aba Extras (a ser implementado).</p>
+          <div className="space-y-2">
+            <Label htmlFor="notes">Observações</Label>
+            <Textarea id="notes" placeholder="Adicione observações adicionais sobre o responsável..." rows={5} />
+          </div>
           <div className="flex justify-end gap-2 mt-6">
             <Button variant="outline">
               <X className="mr-2 h-4 w-4" /> Cancelar
