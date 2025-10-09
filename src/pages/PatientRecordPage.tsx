@@ -204,11 +204,26 @@ interface ExamEntry {
   vet: string;
   // Campos específicos para Hemograma
   hemacias?: number;
+  volumeGlobular?: number;
   hemoglobina?: number;
-  hematocrito?: number;
-  leucocitos?: number;
+  vgm?: number;
+  chgm?: number;
   plaquetas?: number;
-  // Adicione outros campos de hemograma conforme necessário
+  formasTotais?: number;
+  hemaciasNucleadas?: number;
+  leucocitos?: number;
+  bastoes?: number;
+  segmentados?: number;
+  linfocitos?: number;
+  monocitos?: number;
+  eosinofilos?: number;
+  basofilos?: number;
+  // Campos adicionais
+  examObservations?: string;
+  operator?: string;
+  referenceDate?: string;
+  referenceTables?: string;
+  conclusions?: string;
 }
 
 const PatientRecordPage = () => {
@@ -260,10 +275,29 @@ const PatientRecordPage = () => {
 
   // Campos específicos para Hemograma
   const [newHemacias, setNewHemacias] = useState<string>("");
+  const [newVolumeGlobular, setNewVolumeGlobular] = useState<string>("");
   const [newHemoglobina, setNewHemoglobina] = useState<string>("");
-  const [newHematocrito, setNewHematocrito] = useState<string>("");
-  const [newLeucocitos, setNewLeucocitos] = useState<string>("");
+  const [newVGM, setNewVGM] = useState<string>("");
+  const [newCHGM, setNewCHGM] = useState<string>("");
   const [newPlaquetas, setNewPlaquetas] = useState<string>("");
+  const [newFormasTotais, setNewFormasTotais] = useState<string>("");
+  const [newHemaciasNucleadas, setNewHemaciasNucleadas] = useState<string>("");
+
+  const [newLeucocitos, setNewLeucocitos] = useState<string>("");
+  const [newBastoes, setNewBastoes] = useState<string>("");
+  const [newSegmentados, setNewSegmentados] = useState<string>("");
+  const [newLinfocitos, setNewLinfocitos] = useState<string>("");
+  const [newMonocitos, setNewMonocitos] = useState<string>("");
+  const [newEosinofilos, setNewEosinofilos] = useState<string>("");
+  const [newBasofilos, setNewBasofilos] = useState<string>("");
+
+  // Campos adicionais do exame
+  const [newExamObservations, setNewExamObservations] = useState<string>("");
+  const [newOperator, setNewOperator] = useState<string>("");
+  const [newReferenceDate, setNewReferenceDate] = useState<string>("");
+  const [newReferenceTables, setNewReferenceTables] = useState<string>("");
+  const [newConclusions, setNewConclusions] = useState<string>("");
+
 
   if (!client || !animal) {
     return (
@@ -337,7 +371,6 @@ const PatientRecordPage = () => {
 
   const handleAddExam = () => {
     if (!newExamDate || !newExamType || !newExamVet) {
-      // Adicionar validação de campos obrigatórios
       alert("Por favor, preencha a data, tipo de exame e veterinário.");
       return;
     }
@@ -346,20 +379,36 @@ const PatientRecordPage = () => {
       id: String(examsList.length + 1),
       date: newExamDate,
       type: newExamType,
-      result: newExamResult,
+      result: newExamResult, // Default result for non-hemogram
       vet: newExamVet,
+      examObservations: newExamObservations,
+      operator: newOperator,
+      referenceDate: newReferenceDate,
+      referenceTables: newReferenceTables,
+      conclusions: newConclusions,
     };
 
     if (newExamType === "Hemograma Completo") {
       examData = {
         ...examData,
         hemacias: parseFloat(newHemacias) || undefined,
+        volumeGlobular: parseFloat(newVolumeGlobular) || undefined,
         hemoglobina: parseFloat(newHemoglobina) || undefined,
-        hematocrito: parseFloat(newHematocrito) || undefined,
-        leucocitos: parseFloat(newLeucocitos) || undefined,
+        vgm: parseFloat(newVGM) || undefined,
+        chgm: parseFloat(newCHGM) || undefined,
         plaquetas: parseFloat(newPlaquetas) || undefined,
+        formasTotais: parseFloat(newFormasTotais) || undefined,
+        hemaciasNucleadas: parseFloat(newHemaciasNucleadas) || undefined,
+        leucocitos: parseFloat(newLeucocitos) || undefined,
+        bastoes: parseFloat(newBastoes) || undefined,
+        segmentados: parseFloat(newSegmentados) || undefined,
+        linfocitos: parseFloat(newLinfocitos) || undefined,
+        monocitos: parseFloat(newMonocitos) || undefined,
+        eosinofilos: parseFloat(newEosinofilos) || undefined,
+        basofilos: parseFloat(newBasofilos) || undefined,
       };
-      examData.result = `Hemácias: ${newHemacias}, Leucócitos: ${newLeucocitos}, Plaquetas: ${newPlaquetas}`; // Resumo para a tabela
+      // Summarize hemogram results for the table display
+      examData.result = `Hemograma: Hemácias ${newHemacias}, Leucócitos ${newLeucocitos}, Plaquetas ${newPlaquetas}`;
     } else {
       if (!newExamResult.trim()) {
         alert("Por favor, preencha o resultado do exame.");
@@ -375,10 +424,25 @@ const PatientRecordPage = () => {
     setNewExamResult("");
     setNewExamVet(undefined);
     setNewHemacias("");
+    setNewVolumeGlobular("");
     setNewHemoglobina("");
-    setNewHematocrito("");
-    setNewLeucocitos("");
+    setNewVGM("");
+    setNewCHGM("");
     setNewPlaquetas("");
+    setNewFormasTotais("");
+    setNewHemaciasNucleadas("");
+    setNewLeucocitos("");
+    setNewBastoes("");
+    setNewSegmentados("");
+    setNewLinfocitos("");
+    setNewMonocitos("");
+    setNewEosinofilos("");
+    setNewBasofilos("");
+    setNewExamObservations("");
+    setNewOperator("");
+    setNewReferenceDate("");
+    setNewReferenceTables("");
+    setNewConclusions("");
   };
 
   return (
@@ -551,7 +615,7 @@ const PatientRecordPage = () => {
 
           {/* Modal para Adicionar Exame */}
           <Dialog open={isAddExamDialogOpen} onOpenChange={setIsAddExamDialogOpen}>
-            <DialogContent className="sm:max-w-[600px]">
+            <DialogContent className="sm:max-w-[700px]"> {/* Aumentado o tamanho do modal */}
               <DialogHeader>
                 <DialogTitle>Adicionar Novo Exame</DialogTitle>
                 <DialogDescription>
@@ -608,70 +672,72 @@ const PatientRecordPage = () => {
 
                 {newExamType === "Hemograma Completo" ? (
                   <>
-                    <div className="grid grid-cols-4 items-center gap-4">
-                      <Label htmlFor="hemacias" className="text-right">
-                        Hemácias
-                      </Label>
-                      <Input
-                        id="hemacias"
-                        type="number"
-                        placeholder="Ex: 5.5"
-                        value={newHemacias}
-                        onChange={(e) => setNewHemacias(e.target.value)}
-                        className="col-span-3"
-                      />
+                    <h3 className="col-span-4 text-lg font-semibold mt-4 mb-2">Eritrograma</h3>
+                    <div className="grid grid-cols-2 col-span-4 gap-4">
+                      <div className="space-y-2">
+                        <Label htmlFor="hemacias">Hemácias (m/mm3)</Label>
+                        <Input id="hemacias" type="number" placeholder="Ex: 5.5" value={newHemacias} onChange={(e) => setNewHemacias(e.target.value)} />
+                      </div>
+                      <div className="space-y-2">
+                        <Label htmlFor="volumeGlobular">Volume globular (%)</Label>
+                        <Input id="volumeGlobular" type="number" placeholder="Ex: 37" value={newVolumeGlobular} onChange={(e) => setNewVolumeGlobular(e.target.value)} />
+                      </div>
+                      <div className="space-y-2">
+                        <Label htmlFor="hemoglobina">Hemoglobina (g/dL)</Label>
+                        <Input id="hemoglobina" type="number" placeholder="Ex: 12.0" value={newHemoglobina} onChange={(e) => setNewHemoglobina(e.target.value)} />
+                      </div>
+                      <div className="space-y-2">
+                        <Label htmlFor="vgm">VGM (fL)</Label>
+                        <Input id="vgm" type="number" placeholder="Ex: 60.0" value={newVGM} onChange={(e) => setNewVGM(e.target.value)} />
+                      </div>
+                      <div className="space-y-2">
+                        <Label htmlFor="chgm">CHGM (%)</Label>
+                        <Input id="chgm" type="number" placeholder="Ex: 31" value={newCHGM} onChange={(e) => setNewCHGM(e.target.value)} />
+                      </div>
+                      <div className="space-y-2">
+                        <Label htmlFor="plaquetas">Plaquetas (m/mm3)</Label>
+                        <Input id="plaquetas" type="number" placeholder="Ex: 300" value={newPlaquetas} onChange={(e) => setNewPlaquetas(e.target.value)} />
+                      </div>
+                      <div className="space-y-2">
+                        <Label htmlFor="formasTotais">Formas totais (m/mm3)</Label>
+                        <Input id="formasTotais" type="number" placeholder="Ex: 6.0" value={newFormasTotais} onChange={(e) => setNewFormasTotais(e.target.value)} />
+                      </div>
+                      <div className="space-y-2">
+                        <Label htmlFor="hemaciasNucleadas">Hemácias nucleadas (g/dL)</Label>
+                        <Input id="hemaciasNucleadas" type="number" placeholder="Ex: 0" value={newHemaciasNucleadas} onChange={(e) => setNewHemaciasNucleadas(e.target.value)} />
+                      </div>
                     </div>
-                    <div className="grid grid-cols-4 items-center gap-4">
-                      <Label htmlFor="hemoglobina" className="text-right">
-                        Hemoglobina
-                      </Label>
-                      <Input
-                        id="hemoglobina"
-                        type="number"
-                        placeholder="Ex: 15.0"
-                        value={newHemoglobina}
-                        onChange={(e) => setNewHemoglobina(e.target.value)}
-                        className="col-span-3"
-                      />
-                    </div>
-                    <div className="grid grid-cols-4 items-center gap-4">
-                      <Label htmlFor="hematocrito" className="text-right">
-                        Hematócrito
-                      </Label>
-                      <Input
-                        id="hematocrito"
-                        type="number"
-                        placeholder="Ex: 45.0"
-                        value={newHematocrito}
-                        onChange={(e) => setNewHematocrito(e.target.value)}
-                        className="col-span-3"
-                      />
-                    </div>
-                    <div className="grid grid-cols-4 items-center gap-4">
-                      <Label htmlFor="leucocitos" className="text-right">
-                        Leucócitos
-                      </Label>
-                      <Input
-                        id="leucocitos"
-                        type="number"
-                        placeholder="Ex: 12.0"
-                        value={newLeucocitos}
-                        onChange={(e) => setNewLeucocitos(e.target.value)}
-                        className="col-span-3"
-                      />
-                    </div>
-                    <div className="grid grid-cols-4 items-center gap-4">
-                      <Label htmlFor="plaquetas" className="text-right">
-                        Plaquetas
-                      </Label>
-                      <Input
-                        id="plaquetas"
-                        type="number"
-                        placeholder="Ex: 300"
-                        value={newPlaquetas}
-                        onChange={(e) => setNewPlaquetas(e.target.value)}
-                        className="col-span-3"
-                      />
+
+                    <h3 className="col-span-4 text-lg font-semibold mt-4 mb-2">Leucograma</h3>
+                    <div className="grid grid-cols-2 col-span-4 gap-4">
+                      <div className="space-y-2">
+                        <Label htmlFor="leucocitos">Leucócitos (m/mm3)</Label>
+                        <Input id="leucocitos" type="number" placeholder="Ex: 6.0" value={newLeucocitos} onChange={(e) => setNewLeucocitos(e.target.value)} />
+                      </div>
+                      <div className="space-y-2">
+                        <Label htmlFor="bastoes">Bastões (%)</Label>
+                        <Input id="bastoes" type="number" placeholder="Ex: 0" value={newBastoes} onChange={(e) => setNewBastoes(e.target.value)} />
+                      </div>
+                      <div className="space-y-2">
+                        <Label htmlFor="segmentados">Segmentados (%)</Label>
+                        <Input id="segmentados" type="number" placeholder="Ex: 60" value={newSegmentados} onChange={(e) => setNewSegmentados(e.target.value)} />
+                      </div>
+                      <div className="space-y-2">
+                        <Label htmlFor="linfocitos">Linfócitos (%)</Label>
+                        <Input id="linfocitos" type="number" placeholder="Ex: 30" value={newLinfocitos} onChange={(e) => setNewLinfocitos(e.target.value)} />
+                      </div>
+                      <div className="space-y-2">
+                        <Label htmlFor="monocitos">Monócitos (%)</Label>
+                        <Input id="monocitos" type="number" placeholder="Ex: 3" value={newMonocitos} onChange={(e) => setNewMonocitos(e.target.value)} />
+                      </div>
+                      <div className="space-y-2">
+                        <Label htmlFor="eosinofilos">Eosinófilos (%)</Label>
+                        <Input id="eosinofilos" type="number" placeholder="Ex: 2" value={newEosinofilos} onChange={(e) => setNewEosinofilos(e.target.value)} />
+                      </div>
+                      <div className="space-y-2">
+                        <Label htmlFor="basofilos">Basófilos (%)</Label>
+                        <Input id="basofilos" type="number" placeholder="Ex: 1" value={newBasofilos} onChange={(e) => setNewBasofilos(e.target.value)} />
+                      </div>
                     </div>
                   </>
                 ) : (
@@ -688,6 +754,70 @@ const PatientRecordPage = () => {
                     />
                   </div>
                 )}
+
+                <div className="grid grid-cols-4 items-center gap-4 mt-4">
+                  <Label htmlFor="examObservations" className="text-right">
+                    Observações
+                  </Label>
+                  <Textarea
+                    id="examObservations"
+                    placeholder="Observações gerais do exame"
+                    value={newExamObservations}
+                    onChange={(e) => setNewExamObservations(e.target.value)}
+                    className="col-span-3"
+                    rows={3}
+                  />
+                </div>
+                <div className="grid grid-cols-4 items-center gap-4">
+                  <Label htmlFor="operator" className="text-right">
+                    Operador
+                  </Label>
+                  <Input
+                    id="operator"
+                    placeholder="Nome do operador"
+                    value={newOperator}
+                    onChange={(e) => setNewOperator(e.target.value)}
+                    className="col-span-3"
+                  />
+                </div>
+                <div className="grid grid-cols-4 items-center gap-4">
+                  <Label htmlFor="referenceDate" className="text-right">
+                    Data de Referência
+                  </Label>
+                  <Input
+                    id="referenceDate"
+                    type="date"
+                    value={newReferenceDate}
+                    onChange={(e) => setNewReferenceDate(e.target.value)}
+                    className="col-span-3"
+                  />
+                </div>
+                <div className="grid grid-cols-4 items-center gap-4">
+                  <Label htmlFor="referenceTables" className="text-right">
+                    Tabelas de referência
+                  </Label>
+                  <Textarea
+                    id="referenceTables"
+                    placeholder="Tabelas de referência"
+                    value={newReferenceTables}
+                    onChange={(e) => setNewReferenceTables(e.target.value)}
+                    className="col-span-3"
+                    rows={3}
+                  />
+                </div>
+                <div className="grid grid-cols-4 items-center gap-4">
+                  <Label htmlFor="conclusions" className="text-right">
+                    Conclusões
+                  </Label>
+                  <Textarea
+                    id="conclusions"
+                    placeholder="Conclusões do exame"
+                    value={newConclusions}
+                    onChange={(e) => setNewConclusions(e.target.value)}
+                    className="col-span-3"
+                    rows={5}
+                  />
+                </div>
               </div>
               <DialogFooter>
                 <Button variant="outline" onClick={() => setIsAddExamDialogOpen(false)}>
