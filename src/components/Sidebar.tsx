@@ -17,6 +17,8 @@ import {
   DollarSign,
   Settings,
   LogOut,
+  PawPrint, // Adicionado para o menu de cadastros de animais
+  Palette, // Adicionado para pelagens
 } from "lucide-react";
 
 interface NavItem {
@@ -65,9 +67,9 @@ const navItems: NavItem[] = [
     title: "Cadastros",
     icon: Folder,
     subItems: [
-      { title: "Espécies", href: "/registrations/species" },
-      { title: "Raças", href: "/registrations/breeds" },
-      { title: "Pelagens", href: "/registrations/coat-types" },
+      { title: "Espécies", href: "/registrations/species", icon: PawPrint }, // Link para a nova página
+      { title: "Raças", href: "/registrations/breeds", icon: PawPrint },     // Link para a nova página
+      { title: "Pelagens", href: "/registrations/coat-types", icon: Palette }, // Link para a nova página
       { title: "Patologias", href: "/registrations/pathologies" },
       { title: "Tipos de atendimento", href: "/registrations/appointment-types" },
       { title: "Vacinas", href: "/registrations/vaccines" },
@@ -158,6 +160,7 @@ const Sidebar = () => {
                           to={subItem.href || "#"}
                           className="flex items-center gap-3 rounded-lg px-3 py-2 text-sidebar-foreground transition-all hover:bg-sidebar-accent hover:text-sidebar-accent-foreground"
                         >
+                          {subItem.icon && <subItem.icon className="h-4 w-4" />} {/* Render icon if available */}
                           {subItem.title}
                         </Link>
                       ))}

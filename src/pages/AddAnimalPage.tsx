@@ -5,13 +5,50 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Textarea } from "@/components/ui/textarea";
 import { ArrowLeft, Save, X } from "lucide-react";
 import { Link } from "react-router-dom";
+import React, { useState } from "react";
+
+// Mock data for clients (tutors)
+const mockClients = [
+  { id: "1", name: "William" },
+  { id: "2", name: "Maria" },
+  { id: "3", name: "João" },
+];
+
+// Mock data for species (from SpeciesPage.tsx)
+const mockSpecies = [
+  { id: "1", name: "Cachorro" },
+  { id: "2", name: "Gato" },
+  { id: "3", name: "Pássaro" },
+  { id: "4", name: "Roedor" },
+];
+
+// Mock data for breeds (from BreedsPage.tsx)
+const mockBreeds = [
+  { id: "1", name: "Labrador", speciesId: "1" },
+  { id: "2", name: "Poodle", speciesId: "1" },
+  { id: "3", name: "Siamês", speciesId: "2" },
+  { id: "4", name: "Persa", speciesId: "2" },
+];
+
+// Mock data for coat types (from CoatTypesPage.tsx)
+const mockCoatTypes = [
+  { id: "1", name: "Curta" },
+  { id: "2", name: "Longa" },
+  { id: "3", name: "Lisa" },
+  { id: "4", name: "Ondulada" },
+];
 
 const AddAnimalPage = () => {
+  const [selectedSpecies, setSelectedSpecies] = useState<string | undefined>(undefined);
+  const filteredBreeds = selectedSpecies
+    ? mockBreeds.filter(breed => breed.speciesId === selectedSpecies)
+    : mockBreeds;
+
   return (
     <div className="p-6">
       <div className="flex items-center justify-between mb-6">
         <h1 className="text-3xl font-bold">Adicionar Animal</h1>
-        <Link to="/clients"> {/* Pode ser alterado para voltar para a página de detalhes do cliente */}
+        <Link to="/clients">
           <Button variant="outline">
             <ArrowLeft className="mr-2 h-4 w-4" /> Voltar
           </Button>
@@ -20,26 +57,53 @@ const AddAnimalPage = () => {
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         <div className="space-y-2">
+          <Label htmlFor="tutor">Tutor/Responsável*</Label>
+          <Select>
+            <SelectTrigger id="tutor">
+              <SelectValue placeholder="Selecione o tutor..." />
+            </SelectTrigger>
+            <SelectContent>
+              {mockClients.map((client) => (
+                <SelectItem key={client.id} value={client.id}>
+                  {client.name}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </div>
+        <div className="space-y-2">
           <Label htmlFor="animalName">Nome do Animal*</Label>
           <Input id="animalName" placeholder="Nome do animal" />
         </div>
         <div className="space-y-2">
           <Label htmlFor="species">Espécie*</Label>
-          <Select>
+          <Select onValueChange={setSelectedSpecies}>
             <SelectTrigger id="species">
               <SelectValue placeholder="Selecione..." />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="dog">Cachorro</SelectItem>
-              <SelectItem value="cat">Gato</SelectItem>
-              <SelectItem value="bird">Pássaro</SelectItem>
-              <SelectItem value="other">Outro</SelectItem>
+              {mockSpecies.map((species) => (
+                <SelectItem key={species.id} value={species.id}>
+                  {species.name}
+                </SelectItem>
+              ))}
             </SelectContent>
           </Select>
         </div>
         <div className="space-y-2">
           <Label htmlFor="breed">Raça</Label>
-          <Input id="breed" placeholder="Raça" />
+          <Select disabled={!selectedSpecies}>
+            <SelectTrigger id="breed">
+              <SelectValue placeholder="Selecione..." />
+            </SelectTrigger>
+            <SelectContent>
+              {filteredBreeds.map((breed) => (
+                <SelectItem key={breed.id} value={breed.id}>
+                  {breed.name}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
         </div>
         <div className="space-y-2">
           <Label htmlFor="gender">Sexo</Label>
@@ -59,7 +123,18 @@ const AddAnimalPage = () => {
         </div>
         <div className="space-y-2">
           <Label htmlFor="coatColor">Cor da Pelagem</Label>
-          <Input id="coatColor" placeholder="Cor da pelagem" />
+          <Select>
+            <SelectTrigger id="coatColor">
+              <SelectValue placeholder="Selecione..." />
+            </SelectTrigger>
+            <SelectContent>
+              {mockCoatTypes.map((coatType) => (
+                <SelectItem key={coatType.id} value={coatType.id}>
+                  {coatType.name}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
         </div>
         <div className="space-y-2">
           <Label htmlFor="weight">Peso (kg)</Label>

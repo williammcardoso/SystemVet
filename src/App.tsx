@@ -7,7 +7,10 @@ import Layout from "./components/Layout";
 import Dashboard from "./pages/Dashboard";
 import ClientsPage from "./pages/ClientsPage";
 import AddClientPage from "./pages/AddClientPage";
-import AddAnimalPage from "./pages/AddAnimalPage"; // Import the new AddAnimalPage
+import AddAnimalPage from "./pages/AddAnimalPage";
+import SpeciesPage from "./pages/registrations/SpeciesPage"; // New import
+import BreedsPage from "./pages/registrations/BreedsPage";   // New import
+import CoatTypesPage from "./pages/registrations/CoatTypesPage"; // New import
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -23,7 +26,10 @@ const App = () => (
             <Route path="/" element={<Dashboard />} />
             <Route path="/clients" element={<ClientsPage />} />
             <Route path="/clients/add" element={<AddClientPage />} />
-            <Route path="/animals/add" element={<AddAnimalPage />} /> {/* New route for adding animals */}
+            <Route path="/animals/add" element={<AddAnimalPage />} />
+            <Route path="/registrations/species" element={<SpeciesPage />} />     {/* New route */}
+            <Route path="/registrations/breeds" element={<BreedsPage />} />       {/* New route */}
+            <Route path="/registrations/coat-types" element={<CoatTypesPage />} /> {/* New route */}
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>
