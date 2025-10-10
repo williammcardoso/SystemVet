@@ -10,6 +10,8 @@ import PrescriptionMedicationForm, { MedicationData } from "@/components/Prescri
 import { toast } from "sonner";
 import { pdf } from "@react-pdf/renderer"; // Importar a função pdf
 import { PrescriptionPdfContent } from "@/components/PrescriptionPdfContent"; // Atualizado para .tsx
+import { PrescriptionEntry } from "@/types/medication"; // Import PrescriptionEntry
+import { mockPrescriptions } from "@/mockData/prescriptions"; // Import mutable mockPrescriptions
 
 // Mock data para animais e clientes (para exibir informações no cabeçalho)
 interface Animal {
@@ -43,214 +45,6 @@ const mockClients: Client[] = [
     animals: [
       { id: "a3", name: "Fido", species: "Cachorro", breed: "Vira-lata" },
       { id: "a4", name: "Miau", species: "Gato", breed: "Siamês" },
-    ],
-  },
-];
-
-// Mock de receitas existentes (para simular carregamento em modo de edição)
-interface PrescriptionEntry {
-  id: string;
-  date: string;
-  medicationName: string; // Resumo para a tabela
-  dosePerAdministration: string;
-  frequency: string;
-  period: string;
-  instructions: string; // Observações gerais
-  medications: MedicationData[]; // Detalhes completos dos medicamentos
-}
-
-const mockPrescriptions: PrescriptionEntry[] = [
-  {
-    id: "rx1",
-    date: "2023-11-01",
-    medicationName: "Antibiótico X, Anti-inflamatório Y",
-    dosePerAdministration: "Ver detalhes",
-    frequency: "Ver detalhes",
-    period: "Ver detalhes",
-    instructions: "Administrar com alimento e bastante água.",
-    medications: [
-      {
-        id: "med1",
-        useType: "Uso Oral",
-        pharmacyType: "Farmácia Veterinária",
-        medicationName: "Antibiótico X",
-        concentration: "250mg",
-        pharmaceuticalForm: "Comprimido",
-        dosePerAdministration: "1",
-        frequency: "12 horas",
-        period: "7 dias",
-        useCustomInstructions: false,
-        generatedInstructions: "Dê 1 comprimido, a cada 12 horas, durante 7 dias.",
-        generalObservations: "Não interromper o tratamento.",
-        totalQuantity: "14",
-        totalQuantityDisplay: "14 comprimido(s)",
-        isCollapsed: true,
-      },
-      {
-        id: "med2",
-        useType: "Uso Oral",
-        pharmacyType: "Farmácia Humana",
-        medicationName: "Anti-inflamatório Y",
-        concentration: "50mg",
-        pharmaceuticalForm: "Cápsula",
-        dosePerAdministration: "0.5",
-        frequency: "24 horas (1x/dia)",
-        period: "5 dias",
-        useCustomInstructions: true,
-        generatedInstructions: "Meio comprimido uma vez ao dia, por 5 dias, junto com a ração.",
-        generalObservations: "",
-        totalQuantity: "2.5",
-        totalQuantityDisplay: "2.5 cápsula(s)",
-        isCollapsed: true,
-      },
-    ],
-  },
-  {
-    id: "rx-long-test",
-    date: new Date().toISOString().split('T')[0],
-    medicationName: "Receita de Teste Longa",
-    dosePerAdministration: "Ver detalhes",
-    frequency: "Ver detalhes",
-    period: "Ver detalhes",
-    instructions: "Esta é uma receita de teste com múltiplos medicamentos para verificar a paginação do PDF.",
-    medications: [
-      {
-        id: "med-long-1",
-        useType: "Uso Oral",
-        pharmacyType: "Farmácia Veterinária",
-        medicationName: "Antibiótico X",
-        concentration: "250mg",
-        pharmaceuticalForm: "Comprimido",
-        dosePerAdministration: "1",
-        frequency: "12 horas",
-        period: "7 dias",
-        useCustomInstructions: false,
-        generatedInstructions: "Dê 1 comprimido, a cada 12 horas, durante 7 dias.",
-        generalObservations: "Não interromper o tratamento.",
-        totalQuantity: "14",
-        totalQuantityDisplay: "14 comprimido(s)",
-        isCollapsed: true,
-      },
-      {
-        id: "med-long-2",
-        useType: "Uso Oral",
-        pharmacyType: "Farmácia Humana",
-        medicationName: "Anti-inflamatório Y",
-        concentration: "50mg",
-        pharmaceuticalForm: "Cápsula",
-        dosePerAdministration: "0.5",
-        frequency: "24 horas (1x/dia)",
-        period: "5 dias",
-        useCustomInstructions: true,
-        generatedInstructions: "Meio comprimido uma vez ao dia, por 5 dias, junto com a ração.",
-        generalObservations: "",
-        totalQuantity: "2.5",
-        totalQuantityDisplay: "2.5 cápsula(s)",
-        isCollapsed: true,
-      },
-      {
-        id: "med-long-3",
-        useType: "Uso Oral",
-        pharmacyType: "Farmácia Humana",
-        medicationName: "Dipirona",
-        concentration: "500mg",
-        pharmaceuticalForm: "Comprimido",
-        dosePerAdministration: "1",
-        frequency: "12 horas",
-        period: "10 dias",
-        useCustomInstructions: false,
-        generatedInstructions: "Dê 1 comprimido(s), a cada 12 horas, durante 10 dias.",
-        generalObservations: "",
-        totalQuantity: "20",
-        totalQuantityDisplay: "20 comprimido(s)",
-        isCollapsed: true,
-      },
-      {
-        id: "med-long-4",
-        useType: "Uso Oral",
-        pharmacyType: "Farmácia Veterinária",
-        medicationName: "Agemoxi",
-        concentration: "250mg",
-        pharmaceuticalForm: "Comprimido",
-        dosePerAdministration: "1",
-        frequency: "12 horas",
-        period: "21 dias",
-        useCustomInstructions: false,
-        generatedInstructions: "Dê 1 comprimido(s), a cada 12 horas, durante 21 dias.",
-        generalObservations: "",
-        totalQuantity: "42",
-        totalQuantityDisplay: "42 comprimido(s)",
-        isCollapsed: true,
-      },
-      {
-        id: "med-long-5",
-        useType: "Uso Oral",
-        pharmacyType: "Farmácia Veterinária",
-        medicationName: "Giardicid",
-        concentration: "50mg",
-        pharmaceuticalForm: "Comprimido",
-        dosePerAdministration: "1",
-        frequency: "24 horas (1x/dia)",
-        period: "5 dias",
-        useCustomInstructions: false,
-        generatedInstructions: "Dê 1 comprimido(s), a cada 24 horas (1x/dia), durante 5 dias.",
-        generalObservations: "",
-        totalQuantity: "5",
-        totalQuantityDisplay: "5 comprimido(s)",
-        isCollapsed: true,
-      },
-      {
-        id: "med-long-6",
-        useType: "Uso Oral",
-        pharmacyType: "Farmácia Veterinária",
-        medicationName: "Nexgard",
-        concentration: "10kg",
-        pharmaceuticalForm: "Comprimido",
-        dosePerAdministration: "1",
-        frequency: "24 horas (1x/dia)",
-        period: "Outro",
-        customPeriod: "1 dia (dose unica)",
-        useCustomInstructions: false,
-        generatedInstructions: "Dê 1 comprimido(s), a cada 24 horas (1x/dia), durante 1 dia (dose unica)",
-        generalObservations: "",
-        totalQuantity: "1",
-        totalQuantityDisplay: "1 comprimido(s)",
-        isCollapsed: true,
-      },
-      {
-        id: "med-long-7",
-        useType: "Uso Tópico",
-        pharmacyType: "Farmácia Veterinária",
-        medicationName: "Vetaglos pomada",
-        concentration: "",
-        pharmaceuticalForm: "Pomada",
-        dosePerAdministration: "",
-        frequency: "",
-        period: "",
-        useCustomInstructions: true,
-        generatedInstructions: "Aplicar a pomada em toda extensao da ferida",
-        generalObservations: "Aplicar apos limpeza com soro",
-        totalQuantity: "10",
-        totalQuantityDisplay: "10 pomada",
-        isCollapsed: true,
-      },
-      {
-        id: "med-long-8",
-        useType: "Uso Tópico",
-        pharmacyType: "Farmácia Humana",
-        medicationName: "Rifocina spray",
-        concentration: "",
-        pharmaceuticalForm: "Spray",
-        dosePerAdministration: "",
-        frequency: "",
-        period: "",
-        useCustomInstructions: true,
-        generatedInstructions: "Aplicar apos pomada",
-        generalObservations: "",
-        totalQuantity: "42",
-        totalQuantityDisplay: "42 spray",
-        isCollapsed: true,
-      },
     ],
   },
 ];
@@ -344,11 +138,39 @@ const AddPrescriptionPage = () => {
       return;
     }
 
-    // Aqui você faria a lógica para salvar a receita (enviar para uma API, etc.)
-    // Por enquanto, apenas exibiremos um toast de sucesso e navegaremos de volta.
-    console.log("Salvando receita para Cliente:", client.name, "Animal:", animal.name);
-    console.log("Medicamentos:", currentPrescriptionMedications);
-    console.log("Observações Gerais da Receita:", currentPrescriptionGeneralObservations);
+    // Generate a summary medication name for the table display
+    const summaryMedicationName = currentPrescriptionMedications
+      .map(med => med.medicationName)
+      .filter(name => name.trim() !== "")
+      .join(", ");
+
+    // For simplicity, let's take the first medication's dose, frequency, and period for the summary
+    const firstMed = currentPrescriptionMedications[0];
+    const summaryDose = firstMed?.dosePerAdministration || "N/A";
+    const summaryFrequency = firstMed?.frequency || "N/A";
+    const summaryPeriod = firstMed?.period || "N/A";
+
+    const newPrescription: PrescriptionEntry = {
+      id: prescriptionId || `rx-${Date.now()}`, // Use existing ID if editing, otherwise new ID
+      date: new Date().toISOString().split('T')[0],
+      medicationName: summaryMedicationName || "Receita sem medicamentos",
+      dosePerAdministration: summaryDose,
+      frequency: summaryFrequency,
+      period: summaryPeriod,
+      instructions: currentPrescriptionGeneralObservations,
+      medications: currentPrescriptionMedications.map(med => ({ ...med, isCollapsed: true })), // Ensure all are collapsed when saved
+    };
+
+    if (prescriptionId) {
+      // Update existing prescription
+      const index = mockPrescriptions.findIndex(p => p.id === prescriptionId);
+      if (index !== -1) {
+        mockPrescriptions[index] = newPrescription;
+      }
+    } else {
+      // Add new prescription
+      mockPrescriptions.push(newPrescription);
+    }
 
     toast.success("Receita salva com sucesso!");
     navigate(`/clients/${clientId}/animals/${animalId}/record`);

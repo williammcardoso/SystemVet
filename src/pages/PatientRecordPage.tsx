@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link, useParams, useNavigate } from "react-router-dom";
 import {
   ArrowLeft,
@@ -34,6 +34,8 @@ import {
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { toast } from "sonner"; // Importar toast para notificações
+import { PrescriptionEntry } from "@/types/medication"; // Import PrescriptionEntry
+import { mockPrescriptions } from "@/mockData/prescriptions"; // Import mutable mockPrescriptions
 
 // Mock data (centralizado aqui para facilitar o exemplo, mas idealmente viria de um serviço)
 interface Animal {
@@ -170,16 +172,6 @@ interface DocumentEntry {
   fileUrl: string; // Placeholder for a file URL
 }
 
-interface PrescriptionEntry {
-  id: string;
-  date: string;
-  medicationName: string;
-  dosePerAdministration: string;
-  frequency: string;
-  period: string;
-  instructions: string; // Simplified for table display
-}
-
 interface ObservationEntry {
   id: string;
   date: string;
@@ -231,29 +223,6 @@ interface ExamEntry {
   conclusions?: string;
 }
 
-// Mock de receitas existentes (para simular carregamento em modo de edição)
-const mockPrescriptions: PrescriptionEntry[] = [
-  {
-    id: "rx1",
-    date: "2023-11-01",
-    medicationName: "Antibiótico X, Anti-inflamatório Y",
-    dosePerAdministration: "Ver detalhes",
-    frequency: "2x ao dia",
-    period: "7 dias",
-    instructions: "Administrar com alimento.",
-  },
-  {
-    id: "rx-long-test", // Adicionando a receita longa aqui
-    date: new Date().toISOString().split('T')[0],
-    medicationName: "Receita de Teste Longa (8 medicamentos)",
-    dosePerAdministration: "Ver detalhes",
-    frequency: "Ver detalhes",
-    period: "Ver detalhes",
-    instructions: "Esta é uma receita de teste com múltiplos medicamentos para verificar a paginação do PDF.",
-  },
-];
-
-
 const PatientRecordPage = () => {
   const { clientId, animalId } = useParams<{ clientId: string; animalId: string }>();
   const navigate = useNavigate();
@@ -279,6 +248,13 @@ const PatientRecordPage = () => {
 
   // A lista de prescrições aqui representa as receitas FINALIZADAS
   const [prescriptions, setPrescriptions] = useState<PrescriptionEntry[]>(mockPrescriptions);
+
+  // Use useEffect to update the state if mockPrescriptions changes (e.g., after a save)
+  // This is a simple way to "refresh" the list when returning to the page.
+  useEffect(() => {
+    setPrescriptions([...mockPrescriptions]); // Create a new array reference to trigger re-render
+  }, [location.pathname]); // Re-run when the path changes (e.g., returning from add/edit page)
+
 
   const [observations, setObservations] = useState<ObservationEntry[]>([
     { id: "o1", date: "2023-09-20", observation: "Animal apresentou melhora significativa após tratamento." },
