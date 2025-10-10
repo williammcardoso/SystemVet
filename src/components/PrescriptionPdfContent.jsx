@@ -1,4 +1,3 @@
-' que fecha a tag de abertura esteja na posição correta para resolver o erro de 'Syntax Error'.">
 import React from "react";
 import { Document, Page, View, Text, StyleSheet, Font } from "@react-pdf/renderer";
 import { MedicationData } from "@/types/medication";
@@ -345,7 +344,7 @@ export const PrescriptionPdfContent = ({
             </>
           );
         }}
-      ></Page> {/* A tag de fechamento da abertura do Page e a tag de fechamento do Page */}
+      </Page>
     </Document>
   );
 };
