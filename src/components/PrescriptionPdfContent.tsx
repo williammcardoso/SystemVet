@@ -168,7 +168,7 @@ const styles = StyleSheet.create({
     textAlign: "center",
     fontSize: 10,
     color: "#666",
-    paddingTop: 15,
+    paddingTop: 30, // Aumentado para 30 para mais espaço
     borderTopWidth: 1,
     borderTopColor: "#eee",
   },
