@@ -14,6 +14,10 @@ const styles = StyleSheet.create({
     fontSize: 10,
     color: "#333",
   },
+  mainContentContainer: {
+    // This view will contain all content that flows across pages
+    // It will automatically break into new pages if content is too long
+  },
   clinicHeader: {
     flexDirection: "row",
     justifyContent: "space-between",
@@ -78,7 +82,7 @@ const styles = StyleSheet.create({
     paddingBottom: 4,
   },
   medicationItem: {
-    flexDirection: "column", // Changed to column to allow instructions on new line
+    flexDirection: "column",
     marginBottom: 15,
   },
   medicationHeaderLine: {
@@ -90,12 +94,12 @@ const styles = StyleSheet.create({
   medicationNumber: {
     fontSize: 11,
     marginRight: 5,
-    width: 15, // Fixed width for numbering
+    width: 15,
   },
   medicationNameConcentration: {
     fontSize: 11,
     fontWeight: "bold",
-    flexShrink: 1, // Allow text to shrink
+    flexShrink: 1,
   },
   lineSeparator: {
     borderBottomWidth: 1,
@@ -107,7 +111,7 @@ const styles = StyleSheet.create({
   badgeContainer: {
     flexDirection: "row",
     gap: 5,
-    flexShrink: 0, // Prevent badges from shrinking
+    flexShrink: 0,
   },
   pharmacyBadge: {
     fontSize: 8,
@@ -124,7 +128,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 8,
     paddingVertical: 4,
     borderRadius: 8,
-    backgroundColor: "#e0e0ff", // Light blue background
+    backgroundColor: "#e0e0ff",
     color: "#333",
     borderWidth: 1,
     borderColor: "#aaa",
@@ -132,13 +136,13 @@ const styles = StyleSheet.create({
   medicationInstructions: {
     fontSize: 10,
     color: "#444",
-    marginLeft: 20, // Indent instructions
+    marginLeft: 20,
     lineHeight: 1.4,
   },
   medicationObservations: {
     fontSize: 9,
     color: "#777",
-    marginLeft: 20, // Indent observations
+    marginLeft: 20,
     marginTop: 3,
     fontStyle: "italic",
   },
@@ -157,11 +161,17 @@ const styles = StyleSheet.create({
     fontSize: 10,
     lineHeight: 1.5,
   },
-  footer: {
-    marginTop: 30, // Adiciona uma margem superior para separar do conteúdo
+  footerAbsolute: { // New style for absolute positioning
+    position: 'absolute',
+    bottom: 30, // Matches page padding
+    left: 30,   // Matches page padding
+    right: 30,  // Matches page padding
     textAlign: "center",
     fontSize: 10,
     color: "#666",
+    paddingTop: 15, // Add padding to separate from content above
+    borderTopWidth: 1,
+    borderTopColor: "#eee",
   },
   signatureDate: {
     fontSize: 10,
@@ -218,95 +228,103 @@ const PrescriptionPdfDocument: React.FC<PrescriptionPdfDocumentProps> = ({
 
   return (
     <Document>
-      <Page size="A4" style={styles.page}>
-        {/* Clinic Header */}
-        <View style={styles.clinicHeader}>
-          <View style={styles.clinicInfoLeft}>
-            {/* <Image src="/public/placeholder.svg" style={{ width: 40, height: 40, marginRight: 10 }} /> */}
-            <View>
-              <Text style={styles.clinicName}>Clínica Moraes Cardoso</Text>
-              <Text style={styles.clinicDetails}>CRMV 56895 SP</Text>
-              <Text style={styles.clinicDetails}>Registro no MAPA MV0052750203</Text>
+      <Page size="A4" style={styles.page} render={({ pageNumber, totalPages }) => (
+        <>
+          {/* Main Content that flows across pages */}
+          <View style={styles.mainContentContainer}>
+            {/* Clinic Header */}
+            <View style={styles.clinicHeader}>
+              <View style={styles.clinicInfoLeft}>
+                {/* <Image src="/public/placeholder.svg" style={{ width: 40, height: 40, marginRight: 10 }} /> */}
+                <View>
+                  <Text style={styles.clinicName}>Clínica Moraes Cardoso</Text>
+                  <Text style={styles.clinicDetails}>CRMV 56895 SP</Text>
+                  <Text style={styles.clinicDetails}>Registro no MAPA MV0052750203</Text>
+                </View>
+              </View>
+              <View style={styles.clinicAddressPhone}>
+                <Text>Rua Campos Salles, 175, Centro</Text>
+                <Text>Itapira - CEP: 13970-170</Text>
+                <Text>Telefone: (19) 99363-1981</Text>
+              </View>
             </View>
-          </View>
-          <View style={styles.clinicAddressPhone}>
-            <Text>Rua Campos Salles, 175, Centro</Text>
-            <Text>Itapira - CEP: 13970-170</Text>
-            <Text>Telefone: (19) 99363-1981</Text>
-          </View>
-        </View>
 
-        <Text style={styles.mainTitle}>Receita Simples</Text>
+            <Text style={styles.mainTitle}>Receita Simples</Text>
 
-        {/* Animal and Tutor Info */}
-        <View style={styles.infoSectionContainer}>
-          <View style={styles.infoCard}>
-            <Text style={styles.infoTitle}>Animal</Text>
-            <Text style={styles.infoText}>ID: {animalId}</Text>
-            <Text style={styles.infoText}>Nome: {animalName}</Text>
-            <Text style={styles.infoText}>Espécie: {animalSpecies}</Text>
-          </View>
-          <View style={styles.infoCard}>
-            <Text style={styles.infoTitle}>Tutor</Text>
-            <Text style={styles.infoText}>Nome: {tutorName}</Text>
-            <Text style={styles.infoText}>Endereço: {tutorAddress || "Não informado"}</Text>
-          </View>
-        </View>
+            {/* Animal and Tutor Info */}
+            <View style={styles.infoSectionContainer}>
+              <View style={styles.infoCard}>
+                <Text style={styles.infoTitle}>Animal</Text>
+                <Text style={styles.infoText}>ID: {animalId}</Text>
+                <Text style={styles.infoText}>Nome: {animalName}</Text>
+                <Text style={styles.infoText}>Espécie: {animalSpecies}</Text>
+              </View>
+              <View style={styles.infoCard}>
+                <Text style={styles.infoTitle}>Tutor</Text>
+                <Text style={styles.infoText}>Nome: {tutorName}</Text>
+                <Text style={styles.infoText}>Endereço: {tutorAddress || "Não informado"}</Text>
+              </View>
+            </View>
 
-        {/* Medication List Grouped by Use Type */}
-        {Object.keys(groupedMedications).map((useType) => (
-          <View key={useType}>
-            <Text style={styles.groupTitle}>{useType}</Text>
-            {groupedMedications[useType].map((med, index) => (
-              <View key={med.id} style={styles.medicationItem}>
-                <View style={styles.medicationHeaderLine}>
-                  <Text style={styles.medicationNumber}>{index + 1})</Text>
-                  <Text style={styles.medicationNameConcentration}>
-                    {med.medicationName} {med.concentration && med.concentration}
-                  </Text>
-                  <View style={styles.lineSeparator} />
-                  <View style={styles.badgeContainer}>
-                    {med.pharmacyType && (
-                      <Text style={styles.pharmacyBadge}>
-                        {med.pharmacyType === "Farmácia Veterinária" ? "VET" : "HUMANA"}
+            {/* Medication List Grouped by Use Type */}
+            {Object.keys(groupedMedications).map((useType) => (
+              <View key={useType}>
+                <Text style={styles.groupTitle}>{useType}</Text>
+                {groupedMedications[useType].map((med, index) => (
+                  <View key={med.id} style={styles.medicationItem}>
+                    <View style={styles.medicationHeaderLine}>
+                      <Text style={styles.medicationNumber}>{index + 1})</Text>
+                      <Text style={styles.medicationNameConcentration}>
+                        {med.medicationName} {med.concentration && med.concentration}
                       </Text>
-                    )}
-                    {med.totalQuantityDisplay && (
-                      <Text style={styles.quantityBadge}>
-                        {med.totalQuantityDisplay}
+                      <View style={styles.lineSeparator} />
+                      <View style={styles.badgeContainer}>
+                        {med.pharmacyType && (
+                          <Text style={styles.pharmacyBadge}>
+                            {med.pharmacyType === "Farmácia Veterinária" ? "VET" : "HUMANA"}
+                          </Text>
+                        )}
+                        {med.totalQuantityDisplay && (
+                          <Text style={styles.quantityBadge}>
+                            {med.totalQuantityDisplay}
+                          </Text>
+                        )}
+                      </View>
+                    </View>
+                    <Text style={styles.medicationInstructions}>
+                      {med.generatedInstructions}
+                    </Text>
+                    {med.generalObservations && (
+                      <Text style={styles.medicationObservations}>
+                        Obs. Medicamento: {med.generalObservations}
                       </Text>
                     )}
                   </View>
-                </View>
-                <Text style={styles.medicationInstructions}>
-                  {med.generatedInstructions}
-                </Text>
-                {med.generalObservations && (
-                  <Text style={styles.medicationObservations}>
-                    Obs. Medicamento: {med.generalObservations}
-                  </Text>
-                )}
+                ))}
               </View>
             ))}
-          </View>
-        ))}
 
-        {/* General Observations for the entire prescription */}
-        {generalObservations && (
-          <View style={styles.generalObservationsSection}>
-            <Text style={styles.generalObservationsTitle}>Observações Gerais da Receita</Text>
-            <Text style={styles.generalObservationsText}>{generalObservations}</Text>
+            {/* General Observations for the entire prescription */}
+            {generalObservations && (
+              <View style={styles.generalObservationsSection}>
+                <Text style={styles.generalObservationsTitle}>Observações Gerais da Receita</Text>
+                <Text style={styles.generalObservationsText}>{generalObservations}</Text>
+              </View>
+            )}
           </View>
-        )}
 
-        {/* Footer with updated signature */}
-        <View style={styles.footer}>
-          <Text style={styles.signatureDate}>{formatDateToPortuguese(currentDate)}</Text>
-          <Text style={styles.signatureText}>Assinado eletronicamente por</Text>
-          <Text style={styles.signatureName}>Dr. William Cardoso</Text>
-          <Text style={styles.signatureText}>CRMV 56895/SP</Text>
-          <Text style={styles.signatureText}>Registro no MAPA MV0052750203</Text>
-        </View>
+          {/* Footer - only on the last page */}
+          {pageNumber === totalPages && (
+            <View style={styles.footerAbsolute}>
+              <Text style={styles.signatureDate}>{formatDateToPortuguese(currentDate)}</Text>
+              <Text style={styles.signatureText}>Assinado eletronicamente por</Text>
+              <Text style={styles.signatureName}>Dr. William Cardoso</Text>
+              <Text style={styles.signatureText}>CRMV 56895/SP</Text>
+              <Text style={styles.signatureText}>Registro no MAPA MV0052750203</Text>
+            </View>
+          )}
+        </>
+      )}
       </Page>
     </Document>
   );
