@@ -163,8 +163,18 @@ const styles = StyleSheet.create({
     fontSize: 10,
     color: "#666",
   },
-  footerSignature: {
-    marginTop: 15,
+  signatureLine: {
+    borderBottomWidth: 1,
+    borderBottomColor: "#000",
+    width: 200, // Adjust width as needed
+    alignSelf: 'center',
+    marginTop: 20,
+    marginBottom: 5,
+  },
+  signatureText: {
+    fontSize: 10,
+    textAlign: 'center',
+    lineHeight: 1.4,
   },
 });
 
@@ -280,10 +290,15 @@ const PrescriptionPdfDocument: React.FC<PrescriptionPdfDocumentProps> = ({
           </View>
         )}
 
-        {/* Footer */}
+        {/* Footer with updated signature */}
         <View style={styles.footer} fixed>
-          <Text>Data: {new Date().toLocaleDateString()}</Text>
-          <Text style={styles.footerSignature}>Assinatura do Veterinário: _________________________</Text>
+          <View style={styles.signatureLine} />
+          <Text style={styles.signatureText}>
+            William | CRMV 56895 SP | Registro no MAPA MV0052750203
+          </Text>
+          <Text style={styles.signatureText}>
+            Assinado Eletronicamente em {new Date().toLocaleDateString()}
+          </Text>
         </View>
       </Page>
     </Document>
