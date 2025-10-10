@@ -179,12 +179,15 @@ const AddPrescriptionPage = () => {
       medicationName: "",
       concentration: "",
       pharmaceuticalForm: "",
+      customPharmaceuticalForm: "", // Inicializado como string vazia
       dosePerAdministration: "",
       frequency: "",
+      customFrequency: "", // Inicializado como string vazia
       period: "",
+      customPeriod: "", // Inicializado como string vazia
       useCustomInstructions: false,
-      generatedInstructions: "",
-      generalObservations: "",
+      generatedInstructions: "", // This will store the final instruction (auto or custom)
+      generalObservations: "", // This is for the separate 'Observações Gerais' at the bottom
       totalQuantity: "",
       totalQuantityDisplay: "",
     };
@@ -231,6 +234,9 @@ const AddPrescriptionPage = () => {
   };
 
   const isPreviewDisabled = !currentClient || !currentAnimal || medications.length === 0;
+
+  // DEBUG: Log para verificar o array de medicamentos antes de passar para o PDF
+  console.log("[AddPrescriptionPage] Medications array before PDF generation:", medications);
 
   return (
     <div className="p-6">
