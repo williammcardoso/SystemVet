@@ -251,12 +251,20 @@ const PrescriptionPdfDocument: React.FC<PrescriptionPdfDocumentProps> = ({
 
           {/* DEBUG: Linhas para verificar os dados dos medicamentos */}
           <Text style={{ fontSize: 8, color: 'purple', marginBottom: 5 }}>
-            DEBUG: Quantidade de medicamentos: {medications.length}
+            DEBUG: Quantidade de medicamentos no array: {medications.length}
           </Text>
           {medications.map((med, idx) => (
-            <Text key={`debug-med-${idx}`} style={{ fontSize: 8, color: 'purple', marginBottom: 2 }}>
-              DEBUG: Med {idx + 1}: Nome='{med.medicationName}', Instruções='{med.generatedInstructions}'
-            </Text>
+            <View key={`debug-med-${idx}`} style={{ marginBottom: 2 }}>
+              <Text style={{ fontSize: 8, color: 'purple' }}>
+                DEBUG: Med {idx + 1} ID: {med.id}
+              </Text>
+              <Text style={{ fontSize: 8, color: 'purple' }}>
+                DEBUG: Med {idx + 1} Nome: '{med.medicationName || "N/A"}'
+              </Text>
+              <Text style={{ fontSize: 8, color: 'purple' }}>
+                DEBUG: Med {idx + 1} Instruções: '{med.generatedInstructions || "N/A"}'
+              </Text>
+            </View>
           ))}
           {/* FIM DEBUG */}
 
@@ -269,7 +277,7 @@ const PrescriptionPdfDocument: React.FC<PrescriptionPdfDocumentProps> = ({
                   <View style={styles.medicationDetails}>
                     <View style={styles.flexRowCenter}>
                       <Text style={styles.medicationName}>
-                        {med.medicationName} {med.concentration && med.concentration}
+                        {med.medicationName || ""} {med.concentration && med.concentration}
                       </Text>
                       <View style={styles.line} />
                       {med.pharmacyType && (
@@ -284,7 +292,7 @@ const PrescriptionPdfDocument: React.FC<PrescriptionPdfDocumentProps> = ({
                       )}
                     </View>
                     <Text style={styles.medicationInstructions}>
-                      {med.generatedInstructions}
+                      {med.generatedInstructions || ""}
                     </Text>
                   </View>
                 </View>
