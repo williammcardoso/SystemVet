@@ -276,7 +276,8 @@ const PrescriptionPdfDocument: React.FC<PrescriptionPdfDocumentProps> = ({
                   <View style={styles.medicationHeaderLine}>
                     <Text style={styles.medicationNumber}>{index + 1})</Text>
                     <Text style={styles.medicationNameConcentration}>
-                      {med.medicationName}{med.concentration ? ` ${med.concentration}` : ''} {/* Corrigido aqui */}
+                      {/* Ajuste para garantir que sempre haja um texto, mesmo que vazio */}
+                      {`${med.medicationName || ''}${med.concentration ? ` ${med.concentration}` : ''}` || 'Medicamento sem nome'}
                     </Text>
                     <View style={styles.lineSeparator} />
                     <View style={styles.badgeContainer}>
