@@ -835,7 +835,7 @@ const PatientRecordPage = () => {
                       <TableHead>Item</TableHead>
                       <TableHead>Quantidade</TableHead>
                       <TableHead className="text-right">Total</TableHead>
-                      <TableHead className="text-right">Ações</Tablead>
+                      <TableHead className="text-right">Ações</TableHead> {/* Corrigido de Tablead para TableHead */}
                     </TableRow>
                   </TableHeader>
                   <TableBody>
