@@ -1,5 +1,5 @@
 import React from "react";
-import { Link, useLocation } from "react-router-dom"; // Importar useLocation
+import { Link, useLocation } from "react-router-dom";
 import {
   Accordion,
   AccordionContent,
@@ -19,10 +19,10 @@ import {
   LogOut,
   PawPrint,
   Palette,
-  Search, // Adicionado para 'Busca Rápida'
-  Stethoscope, // Importado
-  ClipboardList, // Importado
-  FileText, // Importado
+  Search,
+  Stethoscope,
+  ClipboardList,
+  FileText,
 } from "lucide-react";
 
 interface NavItem {
@@ -35,23 +35,23 @@ interface NavItem {
 const navItems: NavItem[] = [
   {
     title: "PRINCIPAL",
-    icon: Folder, // Ícone genérico para o cabeçalho do grupo
+    icon: Folder,
     subItems: [
       {
         title: "Dashboard",
-        href: "/dashboard", // Alterado para /dashboard
+        href: "/dashboard",
         icon: LayoutDashboard,
       },
       {
         title: "Busca Rápida",
-        href: "/quick-search", // Nova rota para busca rápida
+        href: "/quick-search",
         icon: Search,
       },
     ],
   },
   {
     title: "CADASTROS",
-    icon: Folder, // Ícone genérico para o cabeçalho do grupo
+    icon: Folder,
     subItems: [
       {
         title: "Tutores",
@@ -60,10 +60,9 @@ const navItems: NavItem[] = [
       },
       {
         title: "Pacientes",
-        href: "/patients", // Nova rota para pacientes (animais)
+        href: "/patients",
         icon: PawPrint,
       },
-      // Sub-itens de cadastros existentes
       { title: "Espécies", href: "/registrations/species", icon: PawPrint },
       { title: "Raças", href: "/registrations/breeds", icon: PawPrint },
       { title: "Pelagens", href: "/registrations/coat-types", icon: Palette },
@@ -80,7 +79,7 @@ const navItems: NavItem[] = [
   },
   {
     title: "ATENDIMENTO",
-    icon: Stethoscope, // Ícone genérico para o cabeçalho do grupo
+    icon: Stethoscope,
     subItems: [
       { title: "Consultas", href: "/appointments/consultations", icon: Calendar },
       { title: "Agendamentos", href: "/appointments/schedule", icon: Calendar },

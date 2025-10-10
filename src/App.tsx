@@ -18,6 +18,11 @@ import CoatTypesPage from "./pages/registrations/CoatTypesPage";
 import NotFound from "./pages/NotFound";
 import PatientsPage from "./pages/PatientsPage"; // Nova página de Pacientes
 import QuickSearchPage from "./pages/QuickSearchPage"; // Nova página de Busca Rápida
+import ConsultationsPage from "./pages/appointments/ConsultationsPage"; // Nova importação
+import SchedulePage from "./pages/appointments/SchedulePage"; // Nova importação
+import AnamnesisPage from "./pages/appointments/AnamnesisPage"; // Nova importação
+import PrescriptionsPage from "./pages/appointments/PrescriptionsPage"; // Nova importação
+
 
 const queryClient = new QueryClient();
 
@@ -43,6 +48,12 @@ const App = () => (
             <Route path="/clients/:clientId/animals/:animalId/add-exam" element={<AddExamPage />} />
             <Route path="/clients/:clientId/animals/:animalId/add-prescription" element={<AddPrescriptionPage />} />
             <Route path="/clients/:clientId/animals/:animalId/edit-prescription/:prescriptionId" element={<AddPrescriptionPage />} />
+
+            {/* Rotas para o grupo ATENDIMENTO */}
+            <Route path="/appointments/consultations" element={<ConsultationsPage />} />
+            <Route path="/appointments/schedule" element={<SchedulePage />} />
+            <Route path="/appointments/anamnesis" element={<AnamnesisPage />} />
+            <Route path="/appointments/prescriptions" element={<PrescriptionsPage />} />
 
             <Route path="/registrations/species" element={<SpeciesPage />} />
             <Route path="/registrations/breeds" element={<BreedsPage />} />
