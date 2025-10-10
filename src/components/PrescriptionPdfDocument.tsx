@@ -308,11 +308,11 @@ const PrescriptionPdfDocument: React.FC<PrescriptionPdfDocumentProps> = ({
                   <Text style={styles.medicationInstructions}>
                     {med.generatedInstructions || 'Sem instruções de uso.'}
                   </Text>
-                  {med.generalObservations && (
+                  {med.generalObservations && med.generalObservations.trim().length > 0 ? (
                     <Text style={styles.medicationObservations}>
                       Obs. Medicamento: {med.generalObservations}
                     </Text>
-                  )}
+                  ) : null}
                 </View>
               ))}
             </View>
