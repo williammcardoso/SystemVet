@@ -15,8 +15,10 @@ import AddPrescriptionPage from "./pages/AddPrescriptionPage";
 import SpeciesPage from "./pages/registrations/SpeciesPage";
 import BreedsPage from "./pages/registrations/BreedsPage";
 import CoatTypesPage from "./pages/registrations/CoatTypesPage";
+import CompanySettingsPage from "./pages/settings/CompanySettingsPage"; // Importar
+import UserSettingsPage from "./pages/settings/UserSettingsPage";     // Importar
 import NotFound from "./pages/NotFound";
-import { ThemeProvider } from "./components/ThemeProvider"; // Importar ThemeProvider
+import { ThemeProvider } from "./components/ThemeProvider";
 
 const queryClient = new QueryClient();
 
@@ -41,6 +43,8 @@ const App = () => (
               <Route path="/registrations/species" element={<SpeciesPage />} />
               <Route path="/registrations/breeds" element={<BreedsPage />} />
               <Route path="/registrations/coat-types" element={<CoatTypesPage />} />
+              <Route path="/settings/company" element={<CompanySettingsPage />} /> {/* Nova rota */}
+              <Route path="/settings/user" element={<UserSettingsPage />} />     {/* Nova rota */}
               {/* ADICIONE TODAS AS ROTAS PERSONALIZADAS ACIMA DA ROTA CATCH-ALL "*" */}
               <Route path="*" element={<NotFound />} />
             </Routes>

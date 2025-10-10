@@ -115,8 +115,8 @@ const navItems: NavItem[] = [
     title: "Configuração",
     icon: Settings,
     subItems: [
-      { title: "Empresa", href: "/settings/company" },
-      { title: "Usuários", href: "/settings/users" },
+      { title: "Empresa", href: "/settings/company" }, // Novo link
+      { title: "Usuários", href: "/settings/user" },   // Novo link
       { title: "Acesso externo", href: "/settings/external-access" },
       { title: "Perfil de Acesso", href: "/settings/access-profile" },
     ],

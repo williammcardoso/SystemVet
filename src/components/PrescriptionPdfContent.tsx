@@ -1,6 +1,7 @@
 import React from "react";
 import { Document, Page, View, Text, StyleSheet, Font } from "@react-pdf/renderer";
 import { MedicationData } from "@/types/medication";
+import { mockCompanySettings, mockUserSettings } from "@/mockData/settings"; // Importar as configurações
 
 // Register a font if needed (e.g., for custom fonts or if default is not working)
 // Font.register({ family: "Roboto", src: "https://fonts.gstatic.com/s/roboto/v20/KFOmCnqEu92Fr1Mu4mxP.ttf" });
@@ -238,15 +239,15 @@ export const PrescriptionPdfContent = ({
                 <View style={styles.clinicInfoLeft}>
                   {/* <Image src="/public/placeholder.svg" style={{ width: 40, height: 40, marginRight: 10 }} /> */}
                   <View>
-                    <Text style={styles.clinicName}>Clínica Moraes Cardoso</Text>
-                    <Text style={styles.clinicDetails}>CRMV 56895 SP</Text>
-                    <Text style={styles.clinicDetails}>Registro no MAPA MV0052750203</Text>
+                    <Text style={styles.clinicName}>{mockCompanySettings.companyName}</Text>
+                    <Text style={styles.clinicDetails}>CRMV {mockCompanySettings.crmv}</Text>
+                    <Text style={styles.clinicDetails}>Registro no MAPA {mockCompanySettings.mapaRegistration}</Text>
                   </View>
                 </View>
                 <View style={styles.clinicAddressPhone}>
-                  <Text>Rua Campos Salles, 175, Centro</Text>
-                  <Text>Itapira - CEP: 13970-170</Text>
-                  <Text>Telefone: (19) 99363-1981</Text>
+                  <Text>{mockCompanySettings.address}</Text>
+                  <Text>{mockCompanySettings.city} - CEP: {mockCompanySettings.zipCode}</Text>
+                  <Text>Telefone: {mockCompanySettings.phone}</Text>
                 </View>
               </View>
 
@@ -335,9 +336,9 @@ export const PrescriptionPdfContent = ({
                     {formatDateToPortuguese(currentDate)}
                   </Text>
                   <Text style={styles.signatureText}>Assinado eletronicamente por</Text>
-                  <Text style={styles.signatureName}>Dr. William Cardoso</Text>
-                  <Text style={styles.clinicDetails}>CRMV 56895/SP</Text>
-                  <Text style={styles.clinicDetails}>Registro no MAPA MV0052750203</Text>
+                  <Text style={styles.signatureName}>{mockUserSettings.signatureText}</Text>
+                  <Text style={styles.clinicDetails}>CRMV {mockUserSettings.userCrmv}</Text>
+                  <Text style={styles.clinicDetails}>Registro no MAPA {mockUserSettings.userMapaRegistration}</Text>
                 </View>
               )}
             </>
