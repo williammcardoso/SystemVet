@@ -50,6 +50,9 @@ const PrescriptionMedicationForm: React.FC<PrescriptionMedicationFormProps> = ({
   onDelete,
   onToggleCollapse,
 }) => {
+  // DEBUG: Log para verificar se o componente está sendo renderizado
+  console.log(`[PrescriptionMedicationForm] Renderizando para medicamento ID: ${medication.id}, Nome: ${medication.medicationName}`);
+
   const [useType, setUseType] = useState<string>(medication.useType);
   const [pharmacyType, setPharmacyType] = useState<string>(medication.pharmacyType);
   const [medicationName, setMedicationName] = useState<string>(medication.medicationName);
@@ -133,6 +136,9 @@ const PrescriptionMedicationForm: React.FC<PrescriptionMedicationFormProps> = ({
   }, [dosePerAdministration, pharmaceuticalForm, customPharmaceuticalForm, frequency, customFrequency, period, customPeriod, useCustomInstructions]);
 
   const handleSave = () => {
+    // DEBUG: Log para verificar se o clique no botão está sendo detectado
+    console.log(`[PrescriptionMedicationForm] Botão 'Salvar Medicamento' clicado para ID: ${medication.id}`);
+
     if (
       !useType ||
       !pharmacyType ||
@@ -167,7 +173,7 @@ const PrescriptionMedicationForm: React.FC<PrescriptionMedicationFormProps> = ({
       totalQuantityDisplay, // Save the formatted display string
       isCollapsed: true, // Collapse after saving
     };
-    console.log("Salvando medicamento:", updatedMedication); // Adicionado console.log
+    console.log("[PrescriptionMedicationForm] Salvando medicamento:", updatedMedication); // Adicionado console.log
     onSave(updatedMedication);
     setIsCollapsed(true); // Collapse after saving
   };
