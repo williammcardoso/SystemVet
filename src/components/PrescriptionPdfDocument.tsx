@@ -198,9 +198,6 @@ const PrescriptionPdfDocument: React.FC<PrescriptionPdfDocumentProps> = ({
   generalObservations,
   vetInfo,
 }) => {
-  // DEBUG: Log para verificar as props de medicamentos recebidas
-  console.log("[PrescriptionPdfDocument] Medicamentos recebidos:", medications);
-
   // Group medications by useType
   const groupedMedications = medications.reduce((acc, med) => {
     const useType = med.useType || "Outros";
@@ -261,7 +258,8 @@ const PrescriptionPdfDocument: React.FC<PrescriptionPdfDocumentProps> = ({
                   <View style={styles.medicationDetails}>
                     <View style={styles.flexRowCenter}>
                       <Text style={styles.medicationName}>
-                        {med.medicationName || ""} {med.concentration && med.concentration}
+                        {med.medicationName}
+                        {med.concentration ? ` ${med.concentration}` : null}
                       </Text>
                       <View style={styles.line} />
                       {med.pharmacyType && (
@@ -276,7 +274,7 @@ const PrescriptionPdfDocument: React.FC<PrescriptionPdfDocumentProps> = ({
                       )}
                     </View>
                     <Text style={styles.medicationInstructions}>
-                      {med.generatedInstructions || ""}
+                      {med.generatedInstructions || null}
                     </Text>
                   </View>
                 </View>

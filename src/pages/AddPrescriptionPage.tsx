@@ -235,9 +235,6 @@ const AddPrescriptionPage = () => {
 
   const isPreviewDisabled = !currentClient || !currentAnimal || medications.length === 0;
 
-  // DEBUG: Log para verificar o array de medicamentos antes de passar para o PDF
-  console.log("[AddPrescriptionPage] Medicamentos antes da geração do PDF:", medications);
-
   return (
     <div className="p-6">
       <div className="flex items-center justify-between mb-6">
