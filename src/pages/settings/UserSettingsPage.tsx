@@ -26,9 +26,9 @@ const UserSettingsPage = () => {
   };
 
   return (
-    <div className="flex flex-col min-h-screen bg-[#F9FAFB] dark:bg-gray-950">
+    <div className="flex flex-col min-h-screen bg-[#f8fafc] dark:bg-gray-950">
       {/* Header da Página com Gradiente e Breadcrumb */}
-      <div className="bg-gradient-to-r from-gray-50 via-white to-gray-50 dark:from-gray-900 dark:via-gray-950 dark:to-gray-950 p-6 pb-4">
+      <div className="bg-gradient-to-r from-gray-50 via-white to-gray-50 dark:from-gray-900 dark:via-gray-950 dark:to-gray-950 p-6 pb-4 border-b border-gray-200 dark:border-gray-800">
         <div className="flex items-center justify-between mb-2">
           <div className="flex items-center gap-4">
             <Avatar className="h-8 w-8">
@@ -36,8 +36,8 @@ const UserSettingsPage = () => {
               <AvatarFallback>US</AvatarFallback>
             </Avatar>
             <div>
-              <h1 className="text-2xl font-semibold flex items-center gap-3 text-[#1E293B] dark:text-gray-100">
-                <Settings className="h-5 w-5 text-gray-500 dark:text-gray-400" /> Configurações do Usuário
+              <h1 className="text-2xl font-semibold flex items-center gap-3 text-[#1E293B] dark:text-gray-100 group">
+                <Settings className="h-5 w-5 text-gray-500 dark:text-gray-400 group-hover:animate-spin-slow" /> Configurações do Usuário
               </h1>
               <p className="text-sm text-[#6B7280] dark:text-gray-400 mt-1 mb-4">
                 Gerencie suas informações e credenciais profissionais.
@@ -58,13 +58,13 @@ const UserSettingsPage = () => {
       <div className="flex-1 p-6">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 py-4 max-w-5xl mx-auto">
           {/* Card: Informações Pessoais */}
-          <Card className="bg-white dark:bg-gray-800 rounded-2xl shadow-[0_1px_3px_rgba(0,0,0,0.05)] hover:shadow-[0_4px_8px_rgba(0,0,0,0.08)] transition-all duration-300 border-t-4 border-blue-400">
-            <CardHeader className="pb-3"> {/* Reduzido padding-bottom */}
+          <Card className="bg-white/90 backdrop-blur-sm border border-gray-200 dark:border-gray-700 rounded-2xl shadow-[0_1px_3px_rgba(0,0,0,0.05)] hover:shadow-[0_4px_8px_rgba(0,0,0,0.08)] transition-all duration-300 border-t-4 border-blue-400 dark:bg-gray-800/90">
+            <CardHeader className="pb-3">
               <CardTitle className="flex items-center gap-2 text-lg font-semibold text-[#374151] dark:text-gray-100">
                 <User className="h-5 w-5 text-blue-500" /> Informações Pessoais
               </CardTitle>
             </CardHeader>
-            <CardContent className="grid gap-y-3 pt-0"> {/* Reduzido gap-y e padding-top */}
+            <CardContent className="grid gap-y-3 pt-0">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="space-y-2">
                   <Label htmlFor="userName" className="text-[#4B5563] dark:text-gray-400 font-medium">Nome Completo</Label>
@@ -79,13 +79,13 @@ const UserSettingsPage = () => {
           </Card>
 
           {/* Card: Informações Profissionais */}
-          <Card className="bg-white dark:bg-gray-800 rounded-2xl shadow-[0_1px_3px_rgba(0,0,0,0.05)] hover:shadow-[0_4px_8px_rgba(0,0,0,0.08)] transition-all duration-300 border-t-4 border-purple-400">
-            <CardHeader className="pb-3"> {/* Reduzido padding-bottom */}
+          <Card className="bg-white/90 backdrop-blur-sm border border-gray-200 dark:border-gray-700 rounded-2xl shadow-[0_1px_3px_rgba(0,0,0,0.05)] hover:shadow-[0_4px_8px_rgba(0,0,0,0.08)] transition-all duration-300 border-t-4 border-purple-400 dark:bg-gray-800/90">
+            <CardHeader className="pb-3">
               <CardTitle className="flex items-center gap-2 text-lg font-semibold text-[#374151] dark:text-gray-100">
                 <Briefcase className="h-5 w-5 text-purple-500" /> Informações Profissionais
               </CardTitle>
             </CardHeader>
-            <CardContent className="grid gap-y-3 pt-0"> {/* Reduzido gap-y e padding-top */}
+            <CardContent className="grid gap-y-3 pt-0">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="space-y-2">
                   <Label htmlFor="userCrmv" className="text-[#4B5563] dark:text-gray-400 font-medium">CRMV</Label>
@@ -104,13 +104,13 @@ const UserSettingsPage = () => {
           </Card>
 
           {/* Card: Segurança (ocupa 2 colunas em telas grandes) */}
-          <Card className="bg-white dark:bg-gray-800 rounded-2xl shadow-[0_1px_3px_rgba(0,0,0,0.05)] hover:shadow-[0_4px_8px_rgba(0,0,0,0.08)] transition-all duration-300 border-t-4 border-gray-400 lg:col-span-2">
-            <CardHeader className="pb-3"> {/* Reduzido padding-bottom */}
+          <Card className="bg-white/90 backdrop-blur-sm border border-gray-200 dark:border-gray-700 rounded-2xl shadow-[0_1px_3px_rgba(0,0,0,0.05)] hover:shadow-[0_4px_8px_rgba(0,0,0,0.08)] transition-all duration-300 border-t-4 border-gray-400 dark:bg-gray-800/90 lg:col-span-2">
+            <CardHeader className="pb-3">
               <CardTitle className="flex items-center gap-2 text-lg font-semibold text-[#374151] dark:text-gray-100">
                 <Lock className="h-5 w-5 text-gray-500" /> Segurança
               </CardTitle>
             </CardHeader>
-            <CardContent className="grid gap-y-3 pt-0"> {/* Reduzido gap-y e padding-top */}
+            <CardContent className="grid gap-y-3 pt-0">
               <div className="space-y-2">
                 <Label htmlFor="password" className="text-[#4B5563] dark:text-gray-400 font-medium">Alterar Senha</Label>
                 <Input id="password" type="password" placeholder="Deixe em branco para não alterar" className="bg-white rounded-lg border-gray-200 dark:border-gray-600 focus:ring-2 focus:ring-blue-400 placeholder-[#9CA3AF] dark:placeholder-gray-500 transition-all duration-200" />
