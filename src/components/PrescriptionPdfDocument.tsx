@@ -231,11 +231,13 @@ const PrescriptionPdfDocument: React.FC<PrescriptionPdfDocumentProps> = ({
     year: 'numeric',
   }).toUpperCase();
 
+  // Adicionando console.log para depuração
+  console.log("Medications received in PDF document:", medications);
+
   return (
     <Document>
       <Page size="A4" style={styles.page}>
         <View> {/* Main content wrapper */}
-          {/* Removido: <Text style={styles.debugText}>TEXTO DE TESTE - DEVE APARECER!</Text> */}
           <View style={styles.headerSection}>
             <View style={styles.clinicHeader}>
               <View style={styles.clinicInfoLeft}>
@@ -274,23 +276,13 @@ const PrescriptionPdfDocument: React.FC<PrescriptionPdfDocumentProps> = ({
                 <View key={med.id} style={styles.medicationItem}>
                   <Text style={styles.medicationNumber}>{index + 1})</Text>
                   <View style={styles.medicationDetails}>
-                    <View style={styles.medicationNameLine}>
-                      <Text style={styles.medicationName}>
-                        {med.medicationName || "Medicamento sem nome"}
-                        {med.concentration ? ` ${med.concentration}` : null}
-                      </Text>
-                      <View style={styles.line} />
-                      {med.pharmacyType && (
-                        <Text style={styles.pharmacyTypeBadge}>
-                          {med.pharmacyType === "Farmácia Veterinária" ? "VET" : "HUMANA"}
-                        </Text>
-                      )}
-                      {med.totalQuantityDisplay && (
-                        <Text style={styles.totalQuantityBadge}>
-                          {med.totalQuantityDisplay}
-                        </Text>
-                      )}
-                    </View>
+                    {/* Simplificando a linha do nome do medicamento e os badges para depuração */}
+                    <Text style={styles.medicationName}>
+                      {med.medicationName || "Medicamento sem nome"}
+                      {med.concentration ? ` ${med.concentration}` : null}
+                      {med.pharmacyType && ` (${med.pharmacyType === "Farmácia Veterinária" ? "VET" : "HUMANA"})`}
+                      {med.totalQuantityDisplay && ` - ${med.totalQuantityDisplay}`}
+                    </Text>
                     <Text style={styles.medicationInstructions}>
                       {med.generatedInstructions || "Instruções não informadas"}
                     </Text>
