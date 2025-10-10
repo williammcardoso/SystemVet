@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { ArrowLeft, Save, X, Settings, BuildingOffice2, MapPin, Wrench } from "lucide-react"; // Adicionado Wrench para 'Outros'
+import { ArrowLeft, Save, X, Settings, Building, MapPin, Wrench } from "lucide-react"; // Corrigido BuildingOffice2 para Building
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -49,7 +49,7 @@ const CompanySettingsPage = () => {
           <Card className="rounded-xl shadow-sm hover:shadow-md transition-all duration-300 border-l-4 border-blue-400">
             <CardHeader>
               <CardTitle className="flex items-center gap-2 text-lg">
-                <BuildingOffice2 className="h-5 w-5 text-blue-500" /> Informações Gerais
+                <Building className="h-5 w-5 text-blue-500" /> Informações Gerais
               </CardTitle>
             </CardHeader>
             <CardContent className="grid gap-y-3">
