@@ -34,16 +34,16 @@
 
     --radius: 0.5rem;
 
-    --sidebar-background: 220 10% 20%; /* Darker Gray-Blue, slightly lighter */
-    --sidebar-foreground: 220 20% 90%; /* Light Gray */
+    --sidebar-background: 220 10% 98%; /* MUITO MAIS CLARO: Quase branco */
+    --sidebar-foreground: 220 10% 20%; /* Texto escuro para contraste */
 
     --sidebar-primary: 220 80% 50%; /* Royal Blue */
     --sidebar-primary-foreground: 0 0% 100%;
 
-    --sidebar-accent: 220 10% 28%; /* Slightly lighter dark blue-gray for hover */
-    --sidebar-accent-foreground: 220 20% 90%;
+    --sidebar-accent: 220 10% 90%; /* Cinza claro para hover */
+    --sidebar-accent-foreground: 220 10% 20%; /* Texto escuro para hover */
 
-    --sidebar-border: 220 10% 25%;
+    --sidebar-border: 220 10% 85%;
     --sidebar-ring: 220 80% 50%;
   }
 
@@ -76,7 +76,7 @@
     --input: 220 10% 30%;
     --ring: 220 80% 50%;
 
-    --sidebar-background: 220 10% 20%; /* Darker Gray-Blue (fixed dark) */
+    --sidebar-background: 220 10% 20%; /* Mantido escuro para o modo dark */
     --sidebar-foreground: 220 20% 90%;
     --sidebar-primary: 220 80% 50%;
     --sidebar-primary-foreground: 0 0% 100%;
