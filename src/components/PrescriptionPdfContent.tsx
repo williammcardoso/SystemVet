@@ -160,7 +160,10 @@ const styles = StyleSheet.create({
     lineHeight: 1.5,
   },
   signatureFooter: {
-    marginTop: 30, // Adiciona margem superior para separar do conteúdo
+    position: 'absolute', // Posicionamento absoluto
+    bottom: 30,          // 30pt da parte inferior da página
+    left: 30,            // Alinhado com o padding da página
+    right: 30,           // Alinhado com o padding da página
     textAlign: "center",
     fontSize: 10,
     color: "#666",
@@ -305,7 +308,7 @@ export const PrescriptionPdfContent = ({
                         <Text style={styles.medicationInstructions}>
                           {med.generatedInstructions || 'Sem instruções de uso.'}
                         </Text>
-                        {med.generalObservations && med.generalObservations.trim && med.generalObservations.trim().length > 0 ? (
+                        {med.generalObservations && med.generalObservations.trim().length > 0 ? (
                           <Text style={styles.medicationObservations}>
                             Obs. Medicamento: {med.generalObservations}
                           </Text>
