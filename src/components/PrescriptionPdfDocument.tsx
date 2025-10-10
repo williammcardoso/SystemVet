@@ -185,6 +185,18 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     marginBottom: 2,
   },
+  // Novo estilo para o rodapé de teste
+  testFooter: {
+    position: 'absolute',
+    bottom: 10,
+    left: 0,
+    right: 0,
+    textAlign: 'center',
+    backgroundColor: 'red', // Cor de fundo chamativa
+    color: 'white',
+    padding: 5,
+    fontSize: 12,
+  }
 });
 
 // Helper function to format date
@@ -231,14 +243,9 @@ const PrescriptionPdfDocument: React.FC<PrescriptionPdfDocumentProps> = ({
         size="A4"
         style={styles.page}
         footer={({ pageNumber, totalPages }) => (
-          // Removendo a condição para testar se o rodapé aparece em todas as páginas
-          <View style={styles.signatureFooter}>
-            <Text style={styles.signatureDate}>{formatDateToPortuguese(currentDate)}</Text>
-            <Text style={styles.signatureText}>Assinado eletronicamente por</Text>
-            <Text style={styles.signatureName}>Dr. William Cardoso</Text>
-            <Text style={styles.signatureText}>CRMV 56895/SP</Text>
-            <Text style={styles.signatureText}>Registro no MAPA MV0052750203</Text>
-          </View>
+          <Text style={styles.testFooter}>
+            RODAPÉ DE TESTE - Página {pageNumber} de {totalPages}
+          </Text>
         )}
       >
         {/* Clinic Header */}
