@@ -1,3 +1,4 @@
+' que fecha a tag de abertura esteja na posição correta para resolver o erro de 'Syntax Error'.">
 import React from "react";
 import { Document, Page, View, Text, StyleSheet, Font } from "@react-pdf/renderer";
 import { MedicationData } from "@/types/medication";
@@ -231,7 +232,7 @@ export const PrescriptionPdfContent = ({
       <Page
         size="A4"
         style={styles.page}
-        render={({ pageNumber, totalPages }) => { // Usando retorno explícito aqui
+        render={({ pageNumber, totalPages }) => {
           return (
             <>
               {/* Clinic Header */}
@@ -342,9 +343,9 @@ export const PrescriptionPdfContent = ({
                 </View>
               )}
             </>
-          ); // Fechamento do retorno explícito
-        }} // Fechamento da função do render prop
-      </Page>
+          );
+        }}
+      ></Page> {/* A tag de fechamento da abertura do Page e a tag de fechamento do Page */}
     </Document>
   );
 };
