@@ -231,117 +231,119 @@ export const PrescriptionPdfContent = ({
       <Page
         size="A4"
         style={styles.page}
-        render={({ pageNumber, totalPages }) => (
-          <>
-            {/* Clinic Header */}
-            <View style={styles.clinicHeader}>
-              <View style={styles.clinicInfoLeft}>
-                {/* <Image src="/public/placeholder.svg" style={{ width: 40, height: 40, marginRight: 10 }} /> */}
-                <View>
-                  <Text style={styles.clinicName}>Clínica Moraes Cardoso</Text>
-                  <Text style={styles.clinicDetails}>CRMV 56895 SP</Text>
+        render={({ pageNumber, totalPages }) => { // Usando retorno explícito aqui
+          return (
+            <>
+              {/* Clinic Header */}
+              <View style={styles.clinicHeader}>
+                <View style={styles.clinicInfoLeft}>
+                  {/* <Image src="/public/placeholder.svg" style={{ width: 40, height: 40, marginRight: 10 }} /> */}
+                  <View>
+                    <Text style={styles.clinicName}>Clínica Moraes Cardoso</Text>
+                    <Text style={styles.clinicDetails}>CRMV 56895 SP</Text>
+                    <Text style={styles.clinicDetails}>Registro no MAPA MV0052750203</Text>
+                  </View>
+                </View>
+                <View style={styles.clinicAddressPhone}>
+                  <Text>Rua Campos Salles, 175, Centro</Text>
+                  <Text>Itapira - CEP: 13970-170</Text>
+                  <Text>Telefone: (19) 99363-1981</Text>
+                </View>
+              </View>
+
+              <Text style={styles.mainTitle}>Receita Simples</Text>
+
+              {/* Animal and Tutor Info */}
+              <View style={styles.infoSectionContainer}>
+                <View style={styles.infoCard}>
+                  <Text style={styles.infoTitle}>Animal</Text>
+                  <Text style={styles.infoText}>ID: {animalId}</Text>
+                  <Text style={styles.infoText}>Nome: {animalName}</Text>
+                  <Text style={styles.infoText}>Espécie: {animalSpecies}</Text>
+                </View>
+                <View style={styles.infoCard}>
+                  <Text style={styles.infoTitle}>Tutor</Text>
+                  <Text style={styles.infoText}>Nome: {tutorName}</Text>
+                  <Text style={styles.infoText}>Endereço: {tutorAddress || "Não informado"}</Text>
+                </View>
+              </View>
+
+              {/* Main Content that flows across pages */}
+              <View style={styles.mainContentContainer}>
+                {/* Medication List Grouped by Use Type */}
+                {Object.keys(groupedMedications).map((useType) => (
+                  <View key={useType}>
+                    <Text style={styles.groupTitle}>{useType}</Text>
+                    {groupedMedications[useType].map((med, index) => (
+                      <View key={med.id} style={styles.medicationItem}>
+                        <View style={styles.medicationHeaderLine}>
+                          <Text style={styles.medicationNumber}>{index + 1})</Text>
+                          <Text style={styles.medicationNameConcentration}>
+                            {(() => {
+                              const name = med.medicationName?.trim() || '';
+                              const concentration = med.concentration?.trim() || '';
+                              
+                              if (name.length > 0 && concentration.length > 0) {
+                                return `${name} ${concentration}`;
+                              } else if (name.length > 0) {
+                                return name;
+                              } else if (concentration.length > 0) {
+                                return concentration;
+                              }
+                              return 'Medicamento sem nome';
+                            })()}
+                          </Text>
+                          <View style={styles.lineSeparator} />
+                          <View style={styles.badgeContainer}>
+                            {med.pharmacyType && (
+                              <Text style={styles.pharmacyBadge}>
+                                {med.pharmacyType === "Farmácia Veterinária" ? "VET" : "HUMANA"}
+                              </Text>
+                            )}
+                            {med.totalQuantityDisplay && (
+                              <Text style={styles.quantityBadge}>
+                                {med.totalQuantityDisplay}
+                              </Text>
+                            )}
+                          </View>
+                        </View>
+                        <Text style={styles.medicationInstructions}>
+                          {med.generatedInstructions || 'Sem instruções de uso.'}
+                        </Text>
+                        {med.generalObservations && med.generalObservations.trim().length > 0 ? (
+                          <Text style={styles.medicationObservations}>
+                            Obs. Medicamento: {med.generalObservations}
+                          </Text>
+                        ) : null}
+                      </View>
+                    ))}
+                  </View>
+                ))}
+
+                {/* General Observations for the entire prescription */}
+                {generalObservations && (
+                  <View style={styles.generalObservationsSection}>
+                    <Text style={styles.generalObservationsTitle}>Observações Gerais da Receita</Text>
+                    <Text style={styles.generalObservationsText}>{generalObservations}</Text>
+                  </View>
+                )}
+              </View>
+
+              {/* FOOTER - Assinatura condicional na última página */}
+              {pageNumber === totalPages && (
+                <View style={styles.signatureFooter}>
+                  <Text style={styles.signatureDate}>
+                    {formatDateToPortuguese(currentDate)}
+                  </Text>
+                  <Text style={styles.signatureText}>Assinado eletronicamente por</Text>
+                  <Text style={styles.signatureName}>Dr. William Cardoso</Text>
+                  <Text style={styles.clinicDetails}>CRMV 56895/SP</Text>
                   <Text style={styles.clinicDetails}>Registro no MAPA MV0052750203</Text>
                 </View>
-              </View>
-              <View style={styles.clinicAddressPhone}>
-                <Text>Rua Campos Salles, 175, Centro</Text>
-                <Text>Itapira - CEP: 13970-170</Text>
-                <Text>Telefone: (19) 99363-1981</Text>
-              </View>
-            </View>
-
-            <Text style={styles.mainTitle}>Receita Simples</Text>
-
-            {/* Animal and Tutor Info */}
-            <View style={styles.infoSectionContainer}>
-              <View style={styles.infoCard}>
-                <Text style={styles.infoTitle}>Animal</Text>
-                <Text style={styles.infoText}>ID: {animalId}</Text>
-                <Text style={styles.infoText}>Nome: {animalName}</Text>
-                <Text style={styles.infoText}>Espécie: {animalSpecies}</Text>
-              </View>
-              <View style={styles.infoCard}>
-                <Text style={styles.infoTitle}>Tutor</Text>
-                <Text style={styles.infoText}>Nome: {tutorName}</Text>
-                <Text style={styles.infoText}>Endereço: {tutorAddress || "Não informado"}</Text>
-              </View>
-            </View>
-
-            {/* Main Content that flows across pages */}
-            <View style={styles.mainContentContainer}>
-              {/* Medication List Grouped by Use Type */}
-              {Object.keys(groupedMedications).map((useType) => (
-                <View key={useType}>
-                  <Text style={styles.groupTitle}>{useType}</Text>
-                  {groupedMedications[useType].map((med, index) => (
-                    <View key={med.id} style={styles.medicationItem}>
-                      <View style={styles.medicationHeaderLine}>
-                        <Text style={styles.medicationNumber}>{index + 1})</Text>
-                        <Text style={styles.medicationNameConcentration}>
-                          {(() => {
-                            const name = med.medicationName?.trim() || '';
-                            const concentration = med.concentration?.trim() || '';
-                            
-                            if (name.length > 0 && concentration.length > 0) {
-                              return `${name} ${concentration}`;
-                            } else if (name.length > 0) {
-                              return name;
-                            } else if (concentration.length > 0) {
-                              return concentration;
-                            }
-                            return 'Medicamento sem nome';
-                          })()}
-                        </Text>
-                        <View style={styles.lineSeparator} />
-                        <View style={styles.badgeContainer}>
-                          {med.pharmacyType && (
-                            <Text style={styles.pharmacyBadge}>
-                              {med.pharmacyType === "Farmácia Veterinária" ? "VET" : "HUMANA"}
-                            </Text>
-                          )}
-                          {med.totalQuantityDisplay && (
-                            <Text style={styles.quantityBadge}>
-                              {med.totalQuantityDisplay}
-                            </Text>
-                          )}
-                        </View>
-                      </View>
-                      <Text style={styles.medicationInstructions}>
-                        {med.generatedInstructions || 'Sem instruções de uso.'}
-                      </Text>
-                      {med.generalObservations && med.generalObservations.trim().length > 0 ? (
-                        <Text style={styles.medicationObservations}>
-                          Obs. Medicamento: {med.generalObservations}
-                        </Text>
-                      ) : null}
-                    </View>
-                  ))}
-                </View>
-              ))}
-
-              {/* General Observations for the entire prescription */}
-              {generalObservations && (
-                <View style={styles.generalObservationsSection}>
-                  <Text style={styles.generalObservationsTitle}>Observações Gerais da Receita</Text>
-                  <Text style={styles.generalObservationsText}>{generalObservations}</Text>
-                </View>
               )}
-            </View>
-
-            {/* FOOTER - Assinatura condicional na última página */}
-            {pageNumber === totalPages && (
-              <View style={styles.signatureFooter}>
-                <Text style={styles.signatureDate}>
-                  {formatDateToPortuguese(currentDate)}
-                </Text>
-                <Text style={styles.signatureText}>Assinado eletronicamente por</Text>
-                <Text style={styles.signatureName}>Dr. William Cardoso</Text>
-                <Text style={styles.clinicDetails}>CRMV 56895/SP</Text>
-                <Text style={styles.clinicDetails}>Registro no MAPA MV0052750203</Text>
-              </View>
-            )}
-          </>
-        )}
+            </>
+          ); // Fechamento do retorno explícito
+        }} // Fechamento da função do render prop
       </Page>
     </Document>
   );
