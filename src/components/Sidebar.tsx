@@ -115,8 +115,8 @@ const navItems: NavItem[] = [
     title: "Configuração",
     icon: Settings,
     subItems: [
-      { title: "Empresa", href: "/settings/company" }, // Novo link
-      { title: "Usuários", href: "/settings/user" },   // Novo link
+      { title: "Empresa", href: "/settings/company" },
+      { title: "Usuários", href: "/settings/user" },
       { title: "Acesso externo", href: "/settings/external-access" },
       { title: "Perfil de Acesso", href: "/settings/access-profile" },
     ],
@@ -148,7 +148,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isMobileOpen, onCloseMobile }) => {
 
       <aside
         className={cn(
-          "w-64 bg-sidebar text-sidebar-foreground h-screen fixed left-0 top-0 overflow-y-auto border-r border-sidebar-border p-4 shadow-lg transition-transform duration-300 ease-in-out z-50",
+          "w-64 bg-sidebar text-sidebar-foreground h-screen fixed left-0 top-0 overflow-y-auto border-r border-sidebar-border p-4 shadow-lg transition-transform duration-300 ease-in-out z-50 hide-scrollbar", // Adicionado hide-scrollbar
           isMobileOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0"
         )}
       >
@@ -164,7 +164,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isMobileOpen, onCloseMobile }) => {
                     to={item.href}
                     className={cn(
                       "flex items-center gap-3 rounded-md px-3 py-2 text-sidebar-foreground transition-all hover:bg-sidebar-accent hover:text-sidebar-accent-foreground",
-                      location.pathname === item.href && "bg-sidebar-primary text-sidebar-primary-foreground"
+                      location.pathname === item.href && "bg-sidebar-primary text-sidebar-primary-foreground font-medium" // Mantém font-medium para item ativo
                     )}
                     onClick={onCloseMobile} // Fecha o menu mobile ao clicar
                   >
@@ -175,7 +175,8 @@ const Sidebar: React.FC<SidebarProps> = ({ isMobileOpen, onCloseMobile }) => {
                   <AccordionItem value={`item-${index}`} className="border-b-0">
                     <AccordionTrigger className={cn(
                       "flex items-center gap-3 rounded-md px-3 py-2 text-sidebar-foreground transition-all hover:bg-sidebar-accent hover:text-sidebar-accent-foreground [&[data-state=open]>svg]:rotate-180",
-                      location.pathname.startsWith(item.subItems?.[0]?.href?.split('/')[1] || "") && "bg-sidebar-accent text-sidebar-accent-foreground" // Destaca o pai se um subitem estiver ativo
+                      "font-normal", // Removido font-semibold, agora é normal
+                      location.pathname.startsWith(item.subItems?.[0]?.href?.split('/')[1] || "") && "bg-sidebar-accent text-sidebar-accent-foreground font-medium" // Destaca o pai se um subitem estiver ativo
                     )}>
                       <item.icon className="h-4 w-4" />
                       {item.title}
@@ -188,7 +189,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isMobileOpen, onCloseMobile }) => {
                             to={subItem.href || "#"}
                             className={cn(
                               "flex items-center gap-3 rounded-md px-3 py-2 text-sidebar-foreground transition-all hover:bg-sidebar-accent hover:text-sidebar-accent-foreground",
-                              location.pathname === subItem.href && "bg-sidebar-primary text-sidebar-primary-foreground"
+                              location.pathname === subItem.href && "bg-sidebar-primary text-sidebar-primary-foreground font-medium" // Mantém font-medium para subitem ativo
                             )}
                             onClick={onCloseMobile} // Fecha o menu mobile ao clicar
                           >

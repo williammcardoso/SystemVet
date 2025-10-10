@@ -34,16 +34,16 @@
 
     --radius: 0.5rem;
 
-    --sidebar-background: 220 15% 20%; /* Dark Blue-Gray */
+    --sidebar-background: 220 10% 20%; /* Darker Gray-Blue, slightly lighter */
     --sidebar-foreground: 220 20% 90%; /* Light Gray */
 
     --sidebar-primary: 220 80% 50%; /* Royal Blue */
     --sidebar-primary-foreground: 0 0% 100%;
 
-    --sidebar-accent: 220 15% 30%; /* Slightly lighter dark blue-gray for hover */
+    --sidebar-accent: 220 10% 28%; /* Slightly lighter dark blue-gray for hover */
     --sidebar-accent-foreground: 220 20% 90%;
 
-    --sidebar-border: 220 15% 25%;
+    --sidebar-border: 220 10% 25%;
     --sidebar-ring: 220 80% 50%;
   }
 
@@ -76,13 +76,13 @@
     --input: 220 10% 30%;
     --ring: 220 80% 50%;
 
-    --sidebar-background: 220 15% 20%; /* Dark Blue-Gray (fixed dark) */
+    --sidebar-background: 220 10% 20%; /* Darker Gray-Blue (fixed dark) */
     --sidebar-foreground: 220 20% 90%;
     --sidebar-primary: 220 80% 50%;
     --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 220 15% 30%;
+    --sidebar-accent: 220 10% 28%;
     --sidebar-accent-foreground: 220 20% 90%;
-    --sidebar-border: 220 15% 25%;
+    --sidebar-border: 220 10% 25%;
     --sidebar-ring: 220 80% 50%;
   }
 }
@@ -104,4 +104,14 @@
   html {
     font-family: 'Inter', sans-serif;
   }
+}
+
+/* Estilos para ocultar a barra de rolagem */
+.hide-scrollbar::-webkit-scrollbar {
+  display: none; /* Para navegadores baseados em WebKit (Chrome, Safari) */
+}
+
+.hide-scrollbar {
+  -ms-overflow-style: none;  /* Para IE e Edge */
+  scrollbar-width: none;  /* Para Firefox */
 }
