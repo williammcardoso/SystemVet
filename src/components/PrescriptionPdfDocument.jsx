@@ -186,16 +186,6 @@ const styles = StyleSheet.create({
   },
 });
 
-interface PrescriptionPdfDocumentProps {
-  animalName: string;
-  animalId: string;
-  animalSpecies: string;
-  tutorName: string;
-  tutorAddress: string;
-  medications: MedicationData[];
-  generalObservations: string;
-}
-
 // Helper function to format date
 const formatDateToPortuguese = (date) => {
   const options = { day: '2-digit', month: 'long', year: 'numeric' };
