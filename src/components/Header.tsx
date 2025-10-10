@@ -12,7 +12,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Bell, HelpCircle, LogOut, Menu, Moon, Sun } from "lucide-react";
+import { Bell, HelpCircle, LogOut, Menu, Moon, Sun, Settings } from "lucide-react"; // Adicionado Settings
 import { useTheme } from "next-themes"; // Para Dark Mode
 
 interface HeaderProps {
