@@ -244,13 +244,13 @@ const mockPrescriptions: PrescriptionEntry[] = [
     instructions: "Administrar com alimento.",
   },
   {
-    id: "rx2",
-    date: "2024-04-05",
-    medicationName: "Anti-inflamatório Y",
-    dosePerAdministration: "1 comprimido",
-    frequency: "1x ao dia",
-    period: "7 dias",
-    instructions: "Por 7 dias.",
+    id: "rx-long-test", // Adicionando a receita longa aqui
+    date: new Date().toISOString().split('T')[0],
+    medicationName: "Receita de Teste Longa (8 medicamentos)",
+    dosePerAdministration: "Ver detalhes",
+    frequency: "Ver detalhes",
+    period: "Ver detalhes",
+    instructions: "Esta é uma receita de teste com múltiplos medicamentos para verificar a paginação do PDF.",
   },
 ];
 
