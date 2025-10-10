@@ -80,33 +80,9 @@ const styles = StyleSheet.create({
     borderBottomColor: "#000",
     paddingBottom: 4,
   },
-  medicationGroupTitle: {
-    fontSize: 14,
-    fontWeight: "bold",
-    marginTop: 20,
-    marginBottom: 10,
-    textTransform: "uppercase",
-  },
+  // Removido medicationGroupTitle
   medicationItem: {
-    flexDirection: "row",
-    marginBottom: 10,
-    alignItems: "flex-start",
-    backgroundColor: '#f0f0f0', // TEMPORARY: Light grey background for debugging
-    padding: 5, // TEMPORARY: Add some padding
-  },
-  medicationNumber: {
-    fontSize: 12,
-    marginRight: 5,
-    width: 15, // Fixed width for numbering
-  },
-  medicationDetails: {
-    flexGrow: 1,
-    fontSize: 12,
-  },
-  medicationNameLine: {
-    flexDirection: "row",
-    alignItems: "center",
-    marginBottom: 2,
+    marginBottom: 5, // Espaçamento mínimo entre itens
   },
   medicationName: {
     fontWeight: "bold",
@@ -115,44 +91,9 @@ const styles = StyleSheet.create({
   medicationInstructions: {
     fontSize: 10,
     color: "#555",
-    marginLeft: 20, // Indent instructions
+    marginLeft: 10, // Pequeno recuo para instruções
   },
-  pharmacyTypeBadge: {
-    fontSize: 9,
-    paddingHorizontal: 6,
-    paddingVertical: 3,
-    borderRadius: 10, // More oval
-    backgroundColor: "#e0e0e0",
-    color: "#333",
-    marginLeft: 10,
-    marginRight: 10,
-    alignSelf: "center",
-    borderWidth: 1,
-    borderColor: "#000",
-  },
-  totalQuantityBadge: {
-    fontSize: 10,
-    paddingHorizontal: 8,
-    paddingVertical: 4,
-    borderRadius: 10, // More oval
-    backgroundColor: "#e0e0e0",
-    color: "#333",
-    alignSelf: "center",
-    borderWidth: 1,
-    borderColor: "#000",
-  },
-  line: {
-    borderBottomWidth: 1,
-    borderBottomColor: "#000",
-    flexGrow: 1,
-    height: 1,
-    marginLeft: 5,
-    marginRight: 5,
-  },
-  flexRowCenter: {
-    flexDirection: "row",
-    alignItems: "center",
-  },
+  // Removido estilos de badge e linha
   observationsSection: {
     marginTop: 20,
   },
@@ -217,16 +158,6 @@ const PrescriptionPdfDocument: React.FC<PrescriptionPdfDocumentProps> = ({
   generalObservations,
   vetInfo,
 }) => {
-  // Group medications by useType
-  const groupedMedications = medications.reduce((acc, med) => {
-    const useType = med.useType || "Outros";
-    if (!acc[useType]) {
-      acc[useType] = [];
-    }
-    acc[useType].push(med);
-    return acc;
-  }, {} as Record<string, MedicationData[]>);
-
   const currentDate = new Date().toLocaleDateString('pt-BR', {
     day: '2-digit',
     month: 'long',
@@ -268,38 +199,23 @@ const PrescriptionPdfDocument: React.FC<PrescriptionPdfDocumentProps> = ({
             </View>
           </View>
 
-          {Object.keys(groupedMedications).map((useType) => (
-            <View key={useType}>
-              <Text style={styles.medicationGroupTitle}>{useType}</Text>
-              {groupedMedications[useType].map((med, index) => (
-                <View key={med.id} style={styles.medicationItem}>
-                  <Text style={styles.medicationNumber}>{index + 1})</Text>
-                  <View style={styles.medicationDetails}>
-                    <View style={styles.medicationNameLine}>
-                      <Text style={styles.medicationName}>
-                        {med.medicationName || "Medicamento sem nome"}
-                        {med.concentration ? ` ${med.concentration}` : null}
-                      </Text>
-                      <View style={styles.line} />
-                      {med.pharmacyType && (
-                        <Text style={styles.pharmacyTypeBadge}>
-                          {med.pharmacyType === "Farmácia Veterinária" ? "VET" : "HUMANA"}
-                        </Text>
-                      )}
-                      {med.totalQuantityDisplay && (
-                        <Text style={styles.totalQuantityBadge}>
-                          {med.totalQuantityDisplay}
-                        </Text>
-                      )}
-                    </View>
-                    <Text style={styles.medicationInstructions}>
-                      {med.generatedInstructions || "Instruções não informadas"}
-                    </Text>
-                  </View>
-                </View>
-              ))}
-            </View>
-          ))}
+          {/* Seção de Medicamentos - Simplificada ao máximo para depuração */}
+          <Text style={styles.sectionTitle}>Medicamentos ({medications.length} itens)</Text>
+          {medications.length === 0 ? (
+            <Text style={styles.medicationInstructions}>Nenhum medicamento adicionado para este paciente.</Text>
+          ) : (
+            medications.map((med, index) => (
+              <View key={med.id} style={styles.medicationItem}>
+                <Text style={styles.medicationName}>
+                  {index + 1}) {med.medicationName || "Medicamento sem nome"}
+                  {med.concentration ? ` ${med.concentration}` : null}
+                </Text>
+                <Text style={styles.medicationInstructions}>
+                  {med.generatedInstructions || "Instruções não informadas"}
+                </Text>
+              </View>
+            ))
+          )}
 
           {generalObservations && (
             <View style={styles.observationsSection}>
