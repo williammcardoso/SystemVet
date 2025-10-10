@@ -14,6 +14,8 @@ import {
   ClipboardList,
   MessageSquare,
   Eye,
+  X,
+  Save,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -30,8 +32,9 @@ import {
   DialogFooter,
 } from "@/components/ui/dialog";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"; // Adicionado importação da tabela
-// Removido: import AddPrescriptionForm from "@/components/AddPrescriptionForm"; // Este componente foi refatorado e não é mais usado diretamente aqui
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import PrescriptionMedicationForm, { MedicationData } from "@/components/PrescriptionMedicationForm";
+import { toast } from "sonner"; // Importar toast para notificações
 
 // Mock data (centralizado aqui para facilitar o exemplo, mas idealmente viria de um serviço)
 interface Animal {
@@ -300,6 +303,11 @@ const PatientRecordPage = () => {
   const [newReferenceTables, setNewReferenceTables] = useState<string>("");
   const [newConclusions, setNewConclusions] = useState<string>("");
 
+  // NOVOS ESTADOS PARA O MODAL DE RECEITA
+  const [isAddPrescriptionDialogOpen, setIsAddPrescriptionDialogOpen] = useState(false);
+  const [currentPrescriptionMedications, setCurrentPrescriptionMedications] = useState<MedicationData[]>([]);
+  const [currentPrescriptionGeneralObservations, setCurrentPrescriptionGeneralObservations] = useState<string>("");
+
 
   if (!client || !animal) {
     return (
@@ -430,6 +438,83 @@ const PatientRecordPage = () => {
     setNewReferenceTables("");
     setNewConclusions("");
   };
+
+  // HANDLERS PARA O MODAL DE RECEITA
+  const handleOpenAddPrescriptionDialog = () => {
+    setCurrentPrescriptionMedications([]); // Reset medications when opening
+    setCurrentPrescriptionGeneralObservations(""); // Reset observations
+    setIsAddPrescriptionDialogOpen(true);
+  };
+
+  const handleAddMedicationToModal = () => {
+    const newMedication: MedicationData = {
+      id: `med-${Date.now()}`,
+      useType: "",
+      pharmacyType: "",
+      medicationName: "",
+      concentration: "",
+      pharmaceuticalForm: "",
+      customPharmaceuticalForm: "",
+      dosePerAdministration: "",
+      frequency: "",
+      customFrequency: "",
+      period: "",
+      customPeriod: "",
+      useCustomInstructions: false,
+      generatedInstructions: "",
+      generalObservations: "", // This is for the medication-specific observations, not the overall prescription
+      totalQuantity: "",
+      totalQuantityDisplay: "",
+      isCollapsed: false, // New medications start expanded
+    };
+    setCurrentPrescriptionMedications((prev) => [...prev, newMedication]);
+  };
+
+  const handleSaveMedicationInModal = (updatedMedication: MedicationData) => {
+    setCurrentPrescriptionMedications((prev) =>
+      prev.map((med) => (med.id === updatedMedication.id ? updatedMedication : med))
+    );
+    toast.success(`Medicamento '${updatedMedication.medicationName || 'sem nome'}' salvo no formulário!`);
+  };
+
+  const handleDeleteMedicationInModal = (id: string) => {
+    setCurrentPrescriptionMedications((prev) => prev.filter((med) => med.id !== id));
+    toast.info("Medicamento removido do formulário.");
+  };
+
+  const handleToggleMedicationCollapseInModal = (id: string) => {
+    setCurrentPrescriptionMedications((prev) =>
+      prev.map((med) =>
+        med.id === id ? { ...med, isCollapsed: !med.isCollapsed } : med
+      )
+    );
+  };
+
+  const handleSaveFullPrescription = () => {
+    if (currentPrescriptionMedications.length === 0) {
+      toast.error("Adicione pelo menos um medicamento à receita.");
+      return;
+    }
+
+    // Aqui, você normalmente enviaria os dados completos da receita para um backend
+    // Por enquanto, vamos adicioná-lo ao estado mock `prescriptions`.
+    const newPrescriptionEntry: PrescriptionEntry = {
+      id: `rx-${Date.now()}`,
+      date: new Date().toISOString().split('T')[0],
+      medicationName: currentPrescriptionMedications.map(m => m.medicationName).join(", "), // Resumo para a tabela
+      dosePerAdministration: "Ver detalhes", // Placeholder
+      frequency: "Ver detalhes", // Placeholder
+      period: "Ver detalhes", // Placeholder
+      instructions: currentPrescriptionGeneralObservations || "Nenhuma observação geral.",
+      // Em um aplicativo real, você armazenaria a lista completa de medicamentos e observações gerais
+      // Para este mock, armazenaremos apenas um resumo.
+    };
+
+    setPrescriptions((prev) => [...prev, newPrescriptionEntry]);
+    toast.success("Receita salva com sucesso!");
+    setIsAddPrescriptionDialogOpen(false); // Fechar o modal
+  };
+
 
   return (
     <div className="p-6">
@@ -1015,11 +1100,9 @@ const PatientRecordPage = () => {
           <Card>
             <CardHeader className="flex flex-row items-center justify-between">
               <CardTitle>Receitas</CardTitle>
-              <Link to={`/clients/${clientId}/animals/${animalId}/add-prescription`}>
-                <Button size="sm">
-                  <Plus className="h-4 w-4 mr-2" /> Adicionar Nova Receita
-                </Button>
-              </Link>
+              <Button size="sm" onClick={handleOpenAddPrescriptionDialog}>
+                <Plus className="h-4 w-4 mr-2" /> Adicionar Nova Receita
+              </Button>
             </CardHeader>
             <CardContent>
               {prescriptions.length > 0 ? (
@@ -1092,6 +1175,66 @@ const PatientRecordPage = () => {
           </Card>
         </TabsContent>
       </Tabs>
+
+      {/* MODAL PARA ADICIONAR RECEITA */}
+      <Dialog open={isAddPrescriptionDialogOpen} onOpenChange={setIsAddPrescriptionDialogOpen}>
+        <DialogContent className="sm:max-w-[900px] max-h-[90vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle>Adicionar Nova Receita</DialogTitle>
+            <DialogDescription>
+              Preencha os detalhes para criar uma nova receita para {animal.name}.
+            </DialogDescription>
+          </DialogHeader>
+          <div className="grid gap-4 py-4">
+            <Card className="mb-4">
+              <CardHeader>
+                <CardTitle>Medicamentos</CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                {currentPrescriptionMedications.length === 0 && (
+                  <p className="text-muted-foreground">Nenhum medicamento adicionado ainda.</p>
+                )}
+                {currentPrescriptionMedications.map((med, index) => (
+                  <PrescriptionMedicationForm
+                    key={med.id}
+                    medication={med}
+                    index={index}
+                    onSave={handleSaveMedicationInModal}
+                    onDelete={handleDeleteMedicationInModal}
+                    onToggleCollapse={handleToggleMedicationCollapseInModal}
+                  />
+                ))}
+                <Button onClick={handleAddMedicationToModal} className="w-full">
+                  <Plus className="mr-2 h-4 w-4" /> Adicionar Medicamento
+                </Button>
+              </CardContent>
+            </Card>
+
+            <Card>
+              <CardHeader>
+                <CardTitle>Observações Gerais da Receita</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <Textarea
+                  id="prescriptionGeneralObservations"
+                  placeholder="Instruções especiais, restrições alimentares, ou outras observações para a receita..."
+                  rows={5}
+                  value={currentPrescriptionGeneralObservations}
+                  onChange={(e) => setCurrentPrescriptionGeneralObservations(e.target.value)}
+                />
+              </CardContent>
+            </Card>
+          </div>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setIsAddPrescriptionDialogOpen(false)}>
+              <X className="mr-2 h-4 w-4" /> Cancelar
+            </Button>
+            <Button onClick={handleSaveFullPrescription}>
+              <Save className="mr-2 h-4 w-4" /> Salvar Receita
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };
