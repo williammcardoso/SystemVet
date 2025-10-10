@@ -159,15 +159,15 @@ const styles = StyleSheet.create({
     fontSize: 10,
     lineHeight: 1.5,
   },
-  footerAbsolute: { // New style for absolute positioning
+  footerAbsolute: {
     position: 'absolute',
-    bottom: 30, // Matches page padding
-    left: 30,   // Matches page padding
-    right: 30,  // Matches page padding
+    bottom: 30,
+    left: 30,
+    right: 30,
     textAlign: "center",
     fontSize: 10,
     color: "#666",
-    paddingTop: 15, // Add padding to separate from content above
+    paddingTop: 15,
     borderTopWidth: 1,
     borderTopColor: "#eee",
   },
@@ -197,13 +197,13 @@ interface PrescriptionPdfDocumentProps {
 }
 
 // Helper function to format date
-const formatDateToPortuguese = (date: Date) => {
-  const options: Intl.DateTimeFormatOptions = { day: '2-digit', month: 'long', year: 'numeric' };
+const formatDateToPortuguese = (date) => {
+  const options = { day: '2-digit', month: 'long', year: 'numeric' };
   const formattedDate = date.toLocaleDateString('pt-BR', options);
   return formattedDate.toUpperCase();
 };
 
-const PrescriptionPdfDocument: React.FC<PrescriptionPdfDocumentProps> = ({
+const PrescriptionPdfDocument = ({
   animalName,
   animalId,
   animalSpecies,
@@ -220,7 +220,7 @@ const PrescriptionPdfDocument: React.FC<PrescriptionPdfDocumentProps> = ({
     }
     acc[useType].push(med);
     return acc;
-  }, {} as Record<string, MedicationData[]>);
+  }, {});
 
   const currentDate = new Date();
 
