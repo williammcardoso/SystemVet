@@ -31,6 +31,7 @@ import {
   DialogFooter,
 } from "@/components/ui/dialog";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import AddPrescriptionForm from "@/components/AddPrescriptionForm"; // Importar o novo componente
 
 // Mock data (centralizado aqui para facilitar o exemplo, mas idealmente viria de um serviço)
 interface Animal {
@@ -252,9 +253,6 @@ const PatientRecordPage = () => {
     { id: "p1", date: "2023-11-01", medication: "Antibiótico X", dosage: "5mg, 2x ao dia", instructions: "Administrar com alimento." },
     { id: "p2", date: "2024-04-05", medication: "Anti-inflamatório Y", dosage: "1 comprimido, 1x ao dia", instructions: "Por 7 dias." },
   ]);
-  const [newMedication, setNewMedication] = useState<string>("");
-  const [newDosage, setNewDosage] = useState<string>("");
-  const [newInstructions, setNewInstructions] = useState<string>("");
 
   const [observations, setObservations] = useState<ObservationEntry[]>([
     { id: "o1", date: "2023-09-20", observation: "Animal apresentou melhora significativa após tratamento." },
@@ -341,20 +339,15 @@ const PatientRecordPage = () => {
     }
   };
 
-  const handleAddPrescription = () => {
-    if (newMedication.trim() && newDosage.trim()) {
-      const newEntry: PrescriptionEntry = {
-        id: String(prescriptions.length + 1),
-        date: new Date().toISOString().split('T')[0],
-        medication: newMedication.trim(),
-        dosage: newDosage.trim(),
-        instructions: newInstructions.trim(),
-      };
-      setPrescriptions([...prescriptions, newEntry]);
-      setNewMedication("");
-      setNewDosage("");
-      setNewInstructions("");
-    }
+  const handleAddPrescription = (medication: string, dosage: string, instructions: string) => {
+    const newEntry: PrescriptionEntry = {
+      id: String(prescriptions.length + 1),
+      date: new Date().toISOString().split('T')[0],
+      medication: medication,
+      dosage: dosage,
+      instructions: instructions,
+    };
+    setPrescriptions([...prescriptions, newEntry]);
   };
 
   const handleAddObservation = () => {
@@ -1027,47 +1020,11 @@ const PatientRecordPage = () => {
         {/* Nova aba: Receitas */}
         <TabsContent value="prescriptions" className="mt-4">
           <Card>
-            <CardHeader className="flex flex-row items-center justify-between">
+            <CardHeader>
               <CardTitle>Receitas</CardTitle>
-              {/* Removido o botão "Adicionar Receita" daqui, pois o formulário já está visível abaixo */}
             </CardHeader>
             <CardContent>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-                <div className="space-y-2">
-                  <Label htmlFor="medication">Medicação</Label>
-                  <Input
-                    id="medication"
-                    placeholder="Nome da medicação"
-                    value={newMedication}
-                    onChange={(e) => setNewMedication(e.target.value)}
-                  />
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="dosage">Dosagem</Label>
-                  <Input
-                    id="dosage"
-                    placeholder="Ex: 5mg, 2x ao dia"
-                    value={newDosage}
-                    onChange={(e) => setNewDosage(e.target.value)}
-                  />
-                </div>
-                <div className="space-y-2 col-span-full">
-                  <Label htmlFor="instructions">Instruções</Label>
-                  <Textarea
-                    id="instructions"
-                    placeholder="Instruções de uso"
-                    rows={3}
-                    value={newInstructions}
-                    onChange={(e) => setNewInstructions(e.target.value)}
-                  />
-                </div>
-                <div className="col-span-full flex justify-end">
-                  <Button onClick={handleAddPrescription} disabled={!newMedication || !newDosage}>
-                    <Plus className="h-4 w-4 mr-2" /> Salvar Receita
-                  </Button>
-                </div>
-              </div>
-
+              <AddPrescriptionForm onAddPrescription={handleAddPrescription} />
               {prescriptions.length > 0 ? (
                 <Table>
                   <TableHeader>
