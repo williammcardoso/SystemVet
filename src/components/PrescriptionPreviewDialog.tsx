@@ -10,6 +10,8 @@ import {
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { X } from "lucide-react";
+import { PDFViewer } from "@react-pdf/renderer"; // Import PDFViewer
+import PrescriptionPdfDocument from "./PrescriptionPdfDocument"; // Import the new PDF document component
 import { MedicationData } from "./PrescriptionMedicationForm"; // Import the interface
 
 interface PrescriptionPreviewDialogProps {
@@ -29,53 +31,27 @@ const PrescriptionPreviewDialog: React.FC<PrescriptionPreviewDialogProps> = ({
 }) => {
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="sm:max-w-[600px] max-h-[90vh] overflow-y-auto">
-        <DialogHeader>
+      <DialogContent className="sm:max-w-[800px] max-h-[90vh] overflow-hidden p-0"> {/* Adjusted size and padding */}
+        <DialogHeader className="p-6 pb-0">
           <DialogTitle>Pré-visualização da Receita</DialogTitle>
           <DialogDescription>
             Verifique os detalhes da receita antes de salvar.
           </DialogDescription>
         </DialogHeader>
 
-        <div className="py-4 space-y-6">
-          <div>
-            <h3 className="text-lg font-semibold mb-2">Paciente:</h3>
-            <p className="text-muted-foreground">{clientName || "Não selecionado"}</p>
-          </div>
-
-          <div>
-            <h3 className="text-lg font-semibold mb-2">Medicamentos:</h3>
-            {medications.length > 0 ? (
-              <div className="space-y-4">
-                {medications.map((med, index) => (
-                  <div key={med.id} className="border p-3 rounded-md bg-muted/50">
-                    <p className="font-medium text-primary mb-1">
-                      {index + 1}. {med.medicationName} {med.concentration && `(${med.concentration})`}
-                    </p>
-                    <p className="text-sm text-muted-foreground">
-                      Tipo de Uso: {med.useType || "N/A"} | Farmácia: {med.pharmacyType || "N/A"}
-                    </p>
-                    <p className="text-sm mt-2">
-                      Instruções: <span className="font-semibold">{med.generatedInstructions || "N/A"}</span>
-                    </p>
-                    {med.totalQuantity && <p className="text-xs text-muted-foreground mt-1">Quantidade Total Estimada: {med.totalQuantity}</p>}
-                  </div>
-                ))}
-              </div>
-            ) : (
-              <p className="text-muted-foreground">Nenhum medicamento adicionado.</p>
-            )}
-          </div>
-
-          {generalObservations && (
-            <div>
-              <h3 className="text-lg font-semibold mb-2">Observações Gerais:</h3>
-              <p className="text-muted-foreground whitespace-pre-wrap">{generalObservations}</p>
-            </div>
+        <div className="flex-1 overflow-hidden">
+          {isOpen && ( // Only render PDFViewer when dialog is open to avoid errors
+            <PDFViewer width="100%" height="calc(90vh - 120px)"> {/* Adjust height dynamically */}
+              <PrescriptionPdfDocument
+                clientName={clientName}
+                medications={medications}
+                generalObservations={generalObservations}
+              />
+            </PDFViewer>
           )}
         </div>
 
-        <div className="flex justify-end pt-4">
+        <div className="flex justify-end p-4 border-t">
           <Button variant="outline" onClick={onClose}>
             <X className="mr-2 h-4 w-4" /> Fechar
           </Button>
