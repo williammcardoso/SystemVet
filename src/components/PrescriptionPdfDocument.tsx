@@ -230,11 +230,25 @@ const PrescriptionPdfDocument: React.FC<PrescriptionPdfDocumentProps> = ({
       <Page
         size="A4"
         style={styles.page}
-        footer={({ pageNumber, totalPages }) => (
-          <Text style={{ fontSize: 8, textAlign: 'center', color: 'blue', marginTop: 10 }}>
-            Página {pageNumber} de {totalPages} - Teste de Rodapé
-          </Text>
-        )}
+        footer={({ pageNumber, totalPages }) => {
+          console.log(`Rodapé sendo renderizado! Página ${pageNumber} de ${totalPages}`); // Diagnóstico
+          return (
+            <Text style={{
+              position: 'absolute',
+              bottom: 10,
+              left: 0,
+              right: 0,
+              textAlign: 'center',
+              backgroundColor: 'red', // Cor de fundo chamativa
+              color: 'yellow', // Cor do texto chamativa
+              padding: 5,
+              fontSize: 20, // Tamanho da fonte grande
+              fontWeight: 'bold',
+            }}>
+              RODAPÉ DE TESTE - Página {pageNumber} de {totalPages}
+            </Text>
+          );
+        }}
       >
         {/* Clinic Header */}
         <View style={styles.clinicHeader}>
