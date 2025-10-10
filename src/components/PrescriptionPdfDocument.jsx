@@ -312,8 +312,7 @@ const PrescriptionPdfDocument = ({
             </View>
           )}
         </>
-      )}
-      </Page>
+      )} />
     </Document>
   );
 };
