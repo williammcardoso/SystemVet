@@ -235,9 +235,6 @@ const AddPrescriptionPage = () => {
 
   const isPreviewDisabled = !currentClient || !currentAnimal || medications.length === 0;
 
-  // DEBUG: Log para verificar o array de medicamentos antes de passar para o PDF
-  console.log("[AddPrescriptionPage] Medications array before PDF generation:", medications);
-
   return (
     <div className="p-6">
       <div className="flex items-center justify-between mb-6">
@@ -341,7 +338,7 @@ const AddPrescriptionPage = () => {
           <X className="mr-2 h-4 w-4" /> Cancelar
         </Button>
         <PDFDownloadLink
-          key={medications.length} {/* Adicionada a key aqui */}
+          key={medications.length}
           document={
             <PrescriptionPdfDocument
               clinicInfo={clinicInfo}
