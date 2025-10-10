@@ -7,27 +7,9 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Switch } from "@/components/ui/switch";
 import { Plus, Trash2, ChevronUp, ChevronDown, Edit } from "lucide-react";
 import { cn } from "@/lib/utils"; // Importar cn para classes condicionais
+import { MedicationData } from "@/types/medication"; // Importar do novo arquivo de tipos
 
-export interface MedicationData {
-  id: string;
-  useType: string;
-  pharmacyType: string;
-  medicationName: string;
-  concentration: string;
-  pharmaceuticalForm: string;
-  customPharmaceuticalForm?: string;
-  dosePerAdministration: string;
-  frequency: string;
-  customFrequency?: string;
-  period: string;
-  customPeriod?: string;
-  useCustomInstructions: boolean;
-  generatedInstructions: string; // This will store the final instruction (auto or custom)
-  generalObservations: string; // This is for the separate 'Observações Gerais' at the bottom
-  totalQuantity: string; // Numeric string for calculation
-  totalQuantityDisplay?: string; // Formatted string for display in PDF
-  isCollapsed?: boolean; // To control collapse state in the form
-}
+export type { MedicationData }; // Re-exportar a interface para outros módulos TypeScript
 
 interface PrescriptionMedicationFormProps {
   medication: MedicationData;

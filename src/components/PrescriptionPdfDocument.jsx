@@ -1,6 +1,6 @@
 import React from "react";
 import { Document, Page, View, Text, StyleSheet, Font } from "@react-pdf/renderer";
-import { MedicationData } from "./PrescriptionMedicationForm";
+import { MedicationData } from "@/types/medication"; // Importar do novo arquivo de tipos
 
 // Register a font if needed (e.g., for custom fonts or if default is not working)
 // Font.register({ family: "Roboto", src: "https://fonts.gstatic.com/s/roboto/v20/KFOmCnqEu92Fr1Mu4mxP.ttf" });
