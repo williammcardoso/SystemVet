@@ -1,5 +1,5 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom"; // Importar useLocation
 import {
   Accordion,
   AccordionContent,
@@ -17,8 +17,9 @@ import {
   DollarSign,
   Settings,
   LogOut,
-  PawPrint, // Adicionado para o menu de cadastros de animais
-  Palette, // Adicionado para pelagens
+  PawPrint,
+  Palette,
+  Search, // Adicionado para 'Busca Rápida'
 } from "lucide-react";
 
 interface NavItem {
@@ -30,19 +31,59 @@ interface NavItem {
 
 const navItems: NavItem[] = [
   {
-    title: "Painel de Controle",
-    href: "/",
-    icon: LayoutDashboard,
+    title: "PRINCIPAL",
+    icon: Folder, // Ícone genérico para o cabeçalho do grupo
+    subItems: [
+      {
+        title: "Dashboard",
+        href: "/dashboard", // Alterado para /dashboard
+        icon: LayoutDashboard,
+      },
+      {
+        title: "Busca Rápida",
+        href: "/quick-search", // Nova rota para busca rápida
+        icon: Search,
+      },
+    ],
   },
   {
-    title: "Clientes",
-    href: "/clients",
-    icon: Users,
+    title: "CADASTROS",
+    icon: Folder, // Ícone genérico para o cabeçalho do grupo
+    subItems: [
+      {
+        title: "Tutores",
+        href: "/clients",
+        icon: Users,
+      },
+      {
+        title: "Pacientes",
+        href: "/patients", // Nova rota para pacientes (animais)
+        icon: PawPrint,
+      },
+      // Sub-itens de cadastros existentes
+      { title: "Espécies", href: "/registrations/species", icon: PawPrint },
+      { title: "Raças", href: "/registrations/breeds", icon: PawPrint },
+      { title: "Pelagens", href: "/registrations/coat-types", icon: Palette },
+      { title: "Patologias", href: "/registrations/pathologies" },
+      { title: "Tipos de atendimento", href: "/registrations/appointment-types" },
+      { title: "Vacinas", href: "/registrations/vaccines" },
+      { title: "Exames", href: "/registrations/exams" },
+      { title: "Atributos de exames", href: "/registrations/exam-attributes" },
+      { title: "Referências de exames", href: "/registrations/exam-references" },
+      { title: "Modelo de receita", href: "/registrations/recipe-model" },
+      { title: "Origem dos clientes", href: "/registrations/client-origins" },
+      { title: "Modelo de documento", href: "/registrations/document-model" },
+    ],
   },
   {
-    title: "Agenda",
-    href: "/agenda",
-    icon: Calendar,
+    title: "ATENDIMENTO",
+    icon: Stethoscope, // Ícone genérico para o cabeçalho do grupo
+    subItems: [
+      { title: "Consultas", href: "/appointments/consultations", icon: Calendar },
+      { title: "Agendamentos", href: "/appointments/schedule", icon: Calendar },
+      { title: "Anamnese", href: "/appointments/anamnesis", icon: ClipboardList },
+      { title: "Prescrições", href: "/appointments/prescriptions", icon: FileText },
+    ],
   },
   {
     title: "Vendas",
@@ -61,24 +102,6 @@ const navItems: NavItem[] = [
       { title: "Modelo de orçamento", href: "/sales/budget-model" },
       { title: "Modelo de demonstrativo", href: "/sales/statement-model" },
       { title: "Configuração", href: "/sales/configuration" },
-    ],
-  },
-  {
-    title: "Cadastros",
-    icon: Folder,
-    subItems: [
-      { title: "Espécies", href: "/registrations/species", icon: PawPrint }, // Link para a nova página
-      { title: "Raças", href: "/registrations/breeds", icon: PawPrint },     // Link para a nova página
-      { title: "Pelagens", href: "/registrations/coat-types", icon: Palette }, // Link para a nova página
-      { title: "Patologias", href: "/registrations/pathologies" },
-      { title: "Tipos de atendimento", href: "/registrations/appointment-types" },
-      { title: "Vacinas", href: "/registrations/vaccines" },
-      { title: "Exames", href: "/registrations/exams" },
-      { title: "Atributos de exames", href: "/registrations/exam-attributes" },
-      { title: "Referências de exames", href: "/registrations/exam-references" },
-      { title: "Modelo de receita", href: "/registrations/recipe-model" },
-      { title: "Origem dos clientes", href: "/registrations/client-origins" },
-      { title: "Modelo de documento", href: "/registrations/document-model" },
     ],
   },
   {
@@ -129,51 +152,59 @@ const navItems: NavItem[] = [
 ];
 
 const Sidebar = () => {
+  const location = useLocation();
+
   return (
     <aside className="w-64 bg-sidebar text-sidebar-foreground h-screen fixed left-0 top-0 overflow-y-auto border-r border-sidebar-border p-4 shadow-lg">
-      <div className="flex items-center justify-center h-16 border-b border-sidebar-border mb-4">
-        <h1 className="text-3xl font-extrabold text-sidebar-primary-foreground">SimplesVet</h1>
+      <div className="flex items-center justify-between h-16 border-b border-sidebar-border mb-4 px-3">
+        <h1 className="text-2xl font-extrabold text-sidebar-primary-foreground">SystemVet</h1>
+        {/* Adicionar um botão de fechar ou minimizar se necessário */}
+        {/* <Button variant="ghost" size="icon" className="text-sidebar-foreground hover:bg-sidebar-accent">
+          <X className="h-4 w-4" />
+        </Button> */}
       </div>
       <nav className="space-y-1">
         <Accordion type="multiple" className="w-full">
-          {navItems.map((item, index) => (
-            <React.Fragment key={item.title}>
-              {item.href ? (
-                <Link
-                  to={item.href}
-                  className="flex items-center gap-3 rounded-lg px-3 py-2 text-sidebar-foreground transition-all hover:bg-sidebar-accent hover:text-sidebar-accent-foreground data-[active=true]:bg-sidebar-primary data-[active=true]:text-sidebar-primary-foreground"
-                  data-active={location.pathname === item.href} // Adiciona atributo data-active
-                >
-                  <item.icon className="h-4 w-4" />
-                  {item.title}
-                </Link>
+          {navItems.map((group, groupIndex) => (
+            <div key={`group-${groupIndex}`} className="mb-4">
+              {group.subItems ? (
+                <>
+                  <h3 className="text-xs font-semibold uppercase text-muted-foreground px-3 py-2 mt-4 mb-1">
+                    {group.title}
+                  </h3>
+                  {group.subItems.map((item) => (
+                    <Link
+                      key={item.title}
+                      to={item.href || "#"}
+                      className={cn(
+                        "flex items-center gap-3 rounded-md px-3 py-2 text-sidebar-foreground transition-all hover:bg-sidebar-accent hover:text-sidebar-accent-foreground",
+                        location.pathname === item.href && "bg-sidebar-primary text-sidebar-primary-foreground hover:bg-sidebar-primary hover:text-sidebar-primary-foreground"
+                      )}
+                    >
+                      {item.icon && <item.icon className="h-4 w-4" />}
+                      {item.title}
+                    </Link>
+                  ))}
+                </>
               ) : (
-                <AccordionItem value={`item-${index}`} className="border-b-0">
-                  <AccordionTrigger className="flex items-center gap-3 rounded-lg px-3 py-2 text-sidebar-foreground transition-all hover:bg-sidebar-accent hover:text-sidebar-accent-foreground [&[data-state=open]>svg]:rotate-180">
-                    <item.icon className="h-4 w-4" />
-                    {item.title}
-                  </AccordionTrigger>
-                  <AccordionContent className="pb-0">
-                    <div className="ml-6 space-y-1">
-                      {item.subItems?.map((subItem) => (
-                        <Link
-                          key={subItem.title}
-                          to={subItem.href || "#"}
-                          className="flex items-center gap-3 rounded-lg px-3 py-2 text-sidebar-foreground transition-all hover:bg-sidebar-accent hover:text-sidebar-accent-foreground data-[active=true]:bg-sidebar-primary data-[active=true]:text-sidebar-primary-foreground"
-                          data-active={location.pathname === subItem.href} // Adiciona atributo data-active
-                        >
-                          {subItem.icon && <subItem.icon className="h-4 w-4" />} {/* Render icon if available */}
-                          {subItem.title}
-                        </Link>
-                      ))}
-                    </div>
-                  </AccordionContent>
-                </AccordionItem>
+                <Link
+                  to={group.href || "#"}
+                  className={cn(
+                    "flex items-center gap-3 rounded-md px-3 py-2 text-sidebar-foreground transition-all hover:bg-sidebar-accent hover:text-sidebar-accent-foreground",
+                    location.pathname === group.href && "bg-sidebar-primary text-sidebar-primary-foreground hover:bg-sidebar-primary hover:text-sidebar-primary-foreground"
+                  )}
+                >
+                  {group.icon && <group.icon className="h-4 w-4" />}
+                  {group.title}
+                </Link>
               )}
-            </React.Fragment>
+            </div>
           ))}
         </Accordion>
       </nav>
+      <div className="absolute bottom-4 left-0 w-full text-center text-xs text-muted-foreground">
+        Sistema: Veterinário v1.0.0
+      </div>
     </aside>
   );
 };

@@ -4,9 +4,9 @@ import { Link } from "react-router-dom";
 
 const Index = () => {
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-br from-primary/10 to-background">
+    <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-br from-blue-100 to-white"> {/* Gradiente mais suave */}
       <div className="text-center p-8 bg-card rounded-lg shadow-xl max-w-2xl mx-auto">
-        <h1 className="text-5xl font-extrabold mb-6 text-primary">Bem-vindo ao SimplesVet</h1>
+        <h1 className="text-5xl font-extrabold mb-6 text-primary">Bem-vindo ao SystemVet</h1> {/* Alterado para SystemVet */}
         <p className="text-xl text-foreground mb-8">
           Sua solução completa para gerenciamento veterinário.
         </p>

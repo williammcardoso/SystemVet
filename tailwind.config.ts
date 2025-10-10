@@ -62,6 +62,10 @@ export default {
           border: "hsl(var(--sidebar-border))",
           ring: "hsl(var(--sidebar-ring))",
         },
+        "badge-green": {
+          DEFAULT: "hsl(var(--badge-green-background))",
+          foreground: "hsl(var(--badge-green-foreground))",
+        },
       },
       borderRadius: {
         lg: "var(--radius)",

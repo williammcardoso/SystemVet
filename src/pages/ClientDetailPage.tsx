@@ -1,6 +1,6 @@
 import React from "react";
 import { Link, useParams, useNavigate } from "react-router-dom";
-import { ArrowLeft, PawPrint, Eye } from "lucide-react";
+import { ArrowLeft, PawPrint, Eye, Edit, Trash2 } from "lucide-react"; // Adicionado Edit e Trash2
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
@@ -22,6 +22,9 @@ interface Animal {
 interface Client {
   id: string;
   name: string;
+  cpf: string;
+  contact: { phone: string; email: string };
+  address: string;
   animals: Animal[];
 }
 
@@ -29,6 +32,9 @@ const mockClients: Client[] = [
   {
     id: "1",
     name: "William",
+    cpf: "123.456.789-00",
+    contact: { phone: "(19) 99999-1234", email: "william@email.com" },
+    address: "Rua das Flores, 123",
     animals: [
       {
         id: "a1",
@@ -58,7 +64,10 @@ const mockClients: Client[] = [
   },
   {
     id: "2",
-    name: "Maria",
+    name: "Maria Silva",
+    cpf: "987.654.321-00",
+    contact: { phone: "(11) 99999-5678", email: "maria@email.com" },
+    address: "Av. Principal, 456",
     animals: [
       {
         id: "a3",
@@ -88,7 +97,10 @@ const mockClients: Client[] = [
   },
   {
     id: "3",
-    name: "João",
+    name: "João Santos",
+    cpf: "456.789.123-00",
+    contact: { phone: "(11) 99999-9012", email: "joao@email.com" },
+    address: "Rua do Campo, 789",
     animals: [
       {
         id: "a5",
@@ -106,7 +118,10 @@ const mockClients: Client[] = [
   },
   {
     id: "4",
-    name: "Ana",
+    name: "Ana Costa",
+    cpf: "111.222.333-44",
+    contact: { phone: "(21) 98765-4321", email: "ana@email.com" },
+    address: "Av. Beira Mar, 100",
     animals: [],
   },
 ];
@@ -120,10 +135,10 @@ const ClientDetailPage = () => {
   if (!client) {
     return (
       <div className="p-6 text-center">
-        <h1 className="text-3xl font-bold mb-4">Cliente não encontrado.</h1>
+        <h1 className="text-3xl font-bold mb-4">Tutor não encontrado.</h1>
         <Link to="/clients">
           <Button variant="outline">
-            <ArrowLeft className="mr-2 h-4 w-4" /> Voltar para Clientes
+            <ArrowLeft className="mr-2 h-4 w-4" /> Voltar para Tutores
           </Button>
         </Link>
       </div>
@@ -137,30 +152,55 @@ const ClientDetailPage = () => {
   return (
     <div className="p-6">
       <div className="flex items-center justify-between mb-6">
-        <h1 className="text-3xl font-bold">Detalhes do Cliente: {client.name}</h1>
+        <div>
+          <h1 className="text-3xl font-bold text-foreground">Detalhes do Tutor: {client.name}</h1>
+          <p className="text-muted-foreground">Informações completas e animais associados</p>
+        </div>
         <Link to="/clients">
           <Button variant="outline">
-            <ArrowLeft className="mr-2 h-4 w-4" /> Voltar para Clientes
+            <ArrowLeft className="mr-2 h-4 w-4" /> Voltar para Tutores
           </Button>
         </Link>
       </div>
 
-      <Card className="mb-6">
-        <CardHeader>
-          <CardTitle>Informações do Responsável</CardTitle>
+      <Card className="mb-6 shadow-sm rounded-lg">
+        <CardHeader className="flex flex-row items-center justify-between">
+          <CardTitle>Informações do Tutor</CardTitle>
+          <Button variant="ghost" size="sm">
+            <Edit className="h-4 w-4 mr-2" /> Editar Tutor
+          </Button>
         </CardHeader>
-        <CardContent>
-          <p className="text-muted-foreground">Nome: <span className="font-medium text-foreground">{client.name}</span></p>
+        <CardContent className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 text-sm">
+          <div>
+            <p className="text-muted-foreground">Nome:</p>
+            <p className="font-medium text-foreground">{client.name}</p>
+          </div>
+          <div>
+            <p className="text-muted-foreground">CPF:</p>
+            <p className="font-medium text-foreground">{client.cpf}</p>
+          </div>
+          <div>
+            <p className="text-muted-foreground">Telefone:</p>
+            <p className="font-medium text-foreground">{client.contact.phone}</p>
+          </div>
+          <div>
+            <p className="text-muted-foreground">Email:</p>
+            <p className="font-medium text-foreground">{client.contact.email}</p>
+          </div>
+          <div className="col-span-full">
+            <p className="text-muted-foreground">Endereço:</p>
+            <p className="font-medium text-foreground">{client.address}</p>
+          </div>
           {/* Adicione mais detalhes do cliente aqui se disponíveis */}
         </CardContent>
       </Card>
 
-      <Card>
+      <Card className="shadow-sm rounded-lg">
         <CardHeader className="flex flex-row items-center justify-between">
-          <CardTitle>Animais de {client.name}</CardTitle>
+          <CardTitle>Pacientes de {client.name}</CardTitle>
           <Link to="/animals/add"> {/* Link para adicionar animal, talvez com pré-seleção do tutor */}
             <Button size="sm">
-              <PawPrint className="h-4 w-4 mr-2" /> Adicionar Animal
+              <Plus className="h-4 w-4 mr-2" /> Adicionar Paciente
             </Button>
           </Link>
         </CardHeader>
@@ -182,8 +222,11 @@ const ClientDetailPage = () => {
                     <TableCell>{animal.species}</TableCell>
                     <TableCell>{animal.breed}</TableCell>
                     <TableCell className="text-right">
-                      <Button variant="ghost" size="sm" onClick={() => handleViewRecord(animal.id)}>
-                        <Eye className="h-4 w-4 mr-2" /> Ver Prontuário
+                      <Button variant="ghost" size="sm" onClick={() => handleViewRecord(animal.id)} className="mr-1">
+                        <Eye className="h-4 w-4" /> Ver Prontuário
+                      </Button>
+                      <Button variant="ghost" size="sm">
+                        <Edit className="h-4 w-4" />
                       </Button>
                     </TableCell>
                   </TableRow>
@@ -191,7 +234,7 @@ const ClientDetailPage = () => {
               </TableBody>
             </Table>
           ) : (
-            <p className="text-muted-foreground">Nenhum animal cadastrado para este cliente.</p>
+            <p className="text-muted-foreground p-4">Nenhum paciente cadastrado para este tutor.</p>
           )}
         </CardContent>
       </Card>
