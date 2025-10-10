@@ -253,11 +253,11 @@ const PrescriptionPdfDocument: React.FC<PrescriptionPdfDocumentProps> = ({
           <Text style={{ fontSize: 8, color: 'purple', marginBottom: 5 }}>
             DEBUG: Quantidade de medicamentos: {medications.length}
           </Text>
-          {medications.length > 0 && (
-            <Text style={{ fontSize: 8, color: 'purple', marginBottom: 5 }}>
-              DEBUG: Primeiro medicamento: {medications[0].medicationName || 'N/A'}, Instruções: {medications[0].generatedInstructions || 'N/A'}
+          {medications.map((med, idx) => (
+            <Text key={`debug-med-${idx}`} style={{ fontSize: 8, color: 'purple', marginBottom: 2 }}>
+              DEBUG: Med {idx + 1}: Nome='{med.medicationName}', Instruções='{med.generatedInstructions}'
             </Text>
-          )}
+          ))}
           {/* FIM DEBUG */}
 
           {Object.keys(groupedMedications).map((useType) => (
@@ -268,7 +268,7 @@ const PrescriptionPdfDocument: React.FC<PrescriptionPdfDocumentProps> = ({
                   <Text style={styles.medicationNumber}>{index + 1})</Text>
                   <View style={styles.medicationDetails}>
                     <View style={styles.flexRowCenter}>
-                      <Text style={[styles.medicationName, { color: 'red' }]}> {/* Cor temporária para depuração */}
+                      <Text style={styles.medicationName}>
                         {med.medicationName} {med.concentration && med.concentration}
                       </Text>
                       <View style={styles.line} />
@@ -283,7 +283,7 @@ const PrescriptionPdfDocument: React.FC<PrescriptionPdfDocumentProps> = ({
                         </Text>
                       )}
                     </View>
-                    <Text style={[styles.medicationInstructions, { color: 'blue' }]}> {/* Cor temporária para depuração */}
+                    <Text style={styles.medicationInstructions}>
                       {med.generatedInstructions}
                     </Text>
                   </View>

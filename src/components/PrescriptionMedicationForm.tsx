@@ -167,6 +167,7 @@ const PrescriptionMedicationForm: React.FC<PrescriptionMedicationFormProps> = ({
       totalQuantityDisplay, // Save the formatted display string
       isCollapsed: true, // Collapse after saving
     };
+    console.log("Salvando medicamento:", updatedMedication); // Adicionado console.log
     onSave(updatedMedication);
     setIsCollapsed(true); // Collapse after saving
   };
