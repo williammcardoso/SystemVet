@@ -159,9 +159,12 @@ const styles = StyleSheet.create({
     fontSize: 10,
     lineHeight: 1.5,
   },
-  // Novo estilo para o bloco de assinatura no final do conteúdo
-  signatureBlock: {
-    marginTop: 40, // Espaçamento maior para separar do conteúdo
+  // Re-introducing footerAbsolute for now, as it was in the previous working state
+  footerAbsolute: {
+    position: 'absolute',
+    bottom: 30,
+    left: 30,
+    right: 30,
     textAlign: "center",
     fontSize: 10,
     color: "#666",
@@ -224,9 +227,8 @@ const PrescriptionPdfDocument: React.FC<PrescriptionPdfDocumentProps> = ({
 
   return (
     <Document>
-      <Page size="A4" style={styles.page}>
-        {/* Main Content that flows across pages */}
-        <View style={styles.mainContentContainer}>
+      <Page size="A4" style={styles.page} render={({ pageNumber, totalPages }) => (
+        <>
           {/* Clinic Header */}
           <View style={styles.clinicHeader}>
             <View style={styles.clinicInfoLeft}>
@@ -237,24 +239,32 @@ const PrescriptionPdfDocument: React.FC<PrescriptionPdfDocumentProps> = ({
                 <Text style={styles.clinicDetails}>Registro no MAPA MV0052750203</Text>
               </View>
             </View>
-
-            <Text style={styles.mainTitle}>Receita Simples</Text>
-
-            {/* Animal and Tutor Info */}
-            <View style={styles.infoSectionContainer}>
-              <View style={styles.infoCard}>
-                <Text style={styles.infoTitle}>Animal</Text>
-                <Text style={styles.infoText}>ID: {animalId}</Text>
-                <Text style={styles.infoText}>Nome: {animalName}</Text>
-                <Text style={styles.infoText}>Espécie: {animalSpecies}</Text>
-              </View>
-              <View style={styles.infoCard}>
-                <Text style={styles.infoTitle}>Tutor</Text>
-                <Text style={styles.infoText}>Nome: {tutorName}</Text>
-                <Text style={styles.infoText}>Endereço: {tutorAddress || "Não informado"}</Text>
-              </View>
+            <View style={styles.clinicAddressPhone}>
+              <Text>Rua Campos Salles, 175, Centro</Text>
+              <Text>Itapira - CEP: 13970-170</Text>
+              <Text>Telefone: (19) 99363-1981</Text>
             </View>
+          </View>
 
+          <Text style={styles.mainTitle}>Receita Simples</Text>
+
+          {/* Animal and Tutor Info */}
+          <View style={styles.infoSectionContainer}>
+            <View style={styles.infoCard}>
+              <Text style={styles.infoTitle}>Animal</Text>
+              <Text style={styles.infoText}>ID: {animalId}</Text>
+              <Text style={styles.infoText}>Nome: {animalName}</Text>
+              <Text style={styles.infoText}>Espécie: {animalSpecies}</Text>
+            </View>
+            <View style={styles.infoCard}>
+              <Text style={styles.infoTitle}>Tutor</Text>
+              <Text style={styles.infoText}>Nome: {tutorName}</Text>
+              <Text style={styles.infoText}>Endereço: {tutorAddress || "Não informado"}</Text>
+            </View>
+          </View>
+
+          {/* Main Content that flows across pages */}
+          <View style={styles.mainContentContainer}>
             {/* Medication List Grouped by Use Type */}
             {Object.keys(groupedMedications).map((useType) => (
               <View key={useType}>
@@ -310,7 +320,19 @@ const PrescriptionPdfDocument: React.FC<PrescriptionPdfDocumentProps> = ({
               <Text style={styles.signatureText}>Registro no MAPA MV0052750203</Text>
             </View>
           </View>
-      </Page>
+
+          {/* Footer - only on the last page */}
+          {pageNumber === totalPages && (
+            <View style={styles.footerAbsolute}>
+              <Text style={styles.signatureDate}>{formatDateToPortuguese(currentDate)}</Text>
+              <Text style={styles.signatureText}>Assinado eletronicamente por</Text>
+              <Text style={styles.signatureName}>Dr. William Cardoso</Text>
+              <Text style={styles.signatureText}>CRMV 56895/SP</Text>
+              <Text style={styles.signatureText}>Registro no MAPA MV0052750203</Text>
+            </View>
+          )}
+        </>
+      )} />
     </Document>
   );
 };
