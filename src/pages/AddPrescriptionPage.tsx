@@ -349,7 +349,7 @@ const AddPrescriptionPage = () => {
               vetInfo={vetInfo}
             />
           }
-          fileName={`receita_${currentClient?.name || 'paciente'}_${currentAnimal?.name || 'animal'}_${Date.now()}.pdf`}
+          fileName={`receita_${currentClient?.name || 'paciente'}_${currentAnimal?.name || 'animal'}.pdf`}
         >
           {({ loading }) => (
             <Button variant="outline" disabled={loading || isPreviewDisabled}>

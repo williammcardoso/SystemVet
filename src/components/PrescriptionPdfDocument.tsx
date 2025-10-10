@@ -169,13 +169,6 @@ const styles = StyleSheet.create({
     marginTop: 5,
     marginBottom: 2,
   },
-  // Estilo para o texto de teste
-  debugText: {
-    fontSize: 24,
-    color: "red",
-    textAlign: "center",
-    marginBottom: 20,
-  },
 });
 
 interface ClinicInfo {
@@ -242,7 +235,7 @@ const PrescriptionPdfDocument: React.FC<PrescriptionPdfDocumentProps> = ({
     <Document>
       <Page size="A4" style={styles.page}>
         <View> {/* Main content wrapper */}
-          <Text style={styles.debugText}>TEXTO DE TESTE - DEVE APARECER!</Text> {/* Texto de depuração */}
+          {/* Removido: <Text style={styles.debugText}>TEXTO DE TESTE - DEVE APARECER!</Text> */}
           <View style={styles.headerSection}>
             <View style={styles.clinicHeader}>
               <View style={styles.clinicInfoLeft}>
