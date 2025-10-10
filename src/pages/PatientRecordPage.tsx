@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link, useParams, useNavigate } from "react-router-dom";
 import {
   ArrowLeft,
   Plus,
@@ -18,7 +18,6 @@ import {
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
@@ -31,7 +30,7 @@ import {
   DialogFooter,
 } from "@/components/ui/dialog";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import AddPrescriptionForm from "@/components/AddPrescriptionForm"; // Importar o novo componente
+// Removido: import AddPrescriptionForm from "@/components/AddPrescriptionForm"; // Este componente foi refatorado e não é mais usado diretamente aqui
 
 // Mock data (centralizado aqui para facilitar o exemplo, mas idealmente viria de um serviço)
 interface Animal {
@@ -171,16 +170,11 @@ interface DocumentEntry {
 interface PrescriptionEntry {
   id: string;
   date: string;
-  useType: string;
-  pharmacyType: string;
   medicationName: string;
-  concentration: string;
-  pharmaceuticalForm: string;
   dosePerAdministration: string;
   frequency: string;
   period: string;
-  useCustomInstructions: boolean;
-  generalObservations: string;
+  instructions: string; // Simplified for table display
 }
 
 interface ObservationEntry {
@@ -236,6 +230,7 @@ interface ExamEntry {
 
 const PatientRecordPage = () => {
   const { clientId, animalId } = useParams<{ clientId: string; animalId: string }>();
+  const navigate = useNavigate();
 
   const client = mockClients.find(c => c.id === clientId);
   const animal = client?.animals.find(a => a.id === animalId);
@@ -256,9 +251,10 @@ const PatientRecordPage = () => {
   const [newDocumentName, setNewDocumentName] = useState<string>("");
   const [newDocumentFile, setNewDocumentFile] = useState<File | null>(null);
 
+  // A lista de prescrições aqui representa as receitas FINALIZADAS
   const [prescriptions, setPrescriptions] = useState<PrescriptionEntry[]>([
-    { id: "p1", date: "2023-11-01", medicationName: "Antibiótico X", dosePerAdministration: "5mg", frequency: "2x ao dia", instructions: "Administrar com alimento.", useType: "Uso Pontual", pharmacyType: "Farmácia Veterinária", concentration: "50mg/ml", pharmaceuticalForm: "Líquido", period: "7 dias", generalObservations: "" },
-    { id: "p2", date: "2024-04-05", medicationName: "Anti-inflamatório Y", dosePerAdministration: "1 comprimido", frequency: "1x ao dia", instructions: "Por 7 dias.", useType: "Uso Pontual", pharmacyType: "Farmácia Humana", concentration: "10mg", pharmaceuticalForm: "Comprimido", period: "7 dias", generalObservations: "" },
+    { id: "p1", date: "2023-11-01", medicationName: "Antibiótico X", dosePerAdministration: "5mg", frequency: "2x ao dia", period: "7 dias", instructions: "Administrar com alimento." },
+    { id: "p2", date: "2024-04-05", medicationName: "Anti-inflamatório Y", dosePerAdministration: "1 comprimido", frequency: "1x ao dia", period: "7 dias", instructions: "Por 7 dias." },
   ]);
 
   const [observations, setObservations] = useState<ObservationEntry[]>([
@@ -344,27 +340,6 @@ const PatientRecordPage = () => {
       setNewDocumentName("");
       setNewDocumentFile(null);
     }
-  };
-
-  const handleAddPrescription = (data: {
-    useType: string;
-    pharmacyType: string;
-    medicationName: string;
-    concentration: string;
-    pharmaceuticalForm: string;
-    dosePerAdministration: string;
-    frequency: string;
-    period: string;
-    useCustomInstructions: boolean;
-    generalObservations: string;
-  }) => {
-    const newEntry: PrescriptionEntry = {
-      id: String(prescriptions.length + 1),
-      date: new Date().toISOString().split('T')[0],
-      ...data,
-      instructions: data.useCustomInstructions ? data.generalObservations : `${data.dosePerAdministration}, ${data.frequency}, ${data.period}`, // Simplified instruction for table
-    };
-    setPrescriptions([...prescriptions, newEntry]);
   };
 
   const handleAddObservation = () => {
@@ -860,7 +835,7 @@ const PatientRecordPage = () => {
                       <TableHead>Item</TableHead>
                       <TableHead>Quantidade</TableHead>
                       <TableHead className="text-right">Total</TableHead>
-                      <TableHead className="text-right">Ações</TableHead>
+                      <TableHead className="text-right">Ações</Tablead>
                     </TableRow>
                   </TableHeader>
                   <TableBody>
@@ -1037,13 +1012,17 @@ const PatientRecordPage = () => {
         {/* Nova aba: Receitas */}
         <TabsContent value="prescriptions" className="mt-4">
           <Card>
-            <CardHeader>
+            <CardHeader className="flex flex-row items-center justify-between">
               <CardTitle>Receitas</CardTitle>
+              <Link to={`/clients/${clientId}/animals/${animalId}/add-prescription`}>
+                <Button size="sm">
+                  <Plus className="h-4 w-4 mr-2" /> Adicionar Nova Receita
+                </Button>
+              </Link>
             </CardHeader>
             <CardContent>
-              <AddPrescriptionForm onAddPrescription={handleAddPrescription} />
               {prescriptions.length > 0 ? (
-                <Table className="mt-4">
+                <Table>
                   <TableHeader>
                     <TableRow>
                       <TableHead>Data</TableHead>

@@ -10,7 +10,8 @@ import AddClientPage from "./pages/AddClientPage";
 import AddAnimalPage from "./pages/AddAnimalPage";
 import ClientDetailPage from "./pages/ClientDetailPage";
 import PatientRecordPage from "./pages/PatientRecordPage";
-import AddExamPage from "./pages/AddExamPage"; // Nova importação
+import AddExamPage from "./pages/AddExamPage";
+import AddPrescriptionPage from "./pages/AddPrescriptionPage"; // Nova importação
 import SpeciesPage from "./pages/registrations/SpeciesPage";
 import BreedsPage from "./pages/registrations/BreedsPage";
 import CoatTypesPage from "./pages/registrations/CoatTypesPage";
@@ -32,7 +33,8 @@ const App = () => (
             <Route path="/animals/add" element={<AddAnimalPage />} />
             <Route path="/clients/:clientId" element={<ClientDetailPage />} />
             <Route path="/clients/:clientId/animals/:animalId/record" element={<PatientRecordPage />} />
-            <Route path="/clients/:clientId/animals/:animalId/add-exam" element={<AddExamPage />} /> {/* Nova rota */}
+            <Route path="/clients/:clientId/animals/:animalId/add-exam" element={<AddExamPage />} />
+            <Route path="/clients/:clientId/animals/:animalId/add-prescription" element={<AddPrescriptionPage />} /> {/* Nova rota */}
             <Route path="/registrations/species" element={<SpeciesPage />} />
             <Route path="/registrations/breeds" element={<BreedsPage />} />
             <Route path="/registrations/coat-types" element={<CoatTypesPage />} />

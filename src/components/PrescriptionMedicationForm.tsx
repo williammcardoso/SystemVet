@@ -1,0 +1,366 @@
+import React, { useState, useEffect } from "react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Switch } from "@/components/ui/switch";
+import { Plus, Trash2, ChevronUp, ChevronDown, Edit } from "lucide-react";
+import { cn } from "@/lib/utils"; // Importar cn para classes condicionais
+
+export interface MedicationData {
+  id: string;
+  useType: string;
+  pharmacyType: string;
+  medicationName: string;
+  concentration: string;
+  pharmaceuticalForm: string;
+  customPharmaceuticalForm?: string;
+  dosePerAdministration: string;
+  frequency: string;
+  customFrequency?: string;
+  period: string;
+  customPeriod?: string;
+  useCustomInstructions: boolean;
+  generatedInstructions: string;
+  generalObservations: string;
+  totalQuantity: string;
+}
+
+interface PrescriptionMedicationFormProps {
+  medication: MedicationData;
+  index: number;
+  onSave: (updatedMedication: MedicationData) => void;
+  onDelete: (id: string) => void;
+  onToggleCollapse: (id: string) => void;
+}
+
+const mockUseTypes = ["Uso Contínuo", "Uso Pontual", "Uso Pós-Cirúrgico", "Uso Oral", "Uso Tópico", "Uso Injetável"];
+const mockPharmacyTypes = ["Farmácia Veterinária", "Farmácia Humana"];
+const mockPharmaceuticalForms = ["Comprimido", "Líquido", "Injetável", "Tópico", "Cápsula", "Outro"];
+const mockFrequencies = ["1x ao dia", "2x ao dia", "3x ao dia", "A cada 8 horas", "A cada 12 horas", "5 dias", "12 horas", "Outro"]; // Adicionado "5 dias" e "12 horas"
+const mockPeriods = ["7 dias", "14 dias", "30 dias", "Até o fim do tratamento", "5 dias", "Outro"]; // Adicionado "5 dias"
+
+const PrescriptionMedicationForm: React.FC<PrescriptionMedicationFormProps> = ({
+  medication,
+  index,
+  onSave,
+  onDelete,
+  onToggleCollapse,
+}) => {
+  const [useType, setUseType] = useState<string>(medication.useType);
+  const [pharmacyType, setPharmacyType] = useState<string>(medication.pharmacyType);
+  const [medicationName, setMedicationName] = useState<string>(medication.medicationName);
+  const [concentration, setConcentration] = useState<string>(medication.concentration);
+  const [pharmaceuticalForm, setPharmaceuticalForm] = useState<string>(medication.pharmaceuticalForm);
+  const [customPharmaceuticalForm, setCustomPharmaceuticalForm] = useState<string>(medication.customPharmaceuticalForm || "");
+  const [dosePerAdministration, setDosePerAdministration] = useState<string>(medication.dosePerAdministration);
+  const [frequency, setFrequency] = useState<string>(medication.frequency);
+  const [customFrequency, setCustomFrequency] = useState<string>(medication.customFrequency || "");
+  const [period, setPeriod] = useState<string>(medication.period);
+  const [customPeriod, setCustomPeriod] = useState<string>(medication.customPeriod || "");
+  const [useCustomInstructions, setUseCustomInstructions] = useState<boolean>(medication.useCustomInstructions);
+  const [generalObservations, setGeneralObservations] = useState<string>(medication.generalObservations);
+  const [generatedInstructions, setGeneratedInstructions] = useState<string>(medication.generatedInstructions);
+  const [totalQuantity, setTotalQuantity] = useState<string>(medication.totalQuantity);
+  const [isCollapsed, setIsCollapsed] = useState<boolean>(false); // Start expanded by default for new forms
+
+  useEffect(() => {
+    // Generate instructions
+    let instructions = "";
+    if (!useCustomInstructions) {
+      const doseText = dosePerAdministration.trim();
+      const formText = pharmaceuticalForm === "Outro" ? customPharmaceuticalForm.trim() : pharmaceuticalForm.trim();
+      const freqText = frequency === "Outro" ? customFrequency.trim() : frequency.trim();
+      const periodText = period === "Outro" ? customPeriod.trim() : period.trim();
+
+      if (doseText && formText && freqText && periodText) {
+        instructions = `${doseText} ${formText}(s) ${freqText}, por ${periodText}.`;
+      } else if (doseText && formText && freqText) {
+        instructions = `${doseText} ${formText}(s) ${freqText}.`;
+      } else if (doseText && formText) {
+        instructions = `${doseText} ${formText}(s).`;
+      } else if (doseText) {
+        instructions = `${doseText}.`;
+      }
+    }
+    setGeneratedInstructions(instructions);
+
+    // Calculate total quantity (simple example, can be more complex)
+    // For simplicity, let's assume dosePerAdministration is a number and period is in days
+    let calculatedQuantity = 0;
+    const doseNum = parseFloat(dosePerAdministration);
+    const periodNum = parseFloat(period.split(' ')[0]); // e.g., "7 dias" -> 7
+
+    if (!isNaN(doseNum) && !isNaN(periodNum)) {
+      // Simple calculation: dose * frequency multiplier * period
+      let freqMultiplier = 1;
+      if (frequency.includes("2x ao dia")) freqMultiplier = 2;
+      else if (frequency.includes("3x ao dia")) freqMultiplier = 3;
+      else if (frequency.includes("A cada 8 horas")) freqMultiplier = 3; // 24/8 = 3
+      else if (frequency.includes("A cada 12 horas")) freqMultiplier = 2; // 24/12 = 2
+      
+      calculatedQuantity = doseNum * freqMultiplier * periodNum;
+    }
+    setTotalQuantity(calculatedQuantity > 0 ? calculatedQuantity.toString() : "");
+
+  }, [dosePerAdministration, pharmaceuticalForm, customPharmaceuticalForm, frequency, customFrequency, period, customPeriod, useCustomInstructions]);
+
+  const handleSave = () => {
+    if (
+      !useType ||
+      !pharmacyType ||
+      !medicationName.trim() ||
+      !pharmaceuticalForm ||
+      !dosePerAdministration.trim() ||
+      !frequency ||
+      !period
+    ) {
+      alert("Por favor, preencha todos os campos obrigatórios.");
+      return;
+    }
+
+    const updatedMedication: MedicationData = {
+      ...medication,
+      useType,
+      pharmacyType,
+      medicationName: medicationName.trim(),
+      concentration: concentration.trim(),
+      pharmaceuticalForm: pharmaceuticalForm === "Outro" ? customPharmaceuticalForm.trim() : pharmaceuticalForm,
+      customPharmaceuticalForm: pharmaceuticalForm === "Outro" ? customPharmaceuticalForm.trim() : undefined,
+      dosePerAdministration: dosePerAdministration.trim(),
+      frequency: frequency === "Outro" ? customFrequency.trim() : frequency,
+      customFrequency: frequency === "Outro" ? customFrequency.trim() : undefined,
+      period: period === "Outro" ? customPeriod.trim() : period,
+      customPeriod: period === "Outro" ? customPeriod.trim() : undefined,
+      useCustomInstructions,
+      generatedInstructions: useCustomInstructions ? generalObservations.trim() : generatedInstructions,
+      generalObservations: generalObservations.trim(),
+      totalQuantity,
+    };
+    onSave(updatedMedication);
+    setIsCollapsed(true); // Collapse after saving
+  };
+
+  const handleEdit = () => {
+    setIsCollapsed(false); // Expand to edit
+  };
+
+  const displayMedicationName = medicationName.trim() || "Medicamento sem nome";
+  const displayPharmacyType = pharmacyType === "Farmácia Veterinária" ? "Vet" : "Humana";
+
+  return (
+    <div className="border rounded-lg p-4 space-y-4 bg-white dark:bg-gray-800 shadow-sm">
+      <div className="flex items-center justify-between border-b pb-3 mb-4">
+        <h3 className="text-lg font-semibold flex items-center gap-2">
+          <span className="bg-green-500 text-white rounded-full h-6 w-6 flex items-center justify-center text-sm">
+            #{index + 1}
+          </span>
+          {isCollapsed ? (
+            <>
+              {displayMedicationName} {concentration && ` ${concentration}`}
+              {pharmacyType && <span className="ml-2 px-2 py-0.5 text-xs font-medium bg-blue-100 text-blue-800 rounded-full dark:bg-blue-900 dark:text-blue-200">{displayPharmacyType}</span>}
+            </>
+          ) : (
+            displayMedicationName
+          )}
+        </h3>
+        <div className="flex items-center gap-2">
+          {isCollapsed && (
+            <Button variant="ghost" size="icon" onClick={handleEdit}>
+              <Edit className="h-4 w-4 text-muted-foreground" />
+            </Button>
+          )}
+          <Button variant="ghost" size="icon" onClick={() => onDelete(medication.id)}>
+            <Trash2 className="h-4 w-4 text-muted-foreground" />
+          </Button>
+          <Button variant="ghost" size="icon" onClick={() => onToggleCollapse(medication.id)}>
+            {isCollapsed ? <ChevronDown className="h-4 w-4 text-muted-foreground" /> : <ChevronUp className="h-4 w-4 text-muted-foreground" />}
+          </Button>
+        </div>
+      </div>
+
+      {!isCollapsed && (
+        <>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="space-y-2">
+              <Label htmlFor={`useType-${medication.id}`}>Tipo de Uso *</Label>
+              <Select onValueChange={setUseType} value={useType}>
+                <SelectTrigger id={`useType-${medication.id}`}>
+                  <SelectValue placeholder="Selecionar tipo" />
+                </SelectTrigger>
+                <SelectContent>
+                  {mockUseTypes.map((type) => (
+                    <SelectItem key={type} value={type}>
+                      {type}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor={`pharmacyType-${medication.id}`}>Tipo de Farmácia *</Label>
+              <Select onValueChange={setPharmacyType} value={pharmacyType}>
+                <SelectTrigger id={`pharmacyType-${medication.id}`}>
+                  <SelectValue placeholder="Selecionar farmácia" />
+                </SelectTrigger>
+                <SelectContent>
+                  {mockPharmacyTypes.map((type) => (
+                    <SelectItem key={type} value={type}>
+                      {type}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="space-y-2">
+              <Label htmlFor={`medicationName-${medication.id}`}>Nome do Medicamento *</Label>
+              <Input
+                id={`medicationName-${medication.id}`}
+                placeholder="Ex: Carprofeno"
+                value={medicationName}
+                onChange={(e) => setMedicationName(e.target.value)}
+              />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor={`concentration-${medication.id}`}>Concentração</Label>
+              <Input
+                id={`concentration-${medication.id}`}
+                placeholder="Ex: 75mg, 100mg/ml"
+                value={concentration}
+                onChange={(e) => setConcentration(e.target.value)}
+              />
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="space-y-2">
+              <Label htmlFor={`pharmaceuticalForm-${medication.id}`}>Forma Farmacêutica *</Label>
+              <Select onValueChange={setPharmaceuticalForm} value={pharmaceuticalForm}>
+                <SelectTrigger id={`pharmaceuticalForm-${medication.id}`}>
+                  <SelectValue placeholder="Selecionar forma" />
+                </SelectTrigger>
+                <SelectContent>
+                  {mockPharmaceuticalForms.map((form) => (
+                    <SelectItem key={form} value={form}>
+                      {form}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+              {pharmaceuticalForm === "Outro" && (
+                <Input
+                  placeholder="Ou digite forma personalizada"
+                  value={customPharmaceuticalForm}
+                  onChange={(e) => setCustomPharmaceuticalForm(e.target.value)}
+                  className="mt-2"
+                />
+              )}
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor={`dosePerAdministration-${medication.id}`}>Dose por Administração *</Label>
+              <Input
+                id={`dosePerAdministration-${medication.id}`}
+                placeholder="Ex: 1, 0.5, 2"
+                value={dosePerAdministration}
+                onChange={(e) => setDosePerAdministration(e.target.value)}
+              />
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 items-end">
+            <div className="space-y-2">
+              <Label htmlFor={`frequency-${medication.id}`}>Frequência *</Label>
+              <Select onValueChange={setFrequency} value={frequency}>
+                <SelectTrigger id={`frequency-${medication.id}`}>
+                  <SelectValue placeholder="A cada..." />
+                </SelectTrigger>
+                <SelectContent>
+                  {mockFrequencies.map((freq) => (
+                    <SelectItem key={freq} value={freq}>
+                      {freq}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor={`period-${medication.id}`}>Período *</Label>
+              <Select onValueChange={setPeriod} value={period}>
+                <SelectTrigger id={`period-${medication.id}`}>
+                  <SelectValue placeholder="Por..." />
+                </SelectTrigger>
+                <SelectContent>
+                  {mockPeriods.map((p) => (
+                    <SelectItem key={p} value={p}>
+                      {p}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor={`totalQuantity-${medication.id}`}>Quantidade Total</Label>
+              <Input id={`totalQuantity-${medication.id}`} placeholder="Auto calculado" value={totalQuantity} disabled />
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {frequency === "Outro" && (
+              <Input
+                placeholder="Ou digite frequência personalizada"
+                value={customFrequency}
+                onChange={(e) => setCustomFrequency(e.target.value)}
+              />
+            )}
+            {period === "Outro" && (
+              <Input
+                placeholder="Ou digite período personalizado"
+                value={customPeriod}
+                onChange={(e) => setCustomPeriod(e.target.value)}
+              />
+            )}
+          </div>
+
+          <div className="flex items-center space-x-2 mt-4">
+            <Switch
+              id={`custom-instructions-${medication.id}`}
+              checked={useCustomInstructions}
+              onCheckedChange={setUseCustomInstructions}
+            />
+            <Label htmlFor={`custom-instructions-${medication.id}`}>Usar instrução personalizada</Label>
+          </div>
+
+          {!useCustomInstructions && generatedInstructions && (
+            <div className="bg-green-50 border border-green-200 text-green-800 p-3 rounded-md text-sm mt-4 dark:bg-green-950 dark:border-green-700 dark:text-green-200">
+              <p className="font-semibold mb-1">Instrução Gerada:</p>
+              <p>{generatedInstructions}</p>
+            </div>
+          )}
+
+          <div className="flex justify-end mt-6">
+            <Button onClick={handleSave}>
+              <Plus className="h-4 w-4 mr-2" /> Salvar Medicamento
+            </Button>
+          </div>
+
+          <div className="space-y-2 mt-6">
+            <h4 className="text-lg font-semibold">Observações Gerais</h4>
+            <Textarea
+              id={`generalObservations-${medication.id}`}
+              placeholder="Instruções especiais, restrições alimentares, ou outras observações..."
+              rows={3}
+              value={generalObservations}
+              onChange={(e) => setGeneralObservations(e.target.value)}
+            />
+          </div>
+        </>
+      )}
+    </div>
+  );
+};
+
+export default PrescriptionMedicationForm;
