@@ -130,9 +130,9 @@ const navItems: NavItem[] = [
 
 const Sidebar = () => {
   return (
-    <aside className="w-64 bg-sidebar text-sidebar-foreground h-screen fixed left-0 top-0 overflow-y-auto border-r border-sidebar-border p-4">
+    <aside className="w-64 bg-sidebar text-sidebar-foreground h-screen fixed left-0 top-0 overflow-y-auto border-r border-sidebar-border p-4 shadow-lg">
       <div className="flex items-center justify-center h-16 border-b border-sidebar-border mb-4">
-        <h1 className="text-2xl font-bold text-sidebar-primary-foreground">SimplesVet</h1>
+        <h1 className="text-3xl font-extrabold text-sidebar-primary-foreground">SimplesVet</h1>
       </div>
       <nav className="space-y-1">
         <Accordion type="multiple" className="w-full">
@@ -141,7 +141,8 @@ const Sidebar = () => {
               {item.href ? (
                 <Link
                   to={item.href}
-                  className="flex items-center gap-3 rounded-lg px-3 py-2 text-sidebar-foreground transition-all hover:bg-sidebar-accent hover:text-sidebar-accent-foreground"
+                  className="flex items-center gap-3 rounded-lg px-3 py-2 text-sidebar-foreground transition-all hover:bg-sidebar-accent hover:text-sidebar-accent-foreground data-[active=true]:bg-sidebar-primary data-[active=true]:text-sidebar-primary-foreground"
+                  data-active={location.pathname === item.href} // Adiciona atributo data-active
                 >
                   <item.icon className="h-4 w-4" />
                   {item.title}
@@ -158,7 +159,8 @@ const Sidebar = () => {
                         <Link
                           key={subItem.title}
                           to={subItem.href || "#"}
-                          className="flex items-center gap-3 rounded-lg px-3 py-2 text-sidebar-foreground transition-all hover:bg-sidebar-accent hover:text-sidebar-accent-foreground"
+                          className="flex items-center gap-3 rounded-lg px-3 py-2 text-sidebar-foreground transition-all hover:bg-sidebar-accent hover:text-sidebar-accent-foreground data-[active=true]:bg-sidebar-primary data-[active=true]:text-sidebar-primary-foreground"
+                          data-active={location.pathname === subItem.href} // Adiciona atributo data-active
                         >
                           {subItem.icon && <subItem.icon className="h-4 w-4" />} {/* Render icon if available */}
                           {subItem.title}

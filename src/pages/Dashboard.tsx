@@ -4,13 +4,13 @@ import { BarChart, LineChart, Calendar, Package } from "lucide-react"; // Adicio
 const Dashboard = () => {
   return (
     <div className="p-6">
-      <h1 className="text-3xl font-bold mb-6">Painel de Controle</h1>
+      <h1 className="text-3xl font-bold mb-6 text-primary">Painel de Controle</h1>
 
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-        <Card>
+        <Card className="shadow-md hover:shadow-lg transition-shadow duration-300">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Animais por mês</CardTitle>
-            <BarChart className="h-4 w-4 text-muted-foreground" />
+            <BarChart className="h-5 w-5 text-primary" /> {/* Usando text-primary */}
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">0</div>
@@ -19,10 +19,10 @@ const Dashboard = () => {
             </p>
           </CardContent>
         </Card>
-        <Card>
+        <Card className="shadow-md hover:shadow-lg transition-shadow duration-300">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Últimos atendimentos (24h)</CardTitle>
-            <Calendar className="h-4 w-4 text-muted-foreground" />
+            <Calendar className="h-5 w-5 text-accent" /> {/* Usando text-accent */}
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">00:00:00</div>
@@ -31,10 +31,10 @@ const Dashboard = () => {
             <p className="text-xs text-muted-foreground">Média atendimento</p>
           </CardContent>
         </Card>
-        <Card>
+        <Card className="shadow-md hover:shadow-lg transition-shadow duration-300">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Consultas por mês</CardTitle>
-            <LineChart className="h-4 w-4 text-muted-foreground" />
+            <LineChart className="h-5 w-5 text-primary" /> {/* Usando text-primary */}
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">0</div>
@@ -43,10 +43,10 @@ const Dashboard = () => {
             </p>
           </CardContent>
         </Card>
-        <Card>
+        <Card className="shadow-md hover:shadow-lg transition-shadow duration-300">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Estoque abaixo do mínimo</CardTitle>
-            <Package className="h-4 w-4 text-muted-foreground" />
+            <Package className="h-5 w-5 text-destructive" /> {/* Usando text-destructive */}
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">0</div>
@@ -58,7 +58,7 @@ const Dashboard = () => {
       </div>
 
       <div className="mt-6 grid gap-4 md:grid-cols-2">
-        <Card>
+        <Card className="shadow-md hover:shadow-lg transition-shadow duration-300">
           <CardHeader>
             <CardTitle>Últimos animais cadastrados</CardTitle>
           </CardHeader>
@@ -66,7 +66,7 @@ const Dashboard = () => {
             <p className="text-sm text-muted-foreground">Nenhum animal cadastrado recentemente.</p>
           </CardContent>
         </Card>
-        <Card>
+        <Card className="shadow-md hover:shadow-lg transition-shadow duration-300">
           <CardHeader>
             <CardTitle>Últimos acessos</CardTitle>
           </CardHeader>

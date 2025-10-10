@@ -1,15 +1,20 @@
-// Update this page (the content is just a fallback if you fail to update the page)
-
 import { MadeWithDyad } from "@/components/made-with-dyad";
+import { Button } from "@/components/ui/button";
+import { Link } from "react-router-dom";
 
 const Index = () => {
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100">
-      <div className="text-center">
-        <h1 className="text-4xl font-bold mb-4">Welcome to Your Blank App</h1>
-        <p className="text-xl text-gray-600">
-          Start building your amazing project here!
+    <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-br from-primary/10 to-background">
+      <div className="text-center p-8 bg-card rounded-lg shadow-xl max-w-2xl mx-auto">
+        <h1 className="text-5xl font-extrabold mb-6 text-primary">Bem-vindo ao SimplesVet</h1>
+        <p className="text-xl text-foreground mb-8">
+          Sua solução completa para gerenciamento veterinário.
         </p>
+        <Link to="/dashboard">
+          <Button size="lg" className="bg-primary hover:bg-primary/90 text-primary-foreground shadow-lg transition-all duration-300 ease-in-out transform hover:scale-105">
+            Ir para o Painel de Controle
+          </Button>
+        </Link>
       </div>
       <MadeWithDyad />
     </div>
