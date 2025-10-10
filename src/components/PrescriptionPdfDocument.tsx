@@ -180,7 +180,7 @@ const styles = StyleSheet.create({
     fontSize: 10,
     marginBottom: 2,
   },
-  signatureName: {
+  signatureName: { // Novo estilo para o nome do veterinário na assinatura
     fontSize: 12,
     fontWeight: "bold",
     marginBottom: 2,
@@ -308,11 +308,11 @@ const PrescriptionPdfDocument: React.FC<PrescriptionPdfDocumentProps> = ({
                   <Text style={styles.medicationInstructions}>
                     {med.generatedInstructions || 'Sem instruções de uso.'}
                   </Text>
-                  {med.generalObservations && (
+                  {med.generalObservations && med.generalObservations.trim().length > 0 ? (
                     <Text style={styles.medicationObservations}>
                       Obs. Medicamento: {med.generalObservations}
                     </Text>
-                  )}
+                  ) : null}
                 </View>
               ))}
             </View>
@@ -327,17 +327,18 @@ const PrescriptionPdfDocument: React.FC<PrescriptionPdfDocumentProps> = ({
           )}
         </View>
 
-        {/* FOOTER - Assinatura sem número de página */}
+        {/* FOOTER - Assinatura conforme a imagem */}
         <View
           fixed
           style={styles.signatureFooter} // Usando o estilo definido
         >
           <Text style={styles.signatureDate}>
-            Data: {formatDateToPortuguese(currentDate)}
+            {formatDateToPortuguese(currentDate)}
           </Text>
-          <Text style={styles.signatureText}>
-            Assinatura do Veterinário: _________________________
-          </Text>
+          <Text style={styles.infoText}>Assinado eletronicamente por</Text>
+          <Text style={styles.signatureName}>Dr. William Cardoso</Text>
+          <Text style={styles.clinicDetails}>CRMV 56895/SP</Text>
+          <Text style={styles.clinicDetails}>Registro no MAPA MV0052750203</Text>
         </View>
       </Page>
     </Document>
