@@ -158,7 +158,10 @@ const styles = StyleSheet.create({
     lineHeight: 1.5,
   },
   footer: {
-    marginTop: 40,
+    position: 'absolute', // Position absolutely
+    bottom: 30, // Distance from the bottom of the page
+    left: 30,
+    right: 30,
     textAlign: "center",
     fontSize: 10,
     color: "#666",
