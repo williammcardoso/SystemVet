@@ -15,7 +15,7 @@ import {
   DialogFooter,
 } from "@/components/ui/dialog"; // Importar componentes do Dialog
 import PrescriptionMedicationForm, { MedicationData } from "@/components/PrescriptionMedicationForm";
-import PrescriptionViewModal from "@/components/PrescriptionViewModal"; // Importar o novo componente de visualização
+import PrescriptionPreviewDialog from "@/components/PrescriptionPreviewDialog"; // Importar o novo componente de visualização de PDF
 import { toast } from "sonner";
 
 // Mock data para animais e clientes (para exibir informações no cabeçalho)
@@ -289,20 +289,18 @@ const AddPrescriptionPage = () => {
         </Button>
       </div>
 
-      {/* Modal de Visualização da Receita */}
-      <Dialog open={isViewModalOpen} onOpenChange={setIsViewModalOpen}>
-        <DialogContent className="sm:max-w-[800px] max-h-[90vh] overflow-y-auto p-0"> {/* Removido padding padrão */}
-          <PrescriptionViewModal
-            animalName={animal.name}
-            animalId={animal.id}
-            animalSpecies={animal.species}
-            tutorName={client.name}
-            tutorAddress={client.address}
-            medications={currentPrescriptionMedications}
-            generalObservations={currentPrescriptionGeneralObservations}
-          />
-        </DialogContent>
-      </Dialog>
+      {/* Modal de Visualização da Receita (agora para PDF) */}
+      <PrescriptionPreviewDialog
+        isOpen={isViewModalOpen}
+        onClose={() => setIsViewModalOpen(false)}
+        animalName={animal.name}
+        animalId={animal.id}
+        animalSpecies={animal.species}
+        tutorName={client.name}
+        tutorAddress={client.address}
+        medications={currentPrescriptionMedications}
+        generalObservations={currentPrescriptionGeneralObservations}
+      />
     </div>
   );
 };
