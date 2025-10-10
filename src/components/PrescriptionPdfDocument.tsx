@@ -3,7 +3,7 @@ import { Document, Page, View, Text, StyleSheet, Font } from "@react-pdf/rendere
 import type { MedicationData } from "@/types/medication"; // Importar como tipo
 
 // Register a font if needed (e.g., for custom fonts or if default is not working)
-// Font.register({ family: "Roboto", src: "https://fonts.gstatic.com/s/roboto/v20/KFOmCnqEu92Fr1Mu4mxP" });
+// Font.register({ family: "Roboto", src: "https://fonts.gstatic.com/s/roboto/v20/KFOmCnqEu92Fr1Mu4mxP.ttf" });
 
 const styles = StyleSheet.create({
   page: {
@@ -278,20 +278,17 @@ const PrescriptionPdfDocument: React.FC<PrescriptionPdfDocumentProps> = ({
                     <Text style={styles.medicationNameConcentration}>
                       {/* Lógica mais robusta para garantir que a string não seja vazia */}
                       {(() => {
-                        const namePart = med.medicationName?.trim();
-                        const concentrationPart = med.concentration?.trim();
-                        let displayString = '';
-
-                        if (namePart && concentrationPart) {
-                          displayString = `${namePart} ${concentrationPart}`;
-                        } else if (namePart) {
-                          displayString = namePart;
-                        } else if (concentrationPart) {
-                          displayString = concentrationPart;
-                        } else {
-                          displayString = 'Medicamento sem nome'; // Fallback se ambos estiverem vazios
+                        const name = med.medicationName?.trim() || ''; // Garante que é uma string
+                        const concentration = med.concentration?.trim() || ''; // Garante que é uma string
+                        
+                        if (name.length > 0 && concentration.length > 0) {
+                          return `${name} ${concentration}`;
+                        } else if (name.length > 0) {
+                          return name;
+                        } else if (concentration.length > 0) {
+                          return concentration;
                         }
-                        return displayString;
+                        return 'Medicamento sem nome'; // Fallback final
                       })()}
                     </Text>
                     <View style={styles.lineSeparator} />
