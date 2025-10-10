@@ -97,18 +97,20 @@ const styles = StyleSheet.create({
     marginRight: 5,
     width: 15, // Fixed width for numbering
   },
-  medicationDetails: {
+  medicationContent: { // Renamed from medicationDetails
     flexGrow: 1,
     fontSize: 12,
   },
-  medicationNameLine: {
-    flexDirection: "row",
-    alignItems: "center",
+  medicationNameAndDetails: { // New style for the combined name/details line
+    fontSize: 12,
     marginBottom: 2,
   },
   medicationName: {
     fontWeight: "bold",
-    fontSize: 12,
+  },
+  medicationDetailsInline: { // Style for concentration, pharmacy type, quantity
+    fontSize: 10,
+    color: "#333",
   },
   medicationInstructions: {
     fontSize: 10,
@@ -246,7 +248,7 @@ const PrescriptionPdfDocument: React.FC<PrescriptionPdfDocumentProps> = ({
                 <Text style={styles.clinicDetails}>Registro no MAPA {clinicInfo.mapaRegistro}</Text>
               </View>
               <View style={styles.clinicInfoRight}>
-                <Text>{clinicInfo.address}</Text>
+                <Text>{clientDetails?.address || clinicInfo.address}</Text> {/* Use client address if available, else clinic */}
                 <Text>{clinicInfo.cep}</Text>
                 <Text>Telefone: {clinicInfo.phone}</Text>
               </View>
@@ -274,17 +276,29 @@ const PrescriptionPdfDocument: React.FC<PrescriptionPdfDocumentProps> = ({
               <View key={useType}>
                 <Text style={styles.medicationGroupTitle}>{useType}</Text>
                 {groupedMedications[useType].map((med, index) => {
-                  console.log(`Rendering medication ${index + 1}: ${med.medicationName}`); // Log para cada medicamento
+                  const medicationNameContent = (med.medicationName || "Medicamento sem nome").trim();
+                  const instructionsContent = (med.generatedInstructions || "Instruções não informadas").trim();
+                  console.log(`Medication Name Content: '${medicationNameContent}'`);
+                  console.log(`Instructions Content: '${instructionsContent}'`);
+
+                  const concentrationText = med.concentration ? ` ${med.concentration}` : '';
+                  const pharmacyTypeText = med.pharmacyType ? ` (${med.pharmacyType === "Farmácia Veterinária" ? "VET" : "HUMANA"})` : '';
+                  const totalQuantityText = med.totalQuantityDisplay ? ` - ${med.totalQuantityDisplay}` : '';
+
                   return (
                     <View key={med.id} style={styles.medicationItem}>
-                      <Text style={styles.medicationNumber}>{index + 1})</Text>
-                      <View style={styles.medicationDetails}>
-                        {/* Simplificação extrema: apenas o nome do medicamento */}
-                        <Text style={styles.medicationName}>
-                          {med.medicationName || "Medicamento sem nome"}
+                      <Text style={styles.medicationNumber}>{(index + 1).toString()})</Text>
+                      <View style={styles.medicationContent}> {/* Usando o novo nome de estilo */}
+                        <Text style={styles.medicationNameAndDetails}>
+                          <Text style={styles.medicationName}>{medicationNameContent}</Text>
+                          <Text style={styles.medicationDetailsInline}>
+                            {concentrationText}
+                            {pharmacyTypeText}
+                            {totalQuantityText}
+                          </Text>
                         </Text>
                         <Text style={styles.medicationInstructions}>
-                          {med.generatedInstructions || "Instruções não informadas"}
+                          {instructionsContent || '\u00A0'}
                         </Text>
                       </View>
                     </View>
