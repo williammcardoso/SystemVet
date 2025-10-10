@@ -341,6 +341,7 @@ const AddPrescriptionPage = () => {
           <X className="mr-2 h-4 w-4" /> Cancelar
         </Button>
         <PDFDownloadLink
+          key={medications.length} {/* Adicionada a key aqui */}
           document={
             <PrescriptionPdfDocument
               clinicInfo={clinicInfo}
