@@ -30,6 +30,7 @@ import {
   DialogFooter,
 } from "@/components/ui/dialog";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"; // Adicionado importação da tabela
 // Removido: import AddPrescriptionForm from "@/components/AddPrescriptionForm"; // Este componente foi refatorado e não é mais usado diretamente aqui
 
 // Mock data (centralizado aqui para facilitar o exemplo, mas idealmente viria de um serviço)
@@ -835,7 +836,7 @@ const PatientRecordPage = () => {
                       <TableHead>Item</TableHead>
                       <TableHead>Quantidade</TableHead>
                       <TableHead className="text-right">Total</TableHead>
-                      <TableHead className="text-right">Ações</TableHead> {/* Corrigido de Tablead para TableHead */}
+                      <TableHead className="text-right">Ações</TableHead>
                     </TableRow>
                   </TableHeader>
                   <TableBody>
