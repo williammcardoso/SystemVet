@@ -207,16 +207,6 @@ interface PrescriptionPdfDocumentProps {
   vetInfo: VetInfo;
 }
 
-// Função auxiliar para formatar os detalhes do medicamento em uma única string
-const formatMedicationDetails = (med: MedicationData) => {
-  const name = med.medicationName || "Medicamento sem nome";
-  const concentration = med.concentration ? ` ${med.concentration}` : '';
-  const pharmacyType = med.pharmacyType ? ` (${med.pharmacyType === "Farmácia Veterinária" ? "VET" : "HUMANA"})` : '';
-  const totalQuantity = med.totalQuantityDisplay ? ` - ${med.totalQuantityDisplay}` : '';
-
-  return `${name}${concentration}${pharmacyType}${totalQuantity}`;
-};
-
 const PrescriptionPdfDocument: React.FC<PrescriptionPdfDocumentProps> = ({
   clinicInfo,
   clientDetails,
@@ -279,24 +269,34 @@ const PrescriptionPdfDocument: React.FC<PrescriptionPdfDocumentProps> = ({
             </View>
           </View>
 
-          {Object.keys(groupedMedications).map((useType) => (
-            <View key={useType}>
-              <Text style={styles.medicationGroupTitle}>{useType}</Text>
-              {groupedMedications[useType].map((med, index) => (
-                <View key={med.id} style={styles.medicationItem}>
-                  <Text style={styles.medicationNumber}>{index + 1})</Text>
-                  <View style={styles.medicationDetails}>
-                    <Text style={styles.medicationName}>
-                      {formatMedicationDetails(med)}
-                    </Text>
-                    <Text style={styles.medicationInstructions}>
-                      {med.generatedInstructions || "Instruções não informadas"}
-                    </Text>
-                  </View>
-                </View>
-              ))}
-            </View>
-          ))}
+          {Object.keys(groupedMedications).length > 0 ? (
+            Object.keys(groupedMedications).map((useType) => (
+              <View key={useType}>
+                <Text style={styles.medicationGroupTitle}>{useType}</Text>
+                {groupedMedications[useType].map((med, index) => {
+                  console.log(`Rendering medication ${index + 1}: ${med.medicationName}`); // Log para cada medicamento
+                  return (
+                    <View key={med.id} style={styles.medicationItem}>
+                      <Text style={styles.medicationNumber}>{index + 1})</Text>
+                      <View style={styles.medicationDetails}>
+                        {/* Simplificação extrema: apenas o nome do medicamento */}
+                        <Text style={styles.medicationName}>
+                          {med.medicationName || "Medicamento sem nome"}
+                        </Text>
+                        <Text style={styles.medicationInstructions}>
+                          {med.generatedInstructions || "Instruções não informadas"}
+                        </Text>
+                      </View>
+                    </View>
+                  );
+                })}
+              </View>
+            ))
+          ) : (
+            <Text style={{ textAlign: 'center', marginTop: 20, fontSize: 12, color: '#888' }}>
+              Nenhum medicamento adicionado à receita.
+            </Text>
+          )}
 
           {generalObservations && (
             <View style={styles.observationsSection}>
