@@ -171,9 +171,16 @@ interface DocumentEntry {
 interface PrescriptionEntry {
   id: string;
   date: string;
-  medication: string;
-  dosage: string;
-  instructions: string;
+  useType: string;
+  pharmacyType: string;
+  medicationName: string;
+  concentration: string;
+  pharmaceuticalForm: string;
+  dosePerAdministration: string;
+  frequency: string;
+  period: string;
+  useCustomInstructions: boolean;
+  generalObservations: string;
 }
 
 interface ObservationEntry {
@@ -250,8 +257,8 @@ const PatientRecordPage = () => {
   const [newDocumentFile, setNewDocumentFile] = useState<File | null>(null);
 
   const [prescriptions, setPrescriptions] = useState<PrescriptionEntry[]>([
-    { id: "p1", date: "2023-11-01", medication: "Antibiótico X", dosage: "5mg, 2x ao dia", instructions: "Administrar com alimento." },
-    { id: "p2", date: "2024-04-05", medication: "Anti-inflamatório Y", dosage: "1 comprimido, 1x ao dia", instructions: "Por 7 dias." },
+    { id: "p1", date: "2023-11-01", medicationName: "Antibiótico X", dosePerAdministration: "5mg", frequency: "2x ao dia", instructions: "Administrar com alimento.", useType: "Uso Pontual", pharmacyType: "Farmácia Veterinária", concentration: "50mg/ml", pharmaceuticalForm: "Líquido", period: "7 dias", generalObservations: "" },
+    { id: "p2", date: "2024-04-05", medicationName: "Anti-inflamatório Y", dosePerAdministration: "1 comprimido", frequency: "1x ao dia", instructions: "Por 7 dias.", useType: "Uso Pontual", pharmacyType: "Farmácia Humana", concentration: "10mg", pharmaceuticalForm: "Comprimido", period: "7 dias", generalObservations: "" },
   ]);
 
   const [observations, setObservations] = useState<ObservationEntry[]>([
@@ -339,13 +346,23 @@ const PatientRecordPage = () => {
     }
   };
 
-  const handleAddPrescription = (medication: string, dosage: string, instructions: string) => {
+  const handleAddPrescription = (data: {
+    useType: string;
+    pharmacyType: string;
+    medicationName: string;
+    concentration: string;
+    pharmaceuticalForm: string;
+    dosePerAdministration: string;
+    frequency: string;
+    period: string;
+    useCustomInstructions: boolean;
+    generalObservations: string;
+  }) => {
     const newEntry: PrescriptionEntry = {
       id: String(prescriptions.length + 1),
       date: new Date().toISOString().split('T')[0],
-      medication: medication,
-      dosage: dosage,
-      instructions: instructions,
+      ...data,
+      instructions: data.useCustomInstructions ? data.generalObservations : `${data.dosePerAdministration}, ${data.frequency}, ${data.period}`, // Simplified instruction for table
     };
     setPrescriptions([...prescriptions, newEntry]);
   };
@@ -1026,13 +1043,14 @@ const PatientRecordPage = () => {
             <CardContent>
               <AddPrescriptionForm onAddPrescription={handleAddPrescription} />
               {prescriptions.length > 0 ? (
-                <Table>
+                <Table className="mt-4">
                   <TableHeader>
                     <TableRow>
                       <TableHead>Data</TableHead>
                       <TableHead>Medicação</TableHead>
                       <TableHead>Dosagem</TableHead>
-                      <TableHead>Instruções</TableHead>
+                      <TableHead>Frequência</TableHead>
+                      <TableHead>Período</TableHead>
                       <TableHead className="text-right">Ações</TableHead>
                     </TableRow>
                   </TableHeader>
@@ -1040,9 +1058,10 @@ const PatientRecordPage = () => {
                     {prescriptions.map((rx) => (
                       <TableRow key={rx.id}>
                         <TableCell>{rx.date}</TableCell>
-                        <TableCell>{rx.medication}</TableCell>
-                        <TableCell>{rx.dosage}</TableCell>
-                        <TableCell>{rx.instructions}</TableCell>
+                        <TableCell>{rx.medicationName}</TableCell>
+                        <TableCell>{rx.dosePerAdministration}</TableCell>
+                        <TableCell>{rx.frequency}</TableCell>
+                        <TableCell>{rx.period}</TableCell>
                         <TableCell className="text-right">
                           <Button variant="ghost" size="sm">
                             <Eye className="h-4 w-4" />
@@ -1053,7 +1072,7 @@ const PatientRecordPage = () => {
                   </TableBody>
                 </Table>
               ) : (
-                <p className="text-muted-foreground">Nenhuma receita registrada.</p>
+                <p className="text-muted-foreground mt-4">Nenhuma receita registrada.</p>
               )}
             </CardContent>
           </Card>
