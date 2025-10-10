@@ -9,7 +9,7 @@ import { Textarea } from "@/components/ui/textarea";
 import PrescriptionMedicationForm, { MedicationData } from "@/components/PrescriptionMedicationForm";
 import { toast } from "sonner";
 import { pdf } from "@react-pdf/renderer"; // Importar a função pdf
-import PrescriptionPdfDocument from "@/components/PrescriptionPdfDocument"; // Importar o componente do documento PDF (agora .tsx)
+import { PrescriptionPdfContent } from "@/components/PrescriptionPdfContent"; // Importar a função de conteúdo PDF
 
 // Mock data para animais e clientes (para exibir informações no cabeçalho)
 interface Animal {
@@ -360,17 +360,17 @@ const AddPrescriptionPage = () => {
       return;
     }
 
-    // Gerar o PDF como um Blob
+    // Gerar o PDF como um Blob, chamando a função PrescriptionPdfContent
     const blob = await pdf(
-      <PrescriptionPdfDocument
-        animalName={animal.name}
-        animalId={animal.id}
-        animalSpecies={animal.species}
-        tutorName={client.name}
-        tutorAddress={client.address}
-        medications={currentPrescriptionMedications}
-        generalObservations={currentPrescriptionGeneralObservations}
-      />
+      PrescriptionPdfContent({
+        animalName: animal.name,
+        animalId: animal.id,
+        animalSpecies: animal.species,
+        tutorName: client.name,
+        tutorAddress: client.address,
+        medications: currentPrescriptionMedications,
+        generalObservations: currentPrescriptionGeneralObservations,
+      })
     ).toBlob();
 
     // Criar uma URL para o Blob e abrir em uma nova aba

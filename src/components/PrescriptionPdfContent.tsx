@@ -159,7 +159,6 @@ const styles = StyleSheet.create({
     fontSize: 10,
     lineHeight: 1.5,
   },
-  // Estilo para o bloco de assinatura no final da página (agora flui com o conteúdo)
   signatureFooter: {
     marginTop: 30, // Adiciona margem superior para separar do conteúdo
     textAlign: "center",
@@ -191,7 +190,7 @@ const formatDateToPortuguese = (date: Date) => {
   return formattedDate.toUpperCase();
 };
 
-interface PrescriptionPdfDocumentProps {
+interface PrescriptionPdfContentProps {
   animalName: string;
   animalId: string;
   animalSpecies: string;
@@ -201,7 +200,8 @@ interface PrescriptionPdfDocumentProps {
   generalObservations: string;
 }
 
-const PrescriptionPdfDocument: React.FC<PrescriptionPdfDocumentProps> = ({
+// Exporta uma função que retorna o JSX do PDF, não um React.FC
+export const PrescriptionPdfContent = ({
   animalName,
   animalId,
   animalSpecies,
@@ -209,7 +209,7 @@ const PrescriptionPdfDocument: React.FC<PrescriptionPdfDocumentProps> = ({
   tutorAddress,
   medications,
   generalObservations,
-}) => {
+}: PrescriptionPdfContentProps) => {
   // Group medications by useType
   const groupedMedications = medications.reduce((acc: Record<string, MedicationData[]>, med) => {
     const useType = med.useType || "Outros";
@@ -343,5 +343,3 @@ const PrescriptionPdfDocument: React.FC<PrescriptionPdfDocumentProps> = ({
     </Document>
   );
 };
-
-export default PrescriptionPdfDocument;
