@@ -101,16 +101,9 @@ const styles = StyleSheet.create({
     flexGrow: 1,
     fontSize: 12,
   },
-  medicationNameAndDetails: { // New style for the combined name/details line
-    fontSize: 12,
-    marginBottom: 2,
-  },
-  medicationName: {
+  medicationName: { // Simplified to just bold for the name
     fontWeight: "bold",
-  },
-  medicationDetailsInline: { // Style for concentration, pharmacy type, quantity
-    fontSize: 10,
-    color: "#333",
+    fontSize: 12,
   },
   medicationInstructions: {
     fontSize: 10,
@@ -276,31 +269,14 @@ const PrescriptionPdfDocument: React.FC<PrescriptionPdfDocumentProps> = ({
               <View key={useType}>
                 <Text style={styles.medicationGroupTitle}>{useType}</Text>
                 {groupedMedications[useType].map((med, index) => {
-                  const medicationNameContent = (med.medicationName || "Medicamento sem nome").trim();
-                  const instructionsContent = (med.generatedInstructions || "Instruções não informadas").trim();
-                  console.log(`Medication Name Content: '${medicationNameContent}'`);
-                  console.log(`Instructions Content: '${instructionsContent}'`);
-
-                  const concentrationText = med.concentration ? ` ${med.concentration}` : '';
-                  const pharmacyTypeText = med.pharmacyType ? ` (${med.pharmacyType === "Farmácia Veterinária" ? "VET" : "HUMANA"})` : '';
-                  const totalQuantityText = med.totalQuantityDisplay ? ` - ${med.totalQuantityDisplay}` : '';
-
+                  console.log(`Rendering medication ${index + 1}: ${med.medicationName}`); // Log para cada medicamento
                   return (
                     <View key={med.id} style={styles.medicationItem}>
                       <Text style={styles.medicationNumber}>{(index + 1).toString()})</Text>
-                      <View style={styles.medicationContent}> {/* Usando o novo nome de estilo */}
-                        <Text style={styles.medicationNameAndDetails}>
-                          <Text style={styles.medicationName}>{medicationNameContent}</Text>
-                          <Text style={styles.medicationDetailsInline}>
-                            {concentrationText}
-                            {pharmacyTypeText}
-                            {totalQuantityText}
-                          </Text>
-                        </Text>
-                        <Text style={styles.medicationInstructions}>
-                          {instructionsContent || '\u00A0'}
-                        </Text>
-                      </View>
+                      {/* Mínimo absoluto: apenas o nome do medicamento */}
+                      <Text style={styles.medicationName}>
+                        {med.medicationName || "Medicamento sem nome"}
+                      </Text>
                     </View>
                   );
                 })}
