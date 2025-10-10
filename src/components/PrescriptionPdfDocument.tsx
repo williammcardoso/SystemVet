@@ -159,9 +159,12 @@ const styles = StyleSheet.create({
     fontSize: 10,
     lineHeight: 1.5,
   },
-  // Estilo para o bloco de assinatura no final do conteúdo
-  signatureBlock: {
-    marginTop: 40, // Espaçamento maior para separar do conteúdo
+  // Estilo para o bloco de assinatura no final da página (rodapé condicional)
+  signatureFooter: {
+    position: 'absolute',
+    bottom: 30,
+    left: 30,
+    right: 30,
     textAlign: "center",
     fontSize: 10,
     color: "#666",
@@ -224,7 +227,21 @@ const PrescriptionPdfDocument: React.FC<PrescriptionPdfDocumentProps> = ({
 
   return (
     <Document>
-      <Page size="A4" style={styles.page}>
+      <Page
+        size="A4"
+        style={styles.page}
+        footer={({ pageNumber, totalPages }) => (
+          pageNumber === totalPages && (
+            <View style={styles.signatureFooter}>
+              <Text style={styles.signatureDate}>{formatDateToPortuguese(currentDate)}</Text>
+              <Text style={styles.signatureText}>Assinado eletronicamente por</Text>
+              <Text style={styles.signatureName}>Dr. William Cardoso</Text>
+              <Text style={styles.signatureText}>CRMV 56895/SP</Text>
+              <Text style={styles.signatureText}>Registro no MAPA MV0052750203</Text>
+            </View>
+          )
+        )}
+      >
         {/* Clinic Header */}
         <View style={styles.clinicHeader}>
           <View style={styles.clinicInfoLeft}>
@@ -306,15 +323,6 @@ const PrescriptionPdfDocument: React.FC<PrescriptionPdfDocumentProps> = ({
               <Text style={styles.generalObservationsText}>{generalObservations}</Text>
             </View>
           )}
-
-          {/* Signature Block - now part of the main content flow */}
-          <View style={styles.signatureBlock} break> {/* 'break' will ensure it starts on a new page if not enough space */}
-            <Text style={styles.signatureDate}>{formatDateToPortuguese(currentDate)}</Text>
-            <Text style={styles.signatureText}>Assinado eletronicamente por</Text>
-            <Text style={styles.signatureName}>Dr. William Cardoso</Text>
-            <Text style={styles.signatureText}>CRMV 56895/SP</Text>
-            <Text style={styles.signatureText}>Registro no MAPA MV0052750203</Text>
-          </View>
         </View>
       </Page>
     </Document>
