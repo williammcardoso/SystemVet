@@ -231,15 +231,14 @@ const PrescriptionPdfDocument: React.FC<PrescriptionPdfDocumentProps> = ({
         size="A4"
         style={styles.page}
         footer={({ pageNumber, totalPages }) => (
-          pageNumber === totalPages && (
-            <View style={styles.signatureFooter}>
-              <Text style={styles.signatureDate}>{formatDateToPortuguese(currentDate)}</Text>
-              <Text style={styles.signatureText}>Assinado eletronicamente por</Text>
-              <Text style={styles.signatureName}>Dr. William Cardoso</Text>
-              <Text style={styles.signatureText}>CRMV 56895/SP</Text>
-              <Text style={styles.signatureText}>Registro no MAPA MV0052750203</Text>
-            </View>
-          )
+          // Removendo a condição para testar se o rodapé aparece em todas as páginas
+          <View style={styles.signatureFooter}>
+            <Text style={styles.signatureDate}>{formatDateToPortuguese(currentDate)}</Text>
+            <Text style={styles.signatureText}>Assinado eletronicamente por</Text>
+            <Text style={styles.signatureName}>Dr. William Cardoso</Text>
+            <Text style={styles.signatureText}>CRMV 56895/SP</Text>
+            <Text style={styles.signatureText}>Registro no MAPA MV0052750203</Text>
+          </View>
         )}
       >
         {/* Clinic Header */}
