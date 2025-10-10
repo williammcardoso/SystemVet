@@ -187,13 +187,23 @@ const styles = StyleSheet.create({
 });
 
 // Helper function to format date
-const formatDateToPortuguese = (date) => {
-  const options = { day: '2-digit', month: 'long', year: 'numeric' };
+const formatDateToPortuguese = (date: Date) => {
+  const options: Intl.DateTimeFormatOptions = { day: '2-digit', month: 'long', year: 'numeric' };
   const formattedDate = date.toLocaleDateString('pt-BR', options);
   return formattedDate.toUpperCase();
 };
 
-const PrescriptionPdfDocument = ({
+interface PrescriptionPdfDocumentProps {
+  animalName: string;
+  animalId: string;
+  animalSpecies: string;
+  tutorName: string;
+  tutorAddress: string;
+  medications: MedicationData[];
+  generalObservations: string;
+}
+
+const PrescriptionPdfDocument: React.FC<PrescriptionPdfDocumentProps> = ({
   animalName,
   animalId,
   animalSpecies,
@@ -203,7 +213,7 @@ const PrescriptionPdfDocument = ({
   generalObservations,
 }) => {
   // Group medications by useType
-  const groupedMedications = medications.reduce((acc, med) => {
+  const groupedMedications = medications.reduce((acc: Record<string, MedicationData[]>, med) => {
     const useType = med.useType || "Outros";
     if (!acc[useType]) {
       acc[useType] = [];
