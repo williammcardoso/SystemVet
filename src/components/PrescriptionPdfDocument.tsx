@@ -1,5 +1,3 @@
-"use client";
-
 import React from "react";
 import { Document, Page, View, Text, StyleSheet, Font } from "@react-pdf/renderer";
 import { MedicationData } from "./PrescriptionMedicationForm";
