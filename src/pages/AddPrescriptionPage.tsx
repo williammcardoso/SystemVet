@@ -2,11 +2,20 @@
 
 import React, { useState, useEffect } from "react";
 import { Link, useParams, useNavigate } from "react-router-dom";
-import { ArrowLeft, Save, X, Plus } from "lucide-react";
+import { ArrowLeft, Save, X, Plus, Eye } from "lucide-react"; // Adicionado Eye para o botão Visualizar
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Textarea } from "@/components/ui/textarea";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+  DialogFooter,
+} from "@/components/ui/dialog"; // Importar componentes do Dialog
 import PrescriptionMedicationForm, { MedicationData } from "@/components/PrescriptionMedicationForm";
+import PrescriptionViewModal from "@/components/PrescriptionViewModal"; // Importar o novo componente de visualização
 import { toast } from "sonner";
 
 // Mock data para animais e clientes (para exibir informações no cabeçalho)
@@ -20,12 +29,15 @@ interface Animal {
 interface Client {
   id: string;
   name: string;
+  address: string; // Adicionado endereço para o tutor
+  animals: Animal[];
 }
 
-const mockClients = [
+const mockClients: Client[] = [
   {
     id: "1",
     name: "William",
+    address: "Rua Exemplo, 123, Cidade - Estado",
     animals: [
       { id: "a1", name: "Totó", species: "Cachorro", breed: "Labrador" },
       { id: "a2", name: "Bolinha", species: "Cachorro", breed: "Poodle" },
@@ -34,6 +46,7 @@ const mockClients = [
   {
     id: "2",
     name: "Maria",
+    address: "Avenida Teste, 456, Outra Cidade - Outro Estado",
     animals: [
       { id: "a3", name: "Fido", species: "Cachorro", breed: "Vira-lata" },
       { id: "a4", name: "Miau", species: "Gato", breed: "Siamês" },
@@ -111,6 +124,7 @@ const AddPrescriptionPage = () => {
 
   const [currentPrescriptionMedications, setCurrentPrescriptionMedications] = useState<MedicationData[]>([]);
   const [currentPrescriptionGeneralObservations, setCurrentPrescriptionGeneralObservations] = useState<string>("");
+  const [isViewModalOpen, setIsViewModalOpen] = useState(false); // Estado para controlar o modal de visualização
 
   useEffect(() => {
     if (prescriptionId) {
@@ -200,6 +214,15 @@ const AddPrescriptionPage = () => {
     navigate(`/clients/${clientId}/animals/${animalId}/record`);
   };
 
+  const handleViewPrescription = () => {
+    // Verificar se há medicamentos para visualizar
+    if (currentPrescriptionMedications.length === 0) {
+      toast.error("Adicione pelo menos um medicamento para visualizar a receita.");
+      return;
+    }
+    setIsViewModalOpen(true);
+  };
+
   return (
     <div className="p-6">
       <div className="flex items-center justify-between mb-6">
@@ -255,15 +278,31 @@ const AddPrescriptionPage = () => {
       </div>
 
       <div className="flex justify-end gap-2 mt-6">
-        <Link to={`/clients/${clientId}/animals/${animalId}/record`}>
-          <Button variant="outline">
-            <X className="mr-2 h-4 w-4" /> Cancelar
-          </Button>
-        </Link>
+        <Button variant="outline" onClick={() => navigate(`/clients/${clientId}/animals/${animalId}/record`)}>
+          <X className="mr-2 h-4 w-4" /> Cancelar
+        </Button>
+        <Button variant="secondary" onClick={handleViewPrescription}>
+          <Eye className="mr-2 h-4 w-4" /> Visualizar
+        </Button>
         <Button onClick={handleSavePrescription}>
           <Save className="mr-2 h-4 w-4" /> Salvar Receita
         </Button>
       </div>
+
+      {/* Modal de Visualização da Receita */}
+      <Dialog open={isViewModalOpen} onOpenChange={setIsViewModalOpen}>
+        <DialogContent className="sm:max-w-[800px] max-h-[90vh] overflow-y-auto p-0"> {/* Removido padding padrão */}
+          <PrescriptionViewModal
+            animalName={animal.name}
+            animalId={animal.id}
+            animalSpecies={animal.species}
+            tutorName={client.name}
+            tutorAddress={client.address}
+            medications={currentPrescriptionMedications}
+            generalObservations={currentPrescriptionGeneralObservations}
+          />
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };
