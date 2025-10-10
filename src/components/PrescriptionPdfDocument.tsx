@@ -276,12 +276,8 @@ const PrescriptionPdfDocument: React.FC<PrescriptionPdfDocumentProps> = ({
                 <View key={med.id} style={styles.medicationItem}>
                   <Text style={styles.medicationNumber}>{index + 1})</Text>
                   <View style={styles.medicationDetails}>
-                    {/* Simplificando a linha do nome do medicamento e os badges para depuração */}
                     <Text style={styles.medicationName}>
-                      {med.medicationName || "Medicamento sem nome"}
-                      {med.concentration ? ` ${med.concentration}` : null}
-                      {med.pharmacyType && ` (${med.pharmacyType === "Farmácia Veterinária" ? "VET" : "HUMANA"})`}
-                      {med.totalQuantityDisplay && ` - ${med.totalQuantityDisplay}`}
+                      {`${med.medicationName || "Medicamento sem nome"}${med.concentration ? ` ${med.concentration}` : ''}${med.pharmacyType ? ` (${med.pharmacyType === "Farmácia Veterinária" ? "VET" : "HUMANA"})` : ''}${med.totalQuantityDisplay ? ` - ${med.totalQuantityDisplay}` : ''}`}
                     </Text>
                     <Text style={styles.medicationInstructions}>
                       {med.generatedInstructions || "Instruções não informadas"}
