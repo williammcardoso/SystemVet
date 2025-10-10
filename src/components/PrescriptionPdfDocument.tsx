@@ -185,18 +185,6 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     marginBottom: 2,
   },
-  // Novo estilo para o rodapé de teste
-  testFooter: {
-    position: 'absolute', // Garante que o rodapé de teste também se posicione corretamente
-    bottom: 10,
-    left: 0,
-    right: 0,
-    textAlign: 'center',
-    backgroundColor: 'purple', // Cor de fundo chamativa
-    color: 'white',
-    padding: 5,
-    fontSize: 12,
-  }
 });
 
 // Helper function to format date
@@ -243,9 +231,9 @@ const PrescriptionPdfDocument: React.FC<PrescriptionPdfDocumentProps> = ({
         size="A4"
         style={styles.page}
         footer={({ pageNumber, totalPages }) => (
-          <View style={styles.testFooter}>
-            <Text>RODAPÉ DE TESTE - Página {pageNumber} de {totalPages}</Text>
-          </View>
+          <Text style={{ fontSize: 8, textAlign: 'center', color: 'blue', marginTop: 10 }}>
+            Página {pageNumber} de {totalPages} - Teste de Rodapé
+          </Text>
         )}
       >
         {/* Clinic Header */}
