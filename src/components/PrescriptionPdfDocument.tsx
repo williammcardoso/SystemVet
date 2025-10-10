@@ -161,7 +161,7 @@ const styles = StyleSheet.create({
   },
   // Estilo para o bloco de assinatura no final da página (rodapé condicional)
   signatureFooter: {
-    position: 'absolute',
+    position: 'absolute', // Este position é para o conteúdo DENTRO do footer
     bottom: 30,
     left: 30,
     right: 30,
@@ -185,6 +185,18 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     marginBottom: 2,
   },
+  // Novo estilo para o rodapé de teste
+  testFooter: {
+    position: 'absolute', // Garante que o rodapé de teste também se posicione corretamente
+    bottom: 10,
+    left: 0,
+    right: 0,
+    textAlign: 'center',
+    backgroundColor: 'purple', // Cor de fundo chamativa
+    color: 'white',
+    padding: 5,
+    fontSize: 12,
+  }
 });
 
 // Helper function to format date
@@ -230,7 +242,11 @@ const PrescriptionPdfDocument: React.FC<PrescriptionPdfDocumentProps> = ({
       <Page
         size="A4"
         style={styles.page}
-        // Removendo a propriedade footer
+        footer={({ pageNumber, totalPages }) => (
+          <View style={styles.testFooter}>
+            <Text>RODAPÉ DE TESTE - Página {pageNumber} de {totalPages}</Text>
+          </View>
+        )}
       >
         {/* Clinic Header */}
         <View style={styles.clinicHeader}>
@@ -313,15 +329,6 @@ const PrescriptionPdfDocument: React.FC<PrescriptionPdfDocumentProps> = ({
               <Text style={styles.generalObservationsText}>{generalObservations}</Text>
             </View>
           )}
-        </View>
-
-        {/* Bloco de assinatura com posicionamento absoluto */}
-        <View style={styles.signatureFooter}>
-          <Text style={styles.signatureDate}>{formatDateToPortuguese(currentDate)}</Text>
-          <Text style={styles.signatureText}>Assinado eletronicamente por</Text>
-          <Text style={styles.signatureName}>Dr. William Cardoso</Text>
-          <Text style={styles.signatureText}>CRMV 56895/SP</Text>
-          <Text style={styles.signatureText}>Registro no MAPA MV0052750203</Text>
         </View>
       </Page>
     </Document>
