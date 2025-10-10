@@ -230,7 +230,6 @@ const PrescriptionPdfDocument: React.FC<PrescriptionPdfDocumentProps> = ({
       <Page
         size="A4"
         style={styles.page}
-        // REMOVIDO: footer prop
       >
         {/* Clinic Header */}
         <View style={styles.clinicHeader}>
@@ -277,7 +276,7 @@ const PrescriptionPdfDocument: React.FC<PrescriptionPdfDocumentProps> = ({
                   <View style={styles.medicationHeaderLine}>
                     <Text style={styles.medicationNumber}>{index + 1})</Text>
                     <Text style={styles.medicationNameConcentration}>
-                      {med.medicationName} {med.concentration && med.concentration}
+                      {med.medicationName}{med.concentration ? ` ${med.concentration}` : ''} {/* Corrigido aqui */}
                     </Text>
                     <View style={styles.lineSeparator} />
                     <View style={styles.badgeContainer}>
@@ -294,7 +293,7 @@ const PrescriptionPdfDocument: React.FC<PrescriptionPdfDocumentProps> = ({
                     </View>
                   </View>
                   <Text style={styles.medicationInstructions}>
-                    {med.generatedInstructions || 'Sem instruções de uso.'} {/* FIX: Added fallback */}
+                    {med.generatedInstructions || 'Sem instruções de uso.'}
                   </Text>
                   {med.generalObservations && (
                     <Text style={styles.medicationObservations}>
@@ -315,36 +314,28 @@ const PrescriptionPdfDocument: React.FC<PrescriptionPdfDocumentProps> = ({
           )}
         </View>
 
-        {/* ABSOLUTELY POSITIONED FOOTER FOR TESTING */}
+        {/* FOOTER - Agora com lógica para aparecer apenas na última página */}
         <View
-          fixed // This makes it appear on every page
-          style={{
-            position: 'absolute',
-            bottom: 30,
-            left: 30,
-            right: 30,
-            textAlign: 'center',
-            fontSize: 10,
-            color: '#666',
-            paddingTop: 15,
-            borderTopWidth: 1,
-            borderTopColor: '#eee',
-          }}
-          render={({ pageNumber, totalPages }) => { // Use render prop to access page numbers
+          fixed
+          style={styles.signatureFooter} // Usando o estilo definido
+          render={({ pageNumber, totalPages }) => {
             console.log(`Absolute footer being rendered! Page ${pageNumber} de ${totalPages}`);
-            return (
-              <View>
-                <Text style={{ fontSize: 10, marginBottom: 5 }}>
-                  Data: {formatDateToPortuguese(currentDate)}
-                </Text>
-                <Text style={{ fontSize: 10, marginBottom: 2 }}>
-                  Assinatura do Veterinário: _________________________
-                </Text>
-                <Text style={{ fontSize: 8, color: 'purple', marginTop: 5 }}>
-                  Página {pageNumber} de {totalPages} - Teste Absoluto
-                </Text>
-              </View>
-            );
+            if (pageNumber === totalPages) { // Renderiza apenas na última página
+              return (
+                <View>
+                  <Text style={styles.signatureDate}>
+                    Data: {formatDateToPortuguese(currentDate)}
+                  </Text>
+                  <Text style={styles.signatureText}>
+                    Assinatura do Veterinário: _________________________
+                  </Text>
+                  <Text style={{ fontSize: 8, color: '#999', marginTop: 5 }}>
+                    Página {pageNumber} de {totalPages}
+                  </Text>
+                </View>
+              );
+            }
+            return null; // Não renderiza nas outras páginas
           }}
         />
       </Page>
