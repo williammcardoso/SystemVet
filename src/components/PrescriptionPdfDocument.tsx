@@ -163,18 +163,18 @@ const styles = StyleSheet.create({
     fontSize: 10,
     color: "#666",
   },
-  signatureLine: {
-    borderBottomWidth: 1,
-    borderBottomColor: "#000",
-    width: 200, // Adjust width as needed
-    alignSelf: 'center',
-    marginTop: 20,
+  signatureDate: {
+    fontSize: 10,
     marginBottom: 5,
   },
   signatureText: {
     fontSize: 10,
-    textAlign: 'center',
-    lineHeight: 1.4,
+    marginBottom: 2,
+  },
+  signatureName: {
+    fontSize: 12,
+    fontWeight: "bold",
+    marginBottom: 2,
   },
 });
 
@@ -187,6 +187,13 @@ interface PrescriptionPdfDocumentProps {
   medications: MedicationData[];
   generalObservations: string;
 }
+
+// Helper function to format date
+const formatDateToPortuguese = (date: Date) => {
+  const options: Intl.DateTimeFormatOptions = { day: '2-digit', month: 'long', year: 'numeric' };
+  const formattedDate = date.toLocaleDateString('pt-BR', options);
+  return formattedDate.toUpperCase();
+};
 
 const PrescriptionPdfDocument: React.FC<PrescriptionPdfDocumentProps> = ({
   animalName,
@@ -206,6 +213,8 @@ const PrescriptionPdfDocument: React.FC<PrescriptionPdfDocumentProps> = ({
     acc[useType].push(med);
     return acc;
   }, {} as Record<string, MedicationData[]>);
+
+  const currentDate = new Date();
 
   return (
     <Document>
@@ -292,13 +301,11 @@ const PrescriptionPdfDocument: React.FC<PrescriptionPdfDocumentProps> = ({
 
         {/* Footer with updated signature */}
         <View style={styles.footer} fixed>
-          <View style={styles.signatureLine} />
-          <Text style={styles.signatureText}>
-            William | CRMV 56895 SP | Registro no MAPA MV0052750203
-          </Text>
-          <Text style={styles.signatureText}>
-            Assinado Eletronicamente em {new Date().toLocaleDateString()}
-          </Text>
+          <Text style={styles.signatureDate}>{formatDateToPortuguese(currentDate)}</Text>
+          <Text style={styles.signatureText}>Assinado eletronicamente por</Text>
+          <Text style={styles.signatureName}>Dr. William Cardoso</Text>
+          <Text style={styles.signatureText}>CRMV 56895/SP</Text>
+          <Text style={styles.signatureText}>Registro no MAPA MV0052750203</Text>
         </View>
       </Page>
     </Document>
