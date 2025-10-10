@@ -16,6 +16,7 @@ import {
   Eye,
   X,
   Save,
+  PawPrint,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -438,664 +439,715 @@ const PatientRecordPage = () => {
 
 
   return (
-    <div className="p-6">
-      <div className="flex items-center justify-between mb-6">
-        <h1 className="text-3xl font-bold">{animal.name} - Prontuário</h1>
-        <Link to={`/clients/${client.id}`}>
-          <Button variant="outline" className="rounded-md hover:bg-secondary/80 transition-colors duration-200">
-            <ArrowLeft className="mr-2 h-4 w-4" /> Voltar para {client.name}
-          </Button>
-        </Link>
+    <div className="flex flex-col min-h-screen bg-[#f8fafc] dark:bg-gray-950">
+      {/* Header da Página com Gradiente e Breadcrumb */}
+      <div className="bg-gradient-to-r from-gray-50 via-white to-gray-50 dark:from-gray-900 dark:via-gray-950 dark:to-gray-950 p-6 pb-4 border-b border-gray-200 dark:border-gray-800">
+        <div className="flex items-center justify-between mb-2">
+          <div className="flex items-center gap-4">
+            <div>
+              <h1 className="text-2xl font-semibold flex items-center gap-3 text-[#1E293B] dark:text-gray-100 group">
+                <PawPrint className="h-5 w-5 text-gray-500 dark:text-gray-400" /> {animal.name} - Prontuário
+              </h1>
+              <p className="text-sm text-[#6B7280] dark:text-gray-400 mt-1 mb-4">
+                Gerencie o histórico de saúde e informações do animal.
+              </p>
+            </div>
+          </div>
+          <Link to={`/clients/${client.id}`}>
+            <Button variant="outline" className="rounded-md border-gray-300 text-gray-700 hover:bg-gray-100 hover:text-gray-900 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200 dark:hover:bg-gray-700 transition-colors duration-200">
+              <ArrowLeft className="mr-2 h-4 w-4" /> Voltar para {client.name}
+            </Button>
+          </Link>
+        </div>
+        <p className="text-sm text-gray-400 dark:text-gray-500">
+          Painel &gt; <Link to="/clients" className="hover:text-blue-500 dark:hover:text-blue-400">Clientes</Link> &gt; <Link to={`/clients/${client.id}`} className="hover:text-blue-500 dark:hover:text-blue-400">{client.name}</Link> &gt; {animal.name}
+        </p>
       </div>
 
-      <div className="mb-6">
-        <h2 className="text-xl font-semibold mb-2">Informações do Animal</h2>
-        <Card className="shadow-sm">
-          <CardContent className="p-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            <div>
-              <p className="text-sm text-muted-foreground">Tutor:</p>
-              <p className="font-medium">{client.name}</p>
-            </div>
-            <div>
-              <p className="text-sm text-muted-foreground">Espécie:</p>
-              <p className="font-medium">{animal.species}</p>
-            </div>
-            <div>
-              <p className="text-sm text-muted-foreground">Raça:</p>
-              <p className="font-medium">{animal.breed}</p>
-            </div>
-            <div>
-              <p className="text-sm text-muted-foreground">Sexo:</p>
-              <p className="font-medium">{animal.gender}</p>
-            </div>
-            <div>
-              <p className="text-sm text-muted-foreground">Nascimento:</p>
-              <p className="font-medium">{animal.birthday}</p>
-            </div>
-            <div>
-              <p className="text-sm text-muted-foreground">Pelagem:</p>
-              <p className="font-medium">{animal.coatColor}</p>
-            </div>
-            <div>
-              <p className="text-sm text-muted-foreground">Peso:</p>
-              <p className="font-medium">{animal.weight} kg</p>
-            </div>
-            <div>
-              <p className="text-sm text-muted-foreground">Microchip:</p>
-              <p className="font-medium">{animal.microchip || "N/A"}</p>
-            </div>
-            <div className="col-span-full">
-              <p className="text-sm text-muted-foreground">Observações:</p>
-              <p className="font-medium">{animal.notes || "Nenhuma observação."}</p>
-            </div>
-          </CardContent>
-        </Card>
-      </div>
-
-      <Tabs defaultValue="appointments" className="w-full">
-        <TabsList className="grid w-full grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-8 h-auto flex-wrap">
-          <TabsTrigger value="appointments" className="rounded-md data-[state=active]:bg-primary data-[state=active]:text-primary-foreground transition-colors duration-200">
-            <Stethoscope className="h-4 w-4 mr-2" /> Atendimento
-          </TabsTrigger>
-          <TabsTrigger value="exams" className="rounded-md data-[state=active]:bg-primary data-[state=active]:text-primary-foreground transition-colors duration-200">
-            <CalendarDays className="h-4 w-4 mr-2" /> Exames
-          </TabsTrigger>
-          <TabsTrigger value="sales" className="rounded-md data-[state=active]:bg-primary data-[state=active]:text-primary-foreground transition-colors duration-200">
-            <DollarSign className="h-4 w-4 mr-2" /> Vendas
-          </TabsTrigger>
-          <TabsTrigger value="vaccines" className="rounded-md data-[state=active]:bg-primary data-[state=active]:text-primary-foreground transition-colors duration-200">
-            <Syringe className="h-4 w-4 mr-2" /> Vacinas
-          </TabsTrigger>
-          <TabsTrigger value="weight" className="rounded-md data-[state=active]:bg-primary data-[state=active]:text-primary-foreground transition-colors duration-200">
-            <Weight className="h-4 w-4 mr-2" /> Peso
-          </TabsTrigger>
-          <TabsTrigger value="documents" className="rounded-md data-[state=active]:bg-primary data-[state=active]:text-primary-foreground transition-colors duration-200">
-            <FileText className="h-4 w-4 mr-2" /> Documentos
-          </TabsTrigger>
-          <TabsTrigger value="prescriptions" className="rounded-md data-[state=active]:bg-primary data-[state=active]:text-primary-foreground transition-colors duration-200">
-            <ClipboardList className="h-4 w-4 mr-2" /> Receitas
-          </TabsTrigger>
-          <TabsTrigger value="observations" className="rounded-md data-[state=active]:bg-primary data-[state=active]:text-primary-foreground transition-colors duration-200">
-            <MessageSquare className="h-4 w-4 mr-2" /> Observações
-          </TabsTrigger>
-        </TabsList>
-
-        <TabsContent value="appointments" className="mt-4">
-          <Card className="shadow-sm">
-            <CardHeader className="flex flex-row items-center justify-between">
-              <CardTitle>Histórico de Atendimentos</CardTitle>
-              <Button size="sm" className="rounded-md bg-gradient-to-r from-primary to-blue-600 hover:from-primary/90 hover:to-blue-700 text-primary-foreground font-bold transition-all duration-200">
-                <Plus className="h-4 w-4 mr-2" /> Adicionar Atendimento
-              </Button>
+      <div className="flex-1 p-6">
+        <div className="mb-6">
+          <Card className="bg-white/90 backdrop-blur-sm border border-gray-200 dark:border-gray-700 rounded-2xl shadow-[0_1px_3px_rgba(0,0,0,0.05)] hover:shadow-[0_4px_8px_rgba(0,0,0,0.08)] transition-all duration-300 border-t-4 border-blue-400 dark:bg-gray-800/90">
+            <CardHeader className="pb-3">
+              <CardTitle className="flex items-center gap-2 text-lg font-semibold text-[#374151] dark:text-gray-100">
+                <PawPrint className="h-5 w-5 text-blue-500" /> Informações do Animal
+              </CardTitle>
             </CardHeader>
-            <CardContent>
-              {mockAppointments.length > 0 ? (
-                <Table>
-                  <TableHeader>
-                    <TableRow>
-                      <TableHead>Data</TableHead>
-                      <TableHead>Tipo</TableHead>
-                      <TableHead>Veterinário</TableHead>
-                      <TableHead>Observações</TableHead>
-                      <TableHead className="text-right">Ações</TableHead>
-                    </TableRow>
-                  </TableHeader>
-                  <TableBody>
-                    {mockAppointments.map((app, index) => (
-                      <TableRow key={app.id} className={cn(index % 2 === 1 && "bg-muted/50")}>
-                        <TableCell>{formatDate(app.date)}</TableCell>
-                        <TableCell>{app.type}</TableCell>
-                        <TableCell>{app.vet}</TableCell>
-                        <TableCell>{app.notes}</TableCell>
-                        <TableCell className="text-right">
-                          <Button variant="ghost" size="sm" className="rounded-md hover:bg-primary/10 hover:text-primary transition-colors duration-200">
-                            <Eye className="h-4 w-4" />
-                          </Button>
-                        </TableCell>
-                      </TableRow>
-                    ))}
-                  </TableBody>
-                </Table>
-              ) : (
-                <p className="text-muted-foreground py-4">Nenhum atendimento registrado.</p>
-              )}
+            <CardContent className="p-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 pt-0">
+              <div>
+                <p className="text-sm text-[#4B5563] dark:text-gray-400 font-medium">Tutor:</p>
+                <p className="font-normal text-foreground">{client.name}</p>
+              </div>
+              <div>
+                <p className="text-sm text-[#4B5563] dark:text-gray-400 font-medium">Espécie:</p>
+                <p className="font-normal text-foreground">{animal.species}</p>
+              </div>
+              <div>
+                <p className="text-sm text-[#4B5563] dark:text-gray-400 font-medium">Raça:</p>
+                <p className="font-normal text-foreground">{animal.breed}</p>
+              </div>
+              <div>
+                <p className="text-sm text-[#4B5563] dark:text-gray-400 font-medium">Sexo:</p>
+                <p className="font-normal text-foreground">{animal.gender}</p>
+              </div>
+              <div>
+                <p className="text-sm text-[#4B5563] dark:text-gray-400 font-medium">Nascimento:</p>
+                <p className="font-normal text-foreground">{animal.birthday}</p>
+              </div>
+              <div>
+                <p className="text-sm text-[#4B5563] dark:text-gray-400 font-medium">Pelagem:</p>
+                <p className="font-normal text-foreground">{animal.coatColor}</p>
+              </div>
+              <div>
+                <p className="text-sm text-[#4B5563] dark:text-gray-400 font-medium">Peso:</p>
+                <p className="font-normal text-foreground">{animal.weight} kg</p>
+              </div>
+              <div>
+                <p className="text-sm text-[#4B5563] dark:text-gray-400 font-medium">Microchip:</p>
+                <p className="font-normal text-foreground">{animal.microchip || "N/A"}</p>
+              </div>
+              <div className="col-span-full">
+                <p className="text-sm text-[#4B5563] dark:text-gray-400 font-medium">Observações:</p>
+                <p className="font-normal text-foreground">{animal.notes || "Nenhuma observação."}</p>
+              </div>
             </CardContent>
           </Card>
-        </TabsContent>
+        </div>
 
-        <TabsContent value="exams" className="mt-4">
-          <Card className="shadow-sm">
-            <CardHeader className="flex flex-row items-center justify-between">
-              <CardTitle>Histórico de Exames</CardTitle>
-              <Link to={`/clients/${clientId}/animals/${animalId}/add-exam`}>
-                <Button size="sm" className="rounded-md bg-gradient-to-r from-primary to-blue-600 hover:from-primary/90 hover:to-blue-700 text-primary-foreground font-bold transition-all duration-200">
-                  <Plus className="h-4 w-4 mr-2" /> Adicionar Exame
+        <Tabs defaultValue="appointments" className="w-full mt-6">
+          <TabsList className="grid w-full grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-8 h-auto flex-wrap bg-white/90 backdrop-blur-sm border border-gray-200 dark:border-gray-700 rounded-2xl shadow-[0_1px_3px_rgba(0,0,0,0.05)] p-2">
+            <TabsTrigger value="appointments" className="rounded-xl data-[state=active]:bg-blue-500 data-[state=active]:text-white transition-colors duration-200 text-gray-700 dark:text-gray-300 data-[state=active]:dark:bg-blue-600">
+              <Stethoscope className="h-4 w-4 mr-2" /> Atendimento
+            </TabsTrigger>
+            <TabsTrigger value="exams" className="rounded-xl data-[state=active]:bg-blue-500 data-[state=active]:text-white transition-colors duration-200 text-gray-700 dark:text-gray-300 data-[state=active]:dark:bg-blue-600">
+              <CalendarDays className="h-4 w-4 mr-2" /> Exames
+            </TabsTrigger>
+            <TabsTrigger value="sales" className="rounded-xl data-[state=active]:bg-blue-500 data-[state=active]:text-white transition-colors duration-200 text-gray-700 dark:text-gray-300 data-[state=active]:dark:bg-blue-600">
+              <DollarSign className="h-4 w-4 mr-2" /> Vendas
+            </TabsTrigger>
+            <TabsTrigger value="vaccines" className="rounded-xl data-[state=active]:bg-blue-500 data-[state=active]:text-white transition-colors duration-200 text-gray-700 dark:text-gray-300 data-[state=active]:dark:bg-blue-600">
+              <Syringe className="h-4 w-4 mr-2" /> Vacinas
+            </TabsTrigger>
+            <TabsTrigger value="weight" className="rounded-xl data-[state=active]:bg-blue-500 data-[state=active]:text-white transition-colors duration-200 text-gray-700 dark:text-gray-300 data-[state=active]:dark:bg-blue-600">
+              <Weight className="h-4 w-4 mr-2" /> Peso
+            </TabsTrigger>
+            <TabsTrigger value="documents" className="rounded-xl data-[state=active]:bg-blue-500 data-[state=active]:text-white transition-colors duration-200 text-gray-700 dark:text-gray-300 data-[state=active]:dark:bg-blue-600">
+              <FileText className="h-4 w-4 mr-2" /> Documentos
+            </TabsTrigger>
+            <TabsTrigger value="prescriptions" className="rounded-xl data-[state=active]:bg-blue-500 data-[state=active]:text-white transition-colors duration-200 text-gray-700 dark:text-gray-300 data-[state=active]:dark:bg-blue-600">
+              <ClipboardList className="h-4 w-4 mr-2" /> Receitas
+            </TabsTrigger>
+            <TabsTrigger value="observations" className="rounded-xl data-[state=active]:bg-blue-500 data-[state=active]:text-white transition-colors duration-200 text-gray-700 dark:text-gray-300 data-[state=active]:dark:bg-blue-600">
+              <MessageSquare className="h-4 w-4 mr-2" /> Observações
+            </TabsTrigger>
+          </TabsList>
+
+          <TabsContent value="appointments" className="mt-4">
+            <Card className="bg-white/90 backdrop-blur-sm border border-gray-200 dark:border-gray-700 rounded-2xl shadow-[0_1px_3px_rgba(0,0,0,0.05)] hover:shadow-[0_4px_8px_rgba(0,0,0,0.08)] transition-all duration-300 border-t-4 border-blue-400 dark:bg-gray-800/90">
+              <CardHeader className="flex flex-row items-center justify-between pb-3">
+                <CardTitle className="flex items-center gap-2 text-lg font-semibold text-[#374151] dark:text-gray-100">
+                  <Stethoscope className="h-5 w-5 text-blue-500" /> Histórico de Atendimentos
+                </CardTitle>
+                <Button size="sm" className="rounded-md bg-gradient-to-r from-blue-500 to-indigo-500 text-white hover:from-blue-600 hover:to-indigo-600 font-semibold transition-all duration-200 shadow-md hover:shadow-lg">
+                  <Plus className="h-4 w-4 mr-2" /> Adicionar Atendimento
                 </Button>
-              </Link>
-            </CardHeader>
-            <CardContent>
-              {examsList.length > 0 ? (
-                <Table>
-                  <TableHeader>
-                    <TableRow>
-                      <TableHead>Data</TableHead>
-                      <TableHead>Tipo</TableHead>
-                      <TableHead>Resultado</TableHead>
-                      <TableHead>Veterinário</TableHead>
-                      <TableHead className="text-right">Ações</TableHead>
-                    </TableRow>
-                  </TableHeader>
-                  <TableBody>
-                    {examsList.map((exam, index) => (
-                      <TableRow key={exam.id} className={cn(index % 2 === 1 && "bg-muted/50")}>
-                        <TableCell>{formatDate(exam.date)}</TableCell>
-                        <TableCell>{exam.type}</TableCell>
-                        <TableCell>{exam.result}</TableCell>
-                        <TableCell>{exam.vet}</TableCell>
-                        <TableCell className="text-right">
-                          <Button variant="ghost" size="sm" className="rounded-md hover:bg-primary/10 hover:text-primary transition-colors duration-200">
-                            <Eye className="h-4 w-4" />
-                          </Button>
-                        </TableCell>
-                      </TableRow>
-                    ))}
-                  </TableBody>
-                </Table>
-              ) : (
-                <p className="text-muted-foreground py-4">Nenhum exame registrado.</p>
-              )}
-            </CardContent>
-          </Card>
-
-          <Dialog open={isAddExamDialogOpen} onOpenChange={setIsAddExamDialogOpen}>
-            <DialogContent className="sm:max-w-[700px]">
-              <DialogHeader>
-                <DialogTitle>Adicionar Novo Exame</DialogTitle>
-                <DialogDescription>
-                  Preencha os detalhes do exame para adicionar ao prontuário.
-                </DialogDescription>
-              </DialogHeader>
-              <div className="grid gap-4 py-4">
-                <div className="grid grid-cols-4 items-center gap-4">
-                  <Label htmlFor="examDate" className="text-right">
-                    Data
-                  </Label>
-                  <Input
-                    id="examDate"
-                    type="date"
-                    value={newExamDate}
-                    onChange={(e) => setNewExamDate(e.target.value)}
-                    className="col-span-3 focus-visible:ring-primary transition-all duration-200"
-                  />
-                </div>
-                <div className="grid grid-cols-4 items-center gap-4">
-                  <Label htmlFor="examType" className="text-right">
-                    Tipo de Exame
-                  </Label>
-                  <Select onValueChange={setNewExamType} value={newExamType} >
-                    <SelectTrigger id="examType" className="col-span-3 focus-visible:ring-primary transition-all duration-200">
-                      <SelectValue placeholder="Selecione o tipo de exame" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {mockExamTypes.map((type) => (
-                        <SelectItem key={type.id} value={type.name}>
-                          {type.name}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                </div>
-                <div className="grid grid-cols-4 items-center gap-4">
-                  <Label htmlFor="examVet" className="text-right">
-                    Veterinário
-                  </Label>
-                  <Select onValueChange={setNewExamVet} value={newExamVet}>
-                    <SelectTrigger id="examVet" className="col-span-3 focus-visible:ring-primary transition-all duration-200">
-                      <SelectValue placeholder="Selecione o veterinário" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {mockVets.map((vet) => (
-                        <SelectItem key={vet.id} value={vet.name}>
-                          {vet.name}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                </div>
-
-                {newExamType === "Hemograma Completo" ? (
-                  <>
-                    <h3 className="col-span-4 text-lg font-semibold mt-4 mb-2">Eritrograma</h3>
-                    <div className="grid grid-cols-2 col-span-4 gap-4">
-                      <div className="space-y-2">
-                        <Label htmlFor="hemacias">Hemácias (m/mm3)</Label>
-                        <Input id="hemacias" type="number" placeholder="Ex: 5.5" value={newHemacias} onChange={(e) => setNewHemacias(e.target.value)} className="focus-visible:ring-primary transition-all duration-200" />
-                      </div>
-                      <div className="space-y-2">
-                        <Label htmlFor="volumeGlobular">Volume globular (%)</Label>
-                        <Input id="volumeGlobular" type="number" placeholder="Ex: 37" value={newVolumeGlobular} onChange={(e) => setNewVolumeGlobular(e.target.value)} className="focus-visible:ring-primary transition-all duration-200" />
-                      </div>
-                      <div className="space-y-2">
-                        <Label htmlFor="hemoglobina">Hemoglobina (g/dL)</Label>
-                        <Input id="hemoglobina" type="number" placeholder="Ex: 12.0" value={newHemoglobina} onChange={(e) => setNewHemoglobina(e.target.value)} className="focus-visible:ring-primary transition-all duration-200" />
-                      </div>
-                      <div className="space-y-2">
-                        <Label htmlFor="vgm">VGM (fL)</Label>
-                        <Input id="vgm" type="number" placeholder="Ex: 60.0" value={newVGM} onChange={(e) => setNewVGM(e.target.value)} className="focus-visible:ring-primary transition-all duration-200" />
-                      </div>
-                      <div className="space-y-2">
-                        <Label htmlFor="chgm">CHGM (%)</Label>
-                        <Input id="chgm" type="number" placeholder="Ex: 31" value={newCHGM} onChange={(e) => setNewCHGM(e.target.value)} className="focus-visible:ring-primary transition-all duration-200" />
-                      </div>
-                      <div className="space-y-2">
-                        <Label htmlFor="plaquetas">Plaquetas (m/mm3)</Label>
-                        <Input id="plaquetas" type="number" placeholder="Ex: 300" value={newPlaquetas} onChange={(e) => setNewPlaquetas(e.target.value)} className="focus-visible:ring-primary transition-all duration-200" />
-                      </div>
-                      <div className="space-y-2">
-                        <Label htmlFor="formasTotais">Formas totais (m/mm3)</Label>
-                        <Input id="formasTotais" type="number" placeholder="Ex: 6.0" value={newFormasTotais} onChange={(e) => setNewFormasTotais(e.target.value)} className="focus-visible:ring-primary transition-all duration-200" />
-                      </div>
-                      <div className="space-y-2">
-                        <Label htmlFor="hemaciasNucleadas">Hemácias nucleadas (g/dL)</Label>
-                        <Input id="hemaciasNucleadas" type="number" placeholder="Ex: 0" value={newHemaciasNucleadas} onChange={(e) => setNewHemaciasNucleadas(e.target.value)} className="focus-visible:ring-primary transition-all duration-200" />
-                      </div>
-                    </div>
-
-                    <h3 className="col-span-4 text-lg font-semibold mt-4 mb-2">Leucograma</h3>
-                    <div className="grid grid-cols-2 col-span-4 gap-4">
-                      <div className="space-y-2">
-                        <Label htmlFor="leucocitos">Leucócitos (m/mm3)</Label>
-                        <Input id="leucocitos" type="number" placeholder="Ex: 6.0" value={newLeucocitos} onChange={(e) => setNewLeucocitos(e.target.value)} className="focus-visible:ring-primary transition-all duration-200" />
-                      </div>
-                      <div className="space-y-2">
-                        <Label htmlFor="bastoes">Bastões (%)</Label>
-                        <Input id="bastoes" type="number" placeholder="Ex: 0" value={newBastoes} onChange={(e) => setNewBastoes(e.target.value)} className="focus-visible:ring-primary transition-all duration-200" />
-                      </div>
-                      <div className="space-y-2">
-                        <Label htmlFor="segmentados">Segmentados (%)</Label>
-                        <Input id="segmentados" type="number" placeholder="Ex: 60" value={newSegmentados} onChange={(e) => setNewSegmentados(e.target.value)} className="focus-visible:ring-primary transition-all duration-200" />
-                      </div>
-                      <div className="space-y-2">
-                        <Label htmlFor="linfocitos">Linfócitos (%)</Label>
-                        <Input id="linfocitos" type="number" placeholder="Ex: 30" value={newLinfocitos} onChange={(e) => setNewLinfocitos(e.target.value)} className="focus-visible:ring-primary transition-all duration-200" />
-                      </div>
-                      <div className="space-y-2">
-                        <Label htmlFor="monocitos">Monócitos (%)</Label>
-                        <Input id="monocitos" type="number" placeholder="Ex: 3" value={newMonocitos} onChange={(e) => setNewMonocitos(e.target.value)} className="focus-visible:ring-primary transition-all duration-200" />
-                      </div>
-                      <div className="space-y-2">
-                        <Label htmlFor="eosinofilos">Eosinófilos (%)</Label>
-                        <Input id="eosinofilos" type="number" placeholder="Ex: 2" value={newEosinofilos} onChange={(e) => setNewEosinofilos(e.target.value)} className="focus-visible:ring-primary transition-all duration-200" />
-                      </div>
-                      <div className="space-y-2">
-                        <Label htmlFor="basofilos">Basófilos (%)</Label>
-                        <Input id="basofilos" type="number" placeholder="Ex: 1" value={newBasofilos} onChange={(e) => setNewBasofilos(e.target.value)} className="focus-visible:ring-primary transition-all duration-200" />
-                      </div>
-                    </div>
-                  </>
+              </CardHeader>
+              <CardContent className="pt-0">
+                {mockAppointments.length > 0 ? (
+                  <div className="overflow-hidden">
+                    <Table>
+                      <TableHeader>
+                        <TableRow>
+                          <TableHead>Data</TableHead>
+                          <TableHead>Tipo</TableHead>
+                          <TableHead>Veterinário</TableHead>
+                          <TableHead>Observações</TableHead>
+                          <TableHead className="text-right">Ações</TableHead>
+                        </TableRow>
+                      </TableHeader>
+                      <TableBody>
+                        {mockAppointments.map((app, index) => (
+                          <TableRow key={app.id} className={cn(index % 2 === 1 && "bg-muted/50")}>
+                            <TableCell>{formatDate(app.date)}</TableCell>
+                            <TableCell>{app.type}</TableCell>
+                            <TableCell>{app.vet}</TableCell>
+                            <TableCell>{app.notes}</TableCell>
+                            <TableCell className="text-right">
+                              <Button variant="ghost" size="sm" className="rounded-md hover:bg-gray-100 hover:text-gray-900 dark:hover:bg-gray-700 dark:hover:text-gray-200 transition-colors duration-200">
+                                <Eye className="h-4 w-4" />
+                              </Button>
+                            </TableCell>
+                          </TableRow>
+                        ))}
+                      </TableBody>
+                    </Table>
+                  </div>
                 ) : (
+                  <p className="text-muted-foreground py-4">Nenhum atendimento registrado.</p>
+                )}
+              </CardContent>
+            </Card>
+          </TabsContent>
+
+          <TabsContent value="exams" className="mt-4">
+            <Card className="bg-white/90 backdrop-blur-sm border border-gray-200 dark:border-gray-700 rounded-2xl shadow-[0_1px_3px_rgba(0,0,0,0.05)] hover:shadow-[0_4px_8px_rgba(0,0,0,0.08)] transition-all duration-300 border-t-4 border-purple-400 dark:bg-gray-800/90">
+              <CardHeader className="flex flex-row items-center justify-between pb-3">
+                <CardTitle className="flex items-center gap-2 text-lg font-semibold text-[#374151] dark:text-gray-100">
+                  <CalendarDays className="h-5 w-5 text-purple-500" /> Histórico de Exames
+                </CardTitle>
+                <Link to={`/clients/${clientId}/animals/${animalId}/add-exam`}>
+                  <Button size="sm" className="rounded-md bg-gradient-to-r from-blue-500 to-indigo-500 text-white hover:from-blue-600 hover:to-indigo-600 font-semibold transition-all duration-200 shadow-md hover:shadow-lg">
+                    <Plus className="h-4 w-4 mr-2" /> Adicionar Exame
+                  </Button>
+                </Link>
+              </CardHeader>
+              <CardContent className="pt-0">
+                {examsList.length > 0 ? (
+                  <div className="overflow-hidden">
+                    <Table>
+                      <TableHeader>
+                        <TableRow>
+                          <TableHead>Data</TableHead>
+                          <TableHead>Tipo</TableHead>
+                          <TableHead>Resultado</TableHead>
+                          <TableHead>Veterinário</TableHead>
+                          <TableHead className="text-right">Ações</TableHead>
+                        </TableRow>
+                      </TableHeader>
+                      <TableBody>
+                        {examsList.map((exam, index) => (
+                          <TableRow key={exam.id} className={cn(index % 2 === 1 && "bg-muted/50")}>
+                            <TableCell>{formatDate(exam.date)}</TableCell>
+                            <TableCell>{exam.type}</TableCell>
+                            <TableCell>{exam.result}</TableCell>
+                            <TableCell>{exam.vet}</TableCell>
+                            <TableCell className="text-right">
+                              <Button variant="ghost" size="sm" className="rounded-md hover:bg-gray-100 hover:text-gray-900 dark:hover:bg-gray-700 dark:hover:text-gray-200 transition-colors duration-200">
+                                <Eye className="h-4 w-4" />
+                              </Button>
+                            </TableCell>
+                          </TableRow>
+                        ))}
+                      </TableBody>
+                    </Table>
+                  </div>
+                ) : (
+                  <p className="text-muted-foreground py-4">Nenhum exame registrado.</p>
+                )}
+              </CardContent>
+            </Card>
+
+            <Dialog open={isAddExamDialogOpen} onOpenChange={setIsAddExamDialogOpen}>
+              <DialogContent className="sm:max-w-[700px] bg-white/90 backdrop-blur-sm border border-gray-200 dark:border-gray-700 rounded-2xl shadow-[0_1px_3px_rgba(0,0,0,0.05)] dark:bg-gray-800/90">
+                <DialogHeader>
+                  <DialogTitle className="text-lg font-semibold text-[#374151] dark:text-gray-100">Adicionar Novo Exame</DialogTitle>
+                  <DialogDescription className="text-sm text-[#6B7280] dark:text-gray-400">
+                    Preencha os detalhes do exame para adicionar ao prontuário.
+                  </DialogDescription>
+                </DialogHeader>
+                <div className="grid gap-4 py-4">
                   <div className="grid grid-cols-4 items-center gap-4">
-                    <Label htmlFor="examResult" className="text-right">
-                      Resultado
+                    <Label htmlFor="examDate" className="text-right text-[#4B5563] dark:text-gray-400 font-medium">
+                      Data
                     </Label>
                     <Input
-                      id="examResult"
-                      placeholder="Resultado do exame"
-                      value={newExamResult}
-                      onChange={(e) => setNewExamResult(e.target.value)}
-                      className="col-span-3 focus-visible:ring-primary transition-all duration-200"
+                      id="examDate"
+                      type="date"
+                      value={newExamDate}
+                      onChange={(e) => setNewExamDate(e.target.value)}
+                      className="col-span-3 bg-white rounded-lg border-gray-200 dark:border-gray-600 focus:ring-2 focus:ring-blue-400 placeholder-[#9CA3AF] dark:placeholder-gray-500 transition-all duration-200"
                     />
                   </div>
-                )}
+                  <div className="grid grid-cols-4 items-center gap-4">
+                    <Label htmlFor="examType" className="text-right text-[#4B5563] dark:text-gray-400 font-medium">
+                      Tipo de Exame
+                    </Label>
+                    <Select onValueChange={setNewExamType} value={newExamType} >
+                      <SelectTrigger id="examType" className="col-span-3 bg-white rounded-lg border-gray-200 dark:border-gray-600 focus:ring-2 focus:ring-blue-400 placeholder-[#9CA3AF] dark:placeholder-gray-500 transition-all duration-200">
+                        <SelectValue placeholder="Selecione o tipo de exame" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {mockExamTypes.map((type) => (
+                          <SelectItem key={type.id} value={type.name}>
+                            {type.name}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  <div className="grid grid-cols-4 items-center gap-4">
+                    <Label htmlFor="examVet" className="text-right text-[#4B5563] dark:text-gray-400 font-medium">
+                      Veterinário
+                    </Label>
+                    <Select onValueChange={setNewExamVet} value={newExamVet}>
+                      <SelectTrigger id="examVet" className="col-span-3 bg-white rounded-lg border-gray-200 dark:border-gray-600 focus:ring-2 focus:ring-blue-400 placeholder-[#9CA3AF] dark:placeholder-gray-500 transition-all duration-200">
+                        <SelectValue placeholder="Selecione o veterinário" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {mockVets.map((vet) => (
+                          <SelectItem key={vet.id} value={vet.name}>
+                            {vet.name}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </div>
 
-                <div className="grid grid-cols-4 items-center gap-4 mt-4">
-                  <Label htmlFor="examObservations" className="text-right">
-                    Observações
-                  </Label>
-                  <Textarea
-                    id="examObservations"
-                    placeholder="Observações gerais do exame"
-                    value={newExamObservations}
-                    onChange={(e) => setNewExamObservations(e.target.value)}
-                    className="col-span-3 focus-visible:ring-primary transition-all duration-200"
-                    rows={3}
-                  />
-                </div>
-                <div className="grid grid-cols-4 items-center gap-4">
-                  <Label htmlFor="operator" className="text-right">
-                    Operador
-                  </Label>
-                  <Input
-                    id="operator"
-                    placeholder="Nome do operador"
-                    value={newOperator}
-                    onChange={(e) => setNewOperator(e.target.value)}
-                    className="col-span-3 focus-visible:ring-primary transition-all duration-200"
-                  />
-                </div>
-                <div className="grid grid-cols-4 items-center gap-4">
-                  <Label htmlFor="referenceDate" className="text-right">
-                    Data de Referência
-                  </Label>
-                  <Input
-                    id="referenceDate"
-                    type="date"
-                    value={newReferenceDate}
-                    onChange={(e) => setNewReferenceDate(e.target.value)}
-                    className="col-span-3 focus-visible:ring-primary transition-all duration-200"
-                  />
-                </div>
-                <div className="grid grid-cols-4 items-center gap-4">
-                  <Label htmlFor="referenceTables" className="text-right">
-                    Tabelas de referência
-                  </Label>
-                  <Textarea
-                    id="referenceTables"
-                    placeholder="Tabelas de referência"
-                    value={newReferenceTables}
-                    onChange={(e) => setNewReferenceTables(e.target.value)}
-                    className="col-span-3 focus-visible:ring-primary transition-all duration-200"
-                    rows={3}
-                  />
-                </div>
-                <div className="grid grid-cols-4 items-center gap-4">
-                  <Label htmlFor="conclusions" className="text-right">
-                    Conclusões
-                  </Label>
-                  <Textarea
-                    id="conclusions"
-                    placeholder="Conclusões do exame"
-                    value={newConclusions}
-                    onChange={(e) => setNewConclusions(e.target.value)}
-                    className="col-span-3 focus-visible:ring-primary transition-all duration-200"
-                    rows={5}
-                  />
-                </div>
-              </div>
-              <DialogFooter>
-                <Button variant="outline" onClick={() => setIsAddExamDialogOpen(false)} className="rounded-md hover:bg-secondary/80 transition-colors duration-200">
-                  <X className="mr-2 h-4 w-4" /> Cancelar
-                </Button>
-                <Button onClick={handleAddExam} className="rounded-md bg-gradient-to-r from-primary to-blue-600 hover:from-primary/90 hover:to-blue-700 text-primary-foreground font-bold transition-all duration-200">
-                  <Save className="mr-2 h-4 w-4" /> Salvar Exame
-                </Button>
-              </DialogFooter>
-            </DialogContent>
-          </Dialog>
-        </TabsContent>
+                  {newExamType === "Hemograma Completo" ? (
+                    <>
+                      <h3 className="col-span-4 text-lg font-semibold mt-4 mb-2 text-[#374151] dark:text-gray-100">Eritrograma</h3>
+                      <div className="grid grid-cols-2 col-span-4 gap-4">
+                        <div className="space-y-2">
+                          <Label htmlFor="hemacias" className="text-[#4B5563] dark:text-gray-400 font-medium">Hemácias (m/mm3)</Label>
+                          <Input id="hemacias" type="number" placeholder="Ex: 5.5" value={newHemacias} onChange={(e) => setNewHemacias(e.target.value)} className="bg-white rounded-lg border-gray-200 dark:border-gray-600 focus:ring-2 focus:ring-blue-400 placeholder-[#9CA3AF] dark:placeholder-gray-500 transition-all duration-200" />
+                        </div>
+                        <div className="space-y-2">
+                          <Label htmlFor="volumeGlobular" className="text-[#4B5563] dark:text-gray-400 font-medium">Volume globular (%)</Label>
+                          <Input id="volumeGlobular" type="number" placeholder="Ex: 37" value={newVolumeGlobular} onChange={(e) => setNewVolumeGlobular(e.target.value)} className="bg-white rounded-lg border-gray-200 dark:border-gray-600 focus:ring-2 focus:ring-blue-400 placeholder-[#9CA3AF] dark:placeholder-gray-500 transition-all duration-200" />
+                        </div>
+                        <div className="space-y-2">
+                          <Label htmlFor="hemoglobina" className="text-[#4B5563] dark:text-gray-400 font-medium">Hemoglobina (g/dL)</Label>
+                          <Input id="hemoglobina" type="number" placeholder="Ex: 12.0" value={newHemoglobina} onChange={(e) => setNewHemoglobina(e.target.value)} className="bg-white rounded-lg border-gray-200 dark:border-gray-600 focus:ring-2 focus:ring-blue-400 placeholder-[#9CA3AF] dark:placeholder-gray-500 transition-all duration-200" />
+                        </div>
+                        <div className="space-y-2">
+                          <Label htmlFor="vgm" className="text-[#4B5563] dark:text-gray-400 font-medium">VGM (fL)</Label>
+                          <Input id="vgm" type="number" placeholder="Ex: 60.0" value={newVGM} onChange={(e) => setNewVGM(e.target.value)} className="bg-white rounded-lg border-gray-200 dark:border-gray-600 focus:ring-2 focus:ring-blue-400 placeholder-[#9CA3AF] dark:placeholder-gray-500 transition-all duration-200" />
+                        </div>
+                        <div className="space-y-2">
+                          <Label htmlFor="chgm" className="text-[#4B5563] dark:text-gray-400 font-medium">CHGM (%)</Label>
+                          <Input id="chgm" type="number" placeholder="Ex: 31" value={newCHGM} onChange={(e) => setNewCHGM(e.target.value)} className="bg-white rounded-lg border-gray-200 dark:border-gray-600 focus:ring-2 focus:ring-blue-400 placeholder-[#9CA3AF] dark:placeholder-gray-500 transition-all duration-200" />
+                        </div>
+                        <div className="space-y-2">
+                          <Label htmlFor="plaquetas" className="text-[#4B5563] dark:text-gray-400 font-medium">Plaquetas (m/mm3)</Label>
+                          <Input id="plaquetas" type="number" placeholder="Ex: 300" value={newPlaquetas} onChange={(e) => setNewPlaquetas(e.target.value)} className="bg-white rounded-lg border-gray-200 dark:border-gray-600 focus:ring-2 focus:ring-blue-400 placeholder-[#9CA3AF] dark:placeholder-gray-500 transition-all duration-200" />
+                        </div>
+                        <div className="space-y-2">
+                          <Label htmlFor="formasTotais" className="text-[#4B5563] dark:text-gray-400 font-medium">Formas totais (m/mm3)</Label>
+                          <Input id="formasTotais" type="number" placeholder="Ex: 6.0" value={newFormasTotais} onChange={(e) => setNewFormasTotais(e.target.value)} className="bg-white rounded-lg border-gray-200 dark:border-gray-600 focus:ring-2 focus:ring-blue-400 placeholder-[#9CA3AF] dark:placeholder-gray-500 transition-all duration-200" />
+                        </div>
+                        <div className="space-y-2">
+                          <Label htmlFor="hemaciasNucleadas" className="text-[#4B5563] dark:text-gray-400 font-medium">Hemácias nucleadas (g/dL)</Label>
+                          <Input id="hemaciasNucleadas" type="number" placeholder="Ex: 0" value={newHemaciasNucleadas} onChange={(e) => setNewHemaciasNucleadas(e.target.value)} className="bg-white rounded-lg border-gray-200 dark:border-gray-600 focus:ring-2 focus:ring-blue-400 placeholder-[#9CA3AF] dark:placeholder-gray-500 transition-all duration-200" />
+                        </div>
+                      </div>
 
-        <TabsContent value="sales" className="mt-4">
-          <Card className="shadow-sm">
-            <CardHeader className="flex flex-row items-center justify-between">
-              <CardTitle>Histórico de Vendas</CardTitle>
-              <Button size="sm" className="rounded-md bg-gradient-to-r from-primary to-blue-600 hover:from-primary/90 hover:to-blue-700 text-primary-foreground font-bold transition-all duration-200">
-                <Plus className="h-4 w-4 mr-2" /> Adicionar Venda
-              </Button>
-            </CardHeader>
-            <CardContent>
-              {mockSales.length > 0 ? (
-                <Table>
-                  <TableHeader>
-                    <TableRow>
-                      <TableHead>Data</TableHead>
-                      <TableHead>Item</TableHead>
-                      <TableHead>Quantidade</TableHead>
-                      <TableHead className="text-right">Total</TableHead>
-                      <TableHead className="text-right">Ações</TableHead>
-                    </TableRow>
-                  </TableHeader>
-                  <TableBody>
-                    {mockSales.map((sale, index) => (
-                      <TableRow key={sale.id} className={cn(index % 2 === 1 && "bg-muted/50")}>
-                        <TableCell>{formatDate(sale.date)}</TableCell>
-                        <TableCell>{sale.item}</TableCell>
-                        <TableCell>{sale.quantity}</TableCell>
-                        <TableCell className="text-right">R$ {sale.total.toFixed(2)}</TableCell>
-                        <TableCell className="text-right">
-                          <Button variant="ghost" size="sm" className="rounded-md hover:bg-primary/10 hover:text-primary transition-colors duration-200">
-                            <Eye className="h-4 w-4" />
-                          </Button>
-                        </TableCell>
-                      </TableRow>
-                    ))}
-                  </TableBody>
-                </Table>
-              ) : (
-                <p className="text-muted-foreground py-4">Nenhuma venda registrada.</p>
-              )}
-            </CardContent>
-          </Card>
-        </TabsContent>
-
-        <TabsContent value="vaccines" className="mt-4">
-          <Card className="shadow-sm">
-            <CardHeader className="flex flex-row items-center justify-between">
-              <CardTitle>Histórico de Vacinas</CardTitle>
-              <Button size="sm" className="rounded-md bg-gradient-to-r from-primary to-blue-600 hover:from-primary/90 hover:to-blue-700 text-primary-foreground font-bold transition-all duration-200">
-                <Plus className="h-4 w-4 mr-2" /> Adicionar Vacina
-              </Button>
-            </CardHeader>
-            <CardContent>
-              {mockVaccines.length > 0 ? (
-                <Table>
-                  <TableHeader>
-                    <TableRow>
-                      <TableHead>Data</TableHead>
-                      <TableHead>Tipo</TableHead>
-                      <TableHead>Próxima Dose</TableHead>
-                      <TableHead>Veterinário</TableHead>
-                      <TableHead className="text-right">Ações</TableHead>
-                    </TableRow>
-                  </TableHeader>
-                  <TableBody>
-                    {mockVaccines.map((vaccine, index) => (
-                      <TableRow key={vaccine.id} className={cn(index % 2 === 1 && "bg-muted/50")}>
-                        <TableCell>{formatDate(vaccine.date)}</TableCell>
-                        <TableCell>{vaccine.type}</TableCell>
-                        <TableCell>{formatDate(vaccine.nextDue)}</TableCell>
-                        <TableCell>{vaccine.vet}</TableCell>
-                        <TableCell className="text-right">
-                          <Button variant="ghost" size="sm" className="rounded-md hover:bg-primary/10 hover:text-primary transition-colors duration-200">
-                            <Eye className="h-4 w-4" />
-                          </Button>
-                        </TableCell>
-                      </TableRow>
-                    ))}
-                  </TableBody>
-                </Table>
-              ) : (
-                <p className="text-muted-foreground py-4">Nenhuma vacina registrada.</p>
-              )}
-            </CardContent>
-          </Card>
-        </TabsContent>
-
-        {/* Nova aba: Peso */}
-        <TabsContent value="weight" className="mt-4">
-          <Card className="shadow-sm">
-            <CardHeader className="flex flex-row items-center justify-between">
-              <CardTitle>Histórico de Peso</CardTitle>
-              <div className="flex gap-2">
-                <Input
-                  type="date"
-                  value={newWeightDate}
-                  onChange={(e) => setNewWeightDate(e.target.value)}
-                  className="w-[150px] rounded-md focus-visible:ring-primary transition-all duration-200"
-                />
-                <Input
-                  type="number"
-                  placeholder="Peso (kg)"
-                  value={newWeight}
-                  onChange={(e) => setNewWeight(e.target.value)}
-                  className="w-[120px] rounded-md focus-visible:ring-primary transition-all duration-200"
-                />
-                <Button size="sm" onClick={handleAddWeight} className="rounded-md bg-gradient-to-r from-primary to-blue-600 hover:from-primary/90 hover:to-blue-700 text-primary-foreground font-bold transition-all duration-200">
-                  <Plus className="h-4 w-4 mr-2" /> Adicionar Peso
-                </Button>
-              </div>
-            </CardHeader>
-            <CardContent>
-              {weightHistory.length > 0 ? (
-                <Table>
-                  <TableHeader>
-                    <TableRow>
-                      <TableHead>Data</TableHead>
-                      <TableHead className="text-right">Peso (kg)</TableHead>
-                    </TableRow>
-                  </TableHeader>
-                  <TableBody>
-                    {weightHistory.map((entry, index) => (
-                      <TableRow key={entry.id} className={cn(index % 2 === 1 && "bg-muted/50")}>
-                        <TableCell>{formatDate(entry.date)}</TableCell>
-                        <TableCell className="text-right">{entry.weight.toFixed(2)}</TableCell>
-                      </TableRow>
-                    ))}
-                  </TableBody>
-                </Table>
-              ) : (
-                <p className="text-muted-foreground py-4">Nenhum registro de peso.</p>
-              )}
-            </CardContent>
-          </Card>
-        </TabsContent>
-
-        {/* Nova aba: Documentos */}
-        <TabsContent value="documents" className="mt-4">
-          <Card className="shadow-sm">
-            <CardHeader className="flex flex-row items-center justify-between">
-              <CardTitle>Documentos</CardTitle>
-              <div className="flex gap-2 items-center flex-wrap">
-                <Input
-                  type="text"
-                  placeholder="Nome do Documento"
-                  value={newDocumentName}
-                  onChange={(e) => setNewDocumentName(e.target.value)}
-                  className="w-[200px] rounded-md focus-visible:ring-primary transition-all duration-200"
-                />
-                <Input
-                  type="file"
-                  onChange={(e) => setNewDocumentFile(e.target.files ? e.target.files[0] : null)}
-                  className="w-[200px] rounded-md focus-visible:ring-primary transition-all duration-200"
-                />
-                <Button size="sm" onClick={handleAddDocument} disabled={!newDocumentName || !newDocumentFile} className="rounded-md bg-gradient-to-r from-primary to-blue-600 hover:from-primary/90 hover:to-blue-700 text-primary-foreground font-bold transition-all duration-200">
-                  <Plus className="h-4 w-4 mr-2" /> Adicionar Documento
-                </Button>
-              </div>
-            </CardHeader>
-            <CardContent>
-              {documents.length > 0 ? (
-                <Table>
-                  <TableHeader>
-                    <TableRow>
-                      <TableHead>Data</TableHead>
-                      <TableHead>Nome</TableHead>
-                      <TableHead className="text-right">Ações</TableHead>
-                    </TableRow>
-                  </TableHeader>
-                  <TableBody>
-                    {documents.map((doc, index) => (
-                      <TableRow key={doc.id} className={cn(index % 2 === 1 && "bg-muted/50")}>
-                        <TableCell>{formatDate(doc.date)}</TableCell>
-                        <TableCell>{doc.name}</TableCell>
-                        <TableCell className="text-right">
-                          <a href={doc.fileUrl} target="_blank" rel="noopener noreferrer">
-                            <Button variant="ghost" size="sm" className="rounded-md hover:bg-primary/10 hover:text-primary transition-colors duration-200">
-                              <Eye className="h-4 w-4" /> Ver
-                            </Button>
-                          </a>
-                        </TableCell>
-                      </TableRow>
-                    ))}
-                  </TableBody>
-                </Table>
-              ) : (
-                <p className="text-muted-foreground py-4">Nenhum documento registrado.</p>
-              )}
-            </CardContent>
-          </Card>
-        </TabsContent>
-
-        {/* Nova aba: Receitas */}
-        <TabsContent value="prescriptions" className="mt-4">
-          <Card className="shadow-sm">
-            <CardHeader className="flex flex-row items-center justify-between">
-              <CardTitle>Receitas</CardTitle>
-              <Link to={`/clients/${clientId}/animals/${animalId}/add-prescription`}>
-                <Button size="sm" className="rounded-md bg-gradient-to-r from-primary to-blue-600 hover:from-primary/90 hover:to-blue-700 text-primary-foreground font-bold transition-all duration-200">
-                  <Plus className="h-4 w-4 mr-2" /> Adicionar Nova Receita
-                </Button>
-              </Link>
-            </CardHeader>
-            <CardContent>
-              {prescriptions.length > 0 ? (
-                <Table>
-                  <TableHeader>
-                    <TableRow>
-                      <TableHead>Data</TableHead>
-                      <TableHead>Medicação</TableHead>
-                      <TableHead>Tratamento</TableHead>
-                      <TableHead className="text-right">Ações</TableHead>
-                    </TableRow>
-                  </TableHeader>
-                  <TableBody>
-                    {prescriptions.map((rx, index) => (
-                      <TableRow key={rx.id} className={cn(index % 2 === 1 && "bg-muted/50")}>
-                        <TableCell>{formatDate(rx.date)}</TableCell>
-                        <TableCell>{rx.medicationName}</TableCell>
-                        <TableCell>{rx.treatmentDescription || "N/A"}</TableCell>
-                        <TableCell className="text-right">
-                          <Link to={`/clients/${clientId}/animals/${animalId}/edit-prescription/${rx.id}`}>
-                            <Button variant="ghost" size="sm" className="rounded-md hover:bg-primary/10 hover:text-primary transition-colors duration-200">
-                              <Eye className="h-4 w-4" /> Ver
-                            </Button>
-                          </Link>
-                        </TableCell>
-                      </TableRow>
-                    ))}
-                  </TableBody>
-                </Table>
-              ) : (
-                <p className="text-muted-foreground mt-4 py-4">Nenhuma receita registrada.</p>
-              )}
-            </CardContent>
-          </Card>
-        </TabsContent>
-
-        {/* Nova aba: Observações */}
-        <TabsContent value="observations" className="mt-4">
-          <Card className="shadow-sm">
-            <CardHeader className="flex flex-row items-center justify-between">
-              <CardTitle>Observações Gerais</CardTitle>
-              <Button size="sm" onClick={handleAddObservation} disabled={!newObservation.trim()} className="rounded-md bg-gradient-to-r from-primary to-blue-600 hover:from-primary/90 hover:to-blue-700 text-primary-foreground font-bold transition-all duration-200">
-                <Plus className="h-4 w-4 mr-2" /> Adicionar Observação
-              </Button>
-            </CardHeader>
-            <CardContent>
-              <div className="mb-4">
-                <Textarea
-                  placeholder="Adicione uma nova observação..."
-                  rows={3}
-                  value={newObservation}
-                  onChange={(e) => setNewObservation(e.target.value)}
-                  className="focus-visible:ring-primary transition-all duration-200"
-                />
-              </div>
-              {observations.length > 0 ? (
-                <div className="space-y-4">
-                  {observations.map((obs, index) => (
-                    <div key={obs.id} className={cn("border p-3 rounded-md", index % 2 === 1 ? "bg-muted/50" : "bg-background")}>
-                      <p className="text-sm text-muted-foreground mb-1">{formatDate(obs.date)}</p>
-                      <p>{obs.observation}</p>
+                      <h3 className="col-span-4 text-lg font-semibold mt-4 mb-2 text-[#374151] dark:text-gray-100">Leucograma</h3>
+                      <div className="grid grid-cols-2 col-span-4 gap-4">
+                        <div className="space-y-2">
+                          <Label htmlFor="leucocitos" className="text-[#4B5563] dark:text-gray-400 font-medium">Leucócitos (m/mm3)</Label>
+                          <Input id="leucocitos" type="number" placeholder="Ex: 6.0" value={newLeucocitos} onChange={(e) => setNewLeucocitos(e.target.value)} className="bg-white rounded-lg border-gray-200 dark:border-gray-600 focus:ring-2 focus:ring-blue-400 placeholder-[#9CA3AF] dark:placeholder-gray-500 transition-all duration-200" />
+                        </div>
+                        <div className="space-y-2">
+                          <Label htmlFor="bastoes" className="text-[#4B5563] dark:text-gray-400 font-medium">Bastões (%)</Label>
+                          <Input id="bastoes" type="number" placeholder="Ex: 0" value={newBastoes} onChange={(e) => setNewBastoes(e.target.value)} className="bg-white rounded-lg border-gray-200 dark:border-gray-600 focus:ring-2 focus:ring-blue-400 placeholder-[#9CA3AF] dark:placeholder-gray-500 transition-all duration-200" />
+                        </div>
+                        <div className="space-y-2">
+                          <Label htmlFor="segmentados" className="text-[#4B5563] dark:text-gray-400 font-medium">Segmentados (%)</Label>
+                          <Input id="segmentados" type="number" placeholder="Ex: 60" value={newSegmentados} onChange={(e) => setNewSegmentados(e.target.value)} className="bg-white rounded-lg border-gray-200 dark:border-gray-600 focus:ring-2 focus:ring-blue-400 placeholder-[#9CA3AF] dark:placeholder-gray-500 transition-all duration-200" />
+                        </div>
+                        <div className="space-y-2">
+                          <Label htmlFor="linfocitos" className="text-[#4B5563] dark:text-gray-400 font-medium">Linfócitos (%)</Label>
+                          <Input id="linfocitos" type="number" placeholder="Ex: 30" value={newLinfocitos} onChange={(e) => setNewLinfocitos(e.target.value)} className="bg-white rounded-lg border-gray-200 dark:border-gray-600 focus:ring-2 focus:ring-blue-400 placeholder-[#9CA3AF] dark:placeholder-gray-500 transition-all duration-200" />
+                        </div>
+                        <div className="space-y-2">
+                          <Label htmlFor="monocitos" className="text-[#4B5563] dark:text-gray-400 font-medium">Monócitos (%)</Label>
+                          <Input id="monocitos" type="number" placeholder="Ex: 3" value={newMonocitos} onChange={(e) => setNewMonocitos(e.target.value)} className="bg-white rounded-lg border-gray-200 dark:border-gray-600 focus:ring-2 focus:ring-blue-400 placeholder-[#9CA3AF] dark:placeholder-gray-500 transition-all duration-200" />
+                        </div>
+                        <div className="space-y-2">
+                          <Label htmlFor="eosinofilos" className="text-[#4B5563] dark:text-gray-400 font-medium">Eosinófilos (%)</Label>
+                          <Input id="eosinofilos" type="number" placeholder="Ex: 2" value={newEosinofilos} onChange={(e) => setNewEosinofilos(e.target.value)} className="bg-white rounded-lg border-gray-200 dark:border-gray-600 focus:ring-2 focus:ring-blue-400 placeholder-[#9CA3AF] dark:placeholder-gray-500 transition-all duration-200" />
+                        </div>
+                        <div className="space-y-2">
+                          <Label htmlFor="basofilos" className="text-[#4B5563] dark:text-gray-400 font-medium">Basófilos (%)</Label>
+                          <Input id="basofilos" type="number" placeholder="Ex: 1" value={newBasofilos} onChange={(e) => setNewBasofilos(e.target.value)} className="bg-white rounded-lg border-gray-200 dark:border-gray-600 focus:ring-2 focus:ring-blue-400 placeholder-[#9CA3AF] dark:placeholder-gray-500 transition-all duration-200" />
+                        </div>
+                      </div>
+                    </>
+                  ) : (
+                    <div className="grid grid-cols-4 items-center gap-4">
+                      <Label htmlFor="examResult" className="text-right text-[#4B5563] dark:text-gray-400 font-medium">
+                        Resultado
+                      </Label>
+                      <Input
+                        id="examResult"
+                        placeholder="Resultado do exame"
+                        value={newExamResult}
+                        onChange={(e) => setNewExamResult(e.target.value)}
+                        className="col-span-3 bg-white rounded-lg border-gray-200 dark:border-gray-600 focus:ring-2 focus:ring-blue-400 placeholder-[#9CA3AF] dark:placeholder-gray-500 transition-all duration-200"
+                      />
                     </div>
-                  ))}
+                  )}
+
+                  <div className="grid grid-cols-4 items-center gap-4 mt-4">
+                    <Label htmlFor="examObservations" className="text-right text-[#4B5563] dark:text-gray-400 font-medium">
+                      Observações
+                    </Label>
+                    <Textarea
+                      id="examObservations"
+                      placeholder="Observações gerais do exame"
+                      value={newExamObservations}
+                      onChange={(e) => setNewExamObservations(e.target.value)}
+                      className="col-span-3 bg-white rounded-lg border-gray-200 dark:border-gray-600 focus:ring-2 focus:ring-blue-400 placeholder-[#9CA3AF] dark:placeholder-gray-500 transition-all duration-200"
+                      rows={3}
+                    />
+                  </div>
+                  <div className="grid grid-cols-4 items-center gap-4">
+                    <Label htmlFor="operator" className="text-right text-[#4B5563] dark:text-gray-400 font-medium">
+                      Operador
+                    </Label>
+                    <Input
+                      id="operator"
+                      placeholder="Nome do operador"
+                      value={newOperator}
+                      onChange={(e) => setNewOperator(e.target.value)}
+                      className="col-span-3 bg-white rounded-lg border-gray-200 dark:border-gray-600 focus:ring-2 focus:ring-blue-400 placeholder-[#9CA3AF] dark:placeholder-gray-500 transition-all duration-200"
+                    />
+                  </div>
+                  <div className="grid grid-cols-4 items-center gap-4">
+                    <Label htmlFor="referenceDate" className="text-right text-[#4B5563] dark:text-gray-400 font-medium">
+                      Data de Referência
+                    </Label>
+                    <Input
+                      id="referenceDate"
+                      type="date"
+                      value={newReferenceDate}
+                      onChange={(e) => setNewReferenceDate(e.target.value)}
+                      className="col-span-3 bg-white rounded-lg border-gray-200 dark:border-gray-600 focus:ring-2 focus:ring-blue-400 placeholder-[#9CA3AF] dark:placeholder-gray-500 transition-all duration-200"
+                    />
+                  </div>
+                  <div className="grid grid-cols-4 items-center gap-4">
+                    <Label htmlFor="referenceTables" className="text-right text-[#4B5563] dark:text-gray-400 font-medium">
+                      Tabelas de referência
+                    </Label>
+                    <Textarea
+                      id="referenceTables"
+                      placeholder="Tabelas de referência"
+                      value={newReferenceTables}
+                      onChange={(e) => setNewReferenceTables(e.target.value)}
+                      className="col-span-3 bg-white rounded-lg border-gray-200 dark:border-gray-600 focus:ring-2 focus:ring-blue-400 placeholder-[#9CA3AF] dark:placeholder-gray-500 transition-all duration-200"
+                      rows={3}
+                    />
+                  </div>
+                  <div className="grid grid-cols-4 items-center gap-4">
+                    <Label htmlFor="conclusions" className="text-right text-[#4B5563] dark:text-gray-400 font-medium">
+                      Conclusões
+                    </Label>
+                    <Textarea
+                      id="conclusions"
+                      placeholder="Conclusões do exame"
+                      value={newConclusions}
+                      onChange={(e) => setNewConclusions(e.target.value)}
+                      className="col-span-3 bg-white rounded-lg border-gray-200 dark:border-gray-600 focus:ring-2 focus:ring-blue-400 placeholder-[#9CA3AF] dark:placeholder-gray-500 transition-all duration-200"
+                      rows={5}
+                    />
+                  </div>
                 </div>
-              ) : (
-                <p className="text-muted-foreground py-4">Nenhuma observação registrada.</p>
-              )}
-            </CardContent>
-          </Card>
-        </TabsContent>
-      </Tabs>
+                <DialogFooter>
+                  <Button variant="outline" onClick={() => setIsAddExamDialogOpen(false)} className="bg-white border border-gray-300 text-gray-700 hover:bg-gray-50 rounded-md transition-all duration-200 shadow-sm hover:shadow-md dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200 dark:hover:bg-gray-600">
+                    <X className="mr-2 h-4 w-4" /> Cancelar
+                  </Button>
+                  <Button onClick={handleAddExam} className="bg-gradient-to-r from-blue-500 to-indigo-500 text-white hover:from-blue-600 hover:to-indigo-600 rounded-md font-semibold transition-all duration-200 shadow-md hover:shadow-lg">
+                    <Save className="mr-2 h-4 w-4" /> Salvar Exame
+                  </Button>
+                </DialogFooter>
+              </DialogContent>
+            </Dialog>
+          </TabsContent>
+
+          <TabsContent value="sales" className="mt-4">
+            <Card className="bg-white/90 backdrop-blur-sm border border-gray-200 dark:border-gray-700 rounded-2xl shadow-[0_1px_3px_rgba(0,0,0,0.05)] hover:shadow-[0_4px_8px_rgba(0,0,0,0.08)] transition-all duration-300 border-t-4 border-green-400 dark:bg-gray-800/90">
+              <CardHeader className="flex flex-row items-center justify-between pb-3">
+                <CardTitle className="flex items-center gap-2 text-lg font-semibold text-[#374151] dark:text-gray-100">
+                  <DollarSign className="h-5 w-5 text-green-500" /> Histórico de Vendas
+                </CardTitle>
+                <Button size="sm" className="rounded-md bg-gradient-to-r from-blue-500 to-indigo-500 text-white hover:from-blue-600 hover:to-indigo-600 font-semibold transition-all duration-200 shadow-md hover:shadow-lg">
+                  <Plus className="h-4 w-4 mr-2" /> Adicionar Venda
+                </Button>
+              </CardHeader>
+              <CardContent className="pt-0">
+                {mockSales.length > 0 ? (
+                  <div className="overflow-hidden">
+                    <Table>
+                      <TableHeader>
+                        <TableRow>
+                          <TableHead>Data</TableHead>
+                          <TableHead>Item</TableHead>
+                          <TableHead>Quantidade</TableHead>
+                          <TableHead className="text-right">Total</TableHead>
+                          <TableHead className="text-right">Ações</TableHead>
+                        </TableRow>
+                      </TableHeader>
+                      <TableBody>
+                        {mockSales.map((sale, index) => (
+                          <TableRow key={sale.id} className={cn(index % 2 === 1 && "bg-muted/50")}>
+                            <TableCell>{formatDate(sale.date)}</TableCell>
+                            <TableCell>{sale.item}</TableCell>
+                            <TableCell>{sale.quantity}</TableCell>
+                            <TableCell className="text-right">R$ {sale.total.toFixed(2)}</TableCell>
+                            <TableCell className="text-right">
+                              <Button variant="ghost" size="sm" className="rounded-md hover:bg-gray-100 hover:text-gray-900 dark:hover:bg-gray-700 dark:hover:text-gray-200 transition-colors duration-200">
+                                <Eye className="h-4 w-4" />
+                              </Button>
+                            </TableCell>
+                          </TableRow>
+                        ))}
+                      </TableBody>
+                    </Table>
+                  </div>
+                ) : (
+                  <p className="text-muted-foreground py-4">Nenhuma venda registrada.</p>
+                )}
+              </CardContent>
+            </Card>
+          </TabsContent>
+
+          <TabsContent value="vaccines" className="mt-4">
+            <Card className="bg-white/90 backdrop-blur-sm border border-gray-200 dark:border-gray-700 rounded-2xl shadow-[0_1px_3px_rgba(0,0,0,0.05)] hover:shadow-[0_4px_8px_rgba(0,0,0,0.08)] transition-all duration-300 border-t-4 border-yellow-400 dark:bg-gray-800/90">
+              <CardHeader className="flex flex-row items-center justify-between pb-3">
+                <CardTitle className="flex items-center gap-2 text-lg font-semibold text-[#374151] dark:text-gray-100">
+                  <Syringe className="h-5 w-5 text-yellow-500" /> Histórico de Vacinas
+                </CardTitle>
+                <Button size="sm" className="rounded-md bg-gradient-to-r from-blue-500 to-indigo-500 text-white hover:from-blue-600 hover:to-indigo-600 font-semibold transition-all duration-200 shadow-md hover:shadow-lg">
+                  <Plus className="h-4 w-4 mr-2" /> Adicionar Vacina
+                </Button>
+              </CardHeader>
+              <CardContent className="pt-0">
+                {mockVaccines.length > 0 ? (
+                  <div className="overflow-hidden">
+                    <Table>
+                      <TableHeader>
+                        <TableRow>
+                          <TableHead>Data</TableHead>
+                          <TableHead>Tipo</TableHead>
+                          <TableHead>Próxima Dose</TableHead>
+                          <TableHead>Veterinário</TableHead>
+                          <TableHead className="text-right">Ações</TableHead>
+                        </TableRow>
+                      </TableHeader>
+                      <TableBody>
+                        {mockVaccines.map((vaccine, index) => (
+                          <TableRow key={vaccine.id} className={cn(index % 2 === 1 && "bg-muted/50")}>
+                            <TableCell>{formatDate(vaccine.date)}</TableCell>
+                            <TableCell>{vaccine.type}</TableCell>
+                            <TableCell>{formatDate(vaccine.nextDue)}</TableCell>
+                            <TableCell>{vaccine.vet}</TableCell>
+                            <TableCell className="text-right">
+                              <Button variant="ghost" size="sm" className="rounded-md hover:bg-gray-100 hover:text-gray-900 dark:hover:bg-gray-700 dark:hover:text-gray-200 transition-colors duration-200">
+                                <Eye className="h-4 w-4" />
+                              </Button>
+                            </TableCell>
+                          </TableRow>
+                        ))}
+                      </TableBody>
+                    </Table>
+                  </div>
+                ) : (
+                  <p className="text-muted-foreground py-4">Nenhuma vacina registrada.</p>
+                )}
+              </CardContent>
+            </Card>
+          </TabsContent>
+
+          {/* Nova aba: Peso */}
+          <TabsContent value="weight" className="mt-4">
+            <Card className="bg-white/90 backdrop-blur-sm border border-gray-200 dark:border-gray-700 rounded-2xl shadow-[0_1px_3px_rgba(0,0,0,0.05)] hover:shadow-[0_4px_8px_rgba(0,0,0,0.08)] transition-all duration-300 border-t-4 border-orange-400 dark:bg-gray-800/90">
+              <CardHeader className="flex flex-row items-center justify-between pb-3">
+                <CardTitle className="flex items-center gap-2 text-lg font-semibold text-[#374151] dark:text-gray-100">
+                  <Weight className="h-5 w-5 text-orange-500" /> Histórico de Peso
+                </CardTitle>
+                <div className="flex gap-2">
+                  <Input
+                    type="date"
+                    value={newWeightDate}
+                    onChange={(e) => setNewWeightDate(e.target.value)}
+                    className="w-[150px] bg-white rounded-lg border-gray-200 dark:border-gray-600 focus:ring-2 focus:ring-blue-400 placeholder-[#9CA3AF] dark:placeholder-gray-500 transition-all duration-200"
+                  />
+                  <Input
+                    type="number"
+                    placeholder="Peso (kg)"
+                    value={newWeight}
+                    onChange={(e) => setNewWeight(e.target.value)}
+                    className="w-[120px] bg-white rounded-lg border-gray-200 dark:border-gray-600 focus:ring-2 focus:ring-blue-400 placeholder-[#9CA3AF] dark:placeholder-gray-500 transition-all duration-200"
+                  />
+                  <Button size="sm" onClick={handleAddWeight} className="rounded-md bg-gradient-to-r from-blue-500 to-indigo-500 text-white hover:from-blue-600 hover:to-indigo-600 font-semibold transition-all duration-200 shadow-md hover:shadow-lg">
+                    <Plus className="h-4 w-4 mr-2" /> Adicionar Peso
+                  </Button>
+                </div>
+              </CardHeader>
+              <CardContent className="pt-0">
+                {weightHistory.length > 0 ? (
+                  <div className="overflow-hidden">
+                    <Table>
+                      <TableHeader>
+                        <TableRow>
+                          <TableHead>Data</TableHead>
+                          <TableHead className="text-right">Peso (kg)</TableHead>
+                        </TableRow>
+                      </TableHeader>
+                      <TableBody>
+                        {weightHistory.map((entry, index) => (
+                          <TableRow key={entry.id} className={cn(index % 2 === 1 && "bg-muted/50")}>
+                            <TableCell>{formatDate(entry.date)}</TableCell>
+                            <TableCell className="text-right">{entry.weight.toFixed(2)}</TableCell>
+                          </TableRow>
+                        ))}
+                      </TableBody>
+                    </Table>
+                  </div>
+                ) : (
+                  <p className="text-muted-foreground py-4">Nenhum registro de peso.</p>
+                )}
+              </CardContent>
+            </Card>
+          </TabsContent>
+
+          {/* Nova aba: Documentos */}
+          <TabsContent value="documents" className="mt-4">
+            <Card className="bg-white/90 backdrop-blur-sm border border-gray-200 dark:border-gray-700 rounded-2xl shadow-[0_1px_3px_rgba(0,0,0,0.05)] hover:shadow-[0_4px_8px_rgba(0,0,0,0.08)] transition-all duration-300 border-t-4 border-teal-400 dark:bg-gray-800/90">
+              <CardHeader className="flex flex-row items-center justify-between pb-3">
+                <CardTitle className="flex items-center gap-2 text-lg font-semibold text-[#374151] dark:text-gray-100">
+                  <FileText className="h-5 w-5 text-teal-500" /> Documentos
+                </CardTitle>
+                <div className="flex gap-2 items-center flex-wrap">
+                  <Input
+                    type="text"
+                    placeholder="Nome do Documento"
+                    value={newDocumentName}
+                    onChange={(e) => setNewDocumentName(e.target.value)}
+                    className="w-[200px] bg-white rounded-lg border-gray-200 dark:border-gray-600 focus:ring-2 focus:ring-blue-400 placeholder-[#9CA3AF] dark:placeholder-gray-500 transition-all duration-200"
+                  />
+                  <Input
+                    type="file"
+                    onChange={(e) => setNewDocumentFile(e.target.files ? e.target.files[0] : null)}
+                    className="w-[200px] bg-white rounded-lg border-gray-200 dark:border-gray-600 focus:ring-2 focus:ring-blue-400 placeholder-[#9CA3AF] dark:placeholder-gray-500 transition-all duration-200"
+                  />
+                  <Button size="sm" onClick={handleAddDocument} disabled={!newDocumentName || !newDocumentFile} className="rounded-md bg-gradient-to-r from-blue-500 to-indigo-500 text-white hover:from-blue-600 hover:to-indigo-600 font-semibold transition-all duration-200 shadow-md hover:shadow-lg">
+                    <Plus className="h-4 w-4 mr-2" /> Adicionar Documento
+                  </Button>
+                </div>
+              </CardHeader>
+              <CardContent className="pt-0">
+                {documents.length > 0 ? (
+                  <div className="overflow-hidden">
+                    <Table>
+                      <TableHeader>
+                        <TableRow>
+                          <TableHead>Data</TableHead>
+                          <TableHead>Nome</TableHead>
+                          <TableHead className="text-right">Ações</TableHead>
+                        </TableRow>
+                      </TableHeader>
+                      <TableBody>
+                        {documents.map((doc, index) => (
+                          <TableRow key={doc.id} className={cn(index % 2 === 1 && "bg-muted/50")}>
+                            <TableCell>{formatDate(doc.date)}</TableCell>
+                            <TableCell>{doc.name}</TableCell>
+                            <TableCell className="text-right">
+                              <a href={doc.fileUrl} target="_blank" rel="noopener noreferrer">
+                                <Button variant="ghost" size="sm" className="rounded-md hover:bg-gray-100 hover:text-gray-900 dark:hover:bg-gray-700 dark:hover:text-gray-200 transition-colors duration-200">
+                                  <Eye className="h-4 w-4" /> Ver
+                                </Button>
+                              </a>
+                            </TableCell>
+                          </TableRow>
+                        ))}
+                      </TableBody>
+                    </Table>
+                  </div>
+                ) : (
+                  <p className="text-muted-foreground py-4">Nenhum documento registrado.</p>
+                )}
+              </CardContent>
+            </Card>
+          </TabsContent>
+
+          {/* Nova aba: Receitas */}
+          <TabsContent value="prescriptions" className="mt-4">
+            <Card className="bg-white/90 backdrop-blur-sm border border-gray-200 dark:border-gray-700 rounded-2xl shadow-[0_1px_3px_rgba(0,0,0,0.05)] hover:shadow-[0_4px_8px_rgba(0,0,0,0.08)] transition-all duration-300 border-t-4 border-indigo-400 dark:bg-gray-800/90">
+              <CardHeader className="flex flex-row items-center justify-between pb-3">
+                <CardTitle className="flex items-center gap-2 text-lg font-semibold text-[#374151] dark:text-gray-100">
+                  <ClipboardList className="h-5 w-5 text-indigo-500" /> Receitas
+                </CardTitle>
+                <Link to={`/clients/${clientId}/animals/${animalId}/add-prescription`}>
+                  <Button size="sm" className="rounded-md bg-gradient-to-r from-blue-500 to-indigo-500 text-white hover:from-blue-600 hover:to-indigo-600 font-semibold transition-all duration-200 shadow-md hover:shadow-lg">
+                    <Plus className="h-4 w-4 mr-2" /> Adicionar Nova Receita
+                  </Button>
+                </Link>
+              </CardHeader>
+              <CardContent className="pt-0">
+                {prescriptions.length > 0 ? (
+                  <div className="overflow-hidden">
+                    <Table>
+                      <TableHeader>
+                        <TableRow>
+                          <TableHead>Data</TableHead>
+                          <TableHead>Medicação</TableHead>
+                          <TableHead>Tratamento</TableHead>
+                          <TableHead className="text-right">Ações</TableHead>
+                        </TableRow>
+                      </TableHeader>
+                      <TableBody>
+                        {prescriptions.map((rx, index) => (
+                          <TableRow key={rx.id} className={cn(index % 2 === 1 && "bg-muted/50")}>
+                            <TableCell>{formatDate(rx.date)}</TableCell>
+                            <TableCell>{rx.medicationName}</TableCell>
+                            <TableCell>{rx.treatmentDescription || "N/A"}</TableCell>
+                            <TableCell className="text-right">
+                              <Link to={`/clients/${clientId}/animals/${animalId}/edit-prescription/${rx.id}`}>
+                                <Button variant="ghost" size="sm" className="rounded-md hover:bg-gray-100 hover:text-gray-900 dark:hover:bg-gray-700 dark:hover:text-gray-200 transition-colors duration-200">
+                                  <Eye className="h-4 w-4" /> Ver
+                                </Button>
+                              </Link>
+                            </TableCell>
+                          </TableRow>
+                        ))}
+                      </TableBody>
+                    </Table>
+                  </div>
+                ) : (
+                  <p className="text-muted-foreground mt-4 py-4">Nenhuma receita registrada.</p>
+                )}
+              </CardContent>
+            </Card>
+          </TabsContent>
+
+          {/* Nova aba: Observações */}
+          <TabsContent value="observations" className="mt-4">
+            <Card className="bg-white/90 backdrop-blur-sm border border-gray-200 dark:border-gray-700 rounded-2xl shadow-[0_1px_3px_rgba(0,0,0,0.05)] hover:shadow-[0_4px_8px_rgba(0,0,0,0.08)] transition-all duration-300 border-t-4 border-gray-400 dark:bg-gray-800/90">
+              <CardHeader className="flex flex-row items-center justify-between pb-3">
+                <CardTitle className="flex items-center gap-2 text-lg font-semibold text-[#374151] dark:text-gray-100">
+                  <MessageSquare className="h-5 w-5 text-gray-500" /> Observações Gerais
+                </CardTitle>
+                <Button size="sm" onClick={handleAddObservation} disabled={!newObservation.trim()} className="rounded-md bg-gradient-to-r from-blue-500 to-indigo-500 text-white hover:from-blue-600 hover:to-indigo-600 font-semibold transition-all duration-200 shadow-md hover:shadow-lg">
+                  <Plus className="h-4 w-4 mr-2" /> Adicionar Observação
+                </Button>
+              </CardHeader>
+              <CardContent className="pt-0">
+                <div className="mb-4">
+                  <Textarea
+                    placeholder="Adicione uma nova observação..."
+                    rows={3}
+                    value={newObservation}
+                    onChange={(e) => setNewObservation(e.target.value)}
+                    className="bg-white rounded-lg border-gray-200 dark:border-gray-600 focus:ring-2 focus:ring-blue-400 placeholder-[#9CA3AF] dark:placeholder-gray-500 transition-all duration-200"
+                  />
+                </div>
+                {observations.length > 0 ? (
+                  <div className="space-y-4">
+                    {observations.map((obs, index) => (
+                      <div key={obs.id} className={cn("border p-3 rounded-md bg-white dark:bg-gray-800", index % 2 === 1 ? "bg-muted/50 dark:bg-gray-700" : "bg-background dark:bg-gray-800")}>
+                        <p className="text-sm text-[#4B5563] dark:text-gray-400 font-medium mb-1">{formatDate(obs.date)}</p>
+                        <p className="text-foreground">{obs.observation}</p>
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  <p className="text-muted-foreground py-4">Nenhuma observação registrada.</p>
+                )}
+              </CardContent>
+            </Card>
+          </TabsContent>
+        </Tabs>
+      </div>
     </div>
   );
 };
