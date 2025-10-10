@@ -11,21 +11,64 @@ const styles = StyleSheet.create({
   page: {
     padding: 30,
     fontFamily: "Helvetica", // Default font
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "space-between", // Distribute content and footer
   },
-  header: {
-    fontSize: 24,
-    textAlign: "center",
+  headerSection: {
     marginBottom: 20,
-    fontWeight: "bold",
   },
-  subHeader: {
+  clinicHeader: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "flex-start",
+    marginBottom: 15,
+  },
+  clinicInfoLeft: {
+    flexDirection: "column",
+    width: "60%",
+  },
+  clinicInfoRight: {
+    flexDirection: "column",
+    width: "40%",
+    textAlign: "right",
+    fontSize: 10,
+  },
+  clinicName: {
     fontSize: 16,
-    marginBottom: 10,
     fontWeight: "bold",
+    marginBottom: 5,
   },
-  clientInfo: {
-    fontSize: 12,
+  clinicDetails: {
+    fontSize: 10,
+    marginBottom: 2,
+  },
+  prescriptionTitle: {
+    fontSize: 18,
+    textAlign: "center",
+    fontWeight: "bold",
     marginBottom: 20,
+  },
+  patientInfoContainer: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    marginBottom: 20,
+  },
+  patientInfoBox: {
+    width: "48%",
+    borderWidth: 1,
+    borderColor: "#000",
+    borderRadius: 5,
+    padding: 10,
+  },
+  patientInfoTitle: {
+    fontSize: 12,
+    fontWeight: "bold",
+    marginBottom: 5,
+  },
+  patientInfoText: {
+    fontSize: 10,
+    marginBottom: 2,
   },
   sectionTitle: {
     fontSize: 14,
@@ -98,18 +141,62 @@ const styles = StyleSheet.create({
     fontSize: 12,
     lineHeight: 1.5,
   },
+  footer: {
+    marginTop: 40,
+    textAlign: "center",
+    fontSize: 10,
+    color: "#555",
+  },
+  vetSignature: {
+    fontWeight: "bold",
+    marginTop: 5,
+    marginBottom: 2,
+  },
 });
 
+interface ClinicInfo {
+  name: string;
+  crmv: string;
+  mapaRegistro: string;
+  address: string;
+  cep: string;
+  phone: string;
+}
+
+interface ClientDetails {
+  id: string;
+  name: string;
+  address: string;
+}
+
+interface AnimalDetails {
+  id: string;
+  name: string;
+  species: string;
+}
+
+interface VetInfo {
+  name: string;
+  crmv: string;
+  mapaRegistro: string;
+}
+
 interface PrescriptionPdfDocumentProps {
-  clientName: string;
+  clinicInfo: ClinicInfo;
+  clientDetails?: ClientDetails;
+  animalDetails?: AnimalDetails;
   medications: MedicationData[];
   generalObservations: string;
+  vetInfo: VetInfo;
 }
 
 const PrescriptionPdfDocument: React.FC<PrescriptionPdfDocumentProps> = ({
-  clientName,
+  clinicInfo,
+  clientDetails,
+  animalDetails,
   medications,
   generalObservations,
+  vetInfo,
 }) => {
   // Group medications by useType
   const groupedMedications = medications.reduce((acc, med) => {
@@ -121,52 +208,94 @@ const PrescriptionPdfDocument: React.FC<PrescriptionPdfDocumentProps> = ({
     return acc;
   }, {} as Record<string, MedicationData[]>);
 
+  const currentDate = new Date().toLocaleDateString('pt-BR', {
+    day: '2-digit',
+    month: 'long',
+    year: 'numeric',
+  }).toUpperCase();
+
   return (
     <Document>
       <Page size="A4" style={styles.page}>
-        <Text style={styles.header}>Receita Médica</Text>
-        <Text style={styles.clientInfo}>
-          Paciente: <Text style={{ fontWeight: "bold" }}>{clientName || "Não informado"}</Text>
-        </Text>
-
-        {Object.keys(groupedMedications).map((useType) => (
-          <View key={useType}>
-            <Text style={styles.sectionTitle}>{useType}</Text>
-            {groupedMedications[useType].map((med, index) => (
-              <View key={med.id} style={styles.medicationItem}>
-                <Text style={styles.medicationNumber}>{index + 1})</Text>
-                <View style={styles.medicationDetails}>
-                  <View style={styles.flexRowCenter}>
-                    <Text style={styles.medicationName}>
-                      {med.medicationName} {med.concentration && med.concentration}
-                    </Text>
-                    <View style={styles.line} />
-                    {med.pharmacyType && (
-                      <Text style={styles.pharmacyTypeBadge}>
-                        {med.pharmacyType === "Farmácia Veterinária" ? "VET" : "HUMANA"}
-                      </Text>
-                    )}
-                    {med.totalQuantityDisplay && (
-                      <Text style={styles.totalQuantityBadge}>
-                        {med.totalQuantityDisplay}
-                      </Text>
-                    )}
-                  </View>
-                  <Text style={styles.medicationInstructions}>
-                    {med.generatedInstructions}
-                  </Text>
-                </View>
+        <View> {/* Main content wrapper */}
+          <View style={styles.headerSection}>
+            <View style={styles.clinicHeader}>
+              <View style={styles.clinicInfoLeft}>
+                <Text style={styles.clinicName}>{clinicInfo.name}</Text>
+                <Text style={styles.clinicDetails}>CRMV {clinicInfo.crmv}</Text>
+                <Text style={styles.clinicDetails}>Registro no MAPA {clinicInfo.mapaRegistro}</Text>
               </View>
-            ))}
-          </View>
-        ))}
+              <View style={styles.clinicInfoRight}>
+                <Text>{clinicInfo.address}</Text>
+                <Text>{clinicInfo.cep}</Text>
+                <Text>Telefone: {clinicInfo.phone}</Text>
+              </View>
+            </View>
 
-        {generalObservations && (
-          <View style={styles.observationsSection}>
-            <Text style={styles.sectionTitle}>Observações Gerais</Text>
-            <Text style={styles.observationsText}>{generalObservations}</Text>
+            <Text style={styles.prescriptionTitle}>Receita Simples</Text>
+
+            <View style={styles.patientInfoContainer}>
+              <View style={styles.patientInfoBox}>
+                <Text style={styles.patientInfoTitle}>Animal</Text>
+                <Text style={styles.patientInfoText}>ID: {animalDetails?.id || "Não informado"}</Text>
+                <Text style={styles.patientInfoText}>Nome: {animalDetails?.name || "Não informado"}</Text>
+                <Text style={styles.patientInfoText}>Espécie: {animalDetails?.species || "Não informado"}</Text>
+              </View>
+              <View style={styles.patientInfoBox}>
+                <Text style={styles.patientInfoTitle}>Tutor</Text>
+                <Text style={styles.patientInfoText}>Nome: {clientDetails?.name || "Não informado"}</Text>
+                <Text style={styles.patientInfoText}>Endereço: {clientDetails?.address || "Não informado"}</Text>
+              </View>
+            </View>
           </View>
-        )}
+
+          {Object.keys(groupedMedications).map((useType) => (
+            <View key={useType}>
+              <Text style={styles.sectionTitle}>{useType}</Text>
+              {groupedMedications[useType].map((med, index) => (
+                <View key={med.id} style={styles.medicationItem}>
+                  <Text style={styles.medicationNumber}>{index + 1})</Text>
+                  <View style={styles.medicationDetails}>
+                    <View style={styles.flexRowCenter}>
+                      <Text style={styles.medicationName}>
+                        {med.medicationName} {med.concentration && med.concentration}
+                      </Text>
+                      <View style={styles.line} />
+                      {med.pharmacyType && (
+                        <Text style={styles.pharmacyTypeBadge}>
+                          {med.pharmacyType === "Farmácia Veterinária" ? "VET" : "HUMANA"}
+                        </Text>
+                      )}
+                      {med.totalQuantityDisplay && (
+                        <Text style={styles.totalQuantityBadge}>
+                          {med.totalQuantityDisplay}
+                        </Text>
+                      )}
+                    </View>
+                    <Text style={styles.medicationInstructions}>
+                      {med.generatedInstructions}
+                    </Text>
+                  </View>
+                </View>
+              ))}
+            </View>
+          ))}
+
+          {generalObservations && (
+            <View style={styles.observationsSection}>
+              <Text style={styles.sectionTitle}>Observações Gerais</Text>
+              <Text style={styles.observationsText}>{generalObservations}</Text>
+            </View>
+          )}
+        </View>
+
+        <View style={styles.footer} fixed> {/* Footer section */}
+          <Text>{currentDate}</Text>
+          <Text>Assinado eletronicamente por</Text>
+          <Text style={styles.vetSignature}>{vetInfo.name}</Text>
+          <Text>CRMV {vetInfo.crmv}</Text>
+          <Text>Registro no MAPA {vetInfo.mapaRegistro}</Text>
+        </View>
       </Page>
     </Document>
   );
