@@ -249,25 +249,6 @@ const PrescriptionPdfDocument: React.FC<PrescriptionPdfDocumentProps> = ({
             </View>
           </View>
 
-          {/* DEBUG: Linhas para verificar os dados dos medicamentos */}
-          <Text style={{ fontSize: 8, color: 'purple', marginBottom: 5 }}>
-            DEBUG: Quantidade de medicamentos no array: {medications.length}
-          </Text>
-          {medications.map((med, idx) => (
-            <View key={`debug-med-${idx}`} style={{ marginBottom: 2 }}>
-              <Text style={{ fontSize: 8, color: 'purple' }}>
-                DEBUG: Med {idx + 1} ID: {med.id}
-              </Text>
-              <Text style={{ fontSize: 8, color: 'purple' }}>
-                DEBUG: Med {idx + 1} Nome: '{med.medicationName || "N/A"}'
-              </Text>
-              <Text style={{ fontSize: 8, color: 'purple' }}>
-                DEBUG: Med {idx + 1} Instruções: '{med.generatedInstructions || "N/A"}'
-              </Text>
-            </View>
-          ))}
-          {/* FIM DEBUG */}
-
           {Object.keys(groupedMedications).map((useType) => (
             <View key={useType}>
               <Text style={styles.sectionTitle}>{useType}</Text>
