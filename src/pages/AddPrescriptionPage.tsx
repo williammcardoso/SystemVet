@@ -7,6 +7,7 @@ import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import PrescriptionMedicationForm, { MedicationData } from "@/components/PrescriptionMedicationForm";
+import PrescriptionPreviewDialog from "@/components/PrescriptionPreviewDialog"; // Nova importação
 import { toast } from "sonner"; // Importar toast para notificações
 
 // Mock data para clientes (tutores)
@@ -25,6 +26,7 @@ const AddPrescriptionPage = () => {
   const [selectedClient, setSelectedClient] = useState<string | undefined>(clientId);
   const [medications, setMedications] = useState<MedicationData[]>([]);
   const [generalObservations, setGeneralObservations] = useState<string>("");
+  const [isPreviewOpen, setIsPreviewOpen] = useState(false); // Novo estado para o diálogo de pré-visualização
 
   const handleAddMedication = () => {
     const newMedication: MedicationData = {
@@ -39,7 +41,7 @@ const AddPrescriptionPage = () => {
       period: "",
       useCustomInstructions: false,
       generatedInstructions: "",
-      generalObservations: "",
+      generalObservations: "", // This field is for individual medication observations, not the general one
       totalQuantity: "",
     };
     setMedications((prev) => [...prev, newMedication]);
@@ -83,6 +85,20 @@ const AddPrescriptionPage = () => {
     toast.success("Receita salva com sucesso!");
     navigate(`/clients/${clientId}/animals/${animalId}/record`); // Voltar para o prontuário
   };
+
+  const handlePreview = () => {
+    if (!selectedClient) {
+      toast.error("Por favor, selecione um paciente para pré-visualizar.");
+      return;
+    }
+    if (medications.length === 0) {
+      toast.error("Adicione pelo menos um medicamento para pré-visualizar.");
+      return;
+    }
+    setIsPreviewOpen(true);
+  };
+
+  const selectedClientName = mockClients.find(c => c.id === selectedClient)?.name || "";
 
   return (
     <div className="p-6">
@@ -169,13 +185,21 @@ const AddPrescriptionPage = () => {
         <Button variant="outline" onClick={() => navigate(`/clients/${clientId}/animals/${animalId}/record`)}>
           <X className="mr-2 h-4 w-4" /> Cancelar
         </Button>
-        <Button variant="outline">
+        <Button variant="outline" onClick={handlePreview}> {/* Botão Visualizar atualizado */}
           <Eye className="mr-2 h-4 w-4" /> Visualizar
         </Button>
         <Button onClick={handleSavePrescription}>
           <Save className="mr-2 h-4 w-4" /> Salvar Receita Simples
         </Button>
       </div>
+
+      <PrescriptionPreviewDialog
+        isOpen={isPreviewOpen}
+        onClose={() => setIsPreviewOpen(false)}
+        clientName={selectedClientName}
+        medications={medications}
+        generalObservations={generalObservations}
+      />
     </div>
   );
 };

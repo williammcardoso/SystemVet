@@ -73,24 +73,21 @@ const PrescriptionMedicationForm: React.FC<PrescriptionMedicationFormProps> = ({
     let instructions = "";
     if (!useCustomInstructions) {
       const doseText = dosePerAdministration.trim();
-      const formText = pharmaceuticalForm === "Outro" && customPharmaceuticalForm.trim() ? customPharmaceuticalForm.trim() : pharmaceuticalForm.trim();
+      let formText = pharmaceuticalForm === "Outro" && customPharmaceuticalForm.trim() ? customPharmaceuticalForm.trim() : pharmaceuticalForm.trim();
       const freqText = frequency === "Outro" && customFrequency.trim() ? customFrequency.trim() : frequency.trim();
       const periodText = period === "Outro" && customPeriod.trim() ? customPeriod.trim() : period.trim();
 
+      // Ensure formText is lowercase for the instruction, but keep original for display if needed elsewhere
+      const displayFormText = formText.toLowerCase(); 
+      const pluralFormText = (displayFormText.includes("comprimido") || displayFormText.includes("cápsula"))
+          ? `${displayFormText}(s)`
+          : displayFormText;
+
       if (doseText && formText && freqText && periodText) {
-        const pluralFormText = (formText.toLowerCase().includes("comprimido") || formText.toLowerCase().includes("cápsula"))
-          ? `${formText}(s)`
-          : formText;
         instructions = `Dê ${doseText} ${pluralFormText}, a cada ${freqText}, durante ${periodText}.`;
       } else if (doseText && formText && freqText) {
-        const pluralFormText = (formText.toLowerCase().includes("comprimido") || formText.toLowerCase().includes("cápsula"))
-          ? `${formText}(s)`
-          : formText;
         instructions = `Dê ${doseText} ${pluralFormText}, a cada ${freqText}.`;
       } else if (doseText && formText) {
-        const pluralFormText = (formText.toLowerCase().includes("comprimido") || formText.toLowerCase().includes("cápsula"))
-          ? `${formText}(s)`
-          : formText;
         instructions = `Dê ${doseText} ${pluralFormText}.`;
       } else if (doseText) {
         instructions = `Dê ${doseText}.`;
