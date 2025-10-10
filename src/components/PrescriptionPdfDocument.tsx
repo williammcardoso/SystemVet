@@ -230,6 +230,7 @@ const PrescriptionPdfDocument: React.FC<PrescriptionPdfDocumentProps> = ({
       <Page
         size="A4"
         style={styles.page}
+        // REMOVIDO: footer prop
       >
         {/* Clinic Header */}
         <View style={styles.clinicHeader}>
@@ -293,7 +294,7 @@ const PrescriptionPdfDocument: React.FC<PrescriptionPdfDocumentProps> = ({
                     </View>
                   </View>
                   <Text style={styles.medicationInstructions}>
-                    {med.generatedInstructions}
+                    {med.generatedInstructions || 'Sem instruções de uso.'} {/* FIX: Added fallback */}
                   </Text>
                   {med.generalObservations && (
                     <Text style={styles.medicationObservations}>
@@ -313,6 +314,39 @@ const PrescriptionPdfDocument: React.FC<PrescriptionPdfDocumentProps> = ({
             </View>
           )}
         </View>
+
+        {/* ABSOLUTELY POSITIONED FOOTER FOR TESTING */}
+        <View
+          fixed // This makes it appear on every page
+          style={{
+            position: 'absolute',
+            bottom: 30,
+            left: 30,
+            right: 30,
+            textAlign: 'center',
+            fontSize: 10,
+            color: '#666',
+            paddingTop: 15,
+            borderTopWidth: 1,
+            borderTopColor: '#eee',
+          }}
+          render={({ pageNumber, totalPages }) => { // Use render prop to access page numbers
+            console.log(`Absolute footer being rendered! Page ${pageNumber} de ${totalPages}`);
+            return (
+              <View>
+                <Text style={{ fontSize: 10, marginBottom: 5 }}>
+                  Data: {formatDateToPortuguese(currentDate)}
+                </Text>
+                <Text style={{ fontSize: 10, marginBottom: 2 }}>
+                  Assinatura do Veterinário: _________________________
+                </Text>
+                <Text style={{ fontSize: 8, color: 'purple', marginTop: 5 }}>
+                  Página {pageNumber} de {totalPages} - Teste Absoluto
+                </Text>
+              </View>
+            );
+          }}
+        />
       </Page>
     </Document>
   );
