@@ -1,26 +1,30 @@
-import React from "react";
+import React, { useState } from "react";
 import Sidebar from "./Sidebar";
+import Header from "./Header"; // Importar o novo Header
 import { MadeWithDyad } from "./made-with-dyad";
+import { useIsMobile } from "@/hooks/use-mobile"; // Importar o hook de mobile
 
 interface LayoutProps {
   children: React.ReactNode;
 }
 
 const Layout: React.FC<LayoutProps> = ({ children }) => {
+  const isMobile = useIsMobile();
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+
+  const handleToggleMobileSidebar = () => {
+    setIsSidebarOpen(!isSidebarOpen);
+  };
+
+  const handleCloseMobileSidebar = () => {
+    setIsSidebarOpen(false);
+  };
+
   return (
     <div className="flex min-h-screen bg-background">
-      <Sidebar />
-      <div className="flex flex-col flex-1 ml-64">
-        <header className="sticky top-0 z-30 flex h-16 items-center gap-4 border-b bg-background px-4 sm:static sm:h-auto sm:border-0 sm:bg-transparent sm:px-6">
-          {/* Placeholder for a potential top navigation/header content */}
-          <div className="flex-1 text-lg font-medium"></div>
-          <div className="flex items-center gap-4">
-            {/* User profile/notifications could go here */}
-            <span className="text-sm text-muted-foreground">William | William</span>
-            {/* Add a simple help button */}
-            <a href="#" className="text-sm text-blue-500 hover:underline">Ajuda</a>
-          </div>
-        </header>
+      <Sidebar isMobileOpen={isSidebarOpen} onCloseMobile={handleCloseMobileSidebar} />
+      <div className="flex flex-col flex-1 lg:ml-64"> {/* Ajuste para mobile */}
+        <Header onToggleMobileSidebar={handleToggleMobileSidebar} /> {/* Usar o novo Header */}
         <main className="flex-1 p-4 sm:px-6 sm:py-0">
           {children}
         </main>

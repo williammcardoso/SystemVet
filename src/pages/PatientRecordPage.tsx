@@ -36,6 +36,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { toast } from "sonner"; // Importar toast para notificações
 import { PrescriptionEntry } from "@/types/medication"; // Import PrescriptionEntry
 import { mockPrescriptions } from "@/mockData/prescriptions"; // Import mutable mockPrescriptions
+import { cn } from "@/lib/utils"; // Importar cn
 
 // Mock data (centralizado aqui para facilitar o exemplo, mas idealmente viria de um serviço)
 interface Animal {
@@ -441,7 +442,7 @@ const PatientRecordPage = () => {
       <div className="flex items-center justify-between mb-6">
         <h1 className="text-3xl font-bold">{animal.name} - Prontuário</h1>
         <Link to={`/clients/${client.id}`}>
-          <Button variant="outline">
+          <Button variant="outline" className="rounded-md hover:bg-secondary/80 transition-colors duration-200">
             <ArrowLeft className="mr-2 h-4 w-4" /> Voltar para {client.name}
           </Button>
         </Link>
@@ -449,7 +450,7 @@ const PatientRecordPage = () => {
 
       <div className="mb-6">
         <h2 className="text-xl font-semibold mb-2">Informações do Animal</h2>
-        <Card>
+        <Card className="shadow-sm">
           <CardContent className="p-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             <div>
               <p className="text-sm text-muted-foreground">Tutor:</p>
@@ -492,38 +493,38 @@ const PatientRecordPage = () => {
       </div>
 
       <Tabs defaultValue="appointments" className="w-full">
-        <TabsList className="grid w-full grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-8">
-          <TabsTrigger value="appointments">
+        <TabsList className="grid w-full grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-8 h-auto flex-wrap">
+          <TabsTrigger value="appointments" className="rounded-md data-[state=active]:bg-primary data-[state=active]:text-primary-foreground transition-colors duration-200">
             <Stethoscope className="h-4 w-4 mr-2" /> Atendimento
           </TabsTrigger>
-          <TabsTrigger value="exams">
+          <TabsTrigger value="exams" className="rounded-md data-[state=active]:bg-primary data-[state=active]:text-primary-foreground transition-colors duration-200">
             <CalendarDays className="h-4 w-4 mr-2" /> Exames
           </TabsTrigger>
-          <TabsTrigger value="sales">
+          <TabsTrigger value="sales" className="rounded-md data-[state=active]:bg-primary data-[state=active]:text-primary-foreground transition-colors duration-200">
             <DollarSign className="h-4 w-4 mr-2" /> Vendas
           </TabsTrigger>
-          <TabsTrigger value="vaccines">
+          <TabsTrigger value="vaccines" className="rounded-md data-[state=active]:bg-primary data-[state=active]:text-primary-foreground transition-colors duration-200">
             <Syringe className="h-4 w-4 mr-2" /> Vacinas
           </TabsTrigger>
-          <TabsTrigger value="weight">
+          <TabsTrigger value="weight" className="rounded-md data-[state=active]:bg-primary data-[state=active]:text-primary-foreground transition-colors duration-200">
             <Weight className="h-4 w-4 mr-2" /> Peso
           </TabsTrigger>
-          <TabsTrigger value="documents">
+          <TabsTrigger value="documents" className="rounded-md data-[state=active]:bg-primary data-[state=active]:text-primary-foreground transition-colors duration-200">
             <FileText className="h-4 w-4 mr-2" /> Documentos
           </TabsTrigger>
-          <TabsTrigger value="prescriptions">
+          <TabsTrigger value="prescriptions" className="rounded-md data-[state=active]:bg-primary data-[state=active]:text-primary-foreground transition-colors duration-200">
             <ClipboardList className="h-4 w-4 mr-2" /> Receitas
           </TabsTrigger>
-          <TabsTrigger value="observations">
+          <TabsTrigger value="observations" className="rounded-md data-[state=active]:bg-primary data-[state=active]:text-primary-foreground transition-colors duration-200">
             <MessageSquare className="h-4 w-4 mr-2" /> Observações
           </TabsTrigger>
         </TabsList>
 
         <TabsContent value="appointments" className="mt-4">
-          <Card>
+          <Card className="shadow-sm">
             <CardHeader className="flex flex-row items-center justify-between">
               <CardTitle>Histórico de Atendimentos</CardTitle>
-              <Button size="sm">
+              <Button size="sm" className="rounded-md bg-gradient-to-r from-primary to-blue-600 hover:from-primary/90 hover:to-blue-700 text-primary-foreground font-bold transition-all duration-200">
                 <Plus className="h-4 w-4 mr-2" /> Adicionar Atendimento
               </Button>
             </CardHeader>
@@ -540,14 +541,14 @@ const PatientRecordPage = () => {
                     </TableRow>
                   </TableHeader>
                   <TableBody>
-                    {mockAppointments.map((app) => (
-                      <TableRow key={app.id}>
-                        <TableCell>{app.date}</TableCell>
+                    {mockAppointments.map((app, index) => (
+                      <TableRow key={app.id} className={cn(index % 2 === 1 && "bg-muted/50")}>
+                        <TableCell>{formatDate(app.date)}</TableCell>
                         <TableCell>{app.type}</TableCell>
                         <TableCell>{app.vet}</TableCell>
                         <TableCell>{app.notes}</TableCell>
                         <TableCell className="text-right">
-                          <Button variant="ghost" size="sm">
+                          <Button variant="ghost" size="sm" className="rounded-md hover:bg-primary/10 hover:text-primary transition-colors duration-200">
                             <Eye className="h-4 w-4" />
                           </Button>
                         </TableCell>
@@ -556,18 +557,18 @@ const PatientRecordPage = () => {
                   </TableBody>
                 </Table>
               ) : (
-                <p className="text-muted-foreground">Nenhum atendimento registrado.</p>
+                <p className="text-muted-foreground py-4">Nenhum atendimento registrado.</p>
               )}
             </CardContent>
           </Card>
         </TabsContent>
 
         <TabsContent value="exams" className="mt-4">
-          <Card>
+          <Card className="shadow-sm">
             <CardHeader className="flex flex-row items-center justify-between">
               <CardTitle>Histórico de Exames</CardTitle>
-              <Link to={`/clients/${clientId}/animals/${animalId}/add-exam`}> {/* Link para a nova página */}
-                <Button size="sm">
+              <Link to={`/clients/${clientId}/animals/${animalId}/add-exam`}>
+                <Button size="sm" className="rounded-md bg-gradient-to-r from-primary to-blue-600 hover:from-primary/90 hover:to-blue-700 text-primary-foreground font-bold transition-all duration-200">
                   <Plus className="h-4 w-4 mr-2" /> Adicionar Exame
                 </Button>
               </Link>
@@ -585,14 +586,14 @@ const PatientRecordPage = () => {
                     </TableRow>
                   </TableHeader>
                   <TableBody>
-                    {examsList.map((exam) => (
-                      <TableRow key={exam.id}>
-                        <TableCell>{exam.date}</TableCell>
+                    {examsList.map((exam, index) => (
+                      <TableRow key={exam.id} className={cn(index % 2 === 1 && "bg-muted/50")}>
+                        <TableCell>{formatDate(exam.date)}</TableCell>
                         <TableCell>{exam.type}</TableCell>
                         <TableCell>{exam.result}</TableCell>
                         <TableCell>{exam.vet}</TableCell>
                         <TableCell className="text-right">
-                          <Button variant="ghost" size="sm">
+                          <Button variant="ghost" size="sm" className="rounded-md hover:bg-primary/10 hover:text-primary transition-colors duration-200">
                             <Eye className="h-4 w-4" />
                           </Button>
                         </TableCell>
@@ -601,14 +602,13 @@ const PatientRecordPage = () => {
                   </TableBody>
                 </Table>
               ) : (
-                <p className="text-muted-foreground">Nenhum exame registrado.</p>
+                <p className="text-muted-foreground py-4">Nenhum exame registrado.</p>
               )}
             </CardContent>
           </Card>
 
-          {/* Modal para Adicionar Exame (mantido aqui para referência, mas não usado diretamente) */}
           <Dialog open={isAddExamDialogOpen} onOpenChange={setIsAddExamDialogOpen}>
-            <DialogContent className="sm:max-w-[700px]"> {/* Aumentado o tamanho do modal */}
+            <DialogContent className="sm:max-w-[700px]">
               <DialogHeader>
                 <DialogTitle>Adicionar Novo Exame</DialogTitle>
                 <DialogDescription>
@@ -625,7 +625,7 @@ const PatientRecordPage = () => {
                     type="date"
                     value={newExamDate}
                     onChange={(e) => setNewExamDate(e.target.value)}
-                    className="col-span-3"
+                    className="col-span-3 focus-visible:ring-primary transition-all duration-200"
                   />
                 </div>
                 <div className="grid grid-cols-4 items-center gap-4">
@@ -633,7 +633,7 @@ const PatientRecordPage = () => {
                     Tipo de Exame
                   </Label>
                   <Select onValueChange={setNewExamType} value={newExamType} >
-                    <SelectTrigger id="examType" className="col-span-3">
+                    <SelectTrigger id="examType" className="col-span-3 focus-visible:ring-primary transition-all duration-200">
                       <SelectValue placeholder="Selecione o tipo de exame" />
                     </SelectTrigger>
                     <SelectContent>
@@ -650,7 +650,7 @@ const PatientRecordPage = () => {
                     Veterinário
                   </Label>
                   <Select onValueChange={setNewExamVet} value={newExamVet}>
-                    <SelectTrigger id="examVet" className="col-span-3">
+                    <SelectTrigger id="examVet" className="col-span-3 focus-visible:ring-primary transition-all duration-200">
                       <SelectValue placeholder="Selecione o veterinário" />
                     </SelectTrigger>
                     <SelectContent>
@@ -669,35 +669,35 @@ const PatientRecordPage = () => {
                     <div className="grid grid-cols-2 col-span-4 gap-4">
                       <div className="space-y-2">
                         <Label htmlFor="hemacias">Hemácias (m/mm3)</Label>
-                        <Input id="hemacias" type="number" placeholder="Ex: 5.5" value={newHemacias} onChange={(e) => setNewHemacias(e.target.value)} />
+                        <Input id="hemacias" type="number" placeholder="Ex: 5.5" value={newHemacias} onChange={(e) => setNewHemacias(e.target.value)} className="focus-visible:ring-primary transition-all duration-200" />
                       </div>
                       <div className="space-y-2">
                         <Label htmlFor="volumeGlobular">Volume globular (%)</Label>
-                        <Input id="volumeGlobular" type="number" placeholder="Ex: 37" value={newVolumeGlobular} onChange={(e) => setNewVolumeGlobular(e.target.value)} />
+                        <Input id="volumeGlobular" type="number" placeholder="Ex: 37" value={newVolumeGlobular} onChange={(e) => setNewVolumeGlobular(e.target.value)} className="focus-visible:ring-primary transition-all duration-200" />
                       </div>
                       <div className="space-y-2">
                         <Label htmlFor="hemoglobina">Hemoglobina (g/dL)</Label>
-                        <Input id="hemoglobina" type="number" placeholder="Ex: 12.0" value={newHemoglobina} onChange={(e) => setNewHemoglobina(e.target.value)} />
+                        <Input id="hemoglobina" type="number" placeholder="Ex: 12.0" value={newHemoglobina} onChange={(e) => setNewHemoglobina(e.target.value)} className="focus-visible:ring-primary transition-all duration-200" />
                       </div>
                       <div className="space-y-2">
                         <Label htmlFor="vgm">VGM (fL)</Label>
-                        <Input id="vgm" type="number" placeholder="Ex: 60.0" value={newVGM} onChange={(e) => setNewVGM(e.target.value)} />
+                        <Input id="vgm" type="number" placeholder="Ex: 60.0" value={newVGM} onChange={(e) => setNewVGM(e.target.value)} className="focus-visible:ring-primary transition-all duration-200" />
                       </div>
                       <div className="space-y-2">
                         <Label htmlFor="chgm">CHGM (%)</Label>
-                        <Input id="chgm" type="number" placeholder="Ex: 31" value={newCHGM} onChange={(e) => setNewCHGM(e.target.value)} />
+                        <Input id="chgm" type="number" placeholder="Ex: 31" value={newCHGM} onChange={(e) => setNewCHGM(e.target.value)} className="focus-visible:ring-primary transition-all duration-200" />
                       </div>
                       <div className="space-y-2">
                         <Label htmlFor="plaquetas">Plaquetas (m/mm3)</Label>
-                        <Input id="plaquetas" type="number" placeholder="Ex: 300" value={newPlaquetas} onChange={(e) => setNewPlaquetas(e.target.value)} />
+                        <Input id="plaquetas" type="number" placeholder="Ex: 300" value={newPlaquetas} onChange={(e) => setNewPlaquetas(e.target.value)} className="focus-visible:ring-primary transition-all duration-200" />
                       </div>
                       <div className="space-y-2">
                         <Label htmlFor="formasTotais">Formas totais (m/mm3)</Label>
-                        <Input id="formasTotais" type="number" placeholder="Ex: 6.0" value={newFormasTotais} onChange={(e) => setNewFormasTotais(e.target.value)} />
+                        <Input id="formasTotais" type="number" placeholder="Ex: 6.0" value={newFormasTotais} onChange={(e) => setNewFormasTotais(e.target.value)} className="focus-visible:ring-primary transition-all duration-200" />
                       </div>
                       <div className="space-y-2">
                         <Label htmlFor="hemaciasNucleadas">Hemácias nucleadas (g/dL)</Label>
-                        <Input id="hemaciasNucleadas" type="number" placeholder="Ex: 0" value={newHemaciasNucleadas} onChange={(e) => setNewHemaciasNucleadas(e.target.value)} />
+                        <Input id="hemaciasNucleadas" type="number" placeholder="Ex: 0" value={newHemaciasNucleadas} onChange={(e) => setNewHemaciasNucleadas(e.target.value)} className="focus-visible:ring-primary transition-all duration-200" />
                       </div>
                     </div>
 
@@ -705,31 +705,31 @@ const PatientRecordPage = () => {
                     <div className="grid grid-cols-2 col-span-4 gap-4">
                       <div className="space-y-2">
                         <Label htmlFor="leucocitos">Leucócitos (m/mm3)</Label>
-                        <Input id="leucocitos" type="number" placeholder="Ex: 6.0" value={newLeucocitos} onChange={(e) => setNewLeucocitos(e.target.value)} />
+                        <Input id="leucocitos" type="number" placeholder="Ex: 6.0" value={newLeucocitos} onChange={(e) => setNewLeucocitos(e.target.value)} className="focus-visible:ring-primary transition-all duration-200" />
                       </div>
                       <div className="space-y-2">
                         <Label htmlFor="bastoes">Bastões (%)</Label>
-                        <Input id="bastoes" type="number" placeholder="Ex: 0" value={newBastoes} onChange={(e) => setNewBastoes(e.target.value)} />
+                        <Input id="bastoes" type="number" placeholder="Ex: 0" value={newBastoes} onChange={(e) => setNewBastoes(e.target.value)} className="focus-visible:ring-primary transition-all duration-200" />
                       </div>
                       <div className="space-y-2">
                         <Label htmlFor="segmentados">Segmentados (%)</Label>
-                        <Input id="segmentados" type="number" placeholder="Ex: 60" value={newSegmentados} onChange={(e) => setNewSegmentados(e.target.value)} />
+                        <Input id="segmentados" type="number" placeholder="Ex: 60" value={newSegmentados} onChange={(e) => setNewSegmentados(e.target.value)} className="focus-visible:ring-primary transition-all duration-200" />
                       </div>
                       <div className="space-y-2">
                         <Label htmlFor="linfocitos">Linfócitos (%)</Label>
-                        <Input id="linfocitos" type="number" placeholder="Ex: 30" value={newLinfocitos} onChange={(e) => setNewLinfocitos(e.target.value)} />
+                        <Input id="linfocitos" type="number" placeholder="Ex: 30" value={newLinfocitos} onChange={(e) => setNewLinfocitos(e.target.value)} className="focus-visible:ring-primary transition-all duration-200" />
                       </div>
                       <div className="space-y-2">
                         <Label htmlFor="monocitos">Monócitos (%)</Label>
-                        <Input id="monocitos" type="number" placeholder="Ex: 3" value={newMonocitos} onChange={(e) => setNewMonocitos(e.target.value)} />
+                        <Input id="monocitos" type="number" placeholder="Ex: 3" value={newMonocitos} onChange={(e) => setNewMonocitos(e.target.value)} className="focus-visible:ring-primary transition-all duration-200" />
                       </div>
                       <div className="space-y-2">
                         <Label htmlFor="eosinofilos">Eosinófilos (%)</Label>
-                        <Input id="eosinofilos" type="number" placeholder="Ex: 2" value={newEosinofilos} onChange={(e) => setNewEosinofilos(e.target.value)} />
+                        <Input id="eosinofilos" type="number" placeholder="Ex: 2" value={newEosinofilos} onChange={(e) => setNewEosinofilos(e.target.value)} className="focus-visible:ring-primary transition-all duration-200" />
                       </div>
                       <div className="space-y-2">
                         <Label htmlFor="basofilos">Basófilos (%)</Label>
-                        <Input id="basofilos" type="number" placeholder="Ex: 1" value={newBasofilos} onChange={(e) => setNewBasofilos(e.target.value)} />
+                        <Input id="basofilos" type="number" placeholder="Ex: 1" value={newBasofilos} onChange={(e) => setNewBasofilos(e.target.value)} className="focus-visible:ring-primary transition-all duration-200" />
                       </div>
                     </div>
                   </>
@@ -743,7 +743,7 @@ const PatientRecordPage = () => {
                       placeholder="Resultado do exame"
                       value={newExamResult}
                       onChange={(e) => setNewExamResult(e.target.value)}
-                      className="col-span-3"
+                      className="col-span-3 focus-visible:ring-primary transition-all duration-200"
                     />
                   </div>
                 )}
@@ -757,7 +757,7 @@ const PatientRecordPage = () => {
                     placeholder="Observações gerais do exame"
                     value={newExamObservations}
                     onChange={(e) => setNewExamObservations(e.target.value)}
-                    className="col-span-3"
+                    className="col-span-3 focus-visible:ring-primary transition-all duration-200"
                     rows={3}
                   />
                 </div>
@@ -770,7 +770,7 @@ const PatientRecordPage = () => {
                     placeholder="Nome do operador"
                     value={newOperator}
                     onChange={(e) => setNewOperator(e.target.value)}
-                    className="col-span-3"
+                    className="col-span-3 focus-visible:ring-primary transition-all duration-200"
                   />
                 </div>
                 <div className="grid grid-cols-4 items-center gap-4">
@@ -782,7 +782,7 @@ const PatientRecordPage = () => {
                     type="date"
                     value={newReferenceDate}
                     onChange={(e) => setNewReferenceDate(e.target.value)}
-                    className="col-span-3"
+                    className="col-span-3 focus-visible:ring-primary transition-all duration-200"
                   />
                 </div>
                 <div className="grid grid-cols-4 items-center gap-4">
@@ -794,7 +794,7 @@ const PatientRecordPage = () => {
                     placeholder="Tabelas de referência"
                     value={newReferenceTables}
                     onChange={(e) => setNewReferenceTables(e.target.value)}
-                    className="col-span-3"
+                    className="col-span-3 focus-visible:ring-primary transition-all duration-200"
                     rows={3}
                   />
                 </div>
@@ -807,17 +807,17 @@ const PatientRecordPage = () => {
                     placeholder="Conclusões do exame"
                     value={newConclusions}
                     onChange={(e) => setNewConclusions(e.target.value)}
-                    className="col-span-3"
+                    className="col-span-3 focus-visible:ring-primary transition-all duration-200"
                     rows={5}
                   />
                 </div>
               </div>
               <DialogFooter>
-                <Button variant="outline" onClick={() => setIsAddExamDialogOpen(false)}>
-                  Cancelar
+                <Button variant="outline" onClick={() => setIsAddExamDialogOpen(false)} className="rounded-md hover:bg-secondary/80 transition-colors duration-200">
+                  <X className="mr-2 h-4 w-4" /> Cancelar
                 </Button>
-                <Button onClick={handleAddExam}>
-                  Salvar Exame
+                <Button onClick={handleAddExam} className="rounded-md bg-gradient-to-r from-primary to-blue-600 hover:from-primary/90 hover:to-blue-700 text-primary-foreground font-bold transition-all duration-200">
+                  <Save className="mr-2 h-4 w-4" /> Salvar Exame
                 </Button>
               </DialogFooter>
             </DialogContent>
@@ -825,10 +825,10 @@ const PatientRecordPage = () => {
         </TabsContent>
 
         <TabsContent value="sales" className="mt-4">
-          <Card>
+          <Card className="shadow-sm">
             <CardHeader className="flex flex-row items-center justify-between">
               <CardTitle>Histórico de Vendas</CardTitle>
-              <Button size="sm">
+              <Button size="sm" className="rounded-md bg-gradient-to-r from-primary to-blue-600 hover:from-primary/90 hover:to-blue-700 text-primary-foreground font-bold transition-all duration-200">
                 <Plus className="h-4 w-4 mr-2" /> Adicionar Venda
               </Button>
             </CardHeader>
@@ -845,14 +845,14 @@ const PatientRecordPage = () => {
                     </TableRow>
                   </TableHeader>
                   <TableBody>
-                    {mockSales.map((sale) => (
-                      <TableRow key={sale.id}>
-                        <TableCell>{sale.date}</TableCell>
+                    {mockSales.map((sale, index) => (
+                      <TableRow key={sale.id} className={cn(index % 2 === 1 && "bg-muted/50")}>
+                        <TableCell>{formatDate(sale.date)}</TableCell>
                         <TableCell>{sale.item}</TableCell>
                         <TableCell>{sale.quantity}</TableCell>
                         <TableCell className="text-right">R$ {sale.total.toFixed(2)}</TableCell>
                         <TableCell className="text-right">
-                          <Button variant="ghost" size="sm">
+                          <Button variant="ghost" size="sm" className="rounded-md hover:bg-primary/10 hover:text-primary transition-colors duration-200">
                             <Eye className="h-4 w-4" />
                           </Button>
                         </TableCell>
@@ -861,17 +861,17 @@ const PatientRecordPage = () => {
                   </TableBody>
                 </Table>
               ) : (
-                <p className="text-muted-foreground">Nenhuma venda registrada.</p>
+                <p className="text-muted-foreground py-4">Nenhuma venda registrada.</p>
               )}
             </CardContent>
           </Card>
         </TabsContent>
 
         <TabsContent value="vaccines" className="mt-4">
-          <Card>
+          <Card className="shadow-sm">
             <CardHeader className="flex flex-row items-center justify-between">
               <CardTitle>Histórico de Vacinas</CardTitle>
-              <Button size="sm">
+              <Button size="sm" className="rounded-md bg-gradient-to-r from-primary to-blue-600 hover:from-primary/90 hover:to-blue-700 text-primary-foreground font-bold transition-all duration-200">
                 <Plus className="h-4 w-4 mr-2" /> Adicionar Vacina
               </Button>
             </CardHeader>
@@ -888,14 +888,14 @@ const PatientRecordPage = () => {
                     </TableRow>
                   </TableHeader>
                   <TableBody>
-                    {mockVaccines.map((vaccine) => (
-                      <TableRow key={vaccine.id}>
-                        <TableCell>{vaccine.date}</TableCell>
+                    {mockVaccines.map((vaccine, index) => (
+                      <TableRow key={vaccine.id} className={cn(index % 2 === 1 && "bg-muted/50")}>
+                        <TableCell>{formatDate(vaccine.date)}</TableCell>
                         <TableCell>{vaccine.type}</TableCell>
-                        <TableCell>{vaccine.nextDue}</TableCell>
+                        <TableCell>{formatDate(vaccine.nextDue)}</TableCell>
                         <TableCell>{vaccine.vet}</TableCell>
                         <TableCell className="text-right">
-                          <Button variant="ghost" size="sm">
+                          <Button variant="ghost" size="sm" className="rounded-md hover:bg-primary/10 hover:text-primary transition-colors duration-200">
                             <Eye className="h-4 w-4" />
                           </Button>
                         </TableCell>
@@ -904,7 +904,7 @@ const PatientRecordPage = () => {
                   </TableBody>
                 </Table>
               ) : (
-                <p className="text-muted-foreground">Nenhuma vacina registrada.</p>
+                <p className="text-muted-foreground py-4">Nenhuma vacina registrada.</p>
               )}
             </CardContent>
           </Card>
@@ -912,7 +912,7 @@ const PatientRecordPage = () => {
 
         {/* Nova aba: Peso */}
         <TabsContent value="weight" className="mt-4">
-          <Card>
+          <Card className="shadow-sm">
             <CardHeader className="flex flex-row items-center justify-between">
               <CardTitle>Histórico de Peso</CardTitle>
               <div className="flex gap-2">
@@ -920,16 +920,16 @@ const PatientRecordPage = () => {
                   type="date"
                   value={newWeightDate}
                   onChange={(e) => setNewWeightDate(e.target.value)}
-                  className="w-[150px]"
+                  className="w-[150px] rounded-md focus-visible:ring-primary transition-all duration-200"
                 />
                 <Input
                   type="number"
                   placeholder="Peso (kg)"
                   value={newWeight}
                   onChange={(e) => setNewWeight(e.target.value)}
-                  className="w-[120px]"
+                  className="w-[120px] rounded-md focus-visible:ring-primary transition-all duration-200"
                 />
-                <Button size="sm" onClick={handleAddWeight}>
+                <Button size="sm" onClick={handleAddWeight} className="rounded-md bg-gradient-to-r from-primary to-blue-600 hover:from-primary/90 hover:to-blue-700 text-primary-foreground font-bold transition-all duration-200">
                   <Plus className="h-4 w-4 mr-2" /> Adicionar Peso
                 </Button>
               </div>
@@ -944,16 +944,16 @@ const PatientRecordPage = () => {
                     </TableRow>
                   </TableHeader>
                   <TableBody>
-                    {weightHistory.map((entry) => (
-                      <TableRow key={entry.id}>
-                        <TableCell>{entry.date}</TableCell>
+                    {weightHistory.map((entry, index) => (
+                      <TableRow key={entry.id} className={cn(index % 2 === 1 && "bg-muted/50")}>
+                        <TableCell>{formatDate(entry.date)}</TableCell>
                         <TableCell className="text-right">{entry.weight.toFixed(2)}</TableCell>
                       </TableRow>
                     ))}
                   </TableBody>
                 </Table>
               ) : (
-                <p className="text-muted-foreground">Nenhum registro de peso.</p>
+                <p className="text-muted-foreground py-4">Nenhum registro de peso.</p>
               )}
             </CardContent>
           </Card>
@@ -961,23 +961,23 @@ const PatientRecordPage = () => {
 
         {/* Nova aba: Documentos */}
         <TabsContent value="documents" className="mt-4">
-          <Card>
+          <Card className="shadow-sm">
             <CardHeader className="flex flex-row items-center justify-between">
               <CardTitle>Documentos</CardTitle>
-              <div className="flex gap-2 items-center">
+              <div className="flex gap-2 items-center flex-wrap">
                 <Input
                   type="text"
                   placeholder="Nome do Documento"
                   value={newDocumentName}
                   onChange={(e) => setNewDocumentName(e.target.value)}
-                  className="w-[200px]"
+                  className="w-[200px] rounded-md focus-visible:ring-primary transition-all duration-200"
                 />
                 <Input
                   type="file"
                   onChange={(e) => setNewDocumentFile(e.target.files ? e.target.files[0] : null)}
-                  className="w-[200px]"
+                  className="w-[200px] rounded-md focus-visible:ring-primary transition-all duration-200"
                 />
-                <Button size="sm" onClick={handleAddDocument} disabled={!newDocumentName || !newDocumentFile}>
+                <Button size="sm" onClick={handleAddDocument} disabled={!newDocumentName || !newDocumentFile} className="rounded-md bg-gradient-to-r from-primary to-blue-600 hover:from-primary/90 hover:to-blue-700 text-primary-foreground font-bold transition-all duration-200">
                   <Plus className="h-4 w-4 mr-2" /> Adicionar Documento
                 </Button>
               </div>
@@ -993,13 +993,13 @@ const PatientRecordPage = () => {
                     </TableRow>
                   </TableHeader>
                   <TableBody>
-                    {documents.map((doc) => (
-                      <TableRow key={doc.id}>
-                        <TableCell>{doc.date}</TableCell>
+                    {documents.map((doc, index) => (
+                      <TableRow key={doc.id} className={cn(index % 2 === 1 && "bg-muted/50")}>
+                        <TableCell>{formatDate(doc.date)}</TableCell>
                         <TableCell>{doc.name}</TableCell>
                         <TableCell className="text-right">
                           <a href={doc.fileUrl} target="_blank" rel="noopener noreferrer">
-                            <Button variant="ghost" size="sm">
+                            <Button variant="ghost" size="sm" className="rounded-md hover:bg-primary/10 hover:text-primary transition-colors duration-200">
                               <Eye className="h-4 w-4" /> Ver
                             </Button>
                           </a>
@@ -1009,7 +1009,7 @@ const PatientRecordPage = () => {
                   </TableBody>
                 </Table>
               ) : (
-                <p className="text-muted-foreground">Nenhum documento registrado.</p>
+                <p className="text-muted-foreground py-4">Nenhum documento registrado.</p>
               )}
             </CardContent>
           </Card>
@@ -1017,11 +1017,11 @@ const PatientRecordPage = () => {
 
         {/* Nova aba: Receitas */}
         <TabsContent value="prescriptions" className="mt-4">
-          <Card>
+          <Card className="shadow-sm">
             <CardHeader className="flex flex-row items-center justify-between">
               <CardTitle>Receitas</CardTitle>
               <Link to={`/clients/${clientId}/animals/${animalId}/add-prescription`}>
-                <Button size="sm">
+                <Button size="sm" className="rounded-md bg-gradient-to-r from-primary to-blue-600 hover:from-primary/90 hover:to-blue-700 text-primary-foreground font-bold transition-all duration-200">
                   <Plus className="h-4 w-4 mr-2" /> Adicionar Nova Receita
                 </Button>
               </Link>
@@ -1033,19 +1033,19 @@ const PatientRecordPage = () => {
                     <TableRow>
                       <TableHead>Data</TableHead>
                       <TableHead>Medicação</TableHead>
-                      <TableHead>Tratamento</TableHead> {/* Nova coluna */}
+                      <TableHead>Tratamento</TableHead>
                       <TableHead className="text-right">Ações</TableHead>
                     </TableRow>
                   </TableHeader>
                   <TableBody>
-                    {prescriptions.map((rx) => (
-                      <TableRow key={rx.id}>
-                        <TableCell>{formatDate(rx.date)}</TableCell> {/* Data formatada */}
+                    {prescriptions.map((rx, index) => (
+                      <TableRow key={rx.id} className={cn(index % 2 === 1 && "bg-muted/50")}>
+                        <TableCell>{formatDate(rx.date)}</TableCell>
                         <TableCell>{rx.medicationName}</TableCell>
-                        <TableCell>{rx.treatmentDescription || "N/A"}</TableCell> {/* Exibir tratamento */}
+                        <TableCell>{rx.treatmentDescription || "N/A"}</TableCell>
                         <TableCell className="text-right">
                           <Link to={`/clients/${clientId}/animals/${animalId}/edit-prescription/${rx.id}`}>
-                            <Button variant="ghost" size="sm">
+                            <Button variant="ghost" size="sm" className="rounded-md hover:bg-primary/10 hover:text-primary transition-colors duration-200">
                               <Eye className="h-4 w-4" /> Ver
                             </Button>
                           </Link>
@@ -1055,7 +1055,7 @@ const PatientRecordPage = () => {
                   </TableBody>
                 </Table>
               ) : (
-                <p className="text-muted-foreground mt-4">Nenhuma receita registrada.</p>
+                <p className="text-muted-foreground mt-4 py-4">Nenhuma receita registrada.</p>
               )}
             </CardContent>
           </Card>
@@ -1063,10 +1063,10 @@ const PatientRecordPage = () => {
 
         {/* Nova aba: Observações */}
         <TabsContent value="observations" className="mt-4">
-          <Card>
+          <Card className="shadow-sm">
             <CardHeader className="flex flex-row items-center justify-between">
               <CardTitle>Observações Gerais</CardTitle>
-              <Button size="sm" onClick={handleAddObservation} disabled={!newObservation.trim()}>
+              <Button size="sm" onClick={handleAddObservation} disabled={!newObservation.trim()} className="rounded-md bg-gradient-to-r from-primary to-blue-600 hover:from-primary/90 hover:to-blue-700 text-primary-foreground font-bold transition-all duration-200">
                 <Plus className="h-4 w-4 mr-2" /> Adicionar Observação
               </Button>
             </CardHeader>
@@ -1077,19 +1077,20 @@ const PatientRecordPage = () => {
                   rows={3}
                   value={newObservation}
                   onChange={(e) => setNewObservation(e.target.value)}
+                  className="focus-visible:ring-primary transition-all duration-200"
                 />
               </div>
               {observations.length > 0 ? (
                 <div className="space-y-4">
-                  {observations.map((obs) => (
-                    <div key={obs.id} className="border p-3 rounded-md bg-muted/50">
-                      <p className="text-sm text-muted-foreground mb-1">{obs.date}</p>
+                  {observations.map((obs, index) => (
+                    <div key={obs.id} className={cn("border p-3 rounded-md", index % 2 === 1 ? "bg-muted/50" : "bg-background")}>
+                      <p className="text-sm text-muted-foreground mb-1">{formatDate(obs.date)}</p>
                       <p>{obs.observation}</p>
                     </div>
                   ))}
                 </div>
               ) : (
-                <p className="text-muted-foreground">Nenhuma observação registrada.</p>
+                <p className="text-muted-foreground py-4">Nenhuma observação registrada.</p>
               )}
             </CardContent>
           </Card>
