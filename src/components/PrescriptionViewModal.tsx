@@ -72,24 +72,25 @@ const PrescriptionViewModal: React.FC<PrescriptionViewModalProps> = ({
         <div key={useType} className="mb-6">
           <h3 className="text-lg font-bold uppercase mb-3 border-b pb-2">{useType}</h3>
           <ol className="list-decimal list-inside space-y-4">
-            {groupedMedications[useType].map((med, index) => (
+            {groupedMedications[useType].map((med) => (
               <li key={med.id} className="flex flex-col">
-                <div className="flex items-center justify-between">
-                  <span className="font-semibold text-base">
+                <div className="flex items-center justify-between gap-4">
+                  <span className="font-semibold text-base flex-shrink-0">
                     {med.medicationName} {med.concentration}
                   </span>
-                  <div className="flex items-center gap-2">
-                    <span className="px-2 py-0.5 text-xs font-medium bg-gray-200 text-gray-800 rounded-full dark:bg-gray-700 dark:text-gray-200">
+                  <div className="flex-grow border-b border-gray-300 dark:border-gray-600 mx-2"></div> {/* Esta é a linha */}
+                  <div className="flex items-center gap-2 flex-shrink-0">
+                    <span className="px-2 py-0.5 text-xs font-medium border border-gray-400 text-gray-800 rounded-full dark:bg-gray-700 dark:text-gray-200">
                       {med.pharmacyType === "Farmácia Veterinária" ? "VET" : "HUMANA"}
                     </span>
                     {med.totalQuantityDisplay && (
-                      <span className="px-2 py-0.5 text-xs font-medium bg-blue-100 text-blue-800 rounded-full dark:bg-blue-900 dark:text-blue-200">
+                      <span className="px-2 py-0.5 text-xs font-medium border border-gray-400 bg-blue-100 text-blue-800 rounded-full dark:bg-blue-900 dark:text-blue-200">
                         {med.totalQuantityDisplay}
                       </span>
                     )}
                   </div>
                 </div>
-                <p className="text-sm text-gray-700 dark:text-gray-300 ml-4">
+                <p className="text-sm text-gray-700 dark:text-gray-300 mt-1 ml-4">
                   {med.generatedInstructions}
                 </p>
                 {med.generalObservations && (
