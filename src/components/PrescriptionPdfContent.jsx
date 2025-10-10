@@ -1,6 +1,6 @@
 import React from "react";
 import { Document, Page, View, Text, StyleSheet, Font } from "@react-pdf/renderer";
-import { MedicationData } from "@/types/medication"; // Removido 'type' da importação
+import { MedicationData } from "@/types/medication";
 
 // Register a font if needed (e.g., for custom fonts or if default is not working)
 // Font.register({ family: "Roboto", src: "https://fonts.gstatic.com/s/roboto/v20/KFOmCnqEu92Fr1Mu4mxP.ttf" });
@@ -184,21 +184,23 @@ const styles = StyleSheet.create({
 });
 
 // Helper function to format date
-const formatDateToPortuguese = (date: Date) => {
-  const options: Intl.DateTimeFormatOptions = { day: '2-digit', month: 'long', year: 'numeric' };
+const formatDateToPortuguese = (date) => {
+  const options = { day: '2-digit', month: 'long', year: 'numeric' };
   const formattedDate = date.toLocaleDateString('pt-BR', options);
   return formattedDate.toUpperCase();
 };
 
-interface PrescriptionPdfContentProps {
-  animalName: string;
-  animalId: string;
-  animalSpecies: string;
-  tutorName: string;
-  tutorAddress: string;
-  medications: MedicationData[];
-  generalObservations: string;
-}
+// A interface PrescriptionPdfContentProps ainda é útil para tipagem no AddPrescriptionPage.tsx
+// mas não é usada diretamente aqui no arquivo .jsx
+// interface PrescriptionPdfContentProps {
+//   animalName: string;
+//   animalId: string;
+//   animalSpecies: string;
+//   tutorName: string;
+//   tutorAddress: string;
+//   medications: MedicationData[];
+//   generalObservations: string;
+// }
 
 // Exporta uma função que retorna o JSX do PDF, não um React.FC
 export const PrescriptionPdfContent = ({
@@ -209,9 +211,9 @@ export const PrescriptionPdfContent = ({
   tutorAddress,
   medications,
   generalObservations,
-}: PrescriptionPdfContentProps) => {
+}) => {
   // Group medications by useType
-  const groupedMedications = medications.reduce((acc: Record<string, MedicationData[]>, med) => {
+  const groupedMedications = medications.reduce((acc, med) => {
     const useType = med.useType || "Outros";
     if (!acc[useType]) {
       acc[useType] = [];
