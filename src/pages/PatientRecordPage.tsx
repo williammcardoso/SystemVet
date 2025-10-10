@@ -439,10 +439,7 @@ const PatientRecordPage = () => {
   return (
     <div className="p-6">
       <div className="flex items-center justify-between mb-6">
-        <div>
-          <h1 className="text-3xl font-bold text-foreground">{animal.name} - Prontuário</h1>
-          <p className="text-muted-foreground">Histórico completo de saúde e atendimentos</p>
-        </div>
+        <h1 className="text-3xl font-bold">{animal.name} - Prontuário</h1>
         <Link to={`/clients/${client.id}`}>
           <Button variant="outline">
             <ArrowLeft className="mr-2 h-4 w-4" /> Voltar para {client.name}
@@ -451,43 +448,43 @@ const PatientRecordPage = () => {
       </div>
 
       <div className="mb-6">
-        <h2 className="text-xl font-semibold mb-2">Informações do Paciente</h2>
-        <Card className="shadow-sm rounded-lg">
-          <CardContent className="p-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 text-sm">
+        <h2 className="text-xl font-semibold mb-2">Informações do Animal</h2>
+        <Card>
+          <CardContent className="p-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             <div>
-              <p className="text-muted-foreground">Tutor:</p>
+              <p className="text-sm text-muted-foreground">Tutor:</p>
               <p className="font-medium">{client.name}</p>
             </div>
             <div>
-              <p className="text-muted-foreground">Espécie:</p>
+              <p className="text-sm text-muted-foreground">Espécie:</p>
               <p className="font-medium">{animal.species}</p>
             </div>
             <div>
-              <p className="text-muted-foreground">Raça:</p>
+              <p className="text-sm text-muted-foreground">Raça:</p>
               <p className="font-medium">{animal.breed}</p>
             </div>
             <div>
-              <p className="text-muted-foreground">Sexo:</p>
+              <p className="text-sm text-muted-foreground">Sexo:</p>
               <p className="font-medium">{animal.gender}</p>
             </div>
             <div>
-              <p className="text-muted-foreground">Nascimento:</p>
+              <p className="text-sm text-muted-foreground">Nascimento:</p>
               <p className="font-medium">{animal.birthday}</p>
             </div>
             <div>
-              <p className="text-muted-foreground">Pelagem:</p>
+              <p className="text-sm text-muted-foreground">Pelagem:</p>
               <p className="font-medium">{animal.coatColor}</p>
             </div>
             <div>
-              <p className="text-muted-foreground">Peso:</p>
+              <p className="text-sm text-muted-foreground">Peso:</p>
               <p className="font-medium">{animal.weight} kg</p>
             </div>
             <div>
-              <p className="text-muted-foreground">Microchip:</p>
+              <p className="text-sm text-muted-foreground">Microchip:</p>
               <p className="font-medium">{animal.microchip || "N/A"}</p>
             </div>
             <div className="col-span-full">
-              <p className="text-muted-foreground">Observações:</p>
+              <p className="text-sm text-muted-foreground">Observações:</p>
               <p className="font-medium">{animal.notes || "Nenhuma observação."}</p>
             </div>
           </CardContent>
@@ -495,35 +492,35 @@ const PatientRecordPage = () => {
       </div>
 
       <Tabs defaultValue="appointments" className="w-full">
-        <TabsList className="grid w-full grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-8 bg-secondary text-secondary-foreground rounded-lg p-1 mb-4">
-          <TabsTrigger value="appointments" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-sm rounded-md">
+        <TabsList className="grid w-full grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-8">
+          <TabsTrigger value="appointments">
             <Stethoscope className="h-4 w-4 mr-2" /> Atendimento
           </TabsTrigger>
-          <TabsTrigger value="exams" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-sm rounded-md">
+          <TabsTrigger value="exams">
             <CalendarDays className="h-4 w-4 mr-2" /> Exames
           </TabsTrigger>
-          <TabsTrigger value="sales" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-sm rounded-md">
+          <TabsTrigger value="sales">
             <DollarSign className="h-4 w-4 mr-2" /> Vendas
           </TabsTrigger>
-          <TabsTrigger value="vaccines" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-sm rounded-md">
+          <TabsTrigger value="vaccines">
             <Syringe className="h-4 w-4 mr-2" /> Vacinas
           </TabsTrigger>
-          <TabsTrigger value="weight" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-sm rounded-md">
+          <TabsTrigger value="weight">
             <Weight className="h-4 w-4 mr-2" /> Peso
           </TabsTrigger>
-          <TabsTrigger value="documents" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-sm rounded-md">
+          <TabsTrigger value="documents">
             <FileText className="h-4 w-4 mr-2" /> Documentos
           </TabsTrigger>
-          <TabsTrigger value="prescriptions" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-sm rounded-md">
+          <TabsTrigger value="prescriptions">
             <ClipboardList className="h-4 w-4 mr-2" /> Receitas
           </TabsTrigger>
-          <TabsTrigger value="observations" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-sm rounded-md">
+          <TabsTrigger value="observations">
             <MessageSquare className="h-4 w-4 mr-2" /> Observações
           </TabsTrigger>
         </TabsList>
 
         <TabsContent value="appointments" className="mt-4">
-          <Card className="shadow-sm rounded-lg">
+          <Card>
             <CardHeader className="flex flex-row items-center justify-between">
               <CardTitle>Histórico de Atendimentos</CardTitle>
               <Button size="sm">
@@ -545,7 +542,7 @@ const PatientRecordPage = () => {
                   <TableBody>
                     {mockAppointments.map((app) => (
                       <TableRow key={app.id}>
-                        <TableCell>{formatDate(app.date)}</TableCell>
+                        <TableCell>{app.date}</TableCell>
                         <TableCell>{app.type}</TableCell>
                         <TableCell>{app.vet}</TableCell>
                         <TableCell>{app.notes}</TableCell>
@@ -559,17 +556,17 @@ const PatientRecordPage = () => {
                   </TableBody>
                 </Table>
               ) : (
-                <p className="text-muted-foreground p-4">Nenhum atendimento registrado.</p>
+                <p className="text-muted-foreground">Nenhum atendimento registrado.</p>
               )}
             </CardContent>
           </Card>
         </TabsContent>
 
         <TabsContent value="exams" className="mt-4">
-          <Card className="shadow-sm rounded-lg">
+          <Card>
             <CardHeader className="flex flex-row items-center justify-between">
               <CardTitle>Histórico de Exames</CardTitle>
-              <Link to={`/clients/${clientId}/animals/${animalId}/add-exam`}>
+              <Link to={`/clients/${clientId}/animals/${animalId}/add-exam`}> {/* Link para a nova página */}
                 <Button size="sm">
                   <Plus className="h-4 w-4 mr-2" /> Adicionar Exame
                 </Button>
@@ -590,7 +587,7 @@ const PatientRecordPage = () => {
                   <TableBody>
                     {examsList.map((exam) => (
                       <TableRow key={exam.id}>
-                        <TableCell>{formatDate(exam.date)}</TableCell>
+                        <TableCell>{exam.date}</TableCell>
                         <TableCell>{exam.type}</TableCell>
                         <TableCell>{exam.result}</TableCell>
                         <TableCell>{exam.vet}</TableCell>
@@ -604,13 +601,14 @@ const PatientRecordPage = () => {
                   </TableBody>
                 </Table>
               ) : (
-                <p className="text-muted-foreground p-4">Nenhum exame registrado.</p>
+                <p className="text-muted-foreground">Nenhum exame registrado.</p>
               )}
             </CardContent>
           </Card>
 
+          {/* Modal para Adicionar Exame (mantido aqui para referência, mas não usado diretamente) */}
           <Dialog open={isAddExamDialogOpen} onOpenChange={setIsAddExamDialogOpen}>
-            <DialogContent className="sm:max-w-[700px]">
+            <DialogContent className="sm:max-w-[700px]"> {/* Aumentado o tamanho do modal */}
               <DialogHeader>
                 <DialogTitle>Adicionar Novo Exame</DialogTitle>
                 <DialogDescription>
@@ -827,7 +825,7 @@ const PatientRecordPage = () => {
         </TabsContent>
 
         <TabsContent value="sales" className="mt-4">
-          <Card className="shadow-sm rounded-lg">
+          <Card>
             <CardHeader className="flex flex-row items-center justify-between">
               <CardTitle>Histórico de Vendas</CardTitle>
               <Button size="sm">
@@ -849,7 +847,7 @@ const PatientRecordPage = () => {
                   <TableBody>
                     {mockSales.map((sale) => (
                       <TableRow key={sale.id}>
-                        <TableCell>{formatDate(sale.date)}</TableCell>
+                        <TableCell>{sale.date}</TableCell>
                         <TableCell>{sale.item}</TableCell>
                         <TableCell>{sale.quantity}</TableCell>
                         <TableCell className="text-right">R$ {sale.total.toFixed(2)}</TableCell>
@@ -863,14 +861,14 @@ const PatientRecordPage = () => {
                   </TableBody>
                 </Table>
               ) : (
-                <p className="text-muted-foreground p-4">Nenhuma venda registrada.</p>
+                <p className="text-muted-foreground">Nenhuma venda registrada.</p>
               )}
             </CardContent>
           </Card>
         </TabsContent>
 
         <TabsContent value="vaccines" className="mt-4">
-          <Card className="shadow-sm rounded-lg">
+          <Card>
             <CardHeader className="flex flex-row items-center justify-between">
               <CardTitle>Histórico de Vacinas</CardTitle>
               <Button size="sm">
@@ -892,9 +890,9 @@ const PatientRecordPage = () => {
                   <TableBody>
                     {mockVaccines.map((vaccine) => (
                       <TableRow key={vaccine.id}>
-                        <TableCell>{formatDate(vaccine.date)}</TableCell>
+                        <TableCell>{vaccine.date}</TableCell>
                         <TableCell>{vaccine.type}</TableCell>
-                        <TableCell>{formatDate(vaccine.nextDue)}</TableCell>
+                        <TableCell>{vaccine.nextDue}</TableCell>
                         <TableCell>{vaccine.vet}</TableCell>
                         <TableCell className="text-right">
                           <Button variant="ghost" size="sm">
@@ -906,7 +904,7 @@ const PatientRecordPage = () => {
                   </TableBody>
                 </Table>
               ) : (
-                <p className="text-muted-foreground p-4">Nenhuma vacina registrada.</p>
+                <p className="text-muted-foreground">Nenhuma vacina registrada.</p>
               )}
             </CardContent>
           </Card>
@@ -914,7 +912,7 @@ const PatientRecordPage = () => {
 
         {/* Nova aba: Peso */}
         <TabsContent value="weight" className="mt-4">
-          <Card className="shadow-sm rounded-lg">
+          <Card>
             <CardHeader className="flex flex-row items-center justify-between">
               <CardTitle>Histórico de Peso</CardTitle>
               <div className="flex gap-2">
@@ -948,14 +946,14 @@ const PatientRecordPage = () => {
                   <TableBody>
                     {weightHistory.map((entry) => (
                       <TableRow key={entry.id}>
-                        <TableCell>{formatDate(entry.date)}</TableCell>
+                        <TableCell>{entry.date}</TableCell>
                         <TableCell className="text-right">{entry.weight.toFixed(2)}</TableCell>
                       </TableRow>
                     ))}
                   </TableBody>
                 </Table>
               ) : (
-                <p className="text-muted-foreground p-4">Nenhum registro de peso.</p>
+                <p className="text-muted-foreground">Nenhum registro de peso.</p>
               )}
             </CardContent>
           </Card>
@@ -963,7 +961,7 @@ const PatientRecordPage = () => {
 
         {/* Nova aba: Documentos */}
         <TabsContent value="documents" className="mt-4">
-          <Card className="shadow-sm rounded-lg">
+          <Card>
             <CardHeader className="flex flex-row items-center justify-between">
               <CardTitle>Documentos</CardTitle>
               <div className="flex gap-2 items-center">
@@ -997,7 +995,7 @@ const PatientRecordPage = () => {
                   <TableBody>
                     {documents.map((doc) => (
                       <TableRow key={doc.id}>
-                        <TableCell>{formatDate(doc.date)}</TableCell>
+                        <TableCell>{doc.date}</TableCell>
                         <TableCell>{doc.name}</TableCell>
                         <TableCell className="text-right">
                           <a href={doc.fileUrl} target="_blank" rel="noopener noreferrer">
@@ -1011,7 +1009,7 @@ const PatientRecordPage = () => {
                   </TableBody>
                 </Table>
               ) : (
-                <p className="text-muted-foreground p-4">Nenhum documento registrado.</p>
+                <p className="text-muted-foreground">Nenhum documento registrado.</p>
               )}
             </CardContent>
           </Card>
@@ -1019,7 +1017,7 @@ const PatientRecordPage = () => {
 
         {/* Nova aba: Receitas */}
         <TabsContent value="prescriptions" className="mt-4">
-          <Card className="shadow-sm rounded-lg">
+          <Card>
             <CardHeader className="flex flex-row items-center justify-between">
               <CardTitle>Receitas</CardTitle>
               <Link to={`/clients/${clientId}/animals/${animalId}/add-prescription`}>
@@ -1035,16 +1033,16 @@ const PatientRecordPage = () => {
                     <TableRow>
                       <TableHead>Data</TableHead>
                       <TableHead>Medicação</TableHead>
-                      <TableHead>Tratamento</TableHead>
+                      <TableHead>Tratamento</TableHead> {/* Nova coluna */}
                       <TableHead className="text-right">Ações</TableHead>
                     </TableRow>
                   </TableHeader>
                   <TableBody>
                     {prescriptions.map((rx) => (
                       <TableRow key={rx.id}>
-                        <TableCell>{formatDate(rx.date)}</TableCell>
+                        <TableCell>{formatDate(rx.date)}</TableCell> {/* Data formatada */}
                         <TableCell>{rx.medicationName}</TableCell>
-                        <TableCell>{rx.treatmentDescription || "N/A"}</TableCell>
+                        <TableCell>{rx.treatmentDescription || "N/A"}</TableCell> {/* Exibir tratamento */}
                         <TableCell className="text-right">
                           <Link to={`/clients/${clientId}/animals/${animalId}/edit-prescription/${rx.id}`}>
                             <Button variant="ghost" size="sm">
@@ -1065,7 +1063,7 @@ const PatientRecordPage = () => {
 
         {/* Nova aba: Observações */}
         <TabsContent value="observations" className="mt-4">
-          <Card className="shadow-sm rounded-lg">
+          <Card>
             <CardHeader className="flex flex-row items-center justify-between">
               <CardTitle>Observações Gerais</CardTitle>
               <Button size="sm" onClick={handleAddObservation} disabled={!newObservation.trim()}>
@@ -1085,13 +1083,13 @@ const PatientRecordPage = () => {
                 <div className="space-y-4">
                   {observations.map((obs) => (
                     <div key={obs.id} className="border p-3 rounded-md bg-muted/50">
-                      <p className="text-sm text-muted-foreground mb-1">{formatDate(obs.date)}</p>
+                      <p className="text-sm text-muted-foreground mb-1">{obs.date}</p>
                       <p>{obs.observation}</p>
                     </div>
                   ))}
                 </div>
               ) : (
-                <p className="text-muted-foreground p-4">Nenhuma observação registrada.</p>
+                <p className="text-muted-foreground">Nenhuma observação registrada.</p>
               )}
             </CardContent>
           </Card>
