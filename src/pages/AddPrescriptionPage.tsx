@@ -6,12 +6,13 @@ import { ArrowLeft, Save, X, Plus, Eye } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Textarea } from "@/components/ui/textarea";
+import { Label } from "@/components/ui/label"; // Importar Label
 import PrescriptionMedicationForm, { MedicationData } from "@/components/PrescriptionMedicationForm";
 import { toast } from "sonner";
-import { pdf } from "@react-pdf/renderer"; // Importar a função pdf
-import { PrescriptionPdfContent } from "@/components/PrescriptionPdfContent"; // Atualizado para .tsx
-import { PrescriptionEntry } from "@/types/medication"; // Import PrescriptionEntry
-import { mockPrescriptions } from "@/mockData/prescriptions"; // Import mutable mockPrescriptions
+import { pdf } from "@react-pdf/renderer";
+import { PrescriptionPdfContent } from "@/components/PrescriptionPdfContent";
+import { PrescriptionEntry } from "@/types/medication";
+import { mockPrescriptions } from "@/mockData/prescriptions";
 
 // Mock data para animais e clientes (para exibir informações no cabeçalho)
 interface Animal {
@@ -59,6 +60,7 @@ const AddPrescriptionPage = () => {
 
   const [currentPrescriptionMedications, setCurrentPrescriptionMedications] = useState<MedicationData[]>([]);
   const [currentPrescriptionGeneralObservations, setCurrentPrescriptionGeneralObservations] = useState<string>("");
+  const [treatmentDescription, setTreatmentDescription] = useState<string>(""); // Novo estado para a descrição do tratamento
 
   useEffect(() => {
     if (prescriptionId) {
@@ -67,6 +69,7 @@ const AddPrescriptionPage = () => {
       if (existingPrescription) {
         setCurrentPrescriptionMedications(existingPrescription.medications.map(med => ({ ...med, isCollapsed: true }))); // Collapse existing meds
         setCurrentPrescriptionGeneralObservations(existingPrescription.instructions);
+        setTreatmentDescription(existingPrescription.treatmentDescription || ""); // Carregar descrição do tratamento
       } else {
         toast.error("Receita não encontrada.");
         navigate(`/clients/${clientId}/animals/${animalId}/record`);
@@ -144,19 +147,11 @@ const AddPrescriptionPage = () => {
       .filter(name => name.trim() !== "")
       .join(", ");
 
-    // For simplicity, let's take the first medication's dose, frequency, and period for the summary
-    const firstMed = currentPrescriptionMedications[0];
-    const summaryDose = firstMed?.dosePerAdministration || "N/A";
-    const summaryFrequency = firstMed?.frequency || "N/A";
-    const summaryPeriod = firstMed?.period || "N/A";
-
     const newPrescription: PrescriptionEntry = {
       id: prescriptionId || `rx-${Date.now()}`, // Use existing ID if editing, otherwise new ID
       date: new Date().toISOString().split('T')[0],
       medicationName: summaryMedicationName || "Receita sem medicamentos",
-      dosePerAdministration: summaryDose,
-      frequency: summaryFrequency,
-      period: summaryPeriod,
+      treatmentDescription: treatmentDescription.trim() || undefined, // Salvar a descrição do tratamento
       instructions: currentPrescriptionGeneralObservations,
       medications: currentPrescriptionMedications.map(med => ({ ...med, isCollapsed: true })), // Ensure all are collapsed when saved
     };
@@ -215,6 +210,24 @@ const AddPrescriptionPage = () => {
       </div>
 
       <div className="grid gap-4 py-4">
+        <Card className="mb-4">
+          <CardHeader>
+            <CardTitle>Descrição do Tratamento</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-2">
+              <Label htmlFor="treatmentDescription">Tratamento (Ex: Tratamento de Anemia)</Label>
+              <Textarea
+                id="treatmentDescription"
+                placeholder="Descreva o tratamento geral da receita..."
+                rows={3}
+                value={treatmentDescription}
+                onChange={(e) => setTreatmentDescription(e.target.value)}
+              />
+            </div>
+          </CardContent>
+        </Card>
+
         <Card className="mb-4">
           <CardHeader>
             <CardTitle>Medicamentos</CardTitle>

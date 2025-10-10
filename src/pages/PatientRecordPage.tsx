@@ -312,6 +312,12 @@ const PatientRecordPage = () => {
     );
   }
 
+  // Helper function to format date to dd/mm/yyyy
+  const formatDate = (dateString: string) => {
+    const [year, month, day] = dateString.split('-');
+    return `${day}/${month}/${year}`;
+  };
+
   // Handlers para as novas funcionalidades
   const handleAddWeight = () => {
     if (newWeight.trim() && newWeightDate) {
@@ -355,7 +361,7 @@ const PatientRecordPage = () => {
 
   const handleAddExam = () => {
     if (!newExamDate || !newExamType || !newExamVet) {
-      alert("Por favor, preencha a data, tipo de exame e veterinário.");
+      toast.error("Por favor, preencha a data, tipo de exame e veterinário.");
       return;
     }
 
@@ -395,7 +401,7 @@ const PatientRecordPage = () => {
       examData.result = `Hemograma: Hemácias ${newHemacias}, Leucócitos ${newLeucocitos}, Plaquetas ${newPlaquetas}`;
     } else {
       if (!newExamResult.trim()) {
-        alert("Por favor, preencha o resultado do exame.");
+        toast.error("Por favor, preencha o resultado do exame.");
         return;
       }
     }
@@ -1027,20 +1033,16 @@ const PatientRecordPage = () => {
                     <TableRow>
                       <TableHead>Data</TableHead>
                       <TableHead>Medicação</TableHead>
-                      <TableHead>Dosagem</TableHead>
-                      <TableHead>Frequência</TableHead>
-                      <TableHead>Período</TableHead>
+                      <TableHead>Tratamento</TableHead> {/* Nova coluna */}
                       <TableHead className="text-right">Ações</TableHead>
                     </TableRow>
                   </TableHeader>
                   <TableBody>
                     {prescriptions.map((rx) => (
                       <TableRow key={rx.id}>
-                        <TableCell>{rx.date}</TableCell>
+                        <TableCell>{formatDate(rx.date)}</TableCell> {/* Data formatada */}
                         <TableCell>{rx.medicationName}</TableCell>
-                        <TableCell>{rx.dosePerAdministration}</TableCell>
-                        <TableCell>{rx.frequency}</TableCell>
-                        <TableCell>{rx.period}</TableCell>
+                        <TableCell>{rx.treatmentDescription || "N/A"}</TableCell> {/* Exibir tratamento */}
                         <TableCell className="text-right">
                           <Link to={`/clients/${clientId}/animals/${animalId}/edit-prescription/${rx.id}`}>
                             <Button variant="ghost" size="sm">

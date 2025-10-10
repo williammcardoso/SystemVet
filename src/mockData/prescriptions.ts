@@ -5,9 +5,7 @@ export let mockPrescriptions: PrescriptionEntry[] = [
     id: "rx1",
     date: "2023-11-01",
     medicationName: "Antibiótico X, Anti-inflamatório Y",
-    dosePerAdministration: "Ver detalhes",
-    frequency: "Ver detalhes",
-    period: "Ver detalhes",
+    treatmentDescription: "Tratamento para infecção bacteriana e inflamação.",
     instructions: "Administrar com alimento e bastante água.",
     medications: [
       {
@@ -50,9 +48,7 @@ export let mockPrescriptions: PrescriptionEntry[] = [
     id: "rx-long-test",
     date: new Date().toISOString().split('T')[0],
     medicationName: "Receita de Teste Longa",
-    dosePerAdministration: "Ver detalhes",
-    frequency: "Ver detalhes",
-    period: "Ver detalhes",
+    treatmentDescription: "Receita de teste com múltiplos medicamentos para verificação de paginação.",
     instructions: "Esta é uma receita de teste com múltiplos medicamentos para verificar a paginação do PDF.",
     medications: [
       {

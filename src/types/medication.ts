@@ -23,9 +23,7 @@ export interface PrescriptionEntry {
   id: string;
   date: string;
   medicationName: string; // Summary for the table
-  dosePerAdministration: string; // Summary for the table
-  frequency: string; // Summary for the table
-  period: string; // Summary for the table
+  treatmentDescription?: string; // Novo campo para descrição do tratamento
   instructions: string; // General observations for the prescription
   medications: MedicationData[]; // Full details of medications
 }
