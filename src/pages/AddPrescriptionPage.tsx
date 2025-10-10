@@ -437,10 +437,10 @@ const AddPrescriptionPage = () => {
         <Button variant="outline" onClick={() => navigate(`/clients/${clientId}/animals/${animalId}/record`)}>
           <X className="mr-2 h-4 w-4" /> Cancelar
         </Button>
-        <Button variant="secondary" onClick={handleViewPrescription}>
+        <Button variant="secondary" onClick={handleViewPrescription} disabled={currentPrescriptionMedications.length === 0}>
           <Eye className="mr-2 h-4 w-4" /> Visualizar
         </Button>
-        <Button onClick={handleSavePrescription}>
+        <Button onClick={handleSavePrescription} disabled={currentPrescriptionMedications.length === 0}>
           <Save className="mr-2 h-4 w-4" /> Salvar Receita
         </Button>
       </div>
