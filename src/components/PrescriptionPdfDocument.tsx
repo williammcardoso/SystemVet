@@ -200,16 +200,6 @@ const PrescriptionPdfDocument: React.FC<PrescriptionPdfDocumentProps> = ({
   generalObservations,
   vetInfo,
 }) => {
-  // Group medications by useType
-  const groupedMedications = medications.reduce((acc, med) => {
-    const useType = med.useType || "Outros";
-    if (!acc[useType]) {
-      acc[useType] = [];
-    }
-    acc[useType].push(med);
-    return acc;
-  }, {} as Record<string, MedicationData[]>);
-
   const currentDate = new Date().toLocaleDateString('pt-BR', {
     day: '2-digit',
     month: 'long',
@@ -251,38 +241,26 @@ const PrescriptionPdfDocument: React.FC<PrescriptionPdfDocumentProps> = ({
             </View>
           </View>
 
-          {Object.keys(groupedMedications).map((useType) => (
-            <View key={useType}>
-              <Text style={styles.sectionTitle}>{useType}</Text>
-              {groupedMedications[useType].map((med, index) => (
-                <View key={med.id} style={styles.medicationItem}>
-                  <Text style={styles.medicationNumber}>{index + 1})</Text>
-                  <View style={styles.medicationDetails}>
-                    <View style={styles.flexRowCenter}>
-                      <Text style={styles.medicationName}>
-                        {med.medicationName || "Nome do Medicamento não informado"}
-                        {med.concentration ? ` ${med.concentration}` : null}
-                      </Text>
-                      <View style={styles.line} />
-                      {med.pharmacyType && (
-                        <Text style={styles.pharmacyTypeBadge}>
-                          {med.pharmacyType === "Farmácia Veterinária" ? "VET" : "HUMANA"}
-                        </Text>
-                      )}
-                      {med.totalQuantityDisplay && (
-                        <Text style={styles.totalQuantityBadge}>
-                          {med.totalQuantityDisplay}
-                        </Text>
-                      )}
-                    </View>
-                    <Text style={styles.medicationInstructions}>
-                      {med.generatedInstructions || "Instruções não informadas"}
-                    </Text>
-                  </View>
+          {/* Seção de Medicamentos - Simplificada para depuração */}
+          <Text style={styles.sectionTitle}>Medicamentos</Text>
+          {medications.length === 0 ? (
+            <Text style={styles.medicationInstructions}>Nenhum medicamento adicionado para este paciente.</Text>
+          ) : (
+            medications.map((med, index) => (
+              <View key={med.id} style={styles.medicationItem}>
+                <Text style={styles.medicationNumber}>{index + 1})</Text>
+                <View style={styles.medicationDetails}>
+                  <Text style={styles.medicationName}>
+                    {med.medicationName || "Medicamento sem nome"}
+                    {med.concentration ? ` ${med.concentration}` : null}
+                  </Text>
+                  <Text style={styles.medicationInstructions}>
+                    {med.generatedInstructions || "Instruções não informadas"}
+                  </Text>
                 </View>
-              ))}
-            </View>
-          ))}
+              </View>
+            ))
+          )}
 
           {generalObservations && (
             <View style={styles.observationsSection}>
