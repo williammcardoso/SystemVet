@@ -15,7 +15,7 @@ const styles = StyleSheet.create({
   mainContentContainer: {
     // This view will contain all content that flows across pages
     // It will automatically break into new pages if content is too long
-    marginBottom: 70, // Adiciona margem inferior para dar espaço ao rodapé da assinatura
+    marginBottom: 140, // Aumenta a margem inferior para dar mais espaço ao rodapé da assinatura
   },
   clinicHeader: {
     flexDirection: "row",
