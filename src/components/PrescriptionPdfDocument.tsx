@@ -87,64 +87,12 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     textTransform: "uppercase",
   },
-  medicationItem: {
-    flexDirection: "row",
-    marginBottom: 10,
-    alignItems: "flex-start",
-  },
-  medicationNumber: {
+  medicationItemText: { // Novo estilo para o item de medicamento simplificado
     fontSize: 12,
-    marginRight: 5,
-    width: 15, // Fixed width for numbering
+    marginBottom: 5,
   },
-  medicationContent: { // Renamed from medicationDetails
-    flexGrow: 1,
-    fontSize: 12,
-  },
-  medicationName: { // Simplified to just bold for the name
+  medicationName: { // Mantido para consistência, mas o estilo será aplicado diretamente no medicationItemText
     fontWeight: "bold",
-    fontSize: 12,
-  },
-  medicationInstructions: {
-    fontSize: 10,
-    color: "#555",
-    marginLeft: 20, // Indent instructions
-  },
-  pharmacyTypeBadge: {
-    fontSize: 9,
-    paddingHorizontal: 6,
-    paddingVertical: 3,
-    borderRadius: 10, // More oval
-    backgroundColor: "#e0e0e0",
-    color: "#333",
-    marginLeft: 10,
-    marginRight: 10,
-    alignSelf: "center",
-    borderWidth: 1,
-    borderColor: "#000",
-  },
-  totalQuantityBadge: {
-    fontSize: 10,
-    paddingHorizontal: 8,
-    paddingVertical: 4,
-    borderRadius: 10, // More oval
-    backgroundColor: "#e0e0e0",
-    color: "#333",
-    alignSelf: "center",
-    borderWidth: 1,
-    borderColor: "#000",
-  },
-  line: {
-    borderBottomWidth: 1,
-    borderBottomColor: "#000",
-    flexGrow: 1,
-    height: 1,
-    marginLeft: 5,
-    marginRight: 5,
-  },
-  flexRowCenter: {
-    flexDirection: "row",
-    alignItems: "center",
   },
   observationsSection: {
     marginTop: 20,
@@ -269,15 +217,12 @@ const PrescriptionPdfDocument: React.FC<PrescriptionPdfDocumentProps> = ({
               <View key={useType}>
                 <Text style={styles.medicationGroupTitle}>{useType}</Text>
                 {groupedMedications[useType].map((med, index) => {
-                  console.log(`Rendering medication ${index + 1}: ${med.medicationName}`); // Log para cada medicamento
+                  const medicationNameContent = (med.medicationName || "Medicamento sem nome").trim();
+                  console.log(`Rendering medication ${index + 1}: ${medicationNameContent}`);
                   return (
-                    <View key={med.id} style={styles.medicationItem}>
-                      <Text style={styles.medicationNumber}>{(index + 1).toString()})</Text>
-                      {/* Mínimo absoluto: apenas o nome do medicamento */}
-                      <Text style={styles.medicationName}>
-                        {med.medicationName || "Medicamento sem nome"}
-                      </Text>
-                    </View>
+                    <Text key={med.id} style={styles.medicationItemText}>
+                      {(index + 1).toString()}) {medicationNameContent}
+                    </Text>
                   );
                 })}
               </View>
