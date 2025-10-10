@@ -20,6 +20,9 @@ import {
   PawPrint,
   Palette,
   Search, // Adicionado para 'Busca Rápida'
+  Stethoscope, // Importado
+  ClipboardList, // Importado
+  FileText, // Importado
 } from "lucide-react";
 
 interface NavItem {
