@@ -159,11 +159,9 @@ const styles = StyleSheet.create({
     fontSize: 10,
     lineHeight: 1.5,
   },
-  footerAbsolute: {
-    position: 'absolute',
-    bottom: 30,
-    left: 30,
-    right: 30,
+  // Novo estilo para o bloco de assinatura no final do conteúdo
+  signatureBlock: {
+    marginTop: 40, // Espaçamento maior para separar do conteúdo
     textAlign: "center",
     fontSize: 10,
     color: "#666",
@@ -226,24 +224,17 @@ const PrescriptionPdfDocument: React.FC<PrescriptionPdfDocumentProps> = ({
 
   return (
     <Document>
-      <Page size="A4" style={styles.page} render={({ pageNumber, totalPages }) => (
-        <>
-          {/* Main Content that flows across pages */}
-          <View style={styles.mainContentContainer}>
-            {/* Clinic Header */}
-            <View style={styles.clinicHeader}>
-              <View style={styles.clinicInfoLeft}>
-                {/* <Image src="/public/placeholder.svg" style={{ width: 40, height: 40, marginRight: 10 }} /> */}
-                <View>
-                  <Text style={styles.clinicName}>Clínica Moraes Cardoso</Text>
-                  <Text style={styles.clinicDetails}>CRMV 56895 SP</Text>
-                  <Text style={styles.clinicDetails}>Registro no MAPA MV0052750203</Text>
-                </View>
-              </View>
-              <View style={styles.clinicAddressPhone}>
-                <Text>Rua Campos Salles, 175, Centro</Text>
-                <Text>Itapira - CEP: 13970-170</Text>
-                <Text>Telefone: (19) 99363-1981</Text>
+      <Page size="A4" style={styles.page}>
+        {/* Main Content that flows across pages */}
+        <View style={styles.mainContentContainer}>
+          {/* Clinic Header */}
+          <View style={styles.clinicHeader}>
+            <View style={styles.clinicInfoLeft}>
+              {/* <Image src="/public/placeholder.svg" style={{ width: 40, height: 40, marginRight: 10 }} /> */}
+              <View>
+                <Text style={styles.clinicName}>Clínica Moraes Cardoso</Text>
+                <Text style={styles.clinicDetails}>CRMV 56895 SP</Text>
+                <Text style={styles.clinicDetails}>Registro no MAPA MV0052750203</Text>
               </View>
             </View>
 
@@ -309,20 +300,17 @@ const PrescriptionPdfDocument: React.FC<PrescriptionPdfDocumentProps> = ({
                 <Text style={styles.generalObservationsText}>{generalObservations}</Text>
               </View>
             )}
-          </View>
 
-          {/* Footer - only on the last page */}
-          {pageNumber === totalPages && (
-            <View style={styles.footerAbsolute}>
+            {/* Signature Block - now part of the main content flow */}
+            <View style={styles.signatureBlock} break> {/* 'break' will ensure it starts on a new page if not enough space */}
               <Text style={styles.signatureDate}>{formatDateToPortuguese(currentDate)}</Text>
               <Text style={styles.signatureText}>Assinado eletronicamente por</Text>
               <Text style={styles.signatureName}>Dr. William Cardoso</Text>
               <Text style={styles.signatureText}>CRMV 56895/SP</Text>
               <Text style={styles.signatureText}>Registro no MAPA MV0052750203</Text>
             </View>
-          )}
-        </>
-      )} />
+          </View>
+      </Page>
     </Document>
   );
 };
