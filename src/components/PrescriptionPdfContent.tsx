@@ -275,8 +275,8 @@ export const PrescriptionPdfContent = ({
                           <Text style={styles.medicationNumber}>{index + 1})</Text>
                           <Text style={styles.medicationNameConcentration}>
                             {(() => {
-                              const name = med.medicationName?.trim() || '';
-                              const concentration = med.concentration?.trim() || '';
+                              const name = (med.medicationName && med.medicationName.trim()) || '';
+                              const concentration = (med.concentration && med.concentration.trim()) || '';
                               
                               if (name.length > 0 && concentration.length > 0) {
                                 return `${name} ${concentration}`;
@@ -305,7 +305,7 @@ export const PrescriptionPdfContent = ({
                         <Text style={styles.medicationInstructions}>
                           {med.generatedInstructions || 'Sem instruções de uso.'}
                         </Text>
-                        {med.generalObservations && med.generalObservations.trim().length > 0 ? (
+                        {med.generalObservations && med.generalObservations.trim && med.generalObservations.trim().length > 0 ? (
                           <Text style={styles.medicationObservations}>
                             Obs. Medicamento: {med.generalObservations}
                           </Text>
@@ -339,7 +339,7 @@ export const PrescriptionPdfContent = ({
             </>
           );
         }}
-      </Page>
+      />
     </Document>
   );
 };
