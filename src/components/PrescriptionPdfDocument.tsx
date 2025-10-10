@@ -84,6 +84,8 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     marginBottom: 10,
     alignItems: "flex-start",
+    backgroundColor: '#f0f0f0', // TEMPORARY: Light grey background for debugging
+    padding: 5, // TEMPORARY: Add some padding
   },
   medicationNumber: {
     fontSize: 12,
@@ -258,7 +260,7 @@ const PrescriptionPdfDocument: React.FC<PrescriptionPdfDocumentProps> = ({
                   <View style={styles.medicationDetails}>
                     <View style={styles.flexRowCenter}>
                       <Text style={styles.medicationName}>
-                        {med.medicationName}
+                        {med.medicationName || "Nome do Medicamento não informado"}
                         {med.concentration ? ` ${med.concentration}` : null}
                       </Text>
                       <View style={styles.line} />
@@ -274,7 +276,7 @@ const PrescriptionPdfDocument: React.FC<PrescriptionPdfDocumentProps> = ({
                       )}
                     </View>
                     <Text style={styles.medicationInstructions}>
-                      {med.generatedInstructions || null}
+                      {med.generatedInstructions || "Instruções não informadas"}
                     </Text>
                   </View>
                 </View>
