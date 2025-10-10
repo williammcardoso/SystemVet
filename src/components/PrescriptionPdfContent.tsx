@@ -184,27 +184,22 @@ const styles = StyleSheet.create({
 });
 
 // Helper function to format date
-const formatDateToPortuguese = (date) => {
-  const options = { day: '2-digit', month: 'long', year: 'numeric' };
+const formatDateToPortuguese = (date: Date) => {
+  const options: Intl.DateTimeFormatOptions = { day: '2-digit', month: 'long', year: 'numeric' };
   const formattedDate = date.toLocaleDateString('pt-BR', options);
   return formattedDate.toUpperCase();
 };
 
-/**
- * @typedef {object} PrescriptionPdfContentProps
- * @property {string} animalName
- * @property {string} animalId
- * @property {string} animalSpecies
- * @property {string} tutorName
- * @property {string} tutorAddress
- * @property {MedicationData[]} medications
- * @property {string} generalObservations
- */
+interface PrescriptionPdfContentProps {
+  animalName: string;
+  animalId: string;
+  animalSpecies: string;
+  tutorName: string;
+  tutorAddress: string;
+  medications: MedicationData[];
+  generalObservations: string;
+}
 
-/**
- * Exporta uma função que retorna o JSX do PDF, não um React.FC
- * @param {PrescriptionPdfContentProps} props
- */
 export const PrescriptionPdfContent = ({
   animalName,
   animalId,
@@ -213,9 +208,9 @@ export const PrescriptionPdfContent = ({
   tutorAddress,
   medications,
   generalObservations,
-}) => {
+}: PrescriptionPdfContentProps) => {
   // Group medications by useType
-  const groupedMedications = medications.reduce((acc, med) => {
+  const groupedMedications = medications.reduce((acc: Record<string, MedicationData[]>, med) => {
     const useType = med.useType || "Outros";
     if (!acc[useType]) {
       acc[useType] = [];
@@ -344,7 +339,7 @@ export const PrescriptionPdfContent = ({
             </>
           );
         }}
-      /> {/* Componente Page auto-fechado */}
+      </Page>
     </Document>
   );
 };

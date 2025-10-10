@@ -9,7 +9,7 @@ import { Textarea } from "@/components/ui/textarea";
 import PrescriptionMedicationForm, { MedicationData } from "@/components/PrescriptionMedicationForm";
 import { toast } from "sonner";
 import { pdf } from "@react-pdf/renderer"; // Importar a função pdf
-import { PrescriptionPdfContent } from "@/components/PrescriptionPdfContent.jsx"; // Atualizado para .jsx
+import { PrescriptionPdfContent } from "@/components/PrescriptionPdfContent"; // Atualizado para .tsx
 
 // Mock data para animais e clientes (para exibir informações no cabeçalho)
 interface Animal {
