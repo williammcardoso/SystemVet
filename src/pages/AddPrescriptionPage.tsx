@@ -2,21 +2,14 @@
 
 import React, { useState, useEffect } from "react";
 import { Link, useParams, useNavigate } from "react-router-dom";
-import { ArrowLeft, Save, X, Plus, Eye } from "lucide-react"; // Adicionado Eye para o botão Visualizar
+import { ArrowLeft, Save, X, Plus, Eye } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Textarea } from "@/components/ui/textarea";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogDescription,
-  DialogFooter,
-} from "@/components/ui/dialog"; // Importar componentes do Dialog
 import PrescriptionMedicationForm, { MedicationData } from "@/components/PrescriptionMedicationForm";
-import PrescriptionPreviewDialog from "@/components/PrescriptionPreviewDialog"; // Importar o novo componente de visualização de PDF
 import { toast } from "sonner";
+import { pdf } from "@react-pdf/renderer"; // Importar a função pdf
+import PrescriptionPdfDocument from "@/components/PrescriptionPdfDocument"; // Importar o componente do documento PDF
 
 // Mock data para animais e clientes (para exibir informações no cabeçalho)
 interface Animal {
@@ -124,7 +117,6 @@ const AddPrescriptionPage = () => {
 
   const [currentPrescriptionMedications, setCurrentPrescriptionMedications] = useState<MedicationData[]>([]);
   const [currentPrescriptionGeneralObservations, setCurrentPrescriptionGeneralObservations] = useState<string>("");
-  const [isViewModalOpen, setIsViewModalOpen] = useState(false); // Estado para controlar o modal de visualização
 
   useEffect(() => {
     if (prescriptionId) {
@@ -214,13 +206,29 @@ const AddPrescriptionPage = () => {
     navigate(`/clients/${clientId}/animals/${animalId}/record`);
   };
 
-  const handleViewPrescription = () => {
-    // Verificar se há medicamentos para visualizar
+  const handleViewPrescription = async () => {
     if (currentPrescriptionMedications.length === 0) {
       toast.error("Adicione pelo menos um medicamento para visualizar a receita.");
       return;
     }
-    setIsViewModalOpen(true);
+
+    // Gerar o PDF como um Blob
+    const blob = await pdf(
+      <PrescriptionPdfDocument
+        animalName={animal.name}
+        animalId={animal.id}
+        animalSpecies={animal.species}
+        tutorName={client.name}
+        tutorAddress={client.address}
+        medications={currentPrescriptionMedications}
+        generalObservations={currentPrescriptionGeneralObservations}
+      />
+    ).toBlob();
+
+    // Criar uma URL para o Blob e abrir em uma nova aba
+    const url = URL.createObjectURL(blob);
+    window.open(url, '_blank');
+    URL.revokeObjectURL(url); // Limpar a URL do Blob após a abertura
   };
 
   return (
@@ -288,19 +296,6 @@ const AddPrescriptionPage = () => {
           <Save className="mr-2 h-4 w-4" /> Salvar Receita
         </Button>
       </div>
-
-      {/* Modal de Visualização da Receita (agora para PDF) */}
-      <PrescriptionPreviewDialog
-        isOpen={isViewModalOpen}
-        onClose={() => setIsViewModalOpen(false)}
-        animalName={animal.name}
-        animalId={animal.id}
-        animalSpecies={animal.species}
-        tutorName={client.name}
-        tutorAddress={client.address}
-        medications={currentPrescriptionMedications}
-        generalObservations={currentPrescriptionGeneralObservations}
-      />
     </div>
   );
 };
