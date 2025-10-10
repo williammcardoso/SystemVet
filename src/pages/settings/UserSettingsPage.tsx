@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"; // Importar Card components
 import { toast } from "sonner";
 import { mockUserSettings, updateMockUserSettings } from "@/mockData/settings";
 
@@ -35,37 +36,55 @@ const UserSettingsPage = () => {
       </div>
 
       <div className="grid gap-6 py-4 max-w-3xl mx-auto">
-        <div className="space-y-2">
-          <Label htmlFor="userName">Nome Completo</Label>
-          <Input id="userName" value={settings.userName} onChange={handleChange} />
-        </div>
+        <Card>
+          <CardHeader>
+            <CardTitle>Informações Pessoais</CardTitle>
+          </CardHeader>
+          <CardContent className="grid gap-4">
+            <div className="space-y-2">
+              <Label htmlFor="userName">Nome Completo</Label>
+              <Input id="userName" value={settings.userName} onChange={handleChange} />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="userEmail">Email</Label>
+              <Input id="userEmail" type="email" value={settings.userEmail} onChange={handleChange} />
+            </div>
+          </CardContent>
+        </Card>
 
-        <div className="space-y-2">
-          <Label htmlFor="userEmail">Email</Label>
-          <Input id="userEmail" type="email" value={settings.userEmail} onChange={handleChange} />
-        </div>
+        <Card>
+          <CardHeader>
+            <CardTitle>Informações Profissionais</CardTitle>
+          </CardHeader>
+          <CardContent className="grid gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <Label htmlFor="userCrmv">CRMV</Label>
+                <Input id="userCrmv" value={settings.userCrmv} onChange={handleChange} />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="userMapaRegistration">Registro no MAPA</Label>
+                <Input id="userMapaRegistration" value={settings.userMapaRegistration} onChange={handleChange} />
+              </div>
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="signatureText">Texto da Assinatura (para relatórios)</Label>
+              <Textarea id="signatureText" value={settings.signatureText} onChange={handleChange} rows={2} />
+            </div>
+          </CardContent>
+        </Card>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div className="space-y-2">
-            <Label htmlFor="userCrmv">CRMV</Label>
-            <Input id="userCrmv" value={settings.userCrmv} onChange={handleChange} />
-          </div>
-          <div className="space-y-2">
-            <Label htmlFor="userMapaRegistration">Registro no MAPA</Label>
-            <Input id="userMapaRegistration" value={settings.userMapaRegistration} onChange={handleChange} />
-          </div>
-        </div>
-
-        <div className="space-y-2">
-          <Label htmlFor="signatureText">Texto da Assinatura (para relatórios)</Label>
-          <Textarea id="signatureText" value={settings.signatureText} onChange={handleChange} rows={2} />
-        </div>
-
-        {/* Placeholder para mudança de senha */}
-        <div className="space-y-2">
-          <Label htmlFor="password">Alterar Senha</Label>
-          <Input id="password" type="password" placeholder="Deixe em branco para não alterar" />
-        </div>
+        <Card>
+          <CardHeader>
+            <CardTitle>Segurança</CardTitle>
+          </CardHeader>
+          <CardContent className="grid gap-4">
+            <div className="space-y-2">
+              <Label htmlFor="password">Alterar Senha</Label>
+              <Input id="password" type="password" placeholder="Deixe em branco para não alterar" />
+            </div>
+          </CardContent>
+        </Card>
       </div>
 
       <div className="flex justify-end gap-2 mt-6">

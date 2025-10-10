@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"; // Importar Card components
 import { toast } from "sonner";
 import { mockCompanySettings, updateMockCompanySettings } from "@/mockData/settings";
 
@@ -35,54 +36,71 @@ const CompanySettingsPage = () => {
       </div>
 
       <div className="grid gap-6 py-4 max-w-3xl mx-auto">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div className="space-y-2">
-            <Label htmlFor="companyName">Nome da Empresa</Label>
-            <Input id="companyName" value={settings.companyName} onChange={handleChange} />
-          </div>
-          <div className="space-y-2">
-            <Label htmlFor="crmv">CRMV</Label>
-            <Input id="crmv" value={settings.crmv} onChange={handleChange} />
-          </div>
-        </div>
+        <Card>
+          <CardHeader>
+            <CardTitle>Informações Gerais</CardTitle>
+          </CardHeader>
+          <CardContent className="grid gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <Label htmlFor="companyName">Nome da Empresa</Label>
+                <Input id="companyName" value={settings.companyName} onChange={handleChange} />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="crmv">CRMV</Label>
+                <Input id="crmv" value={settings.crmv} onChange={handleChange} />
+              </div>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <Label htmlFor="mapaRegistration">Registro no MAPA</Label>
+                <Input id="mapaRegistration" value={settings.mapaRegistration} onChange={handleChange} />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="phone">Telefone</Label>
+                <Input id="phone" value={settings.phone} onChange={handleChange} />
+              </div>
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="email">Email</Label>
+              <Input id="email" type="email" value={settings.email} onChange={handleChange} />
+            </div>
+          </CardContent>
+        </Card>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div className="space-y-2">
-            <Label htmlFor="mapaRegistration">Registro no MAPA</Label>
-            <Input id="mapaRegistration" value={settings.mapaRegistration} onChange={handleChange} />
-          </div>
-          <div className="space-y-2">
-            <Label htmlFor="phone">Telefone</Label>
-            <Input id="phone" value={settings.phone} onChange={handleChange} />
-          </div>
-        </div>
+        <Card>
+          <CardHeader>
+            <CardTitle>Endereço</CardTitle>
+          </CardHeader>
+          <CardContent className="grid gap-4">
+            <div className="space-y-2">
+              <Label htmlFor="address">Endereço Completo</Label>
+              <Textarea id="address" value={settings.address} onChange={handleChange} rows={2} />
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <Label htmlFor="city">Cidade</Label>
+                <Input id="city" value={settings.city} onChange={handleChange} />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="zipCode">CEP</Label>
+                <Input id="zipCode" value={settings.zipCode} onChange={handleChange} />
+              </div>
+            </div>
+          </CardContent>
+        </Card>
 
-        <div className="space-y-2">
-          <Label htmlFor="email">Email</Label>
-          <Input id="email" type="email" value={settings.email} onChange={handleChange} />
-        </div>
-
-        <div className="space-y-2">
-          <Label htmlFor="address">Endereço</Label>
-          <Textarea id="address" value={settings.address} onChange={handleChange} rows={2} />
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div className="space-y-2">
-            <Label htmlFor="city">Cidade</Label>
-            <Input id="city" value={settings.city} onChange={handleChange} />
-          </div>
-          <div className="space-y-2">
-            <Label htmlFor="zipCode">CEP</Label>
-            <Input id="zipCode" value={settings.zipCode} onChange={handleChange} />
-          </div>
-        </div>
-
-        {/* Placeholder para upload de logo */}
-        <div className="space-y-2">
-          <Label htmlFor="logoUrl">URL do Logo (Placeholder)</Label>
-          <Input id="logoUrl" value={settings.logoUrl} onChange={handleChange} placeholder="Ex: /public/logo.png" />
-        </div>
+        <Card>
+          <CardHeader>
+            <CardTitle>Outros</CardTitle>
+          </CardHeader>
+          <CardContent className="grid gap-4">
+            <div className="space-y-2">
+              <Label htmlFor="logoUrl">URL do Logo (Placeholder)</Label>
+              <Input id="logoUrl" value={settings.logoUrl} onChange={handleChange} placeholder="Ex: /public/logo.png" />
+            </div>
+          </CardContent>
+        </Card>
       </div>
 
       <div className="flex justify-end gap-2 mt-6">
