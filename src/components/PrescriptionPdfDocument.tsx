@@ -3,7 +3,7 @@ import { Document, Page, View, Text, StyleSheet, Font } from "@react-pdf/rendere
 import type { MedicationData } from "@/types/medication"; // Importar como tipo
 
 // Register a font if needed (e.g., for custom fonts or if default is not working)
-// Font.register({ family: "Roboto", src: "https://fonts.gstatic.com/s/roboto/v20/KFOmCnqEu92Fr1Mu4mxP.ttf" });
+// Font.register({ family: "Roboto", src: "https://fonts.gstatic.com/s/roboto/v20/KFOmCnqEu92Fr1Mu4mxP" });
 
 const styles = StyleSheet.create({
   page: {
@@ -276,8 +276,23 @@ const PrescriptionPdfDocument: React.FC<PrescriptionPdfDocumentProps> = ({
                   <View style={styles.medicationHeaderLine}>
                     <Text style={styles.medicationNumber}>{index + 1})</Text>
                     <Text style={styles.medicationNameConcentration}>
-                      {/* Ajuste para garantir que sempre haja um texto, mesmo que vazio */}
-                      {`${med.medicationName || ''}${med.concentration ? ` ${med.concentration}` : ''}` || 'Medicamento sem nome'}
+                      {/* Lógica mais robusta para garantir que a string não seja vazia */}
+                      {(() => {
+                        const namePart = med.medicationName?.trim();
+                        const concentrationPart = med.concentration?.trim();
+                        let displayString = '';
+
+                        if (namePart && concentrationPart) {
+                          displayString = `${namePart} ${concentrationPart}`;
+                        } else if (namePart) {
+                          displayString = namePart;
+                        } else if (concentrationPart) {
+                          displayString = concentrationPart;
+                        } else {
+                          displayString = 'Medicamento sem nome'; // Fallback se ambos estiverem vazios
+                        }
+                        return displayString;
+                      })()}
                     </Text>
                     <View style={styles.lineSeparator} />
                     <View style={styles.badgeContainer}>
