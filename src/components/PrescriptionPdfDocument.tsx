@@ -158,10 +158,7 @@ const styles = StyleSheet.create({
     lineHeight: 1.5,
   },
   footer: {
-    position: 'absolute', // Position absolutely
-    bottom: 30, // Distance from the bottom of the page
-    left: 30,
-    right: 30,
+    marginTop: 30, // Adiciona uma margem superior para separar do conteúdo
     textAlign: "center",
     fontSize: 10,
     color: "#666",
@@ -303,7 +300,7 @@ const PrescriptionPdfDocument: React.FC<PrescriptionPdfDocumentProps> = ({
         )}
 
         {/* Footer with updated signature */}
-        <View style={styles.footer} fixed>
+        <View style={styles.footer}>
           <Text style={styles.signatureDate}>{formatDateToPortuguese(currentDate)}</Text>
           <Text style={styles.signatureText}>Assinado eletronicamente por</Text>
           <Text style={styles.signatureName}>Dr. William Cardoso</Text>
