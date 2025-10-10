@@ -231,7 +231,7 @@ export const PrescriptionPdfContent = ({
       <Page
         size="A4"
         style={styles.page}
-        render={({ pageNumber, totalPages }) => ( // Usar o render prop para acesso ao número da página
+        render={({ pageNumber, totalPages }) => (
           <>
             {/* Clinic Header */}
             <View style={styles.clinicHeader}>
@@ -278,7 +278,6 @@ export const PrescriptionPdfContent = ({
                       <View style={styles.medicationHeaderLine}>
                         <Text style={styles.medicationNumber}>{index + 1})</Text>
                         <Text style={styles.medicationNameConcentration}>
-                          {/* Lógica mais robusta para garantir que a string não seja vazia */}
                           {(() => {
                             const name = med.medicationName?.trim() || '';
                             const concentration = med.concentration?.trim() || '';
