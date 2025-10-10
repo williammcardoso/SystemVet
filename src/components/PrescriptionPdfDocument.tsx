@@ -308,11 +308,11 @@ const PrescriptionPdfDocument: React.FC<PrescriptionPdfDocumentProps> = ({
                   <Text style={styles.medicationInstructions}>
                     {med.generatedInstructions || 'Sem instruções de uso.'}
                   </Text>
-                  {med.generalObservations && med.generalObservations.trim().length > 0 ? (
+                  {med.generalObservations && (
                     <Text style={styles.medicationObservations}>
                       Obs. Medicamento: {med.generalObservations}
                     </Text>
-                  ) : null}
+                  )}
                 </View>
               ))}
             </View>
@@ -327,7 +327,7 @@ const PrescriptionPdfDocument: React.FC<PrescriptionPdfDocumentProps> = ({
           )}
         </View>
 
-        {/* FOOTER - Agora com a lógica de renderização do número da página no Text */}
+        {/* FOOTER - Assinatura sem número de página */}
         <View
           fixed
           style={styles.signatureFooter} // Usando o estilo definido
@@ -338,9 +338,6 @@ const PrescriptionPdfDocument: React.FC<PrescriptionPdfDocumentProps> = ({
           <Text style={styles.signatureText}>
             Assinatura do Veterinário: _________________________
           </Text>
-          <Text style={{ fontSize: 8, color: '#999', marginTop: 5 }} render={({ pageNumber, totalPages }) => (
-            `Página ${pageNumber} de ${totalPages}`
-          )} />
         </View>
       </Page>
     </Document>
