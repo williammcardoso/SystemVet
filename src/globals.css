@@ -4,55 +4,40 @@
 
 @layer base {
   :root {
-    --background: 210 30% 98%; /* Very light gray/off-white for main content area */
-    --foreground: 222.2 84% 4.9%; /* Dark text */
+    --background: 0 0% 100%;
+    --foreground: 222.2 84% 4.9%;
 
-    --card: 0 0% 100%; /* Pure white for cards */
+    --card: 0 0% 100%;
     --card-foreground: 222.2 84% 4.9%;
 
     --popover: 0 0% 100%;
     --popover-foreground: 222.2 84% 4.9%;
 
-    --primary: 217.2 91.2% 59.8%; /* Vibrant Blue */
-    --primary-foreground: 210 40% 98%; /* Off-white for primary text */
+    --primary: 222.2 47.4% 11.2%;
+    --primary-foreground: 210 40% 98%;
 
-    --secondary: 210 40% 96.1%; /* Light Gray */
-    --secondary-foreground: 222.2 47.4% 11.2%; /* Darker gray for secondary text */
+    --secondary: 210 40% 96.1%;
+    --secondary-foreground: 222.2 47.4% 11.2%;
 
     --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%; /* Medium gray for descriptive text */
+    --muted-foreground: 215.4 16.3% 46.9%;
 
-    --accent: 142.1 76.2% 36.3%; /* Vibrant Green */
-    --accent-foreground: 210 40% 98%; /* Off-white for accent text */
+    --accent: 210 40% 96.1%;
+    --accent-foreground: 222.2 47.4% 11.2%;
 
-    --destructive: 0 84.2% 60.2%; /* Red */
+    --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 210 40% 98%;
 
-    --border: 214.3 31.8% 91.4%; /* Light gray border */
+    --border: 214.3 31.8% 91.4%;
     --input: 214.3 31.8% 91.4%;
-    --ring: 217.2 91.2% 59.8%; /* Same as primary for focus rings */
+    --ring: 222.2 84% 4.9%;
 
     --radius: 0.5rem;
-
-    --sidebar-background: 222.2 47.4% 11.2%; /* Dark Blue-Gray */
-    --sidebar-foreground: 210 40% 98%; /* Off-white */
-
-    --sidebar-primary: 217.2 91.2% 59.8%; /* Vibrant Blue */
-    --sidebar-primary-foreground: 210 40% 98%;
-
-    --sidebar-accent: 217.2 32.6% 17.5%; /* Darker secondary for sidebar hover */
-    --sidebar-accent-foreground: 210 40% 98%;
-
-    --sidebar-border: 222.2 47.4% 15%; /* Slightly lighter dark blue-gray */
-    --sidebar-ring: 217.2 91.2% 59.8%;
-
-    --badge-green-background: 142.1 76.2% 90%; /* Light green for badges */
-    --badge-green-foreground: 142.1 76.2% 30%; /* Darker green for badge text */
   }
 
   .dark {
-    --background: 222.2 84% 4.9%; /* Dark Blue */
-    --foreground: 210 40% 98%; /* Off-white */
+    --background: 222.2 84% 4.9%;
+    --foreground: 210 40% 98%;
 
     --card: 222.2 84% 4.9%;
     --card-foreground: 210 40% 98%;
@@ -60,16 +45,16 @@
     --popover: 222.2 84% 4.9%;
     --popover-foreground: 210 40% 98%;
 
-    --primary: 217.2 91.2% 59.8%; /* Vibrant Blue */
-    --primary-foreground: 222.2 47.4% 11.2%; /* Dark text for primary */
+    --primary: 210 40% 98%;
+    --primary-foreground: 222.2 47.4% 11.2%;
 
-    --secondary: 217.2 32.6% 17.5%; /* Darker Gray */
+    --secondary: 217.2 32.6% 17.5%;
     --secondary-foreground: 210 40% 98%;
 
     --muted: 217.2 32.6% 17.5%;
     --muted-foreground: 215 20.2% 65.1%;
 
-    --accent: 142.1 76.2% 36.3%; /* Vibrant Green */
+    --accent: 217.2 32.6% 17.5%;
     --accent-foreground: 210 40% 98%;
 
     --destructive: 0 62.8% 30.6%;
@@ -77,19 +62,7 @@
 
     --border: 217.2 32.6% 17.5%;
     --input: 217.2 32.6% 17.5%;
-    --ring: 217.2 91.2% 59.8%; /* Same as primary for focus rings */
-
-    --sidebar-background: 222.2 47.4% 11.2%; /* Dark Blue-Gray */
-    --sidebar-foreground: 210 40% 98%; /* Off-white */
-    --sidebar-primary: 217.2 91.2% 59.8%; /* Vibrant Blue */
-    --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 217.2 32.6% 17.5%; /* Darker secondary for sidebar hover */
-    --sidebar-accent-foreground: 210 40% 98%;
-    --sidebar-border: 222.2 47.4% 15%;
-    --sidebar-ring: 217.2 91.2% 59.8%;
-
-    --badge-green-background: 142.1 76.2% 20%;
-    --badge-green-foreground: 142.1 76.2% 70%;
+    --ring: 210 40% 98%;
   }
 }
 
