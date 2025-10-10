@@ -344,7 +344,7 @@ export const PrescriptionPdfContent = ({
             </>
           );
         }}
-      </Page>
+      /> {/* Componente Page auto-fechado */}
     </Document>
   );
 };
