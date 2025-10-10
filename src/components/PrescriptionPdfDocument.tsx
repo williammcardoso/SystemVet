@@ -315,30 +315,21 @@ const PrescriptionPdfDocument: React.FC<PrescriptionPdfDocumentProps> = ({
           )}
         </View>
 
-        {/* FOOTER - Agora com lógica para aparecer apenas na última página */}
+        {/* FOOTER - Agora com a lógica de renderização do número da página no Text */}
         <View
           fixed
           style={styles.signatureFooter} // Usando o estilo definido
-          render={({ pageNumber, totalPages }) => {
-            console.log(`Absolute footer being rendered! Page ${pageNumber} de ${totalPages}`);
-            if (pageNumber === totalPages) { // Renderiza apenas na última página
-              return (
-                <View>
-                  <Text style={styles.signatureDate}>
-                    Data: {formatDateToPortuguese(currentDate)}
-                  </Text>
-                  <Text style={styles.signatureText}>
-                    Assinatura do Veterinário: _________________________
-                  </Text>
-                  <Text style={{ fontSize: 8, color: '#999', marginTop: 5 }}>
-                    Página {pageNumber} de {totalPages}
-                  </Text>
-                </View>
-              );
-            }
-            return null; // Não renderiza nas outras páginas
-          }}
-        />
+        >
+          <Text style={styles.signatureDate}>
+            Data: {formatDateToPortuguese(currentDate)}
+          </Text>
+          <Text style={styles.signatureText}>
+            Assinatura do Veterinário: _________________________
+          </Text>
+          <Text style={{ fontSize: 8, color: '#999', marginTop: 5 }} render={({ pageNumber, totalPages }) => (
+            `Página ${pageNumber} de ${totalPages}`
+          )} />
+        </View>
       </Page>
     </Document>
   );
