@@ -190,19 +190,21 @@ const formatDateToPortuguese = (date) => {
   return formattedDate.toUpperCase();
 };
 
-// A interface PrescriptionPdfContentProps ainda é útil para tipagem no AddPrescriptionPage.tsx
-// mas não é usada diretamente aqui no arquivo .jsx
-// interface PrescriptionPdfContentProps {
-//   animalName: string;
-//   animalId: string;
-//   animalSpecies: string;
-//   tutorName: string;
-//   tutorAddress: string;
-//   medications: MedicationData[];
-//   generalObservations: string;
-// }
+/**
+ * @typedef {object} PrescriptionPdfContentProps
+ * @property {string} animalName
+ * @property {string} animalId
+ * @property {string} animalSpecies
+ * @property {string} tutorName
+ * @property {string} tutorAddress
+ * @property {MedicationData[]} medications
+ * @property {string} generalObservations
+ */
 
-// Exporta uma função que retorna o JSX do PDF, não um React.FC
+/**
+ * Exporta uma função que retorna o JSX do PDF, não um React.FC
+ * @param {PrescriptionPdfContentProps} props
+ */
 export const PrescriptionPdfContent = ({
   animalName,
   animalId,
@@ -278,8 +280,8 @@ export const PrescriptionPdfContent = ({
                         <Text style={styles.medicationNameConcentration}>
                           {/* Lógica mais robusta para garantir que a string não seja vazia */}
                           {(() => {
-                            const name = med.medicationName?.trim() || ''; // Garante que é uma string
-                            const concentration = med.concentration?.trim() || ''; // Garante que é uma string
+                            const name = med.medicationName?.trim() || '';
+                            const concentration = med.concentration?.trim() || '';
                             
                             if (name.length > 0 && concentration.length > 0) {
                               return `${name} ${concentration}`;
@@ -288,7 +290,7 @@ export const PrescriptionPdfContent = ({
                             } else if (concentration.length > 0) {
                               return concentration;
                             }
-                            return 'Medicamento sem nome'; // Fallback final
+                            return 'Medicamento sem nome';
                           })()}
                         </Text>
                         <View style={styles.lineSeparator} />
