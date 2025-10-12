@@ -1,32 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Link, useParams, useNavigate } from "react-router-dom";
 import * as LucideIcons from "lucide-react"; // Importar todos os ícones sob um alias
-import {
-  ArrowLeft,
-  Plus,
-  Edit,
-  Trash2,
-  CalendarDays,
-  Stethoscope,
-  DollarSign,
-  Syringe,
-  Weight,
-  FileText,
-  ClipboardList,
-  MessageSquare,
-  Eye,
-  X,
-  Save,
-  PawPrint,
-  User, // Adicionado User icon
-  Heart, // Adicionado Heart icon
-  Printer, // Adicionado Printer icon
-  Download, // Adicionado Download icon
-  Calendar, // Adicionado Calendar icon
-  Scale, // Adicionado Scale icon para peso
-  // Female, // Removido: Usar LucideIcons.Female
-  // Male, // Removido: Usar LucideIcons.Male
-} from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -359,7 +333,7 @@ const PatientRecordPage = () => {
         <h1 className="text-3xl font-bold mb-4">Animal ou Cliente não encontrado.</h1>
         <Link to="/clients">
           <Button variant="outline">
-            <ArrowLeft className="mr-2 h-4 w-4" /> Voltar para Clientes
+            <LucideIcons.ArrowLeft className="mr-2 h-4 w-4" /> Voltar para Clientes
           </Button>
         </Link>
       </div>
@@ -499,7 +473,7 @@ const PatientRecordPage = () => {
           <div className="flex items-center gap-4">
             <div>
               <h1 className="text-2xl font-semibold flex items-center gap-3 text-[#1E293B] dark:text-gray-100 group">
-                <User className="h-5 w-5 text-gray-500 dark:text-gray-400" /> Prontuário Consolidado
+                <LucideIcons.User className="h-5 w-5 text-gray-500 dark:text-gray-400" /> Prontuário Consolidado
               </h1>
               <p className="text-sm text-[#6B7280] dark:text-gray-400 mt-1 mb-4">
                 Visão completa do histórico médico
