@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Link, useParams, useNavigate } from "react-router-dom";
+import * as LucideIcons from "lucide-react"; // Importar todos os ícones sob um alias
 import {
   ArrowLeft,
   Plus,
@@ -23,8 +24,8 @@ import {
   Download, // Adicionado Download icon
   Calendar, // Adicionado Calendar icon
   Scale, // Adicionado Scale icon para peso
-  Female, // Corrigido: Usar Female para feminino
-  Male, // Corrigido: Usar Male para masculino
+  // Female, // Removido: Usar LucideIcons.Female
+  // Male, // Removido: Usar LucideIcons.Male
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -507,14 +508,14 @@ const PatientRecordPage = () => {
           </div>
           <div className="flex items-center gap-2">
             <Button variant="outline" className="rounded-md border-gray-300 text-gray-700 hover:bg-gray-100 hover:text-gray-900 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200 dark:hover:bg-gray-700 transition-colors duration-200">
-              <Printer className="mr-2 h-4 w-4" /> Imprimir
+              <LucideIcons.Printer className="mr-2 h-4 w-4" /> Imprimir
             </Button>
             <Button variant="outline" className="rounded-md border-gray-300 text-gray-700 hover:bg-gray-100 hover:text-gray-900 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200 dark:hover:bg-gray-700 transition-colors duration-200">
-              <Download className="mr-2 h-4 w-4" /> Exportar PDF
+              <LucideIcons.Download className="mr-2 h-4 w-4" /> Exportar PDF
             </Button>
             <Link to={`/clients/${client.id}`}>
               <Button variant="outline" className="rounded-md border-gray-300 text-gray-700 hover:bg-gray-100 hover:text-gray-900 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200 dark:hover:bg-gray-700 transition-colors duration-200">
-                <ArrowLeft className="mr-2 h-4 w-4" /> Voltar para {client.name}
+                <LucideIcons.ArrowLeft className="mr-2 h-4 w-4" /> Voltar para {client.name}
               </Button>
             </Link>
           </div>
@@ -529,7 +530,7 @@ const PatientRecordPage = () => {
           <Card className="bg-white/90 backdrop-blur-sm border border-gray-200 dark:border-gray-700 rounded-2xl shadow-[0_1px_3px_rgba(0,0,0,0.05)] hover:shadow-[0_4px_8px_rgba(0,0,0,0.08)] transition-all duration-300 border-t-4 border-blue-400 dark:bg-gray-800/90">
             <CardHeader className="pb-3">
               <CardTitle className="flex items-center gap-2 text-lg font-semibold text-[#374151] dark:text-gray-100">
-                <Heart className="h-5 w-5 text-red-500" /> Informações do Paciente
+                <LucideIcons.Heart className="h-5 w-5 text-red-500" /> Informações do Paciente
               </CardTitle>
             </CardHeader>
             <CardContent className="p-4 grid grid-cols-1 md:grid-cols-3 gap-4 pt-0">
@@ -556,19 +557,19 @@ const PatientRecordPage = () => {
               {/* Coluna 2: Detalhes do Animal */}
               <div className="grid grid-cols-2 gap-y-2">
                 <div className="flex items-center gap-2">
-                  <Calendar className="h-4 w-4 text-muted-foreground" />
+                  <LucideIcons.Calendar className="h-4 w-4 text-muted-foreground" />
                   <p className="text-sm text-[#4B5563] dark:text-gray-400">Idade: <span className="font-normal text-foreground">{calculateAge(animal.birthday)}</span></p>
                 </div>
                 <div className="flex items-center gap-2">
-                  <Scale className="h-4 w-4 text-muted-foreground" />
+                  <LucideIcons.Scale className="h-4 w-4 text-muted-foreground" />
                   <p className="text-sm text-[#4B5563] dark:text-gray-400">Peso: <span className="font-normal text-foreground">{animal.weight.toFixed(1)} kg</span></p>
                 </div>
                 <div className="flex items-center gap-2">
-                  {animal.gender === "Macho" ? <Male className="h-4 w-4 text-muted-foreground" /> : <Female className="h-4 w-4 text-muted-foreground" />}
+                  {animal.gender === "Macho" ? <LucideIcons.Male className="h-4 w-4 text-muted-foreground" /> : <LucideIcons.Female className="h-4 w-4 text-muted-foreground" />}
                   <p className="text-sm text-[#4B5563] dark:text-gray-400">Sexo: <span className="font-normal text-foreground">{animal.gender}</span></p>
                 </div>
                 <div className="flex items-center gap-2">
-                  <CalendarDays className="h-4 w-4 text-muted-foreground" />
+                  <LucideIcons.CalendarDays className="h-4 w-4 text-muted-foreground" />
                   <p className="text-sm text-[#4B5563] dark:text-gray-400">Última consulta: <span className="font-normal text-foreground">{formatDate(animal.lastConsultationDate || '')}</span></p>
                 </div>
               </div>
@@ -593,28 +594,28 @@ const PatientRecordPage = () => {
         <Tabs defaultValue="appointments" className="w-full mt-6">
           <TabsList className="grid w-full grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-8 h-auto flex-wrap bg-white/90 backdrop-blur-sm border border-gray-200 dark:border-gray-700 rounded-2xl shadow-[0_1px_3px_rgba(0,0,0,0.05)] p-2">
             <TabsTrigger value="appointments" className="rounded-xl data-[state=active]:bg-blue-500 data-[state=active]:text-white transition-colors duration-200 text-gray-700 dark:text-gray-300 data-[state=active]:dark:bg-blue-600">
-              <Stethoscope className="h-4 w-4 mr-2" /> Atendimento
+              <LucideIcons.Stethoscope className="h-4 w-4 mr-2" /> Atendimento
             </TabsTrigger>
             <TabsTrigger value="exams" className="rounded-xl data-[state=active]:bg-blue-500 data-[state=active]:text-white transition-colors duration-200 text-gray-700 dark:text-gray-300 data-[state=active]:dark:bg-blue-600">
-              <CalendarDays className="h-4 w-4 mr-2" /> Exames
+              <LucideIcons.CalendarDays className="h-4 w-4 mr-2" /> Exames
             </TabsTrigger>
             <TabsTrigger value="sales" className="rounded-xl data-[state=active]:bg-blue-500 data-[state=active]:text-white transition-colors duration-200 text-gray-700 dark:text-gray-300 data-[state=active]:dark:bg-blue-600">
-              <DollarSign className="h-4 w-4 mr-2" /> Vendas
+              <LucideIcons.DollarSign className="h-4 w-4 mr-2" /> Vendas
             </TabsTrigger>
             <TabsTrigger value="vaccines" className="rounded-xl data-[state=active]:bg-blue-500 data-[state=active]:text-white transition-colors duration-200 text-gray-700 dark:text-gray-300 data-[state=active]:dark:bg-blue-600">
-              <Syringe className="h-4 w-4 mr-2" /> Vacinas
+              <LucideIcons.Syringe className="h-4 w-4 mr-2" /> Vacinas
             </TabsTrigger>
             <TabsTrigger value="weight" className="rounded-xl data-[state=active]:bg-blue-500 data-[state=active]:text-white transition-colors duration-200 text-gray-700 dark:text-gray-300 data-[state=active]:dark:bg-blue-600">
-              <Weight className="h-4 w-4 mr-2" /> Peso
+              <LucideIcons.Weight className="h-4 w-4 mr-2" /> Peso
             </TabsTrigger>
             <TabsTrigger value="documents" className="rounded-xl data-[state=active]:bg-blue-500 data-[state=active]:text-white transition-colors duration-200 text-gray-700 dark:text-gray-300 data-[state=active]:dark:bg-blue-600">
-              <FileText className="h-4 w-4 mr-2" /> Documentos
+              <LucideIcons.FileText className="h-4 w-4 mr-2" /> Documentos
             </TabsTrigger>
             <TabsTrigger value="prescriptions" className="rounded-xl data-[state=active]:bg-blue-500 data-[state=active]:text-white transition-colors duration-200 text-gray-700 dark:text-gray-300 data-[state=active]:dark:bg-blue-600">
-              <ClipboardList className="h-4 w-4 mr-2" /> Receitas
+              <LucideIcons.ClipboardList className="h-4 w-4 mr-2" /> Receitas
             </TabsTrigger>
             <TabsTrigger value="observations" className="rounded-xl data-[state=active]:bg-blue-500 data-[state=active]:text-white transition-colors duration-200 text-gray-700 dark:text-gray-300 data-[state=active]:dark:bg-blue-600">
-              <MessageSquare className="h-4 w-4 mr-2" /> Observações
+              <LucideIcons.MessageSquare className="h-4 w-4 mr-2" /> Observações
             </TabsTrigger>
           </TabsList>
 
@@ -622,10 +623,10 @@ const PatientRecordPage = () => {
             <Card className="bg-white/90 backdrop-blur-sm border border-gray-200 dark:border-gray-700 rounded-2xl shadow-[0_1px_3px_rgba(0,0,0,0.05)] hover:shadow-[0_4px_8px_rgba(0,0,0,0.08)] transition-all duration-300 border-t-4 border-blue-400 dark:bg-gray-800/90">
               <CardHeader className="flex flex-row items-center justify-between pb-3">
                 <CardTitle className="flex items-center gap-2 text-lg font-semibold text-[#374151] dark:text-gray-100">
-                  <Stethoscope className="h-5 w-5 text-blue-500" /> Histórico de Atendimentos
+                  <LucideIcons.Stethoscope className="h-5 w-5 text-blue-500" /> Histórico de Atendimentos
                 </CardTitle>
                 <Button size="sm" className="rounded-md bg-gradient-to-r from-blue-500 to-indigo-500 text-white hover:from-blue-600 hover:to-indigo-600 font-semibold transition-all duration-200 shadow-md hover:shadow-lg">
-                  <Plus className="h-4 w-4 mr-2" /> Adicionar Atendimento
+                  <LucideIcons.Plus className="h-4 w-4 mr-2" /> Adicionar Atendimento
                 </Button>
               </CardHeader>
               <CardContent className="pt-0">
@@ -650,7 +651,7 @@ const PatientRecordPage = () => {
                             <TableCell>{app.notes}</TableCell>
                             <TableCell className="text-right">
                               <Button variant="ghost" size="sm" className="rounded-md hover:bg-gray-100 hover:text-gray-900 dark:hover:bg-gray-700 dark:hover:text-gray-200 transition-colors duration-200">
-                                <Eye className="h-4 w-4" />
+                                <LucideIcons.Eye className="h-4 w-4" />
                               </Button>
                             </TableCell>
                           </TableRow>
@@ -669,11 +670,11 @@ const PatientRecordPage = () => {
             <Card className="bg-white/90 backdrop-blur-sm border border-gray-200 dark:border-gray-700 rounded-2xl shadow-[0_1px_3px_rgba(0,0,0,0.05)] hover:shadow-[0_4px_8px_rgba(0,0,0,0.08)] transition-all duration-300 border-t-4 border-purple-400 dark:bg-gray-800/90">
               <CardHeader className="flex flex-row items-center justify-between pb-3">
                 <CardTitle className="flex items-center gap-2 text-lg font-semibold text-[#374151] dark:text-gray-100">
-                  <CalendarDays className="h-5 w-5 text-purple-500" /> Histórico de Exames
+                  <LucideIcons.CalendarDays className="h-5 w-5 text-purple-500" /> Histórico de Exames
                 </CardTitle>
                 <Link to={`/clients/${clientId}/animals/${animalId}/add-exam`}>
                   <Button size="sm" className="rounded-md bg-gradient-to-r from-blue-500 to-indigo-500 text-white hover:from-blue-600 hover:to-indigo-600 font-semibold transition-all duration-200 shadow-md hover:shadow-lg">
-                    <Plus className="h-4 w-4 mr-2" /> Adicionar Exame
+                    <LucideIcons.Plus className="h-4 w-4 mr-2" /> Adicionar Exame
                   </Button>
                 </Link>
               </CardHeader>
@@ -699,7 +700,7 @@ const PatientRecordPage = () => {
                             <TableCell>{exam.vet}</TableCell>
                             <TableCell className="text-right">
                               <Button variant="ghost" size="sm" className="rounded-md hover:bg-gray-100 hover:text-gray-900 dark:hover:bg-gray-700 dark:hover:text-gray-200 transition-colors duration-200">
-                                <Eye className="h-4 w-4" />
+                                <LucideIcons.Eye className="h-4 w-4" />
                               </Button>
                             </TableCell>
                           </TableRow>
@@ -920,10 +921,10 @@ const PatientRecordPage = () => {
                 </div>
                 <DialogFooter>
                   <Button variant="outline" onClick={() => setIsAddExamDialogOpen(false)} className="bg-white border border-gray-300 text-gray-700 hover:bg-gray-50 rounded-md transition-all duration-200 shadow-sm hover:shadow-md dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200 dark:hover:bg-gray-600">
-                    <X className="mr-2 h-4 w-4" /> Cancelar
+                    <LucideIcons.X className="mr-2 h-4 w-4" /> Cancelar
                   </Button>
                   <Button onClick={handleAddExam} className="bg-gradient-to-r from-blue-500 to-indigo-500 text-white hover:from-blue-600 hover:to-indigo-600 rounded-md font-semibold transition-all duration-200 shadow-md hover:shadow-lg">
-                    <Save className="mr-2 h-4 w-4" /> Salvar Exame
+                    <LucideIcons.Save className="mr-2 h-4 w-4" /> Salvar Exame
                   </Button>
                 </DialogFooter>
               </DialogContent>
@@ -934,10 +935,10 @@ const PatientRecordPage = () => {
             <Card className="bg-white/90 backdrop-blur-sm border border-gray-200 dark:border-gray-700 rounded-2xl shadow-[0_1px_3px_rgba(0,0,0,0.05)] hover:shadow-[0_4px_8px_rgba(0,0,0,0.08)] transition-all duration-300 border-t-4 border-green-400 dark:bg-gray-800/90">
               <CardHeader className="flex flex-row items-center justify-between pb-3">
                 <CardTitle className="flex items-center gap-2 text-lg font-semibold text-[#374151] dark:text-gray-100">
-                  <DollarSign className="h-5 w-5 text-green-500" /> Histórico de Vendas
+                  <LucideIcons.DollarSign className="h-5 w-5 text-green-500" /> Histórico de Vendas
                 </CardTitle>
                 <Button size="sm" className="rounded-md bg-gradient-to-r from-blue-500 to-indigo-500 text-white hover:from-blue-600 hover:to-indigo-600 font-semibold transition-all duration-200 shadow-md hover:shadow-lg">
-                  <Plus className="h-4 w-4 mr-2" /> Adicionar Venda
+                  <LucideIcons.Plus className="h-4 w-4 mr-2" /> Adicionar Venda
                 </Button>
               </CardHeader>
               <CardContent className="pt-0">
@@ -962,7 +963,7 @@ const PatientRecordPage = () => {
                             <TableCell className="text-right">R$ {sale.total.toFixed(2)}</TableCell>
                             <TableCell className="text-right">
                               <Button variant="ghost" size="sm" className="rounded-md hover:bg-gray-100 hover:text-gray-900 dark:hover:bg-gray-700 dark:hover:text-gray-200 transition-colors duration-200">
-                                <Eye className="h-4 w-4" />
+                                <LucideIcons.Eye className="h-4 w-4" />
                               </Button>
                             </TableCell>
                           </TableRow>
@@ -981,10 +982,10 @@ const PatientRecordPage = () => {
             <Card className="bg-white/90 backdrop-blur-sm border border-gray-200 dark:border-gray-700 rounded-2xl shadow-[0_1px_3px_rgba(0,0,0,0.05)] hover:shadow-[0_4px_8px_rgba(0,0,0,0.08)] transition-all duration-300 border-t-4 border-yellow-400 dark:bg-gray-800/90">
               <CardHeader className="flex flex-row items-center justify-between pb-3">
                 <CardTitle className="flex items-center gap-2 text-lg font-semibold text-[#374151] dark:text-gray-100">
-                  <Syringe className="h-5 w-5 text-yellow-500" /> Histórico de Vacinas
+                  <LucideIcons.Syringe className="h-5 w-5 text-yellow-500" /> Histórico de Vacinas
                 </CardTitle>
                 <Button size="sm" className="rounded-md bg-gradient-to-r from-blue-500 to-indigo-500 text-white hover:from-blue-600 hover:to-indigo-600 font-semibold transition-all duration-200 shadow-md hover:shadow-lg">
-                  <Plus className="h-4 w-4 mr-2" /> Adicionar Vacina
+                  <LucideIcons.Plus className="h-4 w-4 mr-2" /> Adicionar Vacina
                 </Button>
               </CardHeader>
               <CardContent className="pt-0">
@@ -1009,7 +1010,7 @@ const PatientRecordPage = () => {
                             <TableCell>{vaccine.vet}</TableCell>
                             <TableCell className="text-right">
                               <Button variant="ghost" size="sm" className="rounded-md hover:bg-gray-100 hover:text-gray-900 dark:hover:bg-gray-700 dark:hover:text-gray-200 transition-colors duration-200">
-                                <Eye className="h-4 w-4" />
+                                <LucideIcons.Eye className="h-4 w-4" />
                               </Button>
                             </TableCell>
                           </TableRow>
@@ -1029,7 +1030,7 @@ const PatientRecordPage = () => {
             <Card className="bg-white/90 backdrop-blur-sm border border-gray-200 dark:border-gray-700 rounded-2xl shadow-[0_1px_3px_rgba(0,0,0,0.05)] hover:shadow-[0_4px_8px_rgba(0,0,0,0.08)] transition-all duration-300 border-t-4 border-orange-400 dark:bg-gray-800/90">
               <CardHeader className="flex flex-row items-center justify-between pb-3">
                 <CardTitle className="flex items-center gap-2 text-lg font-semibold text-[#374151] dark:text-gray-100">
-                  <Weight className="h-5 w-5 text-orange-500" /> Histórico de Peso
+                  <LucideIcons.Weight className="h-5 w-5 text-orange-500" /> Histórico de Peso
                 </CardTitle>
                 <div className="flex gap-2">
                   <Input
@@ -1046,7 +1047,7 @@ const PatientRecordPage = () => {
                     className="w-[120px] bg-white rounded-lg border-gray-200 dark:border-gray-600 focus:ring-2 focus:ring-blue-400 placeholder-[#9CA3AF] dark:placeholder-gray-500 transition-all duration-200"
                   />
                   <Button size="sm" onClick={handleAddWeight} className="rounded-md bg-gradient-to-r from-blue-500 to-indigo-500 text-white hover:from-blue-600 hover:to-indigo-600 font-semibold transition-all duration-200 shadow-md hover:shadow-lg">
-                    <Plus className="h-4 w-4 mr-2" /> Adicionar Peso
+                    <LucideIcons.Plus className="h-4 w-4 mr-2" /> Adicionar Peso
                   </Button>
                 </div>
               </CardHeader>
@@ -1082,7 +1083,7 @@ const PatientRecordPage = () => {
             <Card className="bg-white/90 backdrop-blur-sm border border-gray-200 dark:border-gray-700 rounded-2xl shadow-[0_1px_3px_rgba(0,0,0,0.05)] hover:shadow-[0_4px_8px_rgba(0,0,0,0.08)] transition-all duration-300 border-t-4 border-teal-400 dark:bg-gray-800/90">
               <CardHeader className="flex flex-row items-center justify-between pb-3">
                 <CardTitle className="flex items-center gap-2 text-lg font-semibold text-[#374151] dark:text-gray-100">
-                  <FileText className="h-5 w-5 text-teal-500" /> Documentos
+                  <LucideIcons.FileText className="h-5 w-5 text-teal-500" /> Documentos
                 </CardTitle>
                 <div className="flex gap-2 items-center flex-wrap">
                   <Input
@@ -1098,7 +1099,7 @@ const PatientRecordPage = () => {
                     className="w-[200px] bg-white rounded-lg border-gray-200 dark:border-gray-600 focus:ring-2 focus:ring-blue-400 placeholder-[#9CA3AF] dark:placeholder-gray-500 transition-all duration-200"
                   />
                   <Button size="sm" onClick={handleAddDocument} disabled={!newDocumentName || !newDocumentFile} className="rounded-md bg-gradient-to-r from-blue-500 to-indigo-500 text-white hover:from-blue-600 hover:to-indigo-600 font-semibold transition-all duration-200 shadow-md hover:shadow-lg">
-                    <Plus className="h-4 w-4 mr-2" /> Adicionar Documento
+                    <LucideIcons.Plus className="h-4 w-4 mr-2" /> Adicionar Documento
                   </Button>
                 </div>
               </CardHeader>
@@ -1121,7 +1122,7 @@ const PatientRecordPage = () => {
                             <TableCell className="text-right">
                               <a href={doc.fileUrl} target="_blank" rel="noopener noreferrer">
                                 <Button variant="ghost" size="sm" className="rounded-md hover:bg-gray-100 hover:text-gray-900 dark:hover:bg-gray-700 dark:hover:text-gray-200 transition-colors duration-200">
-                                  <Eye className="h-4 w-4" /> Ver
+                                  <LucideIcons.Eye className="h-4 w-4" /> Ver
                                 </Button>
                               </a>
                             </TableCell>
@@ -1142,11 +1143,11 @@ const PatientRecordPage = () => {
             <Card className="bg-white/90 backdrop-blur-sm border border-gray-200 dark:border-gray-700 rounded-2xl shadow-[0_1px_3px_rgba(0,0,0,0.05)] hover:shadow-[0_4px_8px_rgba(0,0,0,0.08)] transition-all duration-300 border-t-4 border-indigo-400 dark:bg-gray-800/90">
               <CardHeader className="flex flex-row items-center justify-between pb-3">
                 <CardTitle className="flex items-center gap-2 text-lg font-semibold text-[#374151] dark:text-gray-100">
-                  <ClipboardList className="h-5 w-5 text-indigo-500" /> Receitas
+                  <LucideIcons.ClipboardList className="h-5 w-5 text-indigo-500" /> Receitas
                 </CardTitle>
                 <Link to={`/clients/${clientId}/animals/${animalId}/add-prescription`}>
                   <Button size="sm" className="rounded-md bg-gradient-to-r from-blue-500 to-indigo-500 text-white hover:from-blue-600 hover:to-indigo-600 font-semibold transition-all duration-200 shadow-md hover:shadow-lg">
-                    <Plus className="h-4 w-4 mr-2" /> Adicionar Nova Receita
+                    <LucideIcons.Plus className="h-4 w-4 mr-2" /> Adicionar Nova Receita
                   </Button>
                 </Link>
               </CardHeader>
@@ -1171,7 +1172,7 @@ const PatientRecordPage = () => {
                             <TableCell className="text-right">
                               <Link to={`/clients/${clientId}/animals/${animalId}/edit-prescription/${rx.id}`}>
                                 <Button variant="ghost" size="sm" className="rounded-md hover:bg-gray-100 hover:text-gray-900 dark:hover:bg-gray-700 dark:hover:text-gray-200 transition-colors duration-200">
-                                  <Eye className="h-4 w-4" /> Ver
+                                  <LucideIcons.Eye className="h-4 w-4" /> Ver
                                 </Button>
                               </Link>
                             </TableCell>
@@ -1192,10 +1193,10 @@ const PatientRecordPage = () => {
             <Card className="bg-white/90 backdrop-blur-sm border border-gray-200 dark:border-gray-700 rounded-2xl shadow-[0_1px_3px_rgba(0,0,0,0.05)] hover:shadow-[0_4px_8px_rgba(0,0,0,0.08)] transition-all duration-300 border-t-4 border-gray-400 dark:bg-gray-800/90">
               <CardHeader className="flex flex-row items-center justify-between pb-3">
                 <CardTitle className="flex items-center gap-2 text-lg font-semibold text-[#374151] dark:text-gray-100">
-                  <MessageSquare className="h-5 w-5 text-gray-500" /> Observações Gerais
+                  <LucideIcons.MessageSquare className="h-5 w-5 text-gray-500" /> Observações Gerais
                 </CardTitle>
                 <Button size="sm" onClick={handleAddObservation} disabled={!newObservation.trim()} className="rounded-md bg-gradient-to-r from-blue-500 to-indigo-500 text-white hover:from-blue-600 hover:to-indigo-600 font-semibold transition-all duration-200 shadow-md hover:shadow-lg">
-                    <Plus className="h-4 w-4 mr-2" /> Adicionar Observação
+                    <LucideIcons.Plus className="h-4 w-4 mr-2" /> Adicionar Observação
                 </Button>
               </CardHeader>
               <CardContent className="pt-0">
