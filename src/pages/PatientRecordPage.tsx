@@ -17,6 +17,14 @@ import {
   X,
   Save,
   PawPrint,
+  User, // Adicionado User icon
+  Heart, // Adicionado Heart icon
+  Printer, // Adicionado Printer icon
+  Download, // Adicionado Download icon
+  Calendar, // Adicionado Calendar icon
+  Scale, // Adicionado Scale icon para peso
+  Venus, // Adicionado Venus icon para sexo
+  Mars, // Adicionado Mars icon para sexo
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -38,6 +46,8 @@ import { toast } from "sonner"; // Importar toast para notificações
 import { PrescriptionEntry } from "@/types/medication"; // Import PrescriptionEntry
 import { mockPrescriptions } from "@/mockData/prescriptions"; // Import mutable mockPrescriptions
 import { cn } from "@/lib/utils"; // Importar cn
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"; // Importar Avatar
+import { Badge } from "@/components/ui/badge"; // Importar Badge
 
 // Mock data (centralizado aqui para facilitar o exemplo, mas idealmente viria de um serviço)
 interface Animal {
@@ -45,17 +55,22 @@ interface Animal {
   name: string;
   species: string;
   breed: string;
-  gender: string;
-  birthday: string;
+  gender: "Macho" | "Fêmea" | "Outro"; // Updated gender type
+  birthday: string; // Keep birthday to calculate age
   coatColor: string;
   weight: number;
   microchip: string;
   notes: string;
+  status: 'Ativo' | 'Inativo'; // New field for status badge
+  lastConsultationDate?: string; // New field for last consultation
+  totalProcedures?: number; // New field for financial summary
+  totalValue?: number; // New field for financial summary
 }
 
 interface Client {
   id: string;
   name: string;
+  phone: string; // New field for client phone
   animals: Animal[];
 }
 
@@ -63,6 +78,7 @@ const mockClients: Client[] = [
   {
     id: "1",
     name: "William",
+    phone: "(19) 99363-1981", // Example phone
     animals: [
       {
         id: "a1",
@@ -70,11 +86,15 @@ const mockClients: Client[] = [
         species: "Cachorro",
         breed: "Labrador",
         gender: "Macho",
-        birthday: "2020-01-15",
+        birthday: "2020-01-15", // Age will be calculated from this
         coatColor: "Dourado",
         weight: 25.0,
         microchip: "123456789",
         notes: "Animal muito dócil e brincalhão.",
+        status: 'Ativo',
+        lastConsultationDate: "2024-07-20",
+        totalProcedures: 5,
+        totalValue: 435.00,
       },
       {
         id: "a2",
@@ -87,12 +107,17 @@ const mockClients: Client[] = [
         weight: 5.0,
         microchip: "987654321",
         notes: "Adora passear no parque.",
+        status: 'Ativo',
+        lastConsultationDate: "2024-06-10",
+        totalProcedures: 2,
+        totalValue: 150.00,
       },
     ],
   },
   {
     id: "2",
     name: "Maria",
+    phone: "(11) 98765-4321",
     animals: [
       {
         id: "a3",
@@ -105,6 +130,10 @@ const mockClients: Client[] = [
         weight: 18.0,
         microchip: "",
         notes: "Resgatado, um pouco tímido.",
+        status: 'Ativo',
+        lastConsultationDate: "2024-05-01",
+        totalProcedures: 3,
+        totalValue: 280.00,
       },
       {
         id: "a4",
@@ -117,12 +146,17 @@ const mockClients: Client[] = [
         weight: 3.5,
         microchip: "112233445",
         notes: "Gosta de dormir no sol.",
+        status: 'Inativo',
+        lastConsultationDate: "2023-12-15",
+        totalProcedures: 1,
+        totalValue: 80.00,
       },
     ],
   },
   {
     id: "3",
     name: "João",
+    phone: "(21) 91234-5678",
     animals: [
       {
         id: "a5",
@@ -135,12 +169,17 @@ const mockClients: Client[] = [
         weight: 30.0,
         microchip: "556677889",
         notes: "Animal de guarda, muito leal.",
+        status: 'Ativo',
+        lastConsultationDate: "2024-04-05",
+        totalProcedures: 7,
+        totalValue: 600.00,
       },
     ],
   },
   {
     id: "4",
     name: "Ana",
+    phone: "(31) 99876-5432",
     animals: [],
   },
 ];
@@ -224,6 +263,18 @@ interface ExamEntry {
   referenceTables?: string;
   conclusions?: string;
 }
+
+// Helper function to calculate age
+const calculateAge = (birthday: string) => {
+  const birthDate = new Date(birthday);
+  const today = new Date();
+  let age = today.getFullYear() - birthDate.getFullYear();
+  const m = today.getMonth() - birthDate.getMonth();
+  if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
+    age--;
+  }
+  return age > 0 ? `${age} ano(s)` : 'Menos de 1 ano';
+};
 
 const PatientRecordPage = () => {
   const { clientId, animalId } = useParams<{ clientId: string; animalId: string }>();
@@ -316,6 +367,7 @@ const PatientRecordPage = () => {
 
   // Helper function to format date to dd/mm/yyyy
   const formatDate = (dateString: string) => {
+    if (!dateString) return "N/A";
     const [year, month, day] = dateString.split('-');
     return `${day}/${month}/${year}`;
   };
@@ -446,18 +498,26 @@ const PatientRecordPage = () => {
           <div className="flex items-center gap-4">
             <div>
               <h1 className="text-2xl font-semibold flex items-center gap-3 text-[#1E293B] dark:text-gray-100 group">
-                <PawPrint className="h-5 w-5 text-gray-500 dark:text-gray-400" /> {animal.name} - Prontuário
+                <User className="h-5 w-5 text-gray-500 dark:text-gray-400" /> Prontuário Consolidado
               </h1>
               <p className="text-sm text-[#6B7280] dark:text-gray-400 mt-1 mb-4">
-                Gerencie o histórico de saúde e informações do animal.
+                Visão completa do histórico médico
               </p>
             </div>
           </div>
-          <Link to={`/clients/${client.id}`}>
+          <div className="flex items-center gap-2">
             <Button variant="outline" className="rounded-md border-gray-300 text-gray-700 hover:bg-gray-100 hover:text-gray-900 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200 dark:hover:bg-gray-700 transition-colors duration-200">
-              <ArrowLeft className="mr-2 h-4 w-4" /> Voltar para {client.name}
+              <Printer className="mr-2 h-4 w-4" /> Imprimir
             </Button>
-          </Link>
+            <Button variant="outline" className="rounded-md border-gray-300 text-gray-700 hover:bg-gray-100 hover:text-gray-900 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200 dark:hover:bg-gray-700 transition-colors duration-200">
+              <Download className="mr-2 h-4 w-4" /> Exportar PDF
+            </Button>
+            <Link to={`/clients/${client.id}`}>
+              <Button variant="outline" className="rounded-md border-gray-300 text-gray-700 hover:bg-gray-100 hover:text-gray-900 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200 dark:hover:bg-gray-700 transition-colors duration-200">
+                <ArrowLeft className="mr-2 h-4 w-4" /> Voltar para {client.name}
+              </Button>
+            </Link>
+          </div>
         </div>
         <p className="text-sm text-gray-400 dark:text-gray-500">
           Painel &gt; <Link to="/clients" className="hover:text-blue-500 dark:hover:text-blue-400">Clientes</Link> &gt; <Link to={`/clients/${client.id}`} className="hover:text-blue-500 dark:hover:text-blue-400">{client.name}</Link> &gt; {animal.name}
@@ -469,45 +529,62 @@ const PatientRecordPage = () => {
           <Card className="bg-white/90 backdrop-blur-sm border border-gray-200 dark:border-gray-700 rounded-2xl shadow-[0_1px_3px_rgba(0,0,0,0.05)] hover:shadow-[0_4px_8px_rgba(0,0,0,0.08)] transition-all duration-300 border-t-4 border-blue-400 dark:bg-gray-800/90">
             <CardHeader className="pb-3">
               <CardTitle className="flex items-center gap-2 text-lg font-semibold text-[#374151] dark:text-gray-100">
-                <PawPrint className="h-5 w-5 text-blue-500" /> Informações do Animal
+                <Heart className="h-5 w-5 text-red-500" /> Informações do Paciente
               </CardTitle>
             </CardHeader>
-            <CardContent className="p-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 pt-0">
-              <div>
-                <p className="text-sm text-[#4B5563] dark:text-gray-400 font-medium">Tutor:</p>
-                <p className="font-normal text-foreground">{client.name}</p>
+            <CardContent className="p-4 grid grid-cols-1 md:grid-cols-3 gap-4 pt-0">
+              {/* Coluna 1: Animal Info */}
+              <div className="flex flex-col items-start gap-2">
+                <div className="flex items-center gap-3">
+                  <Avatar className="h-12 w-12">
+                    <AvatarImage src="/public/placeholder.svg" alt="Animal Avatar" />
+                    <AvatarFallback className="bg-blue-500 text-white text-lg font-bold">{animal.name.charAt(0)}</AvatarFallback>
+                  </Avatar>
+                  <div>
+                    <p className="text-xl font-bold text-foreground">{animal.name}</p>
+                    <p className="text-sm text-muted-foreground">{animal.species} • {animal.breed}</p>
+                  </div>
+                </div>
+                <Badge className={cn(
+                  "mt-2 px-3 py-1 rounded-full text-xs font-medium",
+                  animal.status === 'Ativo' ? "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200" : "bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200"
+                )}>
+                  {animal.status}
+                </Badge>
               </div>
-              <div>
-                <p className="text-sm text-[#4B5563] dark:text-gray-400 font-medium">Espécie:</p>
-                <p className="font-normal text-foreground">{animal.species}</p>
+
+              {/* Coluna 2: Detalhes do Animal */}
+              <div className="grid grid-cols-2 gap-y-2">
+                <div className="flex items-center gap-2">
+                  <Calendar className="h-4 w-4 text-muted-foreground" />
+                  <p className="text-sm text-[#4B5563] dark:text-gray-400">Idade: <span className="font-normal text-foreground">{calculateAge(animal.birthday)}</span></p>
+                </div>
+                <div className="flex items-center gap-2">
+                  <Scale className="h-4 w-4 text-muted-foreground" />
+                  <p className="text-sm text-[#4B5563] dark:text-gray-400">Peso: <span className="font-normal text-foreground">{animal.weight.toFixed(1)} kg</span></p>
+                </div>
+                <div className="flex items-center gap-2">
+                  {animal.gender === "Macho" ? <Mars className="h-4 w-4 text-muted-foreground" /> : <Venus className="h-4 w-4 text-muted-foreground" />}
+                  <p className="text-sm text-[#4B5563] dark:text-gray-400">Sexo: <span className="font-normal text-foreground">{animal.gender}</span></p>
+                </div>
+                <div className="flex items-center gap-2">
+                  <CalendarDays className="h-4 w-4 text-muted-foreground" />
+                  <p className="text-sm text-[#4B5563] dark:text-gray-400">Última consulta: <span className="font-normal text-foreground">{formatDate(animal.lastConsultationDate || '')}</span></p>
+                </div>
               </div>
-              <div>
-                <p className="text-sm text-[#4B5563] dark:text-gray-400 font-medium">Raça:</p>
-                <p className="font-normal text-foreground">{animal.breed}</p>
-              </div>
-              <div>
-                <p className="text-sm text-[#4B5563] dark:text-gray-400 font-medium">Sexo:</p>
-                <p className="font-normal text-foreground">{animal.gender}</p>
-              </div>
-              <div>
-                <p className="text-sm text-[#4B5563] dark:text-gray-400 font-medium">Nascimento:</p>
-                <p className="font-normal text-foreground">{animal.birthday}</p>
-              </div>
-              <div>
-                <p className="text-sm text-[#4B5563] dark:text-gray-400 font-medium">Pelagem:</p>
-                <p className="font-normal text-foreground">{animal.coatColor}</p>
-              </div>
-              <div>
-                <p className="text-sm text-[#4B5563] dark:text-gray-400 font-medium">Peso:</p>
-                <p className="font-normal text-foreground">{animal.weight} kg</p>
-              </div>
-              <div>
-                <p className="text-sm text-[#4B5563] dark:text-gray-400 font-medium">Microchip:</p>
-                <p className="font-normal text-foreground">{animal.microchip || "N/A"}</p>
-              </div>
-              <div className="col-span-full">
-                <p className="text-sm text-[#4B5563] dark:text-gray-400 font-medium">Observações:</p>
-                <p className="font-normal text-foreground">{animal.notes || "Nenhuma observação."}</p>
+
+              {/* Coluna 3: Tutor e Financeiro */}
+              <div className="flex flex-col gap-4">
+                <div>
+                  <p className="text-sm font-semibold text-[#374151] dark:text-gray-100 mb-1">Tutor Responsável</p>
+                  <p className="text-sm text-[#4B5563] dark:text-gray-400">Nome: <span className="font-normal text-foreground">{client.name}</span></p>
+                  <p className="text-sm text-[#4B5563] dark:text-gray-400">Telefone: <span className="font-normal text-foreground">{client.phone}</span></p>
+                </div>
+                <div className="bg-muted/50 dark:bg-muted/30 p-3 rounded-md border border-muted dark:border-gray-700">
+                  <p className="text-sm font-semibold text-[#374151] dark:text-gray-100 mb-1">Resumo Financeiro</p>
+                  <p className="text-sm text-[#4B5563] dark:text-gray-400">Total de procedimentos: <span className="font-normal text-foreground">{animal.totalProcedures || 0}</span></p>
+                  <p className="text-sm text-[#4B5563] dark:text-gray-400">Valor total: <span className="font-normal text-foreground">R$ {(animal.totalValue || 0).toFixed(2).replace('.', ',')}</span></p>
+                </div>
               </div>
             </CardContent>
           </Card>
