@@ -23,8 +23,8 @@ import {
   Download, // Adicionado Download icon
   Calendar, // Adicionado Calendar icon
   Scale, // Adicionado Scale icon para peso
-  GenderFemale, // Corrigido: Usar GenderFemale
-  GenderMale, // Corrigido: Usar GenderMale
+  Venus, // Corrigido: Usar Venus para feminino
+  Mars, // Corrigido: Usar Mars para masculino
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -564,7 +564,7 @@ const PatientRecordPage = () => {
                   <p className="text-sm text-[#4B5563] dark:text-gray-400">Peso: <span className="font-normal text-foreground">{animal.weight.toFixed(1)} kg</span></p>
                 </div>
                 <div className="flex items-center gap-2">
-                  {animal.gender === "Macho" ? <GenderMale className="h-4 w-4 text-muted-foreground" /> : <GenderFemale className="h-4 w-4 text-muted-foreground" />}
+                  {animal.gender === "Macho" ? <Mars className="h-4 w-4 text-muted-foreground" /> : <Venus className="h-4 w-4 text-muted-foreground" />}
                   <p className="text-sm text-[#4B5563] dark:text-gray-400">Sexo: <span className="font-normal text-foreground">{animal.gender}</span></p>
                 </div>
                 <div className="flex items-center gap-2">
@@ -1195,7 +1195,7 @@ const PatientRecordPage = () => {
                   <MessageSquare className="h-5 w-5 text-gray-500" /> Observações Gerais
                 </CardTitle>
                 <Button size="sm" onClick={handleAddObservation} disabled={!newObservation.trim()} className="rounded-md bg-gradient-to-r from-blue-500 to-indigo-500 text-white hover:from-blue-600 hover:to-indigo-600 font-semibold transition-all duration-200 shadow-md hover:shadow-lg">
-                  <Plus className="h-4 w-4 mr-2" /> Adicionar Observação
+                    <Plus className="h-4 w-4 mr-2" /> Adicionar Observação
                 </Button>
               </CardHeader>
               <CardContent className="pt-0">
