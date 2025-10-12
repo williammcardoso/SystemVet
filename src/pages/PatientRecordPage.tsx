@@ -23,8 +23,8 @@ import {
   Download, // Adicionado Download icon
   Calendar, // Adicionado Calendar icon
   Scale, // Adicionado Scale icon para peso
-  Venus, // Adicionado Venus icon para sexo
-  Mars, // Adicionado Mars icon para sexo
+  GenderFemale, // Corrigido: Usar GenderFemale
+  GenderMale, // Corrigido: Usar GenderMale
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -564,7 +564,7 @@ const PatientRecordPage = () => {
                   <p className="text-sm text-[#4B5563] dark:text-gray-400">Peso: <span className="font-normal text-foreground">{animal.weight.toFixed(1)} kg</span></p>
                 </div>
                 <div className="flex items-center gap-2">
-                  {animal.gender === "Macho" ? <Mars className="h-4 w-4 text-muted-foreground" /> : <Venus className="h-4 w-4 text-muted-foreground" />}
+                  {animal.gender === "Macho" ? <GenderMale className="h-4 w-4 text-muted-foreground" /> : <GenderFemale className="h-4 w-4 text-muted-foreground" />}
                   <p className="text-sm text-[#4B5563] dark:text-gray-400">Sexo: <span className="font-normal text-foreground">{animal.gender}</span></p>
                 </div>
                 <div className="flex items-center gap-2">
