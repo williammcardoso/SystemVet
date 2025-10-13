@@ -7,19 +7,7 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import { cn } from "@/lib/utils";
-import {
-  LayoutDashboard,
-  Users,
-  Calendar,
-  ShoppingCart,
-  Folder,
-  Package,
-  DollarSign,
-  Settings,
-  LogOut,
-  PawPrint,
-  Palette,
-} from "lucide-react";
+import * as LucideIcons from "lucide-react"; // Importar todos os ícones sob um alias
 
 interface NavItem {
   title: string;
@@ -32,21 +20,21 @@ const navItems: NavItem[] = [
   {
     title: "Painel de Controle",
     href: "/",
-    icon: LayoutDashboard,
+    icon: LucideIcons.LayoutDashboard,
   },
   {
     title: "Clientes",
     href: "/clients",
-    icon: Users,
+    icon: LucideIcons.Users,
   },
   {
     title: "Agenda",
     href: "/agenda",
-    icon: Calendar,
+    icon: LucideIcons.Calendar,
   },
   {
     title: "Vendas",
-    icon: ShoppingCart,
+    icon: LucideIcons.ShoppingCart,
     subItems: [
       { title: "Ponto de venda", href: "/sales/pos" },
       { title: "Minhas vendas", href: "/sales/my-sales" },
@@ -65,11 +53,11 @@ const navItems: NavItem[] = [
   },
   {
     title: "Cadastros",
-    icon: Folder,
+    icon: LucideIcons.Folder,
     subItems: [
-      { title: "Espécies", href: "/registrations/species", icon: PawPrint },
-      { title: "Raças", href: "/registrations/breeds", icon: PawPrint },
-      { title: "Pelagens", href: "/registrations/coat-types", icon: Palette },
+      { title: "Espécies", href: "/registrations/species", icon: LucideIcons.PawPrint },
+      { title: "Raças", href: "/registrations/breeds", icon: LucideIcons.PawPrint },
+      { title: "Pelagens", href: "/registrations/coat-types", icon: LucideIcons.Palette },
       { title: "Patologias", href: "/registrations/pathologies" },
       { title: "Tipos de atendimento", href: "/registrations/appointment-types" },
       { title: "Vacinas", href: "/registrations/vaccines" },
@@ -83,7 +71,7 @@ const navItems: NavItem[] = [
   },
   {
     title: "Estoque e serviços",
-    icon: Package,
+    icon: LucideIcons.Package,
     subItems: [
       { title: "Produtos e Serviços", href: "/stock/products-services" },
       { title: "Compras", href: "/stock/purchases" },
@@ -98,7 +86,7 @@ const navItems: NavItem[] = [
   },
   {
     title: "Financeiro",
-    icon: DollarSign,
+    icon: LucideIcons.DollarSign,
     subItems: [
       { title: "Lançamentos", href: "/financial/transactions" },
       { title: "Conciliação de cartões", href: "/financial/card-reconciliation" },
@@ -113,7 +101,7 @@ const navItems: NavItem[] = [
   },
   {
     title: "Configuração",
-    icon: Settings,
+    icon: LucideIcons.Settings,
     subItems: [
       { title: "Empresa", href: "/settings/company" },
       { title: "Usuários", href: "/settings/user" },
@@ -124,7 +112,7 @@ const navItems: NavItem[] = [
   {
     title: "Sair",
     href: "/logout",
-    icon: LogOut,
+    icon: LucideIcons.LogOut,
   },
 ];
 
