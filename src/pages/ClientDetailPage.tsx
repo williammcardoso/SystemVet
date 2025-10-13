@@ -1,6 +1,6 @@
 import React from "react";
 import { Link, useParams, useNavigate } from "react-router-dom";
-import { ArrowLeft, Users, PawPrint, Plus, Eye } from "@lucide/react"; // Importações nomeadas explícitas
+import { FaArrowLeft, FaUsers, FaPaw, FaPlus, FaEye } from "react-icons/fa"; // Importar ícones de react-icons
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
@@ -124,7 +124,7 @@ const ClientDetailPage = () => {
         <h1 className="text-3xl font-bold mb-4">Cliente não encontrado.</h1>
         <Link to="/clients">
           <Button variant="outline">
-            <ArrowLeft className="mr-2 h-4 w-4" /> Voltar para Clientes
+            <FaArrowLeft className="mr-2 h-4 w-4" /> Voltar para Clientes
           </Button>
         </Link>
       </div>
@@ -143,7 +143,7 @@ const ClientDetailPage = () => {
           <div className="flex items-center gap-4">
             <div>
               <h1 className="text-2xl font-semibold flex items-center gap-3 text-[#1E293B] dark:text-gray-100 group">
-                <Users className="h-5 w-5 text-gray-500 dark:text-gray-400" /> Detalhes do Cliente: {client.name}
+                <FaUsers className="h-5 w-5 text-gray-500 dark:text-gray-400" /> Detalhes do Cliente: {client.name}
               </h1>
               <p className="text-sm text-[#6B7280] dark:text-gray-400 mt-1 mb-4">
                 Visualize as informações do responsável e seus animais.
@@ -152,7 +152,7 @@ const ClientDetailPage = () => {
           </div>
           <Link to="/clients">
             <Button variant="outline" className="rounded-md border-gray-300 text-gray-700 hover:bg-gray-100 hover:text-gray-900 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200 dark:hover:bg-gray-700 transition-colors duration-200">
-              <ArrowLeft className="mr-2 h-4 w-4" /> Voltar para Clientes
+              <FaArrowLeft className="mr-2 h-4 w-4" /> Voltar para Clientes
             </Button>
           </Link>
         </div>
@@ -166,7 +166,7 @@ const ClientDetailPage = () => {
           <Card className="bg-white/90 backdrop-blur-sm border border-gray-200 dark:border-gray-700 rounded-2xl shadow-[0_1px_3px_rgba(0,0,0,0.05)] hover:shadow-[0_4px_8px_rgba(0,0,0,0.08)] transition-all duration-300 border-t-4 border-blue-400 dark:bg-gray-800/90">
             <CardHeader className="pb-3">
               <CardTitle className="flex items-center gap-2 text-lg font-semibold text-[#374151] dark:text-gray-100">
-                <Users className="h-5 w-5 text-blue-500" /> Informações do Responsável
+                <FaUsers className="h-5 w-5 text-blue-500" /> Informações do Responsável
               </CardTitle>
             </CardHeader>
             <CardContent className="grid gap-y-3 pt-0">
@@ -178,11 +178,11 @@ const ClientDetailPage = () => {
           <Card className="bg-white/90 backdrop-blur-sm border border-gray-200 dark:border-gray-700 rounded-2xl shadow-[0_1px_3px_rgba(0,0,0,0.05)] hover:shadow-[0_4px_8px_rgba(0,0,0,0.08)] transition-all duration-300 border-t-4 border-purple-400 dark:bg-gray-800/90">
             <CardHeader className="flex flex-row items-center justify-between pb-3">
               <CardTitle className="flex items-center gap-2 text-lg font-semibold text-[#374151] dark:text-gray-100">
-                <PawPrint className="h-5 w-5 text-purple-500" /> Animais de {client.name}
+                <FaPaw className="h-5 w-5 text-purple-500" /> Animais de {client.name}
               </CardTitle>
               <Link to="/animals/add"> {/* Link para adicionar animal, talvez com pré-seleção do tutor */}
                 <Button size="sm" className="rounded-md bg-gradient-to-r from-blue-500 to-indigo-500 text-white hover:from-blue-600 hover:to-indigo-600 font-semibold transition-all duration-200 shadow-md hover:shadow-lg">
-                  <Plus className="h-4 w-4 mr-2" /> Adicionar Animal
+                  <FaPlus className="h-4 w-4 mr-2" /> Adicionar Animal
                 </Button>
               </Link>
             </CardHeader>
@@ -206,7 +206,7 @@ const ClientDetailPage = () => {
                           <TableCell>{animal.breed}</TableCell>
                           <TableCell className="text-right">
                             <Button variant="ghost" size="sm" onClick={() => handleViewRecord(animal.id)} className="rounded-md hover:bg-gray-100 hover:text-gray-900 dark:hover:bg-gray-700 dark:hover:text-gray-200 transition-colors duration-200">
-                              <Eye className="h-4 w-4 mr-2" /> Ver Prontuário
+                              <FaEye className="h-4 w-4 mr-2" /> Ver Prontuário
                             </Button>
                           </TableCell>
                         </TableRow>

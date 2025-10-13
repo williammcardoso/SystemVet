@@ -4,7 +4,7 @@ import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Textarea } from "@/components/ui/textarea"; // Importar Textarea
-import { ArrowLeft, Plus, X, Save } from "@lucide/react"; // Importações nomeadas explícitas para todos os ícones
+import { FaArrowLeft, FaPlus, FaTimes, FaSave } from "react-icons/fa"; // Importar ícones de react-icons
 import { Link } from "react-router-dom";
 
 const AddClientPage = () => {
@@ -14,7 +14,7 @@ const AddClientPage = () => {
         <h1 className="text-3xl font-bold">Adicionar responsável</h1>
         <Link to="/clients">
           <Button variant="outline">
-            <ArrowLeft className="mr-2 h-4 w-4" /> Voltar
+            <FaArrowLeft className="mr-2 h-4 w-4" /> Voltar
           </Button>
         </Link>
       </div>
@@ -173,25 +173,25 @@ const AddClientPage = () => {
                 <Input placeholder="Número/Email" className="flex-1" /> {/* Changed placeholder */}
                 <Input placeholder="Observações" className="flex-1" />
                 <Button variant="outline" size="icon">
-                  <Plus className="h-4 w-4" />
+                  <FaPlus className="h-4 w-4" />
                 </Button>
                 <Button variant="outline" size="icon">
-                  <X className="h-4 w-4" />
+                  <FaTimes className="h-4 w-4" />
                 </Button>
               </div>
               {/* More contact fields can be added dynamically */}
             </div>
             <Button variant="outline" className="mt-4">
-              <Plus className="mr-2 h-4 w-4" /> Adicionar
+              <FaPlus className="mr-2 h-4 w-4" /> Adicionar
             </Button>
           </div>
 
           <div className="flex justify-end gap-2 mt-6">
             <Button variant="outline">
-              <X className="mr-2 h-4 w-4" /> Cancelar
+              <FaTimes className="mr-2 h-4 w-4" /> Cancelar
             </Button>
             <Button>
-              <Save className="mr-2 h-4 w-4" /> Salvar
+              <FaSave className="mr-2 h-4 w-4" /> Salvar
             </Button>
           </div>
         </TabsContent>
@@ -261,10 +261,10 @@ const AddClientPage = () => {
           </div>
           <div className="flex justify-end gap-2 mt-6">
             <Button variant="outline">
-              <X className="mr-2 h-4 w-4" /> Cancelar
+              <FaTimes className="mr-2 h-4 w-4" /> Cancelar
             </Button>
             <Button>
-              <Save className="mr-2 h-4 w-4" /> Salvar
+              <FaSave className="mr-2 h-4 w-4" /> Salvar
             </Button>
           </div>
         </TabsContent>
@@ -275,10 +275,10 @@ const AddClientPage = () => {
           </div>
           <div className="flex justify-end gap-2 mt-6">
             <Button variant="outline">
-              <X className="mr-2 h-4 w-4" /> Cancelar
+              <FaTimes className="mr-2 h-4 w-4" /> Cancelar
             </Button>
             <Button>
-              <Save className="mr-2 h-4 w-4" /> Salvar
+              <FaSave className="mr-2 h-4 w-4" /> Salvar
             </Button>
           </div>
         </TabsContent>

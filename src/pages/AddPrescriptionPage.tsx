@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import { Link, useParams, useNavigate } from "react-router-dom";
-import { ArrowLeft, Plus, X, Eye, Save } from "@lucide/react"; // Importações nomeadas explícitas
+import { FaArrowLeft, FaPlus, FaTimes, FaEye, FaSave } from "react-icons/fa"; // Importar ícones de react-icons
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Textarea } from "@/components/ui/textarea";
@@ -84,7 +84,7 @@ const AddPrescriptionPage = () => {
         <h1 className="text-3xl font-bold mb-4">Animal ou Cliente não encontrado.</h1>
         <Link to="/clients">
           <Button variant="outline">
-            <ArrowLeft className="mr-2 h-4 w-4" /> Voltar para Clientes
+            <FaArrowLeft className="mr-2 h-4 w-4" /> Voltar para Clientes
           </Button>
         </Link>
       </div>
@@ -204,7 +204,7 @@ const AddPrescriptionPage = () => {
         </h1>
         <Link to={`/clients/${clientId}/animals/${animalId}/record`}>
           <Button variant="outline">
-            <ArrowLeft className="mr-2 h-4 w-4" /> Voltar para Prontuário
+            <FaArrowLeft className="mr-2 h-4 w-4" /> Voltar para Prontuário
           </Button>
         </Link>
       </div>
@@ -247,7 +247,7 @@ const AddPrescriptionPage = () => {
               />
             ))}
             <Button onClick={handleAddMedication} className="w-full">
-              <Plus className="mr-2 h-4 w-4" /> Adicionar Medicamento
+              <FaPlus className="mr-2 h-4 w-4" /> Adicionar Medicamento
             </Button>
           </CardContent>
         </Card>
@@ -270,13 +270,13 @@ const AddPrescriptionPage = () => {
 
       <div className="flex justify-end gap-2 mt-6">
         <Button variant="outline" onClick={() => navigate(`/clients/${clientId}/animals/${animalId}/record`)}>
-          <X className="mr-2 h-4 w-4" /> Cancelar
+          <FaTimes className="mr-2 h-4 w-4" /> Cancelar
         </Button>
         <Button variant="secondary" onClick={handleViewPrescription} disabled={currentPrescriptionMedications.length === 0}>
-          <Eye className="mr-2 h-4 w-4" /> Visualizar
+          <FaEye className="mr-2 h-4 w-4" /> Visualizar
         </Button>
         <Button onClick={handleSavePrescription} disabled={currentPrescriptionMedications.length === 0}>
-          <Save className="mr-2 h-4 w-4" /> Salvar Receita
+          <FaSave className="mr-2 h-4 w-4" /> Salvar Receita
         </Button>
       </div>
     </div>

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { Settings, ArrowLeft, User, Briefcase, Lock, X, Save } from "@lucide/react"; // Importações nomeadas explícitas
+import { FaCog, FaArrowLeft, FaUser, FaBriefcase, FaLock, FaTimes, FaSave } from "react-icons/fa"; // Importar ícones de react-icons
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -37,7 +37,7 @@ const UserSettingsPage = () => {
             </Avatar>
             <div>
               <h1 className="text-2xl font-semibold flex items-center gap-3 text-[#1E293B] dark:text-gray-100 group">
-                <Settings className="h-5 w-5 text-gray-500 dark:text-gray-400 group-hover:animate-spin-slow" /> Configurações do Usuário
+                <FaCog className="h-5 w-5 text-gray-500 dark:text-gray-400 group-hover:animate-spin-slow" /> Configurações do Usuário
               </h1>
               <p className="text-sm text-[#6B7280] dark:text-gray-400 mt-1 mb-4">
                 Gerencie suas informações e credenciais profissionais.
@@ -46,7 +46,7 @@ const UserSettingsPage = () => {
           </div>
           <Link to="/">
             <Button variant="outline" className="rounded-md border-gray-300 text-gray-700 hover:bg-gray-100 hover:text-gray-900 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200 dark:hover:bg-gray-700 transition-colors duration-200">
-              <ArrowLeft className="mr-2 h-4 w-4" /> Voltar
+              <FaArrowLeft className="mr-2 h-4 w-4" /> Voltar
             </Button>
           </Link>
         </div>
@@ -61,7 +61,7 @@ const UserSettingsPage = () => {
           <Card className="bg-white/90 backdrop-blur-sm border border-gray-200 dark:border-gray-700 rounded-2xl shadow-[0_1px_3px_rgba(0,0,0,0.05)] hover:shadow-[0_4px_8px_rgba(0,0,0,0.08)] transition-all duration-300 border-t-4 border-blue-400 dark:bg-gray-800/90">
             <CardHeader className="pb-3">
               <CardTitle className="flex items-center gap-2 text-lg font-semibold text-[#374151] dark:text-gray-100">
-                <User className="h-5 w-5 text-blue-500" /> Informações Pessoais
+                <FaUser className="h-5 w-5 text-blue-500" /> Informações Pessoais
               </CardTitle>
             </CardHeader>
             <CardContent className="grid gap-y-3 pt-0">
@@ -82,7 +82,7 @@ const UserSettingsPage = () => {
           <Card className="bg-white/90 backdrop-blur-sm border border-gray-200 dark:border-gray-700 rounded-2xl shadow-[0_1px_3px_rgba(0,0,0,0.05)] hover:shadow-[0_4px_8px_rgba(0,0,0,0.08)] transition-all duration-300 border-t-4 border-purple-400 dark:bg-gray-800/90">
             <CardHeader className="pb-3">
               <CardTitle className="flex items-center gap-2 text-lg font-semibold text-[#374151] dark:text-gray-100">
-                <Briefcase className="h-5 w-5 text-purple-500" /> Informações Profissionais
+                <FaBriefcase className="h-5 w-5 text-purple-500" /> Informações Profissionais
               </CardTitle>
             </CardHeader>
             <CardContent className="grid gap-y-3 pt-0">
@@ -107,7 +107,7 @@ const UserSettingsPage = () => {
           <Card className="bg-white/90 backdrop-blur-sm border border-gray-200 dark:border-gray-700 rounded-2xl shadow-[0_1px_3px_rgba(0,0,0,0.05)] hover:shadow-[0_4px_8px_rgba(0,0,0,0.08)] transition-all duration-300 border-t-4 border-gray-400 dark:bg-gray-800/90 lg:col-span-2">
             <CardHeader className="pb-3">
               <CardTitle className="flex items-center gap-2 text-lg font-semibold text-[#374151] dark:text-gray-100">
-                <Lock className="h-5 w-5 text-gray-500" /> Segurança
+                <FaLock className="h-5 w-5 text-gray-500" /> Segurança
               </CardTitle>
             </CardHeader>
             <CardContent className="grid gap-y-3 pt-0">
@@ -123,10 +123,10 @@ const UserSettingsPage = () => {
       {/* Botões Fixos */}
       <div className="sticky bottom-0 p-4 bg-white/80 backdrop-blur-sm flex justify-center gap-4 z-10 border-t border-gray-200 dark:bg-gray-950/80 dark:border-gray-800">
         <Button variant="outline" onClick={() => navigate("/")} className="bg-white border border-gray-300 text-gray-700 hover:bg-gray-50 rounded-md transition-all duration-200 shadow-sm hover:shadow-md dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200 dark:hover:bg-gray-600">
-          <X className="mr-2 h-4 w-4" /> Cancelar
+          <FaTimes className="mr-2 h-4 w-4" /> Cancelar
         </Button>
         <Button onClick={handleSave} className="bg-gradient-to-r from-blue-500 to-indigo-500 text-white hover:from-blue-600 hover:to-indigo-600 rounded-md font-semibold transition-all duration-200 shadow-md hover:shadow-lg">
-          <Save className="mr-2 h-4 w-4" /> Salvar Configurações
+          <FaSave className="mr-2 h-4 w-4" /> Salvar Configurações
         </Button>
       </div>
 

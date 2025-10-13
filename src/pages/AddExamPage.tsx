@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Link, useParams, useNavigate } from "react-router-dom";
-import { ArrowLeft, X, Save } from "@lucide/react"; // Importações nomeadas explícitas
+import { FaArrowLeft, FaTimes, FaSave } from "react-icons/fa"; // Importar ícones de react-icons
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -103,7 +103,7 @@ const AddExamPage = () => {
         <h1 className="text-3xl font-bold">Adicionar Exame para Animal {animalId}</h1>
         <Link to={`/clients/${clientId}/animals/${animalId}/record`}>
           <Button variant="outline">
-            <ArrowLeft className="mr-2 h-4 w-4" /> Voltar para Prontuário
+            <FaArrowLeft className="mr-2 h-4 w-4" /> Voltar para Prontuário
           </Button>
         </Link>
       </div>
@@ -288,11 +288,11 @@ const AddExamPage = () => {
       <div className="flex justify-end gap-2 mt-6">
         <Link to={`/clients/${clientId}/animals/${animalId}/record`}>
           <Button variant="outline">
-            <X className="mr-2 h-4 w-4" /> Cancelar
+            <FaTimes className="mr-2 h-4 w-4" /> Cancelar
           </Button>
         </Link>
         <Button onClick={handleSaveExam}>
-          <Save className="mr-2 h-4 w-4" /> Salvar Exame
+          <FaSave className="mr-2 h-4 w-4" /> Salvar Exame
         </Button>
       </div>
     </div>

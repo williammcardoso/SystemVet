@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { ArrowLeft, Plus, Edit, Trash2 } from "@lucide/react"; // Importações nomeadas explícitas
+import { FaArrowLeft, FaPlus, FaEdit, FaTrashAlt } from "react-icons/fa"; // Importar ícones de react-icons
 import { Link } from "react-router-dom";
 
 interface Species {
@@ -42,7 +42,7 @@ const SpeciesPage = () => {
         <h1 className="text-3xl font-bold">Cadastro de Espécies</h1>
         <Link to="/registrations">
           <Button variant="outline">
-            <ArrowLeft className="mr-2 h-4 w-4" /> Voltar
+            <FaArrowLeft className="mr-2 h-4 w-4" /> Voltar
           </Button>
         </Link>
       </div>
@@ -55,7 +55,7 @@ const SpeciesPage = () => {
           onChange={(e) => setNewSpeciesName(e.target.value)}
         />
         <Button onClick={handleAddSpecies}>
-          <Plus className="mr-2 h-4 w-4" /> Adicionar Espécie
+          <FaPlus className="mr-2 h-4 w-4" /> Adicionar Espécie
         </Button>
       </div>
 
@@ -73,10 +73,10 @@ const SpeciesPage = () => {
                 <TableCell className="font-medium">{species.name}</TableCell>
                 <TableCell className="text-right">
                   <Button variant="ghost" size="sm" className="mr-2">
-                    <Edit className="h-4 w-4" />
+                    <FaEdit className="h-4 w-4" />
                   </Button>
                   <Button variant="ghost" size="sm" onClick={() => handleDeleteSpecies(species.id)}>
-                    <Trash2 className="h-4 w-4" />
+                    <FaTrashAlt className="h-4 w-4" />
                   </Button>
                 </TableCell>
               </TableRow>

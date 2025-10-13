@@ -1,7 +1,7 @@
 import React from "react";
 import { MedicationData } from "./PrescriptionMedicationForm";
 import { Separator } from "@/components/ui/separator";
-import { User } from "@lucide/react"; // Importação nomeada explícita
+import { FaUser } from "react-icons/fa"; // Importação de react-icons
 
 interface PrescriptionViewModalProps {
   animalName: string;
@@ -37,7 +37,7 @@ const PrescriptionViewModal: React.FC<PrescriptionViewModalProps> = ({
       {/* Header da Clínica */}
       <div className="flex items-start justify-between mb-8 border-b pb-4">
         <div className="flex items-center gap-4">
-          <User className="h-10 w-10 text-gray-600 dark:text-gray-400" />
+          <FaUser className="h-10 w-10 text-gray-600 dark:text-gray-400" />
           <div>
             <h2 className="text-xl font-bold">Clínica Moraes Cardoso</h2>
             <p className="text-sm text-gray-600 dark:text-gray-400">CRMV 56895 SP</p>

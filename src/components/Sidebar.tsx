@@ -8,8 +8,8 @@ import {
 } from "@/components/ui/accordion";
 import { cn } from "@/lib/utils";
 import {
-  LayoutDashboard, Users, Calendar, ShoppingCart, Folder, PawPrint, Palette, DollarSign, Package, Settings, LogOut, ArrowLeft
-} from "@lucide/react"; // Importar ícones individualmente
+  FaTachometerAlt, FaUsers, FaCalendarAlt, FaShoppingCart, FaFolder, FaPaw, FaPalette, FaDollarSign, FaBox, FaCog, FaSignOutAlt, FaArrowLeft
+} from "react-icons/fa"; // Importar ícones de react-icons
 
 interface NavItem {
   title: string;
@@ -22,21 +22,21 @@ const navItems: NavItem[] = [
   {
     title: "Painel de Controle",
     href: "/",
-    icon: LayoutDashboard,
+    icon: FaTachometerAlt,
   },
   {
     title: "Clientes",
     href: "/clients",
-    icon: Users,
+    icon: FaUsers,
   },
   {
     title: "Agenda",
     href: "/agenda",
-    icon: Calendar,
+    icon: FaCalendarAlt,
   },
   {
     title: "Vendas",
-    icon: ShoppingCart,
+    icon: FaShoppingCart,
     subItems: [
       { title: "Ponto de venda", href: "/sales/pos" },
       { title: "Minhas vendas", href: "/sales/my-sales" },
@@ -55,11 +55,11 @@ const navItems: NavItem[] = [
   },
   {
     title: "Cadastros",
-    icon: Folder,
+    icon: FaFolder,
     subItems: [
-      { title: "Espécies", href: "/registrations/species", icon: PawPrint },
-      { title: "Raças", href: "/registrations/breeds", icon: PawPrint },
-      { title: "Pelagens", href: "/registrations/coat-types", icon: Palette },
+      { title: "Espécies", href: "/registrations/species", icon: FaPaw },
+      { title: "Raças", href: "/registrations/breeds", icon: FaPaw },
+      { title: "Pelagens", href: "/registrations/coat-types", icon: FaPalette },
       { title: "Patologias", href: "/registrations/pathologies" },
       { title: "Tipos de atendimento", href: "/registrations/appointment-types" },
       { title: "Vacinas", href: "/registrations/vaccines" },
@@ -73,7 +73,7 @@ const navItems: NavItem[] = [
   },
   {
     title: "Estoque e serviços",
-    icon: Package,
+    icon: FaBox,
     subItems: [
       { title: "Produtos e Serviços", href: "/stock/products-services" },
       { title: "Compras", href: "/stock/purchases" },
@@ -88,7 +88,7 @@ const navItems: NavItem[] = [
   },
   {
     title: "Financeiro",
-    icon: DollarSign,
+    icon: FaDollarSign,
     subItems: [
       { title: "Lançamentos", href: "/financial/transactions" },
       { title: "Conciliação de cartões", href: "/financial/card-reconciliation" },
@@ -103,7 +103,7 @@ const navItems: NavItem[] = [
   },
   {
     title: "Configuração",
-    icon: Settings,
+    icon: FaCog,
     subItems: [
       { title: "Empresa", href: "/settings/company" },
       { title: "Usuários", href: "/settings/user" },
@@ -114,7 +114,7 @@ const navItems: NavItem[] = [
   {
     title: "Sair",
     href: "/logout",
-    icon: LogOut,
+    icon: FaSignOutAlt,
   },
 ];
 

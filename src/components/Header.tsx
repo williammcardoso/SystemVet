@@ -12,7 +12,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Menu, Sun, Moon, Bell, HelpCircle, Settings, LogOut } from "@lucide/react"; // Importar ícones individualmente
+import { FaBars, FaSun, FaMoon, FaBell, FaQuestionCircle, FaCog, FaSignOutAlt } from "react-icons/fa"; // Importar ícones de react-icons
 import { useTheme } from "next-themes";
 
 interface HeaderProps {
@@ -31,7 +31,7 @@ const Header: React.FC<HeaderProps> = ({ onToggleMobileSidebar }) => {
         className="lg:hidden"
         onClick={onToggleMobileSidebar}
       >
-        <Menu className="h-5 w-5" />
+        <FaBars className="h-5 w-5" />
         <span className="sr-only">Toggle Sidebar</span>
       </Button>
 
@@ -46,16 +46,16 @@ const Header: React.FC<HeaderProps> = ({ onToggleMobileSidebar }) => {
           className="transition-colors duration-200"
         >
           {theme === "dark" ? (
-            <Sun className="h-5 w-5 text-yellow-500" />
+            <FaSun className="h-5 w-5 text-yellow-500" />
           ) : (
-            <Moon className="h-5 w-5 text-blue-600" />
+            <FaMoon className="h-5 w-5 text-blue-600" />
           )}
           <span className="sr-only">Toggle theme</span>
         </Button>
 
         {/* Notificações */}
         <Button variant="ghost" size="icon" className="relative">
-          <Bell className="h-5 w-5" />
+          <FaBell className="h-5 w-5" />
           <span className="absolute top-1 right-1 h-2 w-2 rounded-full bg-red-500" />
           <span className="sr-only">Notificações</span>
         </Button>
@@ -63,7 +63,7 @@ const Header: React.FC<HeaderProps> = ({ onToggleMobileSidebar }) => {
         {/* Ajuda */}
         <Link to="/help">
           <Button variant="ghost" size="icon">
-            <HelpCircle className="h-5 w-5" />
+            <FaQuestionCircle className="h-5 w-5" />
             <span className="sr-only">Ajuda</span>
           </Button>
         </Link>
@@ -89,11 +89,11 @@ const Header: React.FC<HeaderProps> = ({ onToggleMobileSidebar }) => {
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
             <DropdownMenuItem>
-              <Settings className="mr-2 h-4 w-4" />
+              <FaCog className="mr-2 h-4 w-4" />
               <span>Configurações</span>
             </DropdownMenuItem>
             <DropdownMenuItem>
-              <LogOut className="mr-2 h-4 w-4" />
+              <FaSignOutAlt className="mr-2 h-4 w-4" />
               <span>Sair</span>
             </DropdownMenuItem>
           </DropdownMenuContent>

@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { ArrowLeft, Plus, Edit, Trash2 } from "@lucide/react"; // Importações nomeadas explícitas
+import { FaArrowLeft, FaPlus, FaEdit, FaTrashAlt } from "react-icons/fa"; // Importar ícones de react-icons
 import { Link } from "react-router-dom";
 
 interface Breed {
@@ -64,7 +64,7 @@ const BreedsPage = () => {
         <h1 className="text-3xl font-bold">Cadastro de Raças</h1>
         <Link to="/registrations">
           <Button variant="outline">
-            <ArrowLeft className="mr-2 h-4 w-4" /> Voltar
+            <FaArrowLeft className="mr-2 h-4 w-4" /> Voltar
           </Button>
         </Link>
       </div>
@@ -89,7 +89,7 @@ const BreedsPage = () => {
           </SelectContent>
         </Select>
         <Button onClick={handleAddBreed} disabled={!newBreedName.trim() || !selectedSpeciesId}>
-          <Plus className="mr-2 h-4 w-4" /> Adicionar Raça
+          <FaPlus className="mr-2 h-4 w-4" /> Adicionar Raça
         </Button>
       </div>
 
@@ -109,10 +109,10 @@ const BreedsPage = () => {
                 <TableCell>{breed.speciesName}</TableCell>
                 <TableCell className="text-right">
                   <Button variant="ghost" size="sm" className="mr-2">
-                    <Edit className="h-4 w-4" />
+                    <FaEdit className="h-4 w-4" />
                   </Button>
                   <Button variant="ghost" size="sm" onClick={() => handleDeleteBreed(breed.id)}>
-                    <Trash2 className="h-4 w-4" />
+                    <FaTrashAlt className="h-4 w-4" />
                   </Button>
                 </TableCell>
               </TableRow>

@@ -3,7 +3,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
-import { ArrowLeft, Plus, X, Save } from "@lucide/react"; // Importações nomeadas explícitas para todos os ícones
+import { FaArrowLeft, FaPlus, FaTimes, FaSave } from "react-icons/fa"; // Importar ícones de react-icons
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 
@@ -149,7 +149,7 @@ const AddAnimalPage = () => {
         <h1 className="text-3xl font-bold">Adicionar Animal</h1>
         <Link to="/clients">
           <Button variant="outline">
-            <ArrowLeft className="mr-2 h-4 w-4" /> Voltar
+            <FaArrowLeft className="mr-2 h-4 w-4" /> Voltar
           </Button>
         </Link>
       </div>
@@ -252,10 +252,10 @@ const AddAnimalPage = () => {
 
       <div className="flex justify-end gap-2 mt-6">
         <Button variant="outline">
-          <X className="mr-2 h-4 w-4" /> Cancelar
+          <FaTimes className="mr-2 h-4 w-4" /> Cancelar
         </Button>
         <Button>
-          <Save className="mr-2 h-4 w-4" /> Salvar
+          <FaSave className="mr-2 h-4 w-4" /> Salvar
         </Button>
       </div>
     </div>
