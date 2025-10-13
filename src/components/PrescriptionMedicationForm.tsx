@@ -99,7 +99,7 @@ const PrescriptionMedicationForm: React.FC<PrescriptionMedicationFormProps> = ({
     // Format total quantity for display in PDF
     let formattedTotalQuantity = "";
     if (calculatedQuantity > 0) {
-      let formUnit = pharmaceuticalForm === "Outro" && customPharmaceuticalForm.trim() ? customPharmaceuticalForm.trim() : customPharmaceuticalForm.trim() : pharmaceuticalForm.trim();
+      let formUnit = (pharmaceuticalForm === "Outro" && customPharmaceuticalForm.trim()) ? customPharmaceuticalForm.trim() : pharmaceuticalForm.trim();
       formUnit = formUnit.toLowerCase(); // Ensure lowercase for unit
       
       // Simple pluralization logic
