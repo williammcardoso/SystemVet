@@ -6,6 +6,7 @@ import { ptBR } from "date-fns/locale"; // Importar o locale ptBR
 
 import { cn } from "@/lib/utils";
 import { buttonVariants } from "@/components/ui/button";
+import { FaArrowLeft, FaArrowRight } from "react-icons/fa"; // Importar FaArrowLeft e FaArrowRight
 
 function Calendar({
   className,
