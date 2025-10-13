@@ -75,12 +75,13 @@ const AddPrescriptionPage = () => {
   const [currentPrescriptionGeneralObservations, setCurrentPrescriptionGeneralObservations] = useState<string>("");
   const [treatmentDescription, setTreatmentDescription] = useState<string>("");
 
-  // Estados para dados do farmacêutico (apenas para receita controlada)
-  const [pharmacistName, setPharmacistName] = useState<string>("");
-  const [pharmacistCpf, setPharmacistCpf] = useState<string>("");
-  const [pharmacistCfr, setPharmacistCfr] = useState<string>("");
-  const [pharmacistAddress, setPharmacistAddress] = useState<string>("");
-  const [pharmacistPhone, setPharmacistPhone] = useState<string>("");
+  // Estados para dados do farmacêutico (NÃO APARECEM NO FORMULÁRIO, APENAS PARA O PDF)
+  // Inicializados com dados mock fixos, como no exemplo da imagem
+  const [pharmacistName] = useState<string>("Farmacêutico(a) Responsável");
+  const [pharmacistCpf] = useState<string>("CPF: 000.000.000-00");
+  const [pharmacistCfr] = useState<string>("CRF: 00000");
+  const [pharmacistAddress] = useState<string>("Endereço da Farmácia, 000 - Cidade - UF");
+  const [pharmacistPhone] = useState<string>("Telefone: (00) 00000-0000");
 
   // Estado para o AlertDialog de confirmação de múltiplos medicamentos
   const [isControlledMedicationWarningOpen, setIsControlledMedicationWarningOpen] = useState(false);
@@ -106,12 +107,7 @@ const AddPrescriptionPage = () => {
         navigate(`/clients/${clientId}/animals/${animalId}/record`);
       }
     } else {
-      // Reset pharmacist data for new prescriptions
-      setPharmacistName("");
-      setPharmacistCpf("");
-      setPharmacistCfr("");
-      setPharmacistAddress("");
-      setPharmacistPhone("");
+      // Reset allowMultipleMedications for new prescriptions
       setAllowMultipleMedications(false);
     }
   }, [prescriptionId, clientId, animalId, navigate, prescriptionType]);
@@ -191,11 +187,7 @@ const AddPrescriptionPage = () => {
       return;
     }
 
-    // Validate pharmacist details for controlled prescriptions
-    if (prescriptionType === 'controlled' && (!pharmacistName.trim() || !pharmacistCpf.trim() || !pharmacistCfr.trim() || !pharmacistAddress.trim() || !pharmacistPhone.trim())) {
-      toast.error("Por favor, preencha todos os dados do farmacêutico para a receita controlada.");
-      return;
-    }
+    // Não há validação de dados do farmacêutico aqui, pois eles não são inseridos pelo usuário.
 
     // Generate a summary medication name for the table display
     const summaryMedicationName = currentPrescriptionMedications
@@ -331,40 +323,7 @@ const AddPrescriptionPage = () => {
           </CardContent>
         </Card>
 
-        {prescriptionType === 'controlled' && (
-          <Card className="mb-4 border-t-4 border-red-500">
-            <CardHeader>
-              <CardTitle className="text-red-600 dark:text-red-400">Dados do Farmacêutico (Receita Controlada)</CardTitle>
-              <p className="text-sm text-muted-foreground">Estas informações serão incluídas no PDF da receita controlada.</p>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div className="space-y-2">
-                  <Label htmlFor="pharmacistName">Nome do Farmacêutico *</Label>
-                  <Input id="pharmacistName" value={pharmacistName} onChange={(e) => setPharmacistName(e.target.value)} placeholder="Nome completo do farmacêutico" />
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="pharmacistCpf">CPF *</Label>
-                  <Input id="pharmacistCpf" value={pharmacistCpf} onChange={(e) => setPharmacistCpf(e.target.value)} placeholder="CPF do farmacêutico" />
-                </div>
-              </div>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div className="space-y-2">
-                  <Label htmlFor="pharmacistCfr">CRF *</Label>
-                  <Input id="pharmacistCfr" value={pharmacistCfr} onChange={(e) => setPharmacistCfr(e.target.value)} placeholder="Registro no CRF (Ex: CRF-SP 12345)" />
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="pharmacistPhone">Telefone *</Label>
-                  <Input id="pharmacistPhone" value={pharmacistPhone} onChange={(e) => setPharmacistPhone(e.target.value)} placeholder="Telefone do farmacêutico" />
-                </div>
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="pharmacistAddress">Endereço da Farmácia *</Label>
-                <Textarea id="pharmacistAddress" value={pharmacistAddress} onChange={(e) => setPharmacistAddress(e.target.value)} placeholder="Endereço completo da farmácia" rows={2} />
-              </div>
-            </CardContent>
-          </Card>
-        )}
+        {/* O card de dados do farmacêutico foi removido daqui */}
 
         <Card className="mb-4">
           <CardHeader>
