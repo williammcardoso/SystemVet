@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Link, useParams, useNavigate } from "react-router-dom";
 import {
-  ArrowLeft, Users, PawPrint, Plus, Eye, Stethoscope, CalendarDays, DollarSign, Syringe, Weight, FileText, ClipboardList, MessageSquare, Heart, Male, Female, Printer, Download, X, Save, User, Scale
+  ArrowLeft, Users, PawPrint, Plus, Eye, Stethoscope, CalendarDays, DollarSign, Syringe, Weight, FileText, ClipboardList, MessageSquare, Heart, Male, UserRound, Printer, Download, X, Save, User, Scale
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -321,7 +321,7 @@ const PatientRecordPage = () => {
   const [newEosinofilos, setNewEosinofilos] = useState<string>("");
   const [newBasofilos, setNewBasofilos] = useState<string>("");
 
-  // Campos adicionais do exame
+  // Campos adicionais
   const [newExamObservations, setNewExamObservations] = useState<string>("");
   const [newOperator, setNewOperator] = useState<string>("");
   const [newReferenceDate, setNewReferenceDate] = useState<string>("");
@@ -541,7 +541,7 @@ const PatientRecordPage = () => {
                   <p className="text-sm text-[#4B5563] dark:text-gray-400">Peso: <span className="font-normal text-foreground">{animal.weight.toFixed(1)} kg</span></p>
                 </div>
                 <div className="flex items-center gap-2">
-                  {animal.gender === "Macho" ? <Male className="h-4 w-4 text-muted-foreground" /> : <Female className="h-4 w-4 text-muted-foreground" />}
+                  {animal.gender === "Macho" ? <Male className="h-4 w-4 text-muted-foreground" /> : <UserRound className="h-4 w-4 text-muted-foreground" />}
                   <p className="text-sm text-[#4B5563] dark:text-gray-400">Sexo: <span className="font-normal text-foreground">{animal.gender}</span></p>
                 </div>
                 <div className="flex items-center gap-2">
