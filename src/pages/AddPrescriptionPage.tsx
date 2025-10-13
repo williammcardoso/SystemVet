@@ -96,13 +96,9 @@ const AddPrescriptionPage = () => {
         setCurrentPrescriptionGeneralObservations(existingPrescription.instructions);
         setTreatmentDescription(existingPrescription.treatmentDescription || "");
 
-        // Carregar dados do farmacêutico se for receita controlada
+        // Para receitas controladas, os dados do farmacêutico não são carregados do mock,
+        // pois não são armazenados. Eles seriam preenchidos novamente pelo usuário.
         if (existingPrescription.type === 'controlled') {
-          setPharmacistName(existingPrescription.pharmacistName || "");
-          setPharmacistCpf(existingPrescription.pharmacistCpf || "");
-          setPharmacistCfr(existingPrescription.pharmacistCfr || "");
-          setPharmacistAddress(existingPrescription.pharmacistAddress || "");
-          setPharmacistPhone(existingPrescription.pharmacistPhone || "");
           setAllowMultipleMedications(existingPrescription.medications.length > 1); // Se já tem mais de um, permite
         }
       } else {
@@ -214,11 +210,7 @@ const AddPrescriptionPage = () => {
       treatmentDescription: treatmentDescription.trim() || undefined,
       instructions: currentPrescriptionGeneralObservations,
       type: prescriptionType, // Salvar o tipo de receita
-      pharmacistName: prescriptionType === 'controlled' ? pharmacistName.trim() : undefined,
-      pharmacistCpf: prescriptionType === 'controlled' ? pharmacistCpf.trim() : undefined,
-      pharmacistCfr: prescriptionType === 'controlled' ? pharmacistCfr.trim() : undefined,
-      pharmacistAddress: prescriptionType === 'controlled' ? pharmacistAddress.trim() : undefined,
-      pharmacistPhone: prescriptionType === 'controlled' ? pharmacistPhone.trim() : undefined,
+      // Dados do farmacêutico não são salvos na PrescriptionEntry
       medications: currentPrescriptionMedications.map(med => ({ ...med, isCollapsed: true })), // Ensure all are collapsed when saved
     };
 

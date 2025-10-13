@@ -27,9 +27,5 @@ export interface PrescriptionEntry {
   instructions: string; // General observations for the prescription
   medications: MedicationData[]; // Full details of medications
   type: 'simple' | 'controlled' | 'manipulated'; // Novo campo para o tipo de receita
-  pharmacistName?: string; // Dados do farmacêutico para receita controlada
-  pharmacistCpf?: string;
-  pharmacistCfr?: string;
-  pharmacistAddress?: string;
-  pharmacistPhone?: string;
+  // Os dados do farmacêutico não serão mais armazenados aqui
 }

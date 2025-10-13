@@ -199,11 +199,7 @@ export let mockPrescriptions: PrescriptionEntry[] = [
     treatmentDescription: "Tratamento para ansiedade severa.",
     instructions: "Manter fora do alcance de crianças.",
     type: 'controlled', // Exemplo de receita controlada
-    pharmacistName: "Dra. Farmacêutica Exemplo",
-    pharmacistCpf: "123.456.789-00",
-    pharmacistCfr: "CRF-SP 12345",
-    pharmacistAddress: "Rua da Farmácia, 500, Bairro - Cidade",
-    pharmacistPhone: "(11) 99999-8888",
+    // Dados do farmacêutico removidos daqui
     medications: [
       {
         id: "med-controlled-1",

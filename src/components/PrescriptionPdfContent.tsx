@@ -162,17 +162,27 @@ const styles = StyleSheet.create({
     fontSize: 10,
     lineHeight: 1.5,
   },
-  signatureFooter: {
-    position: 'absolute', // Posicionamento absoluto
-    bottom: 30,          // 30pt da parte inferior da página
-    left: 30,            // Alinhado com o padding da página
-    right: 30,           // Alinhado com o padding da página
-    textAlign: "center",
-    fontSize: 10,
-    color: "#666",
-    paddingTop: 30, // Aumentado para 30 para mais espaço
+  // Rodapé geral, agora com flex para duas colunas
+  footerContainer: {
+    position: 'absolute',
+    bottom: 30,
+    left: 30,
+    right: 30,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    paddingTop: 20,
     borderTopWidth: 1,
     borderTopColor: "#eee",
+  },
+  // Estilo para o card de assinatura do veterinário no rodapé
+  vetSignatureCard: {
+    flex: 1,
+    borderWidth: 1,
+    borderColor: "#ddd",
+    borderRadius: 5,
+    padding: 10,
+    marginRight: 5, // Espaço entre os cards
+    textAlign: "center",
   },
   signatureDate: {
     fontSize: 10,
@@ -201,26 +211,43 @@ const styles = StyleSheet.create({
     color: "#f00",
     marginBottom: 15,
   },
-  issuerPharmacistSection: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    marginBottom: 20,
-    gap: 10,
-  },
-  issuerPharmacistCard: {
-    flex: 1,
+  // Card do emitente (veterinário) no topo para receita controlada
+  issuerVetCard: {
     borderWidth: 1,
     borderColor: "#f00",
     borderRadius: 5,
     padding: 10,
+    marginBottom: 20, // Espaço abaixo do card
+    width: '48%', // Ocupa metade da largura para ficar ao lado do tutor
   },
-  issuerPharmacistTitle: {
+  issuerVetTitle: {
     fontSize: 11,
     fontWeight: "bold",
     marginBottom: 5,
     color: "#f00",
   },
-  issuerPharmacistText: {
+  issuerVetText: {
+    fontSize: 10,
+    marginBottom: 2,
+    color: "#333",
+  },
+  // Card do farmacêutico no rodapé para receita controlada
+  pharmacistSignatureCard: {
+    flex: 1,
+    borderWidth: 1,
+    borderColor: "#f00",
+    borderRadius: 5,
+    padding: 10,
+    marginLeft: 5, // Espaço entre os cards
+    textAlign: "center",
+  },
+  pharmacistSignatureTitle: {
+    fontSize: 11,
+    fontWeight: "bold",
+    marginBottom: 5,
+    color: "#f00",
+  },
+  pharmacistSignatureText: {
     fontSize: 10,
     marginBottom: 2,
     color: "#333",
@@ -312,40 +339,55 @@ export const PrescriptionPdfContent = ({
                 <Text style={styles.mainTitle}>Receita Simples</Text>
               )}
 
-              {/* Issuer and Pharmacist Info for Controlled Prescriptions */}
+              {/* Issuer (Veterinarian) Info for Controlled Prescriptions at the top */}
               {prescriptionType === 'controlled' && (
-                <View style={styles.issuerPharmacistSection}>
-                  <View style={styles.issuerPharmacistCard}>
-                    <Text style={styles.issuerPharmacistTitle}>Emitente (Veterinário)</Text>
-                    <Text style={styles.issuerPharmacistText}>Nome: {mockUserSettings.signatureText}</Text>
-                    <Text style={styles.issuerPharmacistText}>CRMV: {mockUserSettings.userCrmv}</Text>
-                    <Text style={styles.issuerPharmacistText}>Registro MAPA: {mockUserSettings.userMapaRegistration}</Text>
+                <View style={styles.infoSectionContainer}> {/* Usar infoSectionContainer para layout de duas colunas */}
+                  <View style={styles.issuerVetCard}>
+                    <Text style={styles.issuerVetTitle}>Emitente (Veterinário)</Text>
+                    <Text style={styles.issuerVetText}>Nome: {mockUserSettings.signatureText}</Text>
+                    <Text style={styles.issuerVetText}>CRMV: {mockUserSettings.userCrmv}</Text>
+                    <Text style={styles.issuerVetText}>Registro MAPA: {mockUserSettings.userMapaRegistration}</Text>
                   </View>
-                  <View style={styles.issuerPharmacistCard}>
-                    <Text style={styles.issuerPharmacistTitle}>Farmacêutico</Text>
-                    <Text style={styles.issuerPharmacistText}>Nome: {pharmacistName || "Não informado"}</Text>
-                    <Text style={styles.issuerPharmacistText}>CPF: {pharmacistCpf || "Não informado"}</Text>
-                    <Text style={styles.issuerPharmacistText}>CRF: {pharmacistCfr || "Não informado"}</Text>
-                    <Text style={styles.issuerPharmacistText}>Endereço: {pharmacistAddress || "Não informado"}</Text>
-                    <Text style={styles.issuerPharmacistText}>Telefone: {pharmacistPhone || "Não informado"}</Text>
+                  {/* Animal and Tutor Info - Mantido aqui para preencher a segunda coluna do topo */}
+                  <View style={styles.infoCard}>
+                    <Text style={styles.infoTitle}>Animal</Text>
+                    <Text style={styles.infoText}>ID: {animalId}</Text>
+                    <Text style={styles.infoText}>Nome: {animalName}</Text>
+                    <Text style={styles.infoText}>Espécie: {animalSpecies}</Text>
                   </View>
                 </View>
               )}
 
-              {/* Animal and Tutor Info */}
-              <View style={styles.infoSectionContainer}>
-                <View style={styles.infoCard}>
-                  <Text style={styles.infoTitle}>Animal</Text>
-                  <Text style={styles.infoText}>ID: {animalId}</Text>
-                  <Text style={styles.infoText}>Nome: {animalName}</Text>
-                  <Text style={styles.infoText}>Espécie: {animalSpecies}</Text>
+              {/* Animal and Tutor Info (for simple prescriptions, or as a separate card for controlled) */}
+              {prescriptionType !== 'controlled' && (
+                <View style={styles.infoSectionContainer}>
+                  <View style={styles.infoCard}>
+                    <Text style={styles.infoTitle}>Animal</Text>
+                    <Text style={styles.infoText}>ID: {animalId}</Text>
+                    <Text style={styles.infoText}>Nome: {animalName}</Text>
+                    <Text style={styles.infoText}>Espécie: {animalSpecies}</Text>
+                  </View>
+                  <View style={styles.infoCard}>
+                    <Text style={styles.infoTitle}>Tutor</Text>
+                    <Text style={styles.infoText}>Nome: {tutorName}</Text>
+                    <Text style={styles.infoText}>Endereço: {tutorAddress || "Não informado"}</Text>
+                  </View>
                 </View>
-                <View style={styles.infoCard}>
-                  <Text style={styles.infoTitle}>Tutor</Text>
-                  <Text style={styles.infoText}>Nome: {tutorName}</Text>
-                  <Text style={styles.infoText}>Endereço: {tutorAddress || "Não informado"}</Text>
+              )}
+              {/* Para receita controlada, o tutor é o "comprador" e já está no card do animal acima */}
+              {prescriptionType === 'controlled' && (
+                <View style={styles.infoSectionContainer}>
+                  <View style={styles.infoCard}>
+                    <Text style={styles.infoTitle}>Tutor (Comprador)</Text>
+                    <Text style={styles.infoText}>Nome: {tutorName}</Text>
+                    <Text style={styles.infoText}>Endereço: {tutorAddress || "Não informado"}</Text>
+                  </View>
+                  <View style={styles.infoCard}>
+                    {/* Espaço vazio ou informações adicionais se necessário */}
+                  </View>
                 </View>
-              </View>
+              )}
+
 
               {/* Main Content that flows across pages */}
               <View style={styles.mainContentContainer}>
@@ -408,18 +450,33 @@ export const PrescriptionPdfContent = ({
                 )}
               </View>
 
-              {/* FOOTER - Assinatura condicional na última página */}
+              {/* FOOTER - Assinatura e dados do farmacêutico */}
               {pageNumber === totalPages && (
-                <View style={styles.signatureFooter}>
-                  <Text style={styles.signatureDate}>
-                    {formatDateToPortuguese(currentDate)}
-                  </Text>
-                  {showElectronicSignatureText && (
-                    <Text style={styles.signatureText}>Assinado eletronicamente por</Text>
+                <View style={styles.footerContainer}>
+                  {/* Card de Assinatura do Veterinário */}
+                  <View style={styles.vetSignatureCard}>
+                    <Text style={styles.signatureDate}>
+                      {formatDateToPortuguese(currentDate)}
+                    </Text>
+                    {showElectronicSignatureText && (
+                      <Text style={styles.signatureText}>Assinado eletronicamente por</Text>
+                    )}
+                    <Text style={styles.signatureName}>{mockUserSettings.signatureText}</Text>
+                    <Text style={styles.clinicDetails}>CRMV {mockUserSettings.userCrmv}</Text>
+                    <Text style={styles.clinicDetails}>Registro no MAPA {mockUserSettings.userMapaRegistration}</Text>
+                  </View>
+
+                  {/* Card de Dados do Farmacêutico (apenas para receita controlada) */}
+                  {prescriptionType === 'controlled' && (
+                    <View style={styles.pharmacistSignatureCard}>
+                      <Text style={styles.pharmacistSignatureTitle}>Farmacêutico</Text>
+                      <Text style={styles.pharmacistSignatureText}>Nome: {pharmacistName || "Não informado"}</Text>
+                      <Text style={styles.pharmacistSignatureText}>CPF: {pharmacistCpf || "Não informado"}</Text>
+                      <Text style={styles.pharmacistSignatureText}>CRF: {pharmacistCfr || "Não informado"}</Text>
+                      <Text style={styles.pharmacistSignatureText}>Endereço: {pharmacistAddress || "Não informado"}</Text>
+                      <Text style={styles.pharmacistSignatureText}>Telefone: {pharmacistPhone || "Não informado"}</Text>
+                    </View>
                   )}
-                  <Text style={styles.signatureName}>{mockUserSettings.signatureText}</Text>
-                  <Text style={styles.clinicDetails}>CRMV {mockUserSettings.userCrmv}</Text>
-                  <Text style={styles.clinicDetails}>Registro no MAPA {mockUserSettings.userMapaRegistration}</Text>
                 </View>
               )}
             </>
