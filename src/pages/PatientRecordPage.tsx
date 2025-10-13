@@ -25,6 +25,12 @@ import { mockPrescriptions } from "@/mockData/prescriptions";
 import { cn } from "@/lib/utils";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"; // Importar DropdownMenu
 
 // Mock data (centralizado aqui para facilitar o exemplo, mas idealmente viria de um serviço)
 interface Animal {
@@ -1111,11 +1117,26 @@ const PatientRecordPage = () => {
                 <CardTitle className="flex items-center gap-2 text-lg font-semibold text-[#374151] dark:text-gray-100">
                   <FaClipboardList className="h-5 w-5 text-indigo-500" /> Receitas
                 </CardTitle>
-                <Link to={`/clients/${clientId}/animals/${animalId}/add-prescription`}>
-                  <Button size="sm" className="rounded-md bg-gradient-to-r from-blue-500 to-indigo-500 text-white hover:from-blue-600 hover:to-indigo-600 font-semibold transition-all duration-200 shadow-md hover:shadow-lg">
-                    <FaPlus className="h-4 w-4 mr-2" /> Adicionar Nova Receita
-                  </Button>
-                </Link>
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button size="sm" className="rounded-md bg-gradient-to-r from-blue-500 to-indigo-500 text-white hover:from-blue-600 hover:to-indigo-600 font-semibold transition-all duration-200 shadow-md hover:shadow-lg">
+                      <FaPlus className="h-4 w-4 mr-2" /> Adicionar Nova Receita
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="end" className="w-56">
+                    <DropdownMenuItem asChild>
+                      <Link to={`/clients/${clientId}/animals/${animalId}/add-prescription`}>
+                        Receita simples
+                      </Link>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem onClick={() => toast.info("Funcionalidade em desenvolvimento: Receita controlada")}>
+                      Receita controlada
+                    </DropdownMenuItem>
+                    <DropdownMenuItem onClick={() => toast.info("Funcionalidade em desenvolvimento: Receita manipulada")}>
+                      Receita manipulada
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
               </CardHeader>
               <CardContent className="pt-0">
                 {prescriptions.length > 0 ? (
