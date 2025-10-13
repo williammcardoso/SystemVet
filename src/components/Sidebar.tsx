@@ -10,6 +10,7 @@ import { cn } from "@/lib/utils";
 import {
   FaTachometerAlt, FaUsers, FaCalendarAlt, FaShoppingCart, FaFolder, FaPaw, FaPalette, FaDollarSign, FaBox, FaCog, FaSignOutAlt
 } from "react-icons/fa"; // Importar ícones de react-icons
+import SystemVetLogo from "./SystemVetLogo"; // Importar o novo componente de logo
 
 interface NavItem {
   title: string;
@@ -143,7 +144,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isMobileOpen, onCloseMobile }) => {
         )}
       >
         <div className="flex items-center justify-start h-16 border-b border-sidebar-border mb-4 px-3">
-          <h1 className="text-3xl font-extrabold text-sidebar-primary-foreground">SimplesVet</h1>
+          <SystemVetLogo /> {/* Usando o novo componente de logo */}
         </div>
         <nav className="space-y-1">
           <Accordion type="multiple" className="w-full">
