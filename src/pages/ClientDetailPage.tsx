@@ -1,6 +1,6 @@
 import React from "react";
 import { Link, useParams, useNavigate } from "react-router-dom";
-import { ArrowLeft, Users, PawPrint, Plus, Eye } from "lucide-react"; // Importações nomeadas explícitas
+import { ArrowLeft, Users, PawPrint, Plus, Eye } from "@lucide/react"; // Importações nomeadas explícitas
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";

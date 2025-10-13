@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Link, useParams, useNavigate } from "react-router-dom";
-import { ArrowLeft, X, Save } from "lucide-react"; // Importações nomeadas explícitas
+import { ArrowLeft, X, Save } from "@lucide/react"; // Importações nomeadas explícitas
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -140,7 +140,7 @@ const AddExamPage = () => {
               <SelectTrigger id="examVet">
                 <SelectValue placeholder="Selecione o veterinário" />
               </SelectTrigger>
-              <SelectContent>
+                <SelectContent>
                 {mockVets.map((vet) => (
                   <SelectItem key={vet.id} value={vet.name}>
                     {vet.name}

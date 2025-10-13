@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { Users, Settings, Search, Filter, RotateCcw, Plus, Eye } from "lucide-react"; // Importações nomeadas explícitas
+import { Users, Settings, Search, Filter, RotateCcw, Plus, Eye } from "@lucide/react"; // Importações nomeadas explícitas
 import { Link } from "react-router-dom";
 import { cn } from "@/lib/utils"; // Importar cn
 import { Card } from "@/components/ui/card"; // Importar Card

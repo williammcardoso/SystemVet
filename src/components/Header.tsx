@@ -12,7 +12,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Menu, Sun, Moon, Bell, HelpCircle, Settings, LogOut } from "lucide-react"; // Importar ícones individualmente
+import { Menu, Sun, Moon, Bell, HelpCircle, Settings, LogOut } from "@lucide/react"; // Importar ícones individualmente
 import { useTheme } from "next-themes";
 
 interface HeaderProps {

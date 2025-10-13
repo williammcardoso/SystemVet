@@ -1,5 +1,5 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { BarChart, Calendar, LineChart, Package } from "lucide-react"; // Importações nomeadas explícitas
+import { BarChart, Calendar, LineChart, Package } from "@lucide/react"; // Importações nomeadas explícitas
 
 const Dashboard = () => {
   return (

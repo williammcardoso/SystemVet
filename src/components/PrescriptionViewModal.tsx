@@ -1,7 +1,7 @@
 import React from "react";
 import { MedicationData } from "./PrescriptionMedicationForm";
 import { Separator } from "@/components/ui/separator";
-import { User } from "lucide-react"; // Importação nomeada explícita
+import { User } from "@lucide/react"; // Importação nomeada explícita
 
 interface PrescriptionViewModalProps {
   animalName: string;

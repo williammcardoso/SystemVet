@@ -9,7 +9,7 @@ import {
 import { cn } from "@/lib/utils";
 import {
   LayoutDashboard, Users, Calendar, ShoppingCart, Folder, PawPrint, Palette, DollarSign, Package, Settings, LogOut, ArrowLeft
-} from "lucide-react"; // Importar ícones individualmente
+} from "@lucide/react"; // Importar ícones individualmente
 
 interface NavItem {
   title: string;

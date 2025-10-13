@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { Settings, ArrowLeft, User, Briefcase, Lock, X, Save } from "lucide-react"; // Importações nomeadas explícitas
+import { Settings, ArrowLeft, User, Briefcase, Lock, X, Save } from "@lucide/react"; // Importações nomeadas explícitas
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";

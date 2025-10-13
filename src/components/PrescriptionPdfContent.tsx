@@ -2,6 +2,7 @@ import React from "react";
 import { Document, Page, View, Text, StyleSheet, Font } from "@react-pdf/renderer";
 import { MedicationData } from "@/types/medication";
 import { mockCompanySettings, mockUserSettings } from "@/mockData/settings"; // Importar as configurações
+import { User } from "@lucide/react"; // Importação nomeada explícita
 
 // Register a font if needed (e.g., for custom fonts or if default is not working)
 // Font.register({ family: "Roboto", src: "https://fonts.gstatic.com/s/roboto/v20/KFOmCnqEu92Fr1Mu4mxP.ttf" });

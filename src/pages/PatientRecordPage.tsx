@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Link, useParams, useNavigate } from "react-router-dom";
 import {
   ArrowLeft, Users, PawPrint, Plus, Eye, Stethoscope, CalendarDays, DollarSign, Syringe, Weight, FileText, ClipboardList, MessageSquare, Heart, Male, UserRound, Printer, Download, X, Save, User, Scale
-} from "lucide-react";
+} from "@lucide/react";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";

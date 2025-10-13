@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { ArrowLeft, Plus, Edit, Trash2 } from "lucide-react"; // Importações nomeadas explícitas
+import { ArrowLeft, Plus, Edit, Trash2 } from "@lucide/react"; // Importações nomeadas explícitas
 import { Link } from "react-router-dom";
 
 interface Breed {

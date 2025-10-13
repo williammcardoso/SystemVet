@@ -5,8 +5,8 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Switch } from "@/components/ui/switch";
-import { Plus, Edit, Trash2, ChevronDown, ChevronUp } from "lucide-react"; // Importações nomeadas explícitas
-import { cn } from "@/lib/utils"; // Importar cn para classes condicionais
+import { Plus, Edit, Trash2, ChevronDown, ChevronUp } from "@lucide/react"; // Importações nomeadas explícitas
+import { cn } from "@/lib/utils"; // Importar cn
 import { MedicationData } from "@/types/medication"; // Importar do novo arquivo de tipos
 
 export type { MedicationData }; // Re-exportar a interface para outros módulos TypeScript

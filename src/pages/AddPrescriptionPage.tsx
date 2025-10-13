@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import { Link, useParams, useNavigate } from "react-router-dom";
-import { ArrowLeft, Plus, X, Eye, Save } from "lucide-react"; // Importações nomeadas explícitas
+import { ArrowLeft, Plus, X, Eye, Save } from "@lucide/react"; // Importações nomeadas explícitas
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Textarea } from "@/components/ui/textarea";

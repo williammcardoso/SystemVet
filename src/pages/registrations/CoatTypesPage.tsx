@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { ArrowLeft, Plus, Edit, Trash2 } from "lucide-react"; // Importações nomeadas explícitas
+import { ArrowLeft, Plus, Edit, Trash2 } from "@lucide/react"; // Importações nomeadas explícitas
 import { Link } from "react-router-dom";
 
 interface CoatType {
