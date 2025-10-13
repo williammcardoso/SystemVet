@@ -298,14 +298,14 @@ const AddPrescriptionPage = () => {
           {prescriptionId ? "Editar Receita" : "Adicionar Nova Receita"} ({prescriptionType === 'simple' ? 'Simples' : prescriptionType === 'controlled' ? 'Controlada' : 'Manipulada'}) para {animal.name}
         </h1>
         <Link to={`/clients/${clientId}/animals/${animalId}/record`}>
-          <Button variant="outline">
+          <Button variant="outline" className="rounded-md border-gray-300 text-gray-700 hover:bg-gray-100 hover:text-gray-900 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200 dark:hover:bg-gray-700 transition-colors duration-200">
             <FaArrowLeft className="mr-2 h-4 w-4" /> Voltar para Prontuário
           </Button>
         </Link>
       </div>
 
       <div className="grid gap-4 py-4">
-        <Card className="mb-4">
+        <Card className="mb-4 bg-white/90 backdrop-blur-sm border border-gray-200 dark:border-gray-700 rounded-2xl shadow-[0_1px_3px_rgba(0,0,0,0.05)]">
           <CardHeader>
             <CardTitle>Descrição do Tratamento</CardTitle>
           </CardHeader>
@@ -318,14 +318,13 @@ const AddPrescriptionPage = () => {
                 rows={3}
                 value={treatmentDescription}
                 onChange={(e) => setTreatmentDescription(e.target.value)}
+                className="bg-white rounded-lg border-gray-200 dark:border-gray-600 focus:ring-2 focus:ring-blue-400 placeholder-[#9CA3AF] dark:placeholder-gray-500 transition-all duration-200"
               />
             </div>
           </CardContent>
         </Card>
 
-        {/* O card de dados do farmacêutico foi removido daqui */}
-
-        <Card className="mb-4">
+        <Card className="mb-4 bg-white/90 backdrop-blur-sm border border-gray-200 dark:border-gray-700 rounded-2xl shadow-[0_1px_3px_rgba(0,0,0,0.05)]">
           <CardHeader>
             <CardTitle>Medicamentos</CardTitle>
           </CardHeader>
@@ -343,13 +342,13 @@ const AddPrescriptionPage = () => {
                 onToggleCollapse={handleToggleMedicationCollapse}
               />
             ))}
-            <Button onClick={handleAddMedication} className="w-full">
+            <Button onClick={handleAddMedication} className="w-full bg-gradient-to-r from-blue-500 to-indigo-500 text-white hover:from-blue-600 hover:to-indigo-600 font-semibold transition-all duration-200 shadow-md hover:shadow-lg">
               <FaPlus className="mr-2 h-4 w-4" /> Adicionar Medicamento
             </Button>
           </CardContent>
         </Card>
 
-        <Card>
+        <Card className="bg-white/90 backdrop-blur-sm border border-gray-200 dark:border-gray-700 rounded-2xl shadow-[0_1px_3px_rgba(0,0,0,0.05)]">
           <CardHeader>
             <CardTitle>Observações Gerais da Receita</CardTitle>
           </CardHeader>
@@ -360,38 +359,39 @@ const AddPrescriptionPage = () => {
               rows={5}
               value={currentPrescriptionGeneralObservations}
               onChange={(e) => setCurrentPrescriptionGeneralObservations(e.target.value)}
+              className="bg-white rounded-lg border-gray-200 dark:border-gray-600 focus:ring-2 focus:ring-blue-400 placeholder-[#9CA3AF] dark:placeholder-gray-500 transition-all duration-200"
             />
           </CardContent>
         </Card>
       </div>
 
       <div className="flex justify-end gap-2 mt-6">
-        <Button variant="outline" onClick={() => navigate(`/clients/${clientId}/animals/${animalId}/record`)}>
+        <Button variant="outline" onClick={() => navigate(`/clients/${clientId}/animals/${animalId}/record`)} className="bg-white border border-gray-300 text-gray-700 hover:bg-gray-50 rounded-md transition-all duration-200 shadow-sm hover:shadow-md dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200 dark:hover:bg-gray-600">
           <FaTimes className="mr-2 h-4 w-4" /> Cancelar
         </Button>
-        <Button variant="secondary" onClick={handlePrintPrescription} disabled={currentPrescriptionMedications.length === 0}>
+        <Button variant="secondary" onClick={handlePrintPrescription} disabled={currentPrescriptionMedications.length === 0} className="rounded-md bg-white border border-gray-300 text-gray-700 hover:bg-gray-50 transition-colors duration-200 shadow-sm hover:shadow-md dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200 dark:hover:bg-gray-600">
           <FaPrint className="mr-2 h-4 w-4" /> Imprimir
         </Button>
-        <Button variant="secondary" onClick={handleSavePdf} disabled={currentPrescriptionMedications.length === 0}>
+        <Button variant="secondary" onClick={handleSavePdf} disabled={currentPrescriptionMedications.length === 0} className="rounded-md bg-white border border-gray-300 text-gray-700 hover:bg-gray-50 transition-colors duration-200 shadow-sm hover:shadow-md dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200 dark:hover:bg-gray-600">
           <FaDownload className="mr-2 h-4 w-4" /> Salvar PDF
         </Button>
-        <Button onClick={handleSavePrescription} disabled={currentPrescriptionMedications.length === 0}>
+        <Button onClick={handleSavePrescription} disabled={currentPrescriptionMedications.length === 0} className="bg-gradient-to-r from-blue-500 to-indigo-500 text-white hover:from-blue-600 hover:to-indigo-600 rounded-md font-semibold transition-all duration-200 shadow-md hover:shadow-lg">
           <FaSave className="mr-2 h-4 w-4" /> Salvar Receita
         </Button>
       </div>
 
       {/* AlertDialog para Receita Controlada */}
       <AlertDialog open={isControlledMedicationWarningOpen} onOpenChange={setIsControlledMedicationWarningOpen}>
-        <AlertDialogContent>
+        <AlertDialogContent className="bg-white/90 backdrop-blur-sm border border-gray-200 dark:border-gray-700 rounded-2xl shadow-[0_1px_3px_rgba(0,0,0,0.05)] dark:bg-gray-800/90">
           <AlertDialogHeader>
-            <AlertDialogTitle>Receita Controlada: Múltiplos Medicamentos</AlertDialogTitle>
-            <AlertDialogDescription>
+            <AlertDialogTitle className="text-lg font-semibold text-[#374151] dark:text-gray-100">Receita Controlada: Múltiplos Medicamentos</AlertDialogTitle>
+            <AlertDialogDescription className="text-sm text-[#6B7280] dark:text-gray-400">
               Receitas controladas geralmente permitem apenas um medicamento por formulário. Deseja adicionar mais de um medicamento mesmo assim?
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel>Cancelar</AlertDialogCancel>
-            <AlertDialogAction onClick={handleConfirmAddMultipleMedications}>Continuar</AlertDialogAction>
+            <AlertDialogCancel className="bg-white border border-gray-300 text-gray-700 hover:bg-gray-50 rounded-md transition-all duration-200 shadow-sm hover:shadow-md dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200 dark:hover:bg-gray-600">Cancelar</AlertDialogCancel>
+            <AlertDialogAction onClick={handleConfirmAddMultipleMedications} className="bg-gradient-to-r from-blue-500 to-indigo-500 text-white hover:from-blue-600 hover:to-indigo-600 rounded-md font-semibold transition-all duration-200 shadow-md hover:shadow-lg">Continuar</AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>

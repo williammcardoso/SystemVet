@@ -296,10 +296,10 @@ const AgendaPage = () => {
                       )}
                     </div>
                     <div className="flex gap-2">
-                      <Button variant="ghost" size="sm" onClick={() => handleEditAppointmentClick(app)}>
+                      <Button variant="ghost" size="sm" onClick={() => handleEditAppointmentClick(app)} className="rounded-md hover:bg-gray-100 hover:text-gray-900 dark:hover:bg-gray-700 dark:hover:text-gray-200 transition-colors duration-200">
                         <FaEdit className="h-4 w-4" />
                       </Button>
-                      <Button variant="ghost" size="sm" onClick={() => handleDeleteAppointment(app.id)}>
+                      <Button variant="ghost" size="sm" onClick={() => handleDeleteAppointment(app.id)} className="rounded-md hover:bg-gray-100 hover:text-gray-900 dark:hover:bg-gray-700 dark:hover:text-gray-200 transition-colors duration-200">
                         <FaTrashAlt className="h-4 w-4" />
                       </Button>
                     </div>

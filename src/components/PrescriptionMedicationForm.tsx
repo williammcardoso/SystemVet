@@ -99,7 +99,7 @@ const PrescriptionMedicationForm: React.FC<PrescriptionMedicationFormProps> = ({
     // Format total quantity for display in PDF
     let formattedTotalQuantity = "";
     if (calculatedQuantity > 0) {
-      let formUnit = pharmaceuticalForm === "Outro" && customPharmaceuticalForm.trim() ? customPharmaceuticalForm.trim() : pharmaceuticalForm.trim();
+      let formUnit = pharmaceuticalForm === "Outro" && customPharmaceuticalForm.trim() ? customPharmaceuticalForm.trim() : customPharmaceuticalForm.trim() : pharmaceuticalForm.trim();
       formUnit = formUnit.toLowerCase(); // Ensure lowercase for unit
       
       // Simple pluralization logic
@@ -182,14 +182,14 @@ const PrescriptionMedicationForm: React.FC<PrescriptionMedicationFormProps> = ({
         </h3>
         <div className="flex items-center gap-2">
           {isCollapsed && (
-            <Button variant="ghost" size="icon" onClick={handleEdit}>
+            <Button variant="ghost" size="icon" onClick={handleEdit} className="rounded-md hover:bg-gray-100 hover:text-gray-900 dark:hover:bg-gray-700 dark:hover:text-gray-200 transition-colors duration-200">
               <FaEdit className="h-4 w-4 text-muted-foreground" />
             </Button>
           )}
-          <Button variant="ghost" size="icon" onClick={() => onDelete(medication.id)}>
+          <Button variant="ghost" size="icon" onClick={() => onDelete(medication.id)} className="rounded-md hover:bg-gray-100 hover:text-gray-900 dark:hover:bg-gray-700 dark:hover:text-gray-200 transition-colors duration-200">
             <FaTrashAlt className="h-4 w-4 text-muted-foreground" />
           </Button>
-          <Button variant="ghost" size="icon" onClick={() => onToggleCollapse(medication.id)}>
+          <Button variant="ghost" size="icon" onClick={() => onToggleCollapse(medication.id)} className="rounded-md hover:bg-gray-100 hover:text-gray-900 dark:hover:bg-gray-700 dark:hover:text-gray-200 transition-colors duration-200">
             {isCollapsed ? <FaChevronDown className="h-4 w-4 text-muted-foreground" /> : <FaChevronUp className="h-4 w-4 text-muted-foreground" />}
           </Button>
         </div>
@@ -201,7 +201,7 @@ const PrescriptionMedicationForm: React.FC<PrescriptionMedicationFormProps> = ({
             <div className="space-y-2">
               <Label htmlFor={`useType-${medication.id}`}>Tipo de Uso *</Label>
               <Select onValueChange={setUseType} value={useType}>
-                <SelectTrigger id={`useType-${medication.id}`}>
+                <SelectTrigger id={`useType-${medication.id}`} className="bg-white rounded-lg border-gray-200 dark:border-gray-600 focus:ring-2 focus:ring-blue-400 placeholder-[#9CA3AF] dark:placeholder-gray-500 transition-all duration-200">
                   <SelectValue placeholder="Selecionar tipo" />
                 </SelectTrigger>
                 <SelectContent>
@@ -216,7 +216,7 @@ const PrescriptionMedicationForm: React.FC<PrescriptionMedicationFormProps> = ({
             <div className="space-y-2">
               <Label htmlFor={`pharmacyType-${medication.id}`}>Tipo de Farmácia *</Label>
               <Select onValueChange={setPharmacyType} value={pharmacyType}>
-                <SelectTrigger id={`pharmacyType-${medication.id}`}>
+                <SelectTrigger id={`pharmacyType-${medication.id}`} className="bg-white rounded-lg border-gray-200 dark:border-gray-600 focus:ring-2 focus:ring-blue-400 placeholder-[#9CA3AF] dark:placeholder-gray-500 transition-all duration-200">
                   <SelectValue placeholder="Selecionar farmácia" />
                 </SelectTrigger>
                 <SelectContent>
@@ -238,6 +238,7 @@ const PrescriptionMedicationForm: React.FC<PrescriptionMedicationFormProps> = ({
                 placeholder="Ex: Carprofeno"
                 value={medicationName}
                 onChange={(e) => setMedicationName(e.target.value)}
+                className="bg-white rounded-lg border-gray-200 dark:border-gray-600 focus:ring-2 focus:ring-blue-400 placeholder-[#9CA3AF] dark:placeholder-gray-500 transition-all duration-200"
               />
             </div>
             <div className="space-y-2">
@@ -247,6 +248,7 @@ const PrescriptionMedicationForm: React.FC<PrescriptionMedicationFormProps> = ({
                 placeholder="Ex: 75mg, 100mg/ml"
                 value={concentration}
                 onChange={(e) => setConcentration(e.target.value)}
+                className="bg-white rounded-lg border-gray-200 dark:border-gray-600 focus:ring-2 focus:ring-blue-400 placeholder-[#9CA3AF] dark:placeholder-gray-500 transition-all duration-200"
               />
             </div>
           </div>
@@ -255,7 +257,7 @@ const PrescriptionMedicationForm: React.FC<PrescriptionMedicationFormProps> = ({
             <div className="space-y-2">
               <Label htmlFor={`pharmaceuticalForm-${medication.id}`}>Forma Farmacêutica *</Label>
               <Select onValueChange={setPharmaceuticalForm} value={pharmaceuticalForm}>
-                <SelectTrigger id={`pharmaceuticalForm-${medication.id}`}>
+                <SelectTrigger id={`pharmaceuticalForm-${medication.id}`} className="bg-white rounded-lg border-gray-200 dark:border-gray-600 focus:ring-2 focus:ring-blue-400 placeholder-[#9CA3AF] dark:placeholder-gray-500 transition-all duration-200">
                   <SelectValue placeholder="Selecionar forma" />
                 </SelectTrigger>
                 <SelectContent>
@@ -271,7 +273,7 @@ const PrescriptionMedicationForm: React.FC<PrescriptionMedicationFormProps> = ({
                   placeholder="Ou digite forma personalizada"
                   value={customPharmaceuticalForm}
                   onChange={(e) => setCustomPharmaceuticalForm(e.target.value)}
-                  className="mt-2"
+                  className="mt-2 bg-white rounded-lg border-gray-200 dark:border-gray-600 focus:ring-2 focus:ring-blue-400 placeholder-[#9CA3AF] dark:placeholder-gray-500 transition-all duration-200"
                 />
               )}
             </div>
@@ -282,6 +284,7 @@ const PrescriptionMedicationForm: React.FC<PrescriptionMedicationFormProps> = ({
                 placeholder="Ex: 1, 0.5, 2"
                 value={dosePerAdministration}
                 onChange={(e) => setDosePerAdministration(e.target.value)}
+                className="bg-white rounded-lg border-gray-200 dark:border-gray-600 focus:ring-2 focus:ring-blue-400 placeholder-[#9CA3AF] dark:placeholder-gray-500 transition-all duration-200"
               />
             </div>
           </div>
@@ -290,7 +293,7 @@ const PrescriptionMedicationForm: React.FC<PrescriptionMedicationFormProps> = ({
             <div className="space-y-2">
               <Label htmlFor={`frequency-${medication.id}`}>Frequência *</Label>
               <Select onValueChange={setFrequency} value={frequency}>
-                <SelectTrigger id={`frequency-${medication.id}`}>
+                <SelectTrigger id={`frequency-${medication.id}`} className="bg-white rounded-lg border-gray-200 dark:border-gray-600 focus:ring-2 focus:ring-blue-400 placeholder-[#9CA3AF] dark:placeholder-gray-500 transition-all duration-200">
                   <SelectValue placeholder="A cada..." />
                 </SelectTrigger>
                 <SelectContent>
@@ -305,7 +308,7 @@ const PrescriptionMedicationForm: React.FC<PrescriptionMedicationFormProps> = ({
             <div className="space-y-2">
               <Label htmlFor={`period-${medication.id}`}>Período *</Label>
               <Select onValueChange={setPeriod} value={period}>
-                <SelectTrigger id={`period-${medication.id}`}>
+                <SelectTrigger id={`period-${medication.id}`} className="bg-white rounded-lg border-gray-200 dark:border-gray-600 focus:ring-2 focus:ring-blue-400 placeholder-[#9CA3AF] dark:placeholder-gray-500 transition-all duration-200">
                   <SelectValue placeholder="Por..." />
                 </SelectTrigger>
                 <SelectContent>
@@ -319,7 +322,7 @@ const PrescriptionMedicationForm: React.FC<PrescriptionMedicationFormProps> = ({
             </div>
             <div className="space-y-2">
               <Label htmlFor={`totalQuantity-${medication.id}`}>Quantidade Total</Label>
-              <Input id={`totalQuantity-${medication.id}`} placeholder="Auto calculado" value={totalQuantityDisplay} disabled />
+              <Input id={`totalQuantity-${medication.id}`} placeholder="Auto calculado" value={totalQuantityDisplay} disabled className="bg-white rounded-lg border-gray-200 dark:border-gray-600 focus:ring-2 focus:ring-blue-400 placeholder-[#9CA3AF] dark:placeholder-gray-500 transition-all duration-200" />
             </div>
           </div>
 
@@ -329,6 +332,7 @@ const PrescriptionMedicationForm: React.FC<PrescriptionMedicationFormProps> = ({
                 placeholder="Ou digite frequência personalizada"
                 value={customFrequency}
                 onChange={(e) => setCustomFrequency(e.target.value)}
+                className="bg-white rounded-lg border-gray-200 dark:border-gray-600 focus:ring-2 focus:ring-blue-400 placeholder-[#9CA3AF] dark:placeholder-gray-500 transition-all duration-200"
               />
             )}
             {period === "Outro" && (
@@ -336,6 +340,7 @@ const PrescriptionMedicationForm: React.FC<PrescriptionMedicationFormProps> = ({
                 placeholder="Ou digite período personalizado"
                 value={customPeriod}
                 onChange={(e) => setCustomPeriod(e.target.value)}
+                className="bg-white rounded-lg border-gray-200 dark:border-gray-600 focus:ring-2 focus:ring-blue-400 placeholder-[#9CA3AF] dark:placeholder-gray-500 transition-all duration-200"
               />
             )}
           </div>
@@ -358,6 +363,7 @@ const PrescriptionMedicationForm: React.FC<PrescriptionMedicationFormProps> = ({
                 rows={3}
                 value={customInstructionInput}
                 onChange={(e) => setCustomInstructionInput(e.target.value)}
+                className="bg-white rounded-lg border-gray-200 dark:border-gray-600 focus:ring-2 focus:ring-blue-400 placeholder-[#9CA3AF] dark:placeholder-gray-500 transition-all duration-200"
               />
             </div>
           ) : (
@@ -370,7 +376,7 @@ const PrescriptionMedicationForm: React.FC<PrescriptionMedicationFormProps> = ({
           )}
 
           <div className="flex justify-end mt-6">
-            <Button onClick={handleSave}>
+            <Button onClick={handleSave} className="bg-gradient-to-r from-blue-500 to-indigo-500 text-white hover:from-blue-600 hover:to-indigo-600 rounded-md font-semibold transition-all duration-200 shadow-md hover:shadow-lg">
               <FaPlus className="h-4 w-4 mr-2" /> Salvar Medicamento
             </Button>
           </div>
@@ -383,6 +389,7 @@ const PrescriptionMedicationForm: React.FC<PrescriptionMedicationFormProps> = ({
               rows={3}
               value={generalObservations}
               onChange={(e) => setGeneralObservations(e.target.value)}
+              className="bg-white rounded-lg border-gray-200 dark:border-gray-600 focus:ring-2 focus:ring-blue-400 placeholder-[#9CA3AF] dark:placeholder-gray-500 transition-all duration-200"
             />
           </div>
         </>

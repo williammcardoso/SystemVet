@@ -148,17 +148,17 @@ const AddAnimalPage = () => {
       <div className="flex items-center justify-between mb-6">
         <h1 className="text-3xl font-bold">Adicionar Animal</h1>
         <Link to="/clients">
-          <Button variant="outline">
+          <Button variant="outline" className="rounded-md border-gray-300 text-gray-700 hover:bg-gray-100 hover:text-gray-900 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200 dark:hover:bg-gray-700 transition-colors duration-200">
             <FaArrowLeft className="mr-2 h-4 w-4" /> Voltar
           </Button>
         </Link>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 p-6 bg-white/90 backdrop-blur-sm border border-gray-200 dark:border-gray-700 rounded-2xl shadow-[0_1px_3px_rgba(0,0,0,0.05)]">
         <div className="space-y-2">
           <Label htmlFor="tutor">Tutor/Responsável*</Label>
           <Select>
-            <SelectTrigger id="tutor">
+            <SelectTrigger id="tutor" className="bg-white rounded-lg border-gray-200 dark:border-gray-600 focus:ring-2 focus:ring-blue-400 placeholder-[#9CA3AF] dark:placeholder-gray-500 transition-all duration-200">
               <SelectValue placeholder="Selecione o tutor..." />
             </SelectTrigger>
             <SelectContent>
@@ -172,12 +172,12 @@ const AddAnimalPage = () => {
         </div>
         <div className="space-y-2">
           <Label htmlFor="animalName">Nome do Animal*</Label>
-          <Input id="animalName" placeholder="Nome do animal" />
+          <Input id="animalName" placeholder="Nome do animal" className="bg-white rounded-lg border-gray-200 dark:border-gray-600 focus:ring-2 focus:ring-blue-400 placeholder-[#9CA3AF] dark:placeholder-gray-500 transition-all duration-200" />
         </div>
         <div className="space-y-2">
           <Label htmlFor="species">Espécie*</Label>
           <Select onValueChange={setSelectedSpecies}>
-            <SelectTrigger id="species">
+            <SelectTrigger id="species" className="bg-white rounded-lg border-gray-200 dark:border-gray-600 focus:ring-2 focus:ring-blue-400 placeholder-[#9CA3AF] dark:placeholder-gray-500 transition-all duration-200">
               <SelectValue placeholder="Selecione..." />
             </SelectTrigger>
             <SelectContent>
@@ -192,7 +192,7 @@ const AddAnimalPage = () => {
         <div className="space-y-2">
           <Label htmlFor="breed">Raça</Label>
           <Select disabled={!selectedSpecies}>
-            <SelectTrigger id="breed">
+            <SelectTrigger id="breed" className="bg-white rounded-lg border-gray-200 dark:border-gray-600 focus:ring-2 focus:ring-blue-400 placeholder-[#9CA3AF] dark:placeholder-gray-500 transition-all duration-200">
               <SelectValue placeholder="Selecione..." />
             </SelectTrigger>
             <SelectContent>
@@ -207,7 +207,7 @@ const AddAnimalPage = () => {
         <div className="space-y-2">
           <Label htmlFor="gender">Sexo</Label>
           <Select>
-            <SelectTrigger id="gender">
+            <SelectTrigger id="gender" className="bg-white rounded-lg border-gray-200 dark:border-gray-600 focus:ring-2 focus:ring-blue-400 placeholder-[#9CA3AF] dark:placeholder-gray-500 transition-all duration-200">
               <SelectValue placeholder="Selecione..." />
             </SelectTrigger>
             <SelectContent>
@@ -218,12 +218,12 @@ const AddAnimalPage = () => {
         </div>
         <div className="space-y-2">
           <Label htmlFor="birthday">Data de Nascimento</Label>
-          <Input id="birthday" type="date" />
+          <Input id="birthday" type="date" className="bg-white rounded-lg border-gray-200 dark:border-gray-600 focus:ring-2 focus:ring-blue-400 placeholder-[#9CA3AF] dark:placeholder-gray-500 transition-all duration-200" />
         </div>
         <div className="space-y-2">
           <Label htmlFor="coatColor">Cor da Pelagem</Label>
           <Select>
-            <SelectTrigger id="coatColor">
+            <SelectTrigger id="coatColor" className="bg-white rounded-lg border-gray-200 dark:border-gray-600 focus:ring-2 focus:ring-blue-400 placeholder-[#9CA3AF] dark:placeholder-gray-500 transition-all duration-200">
               <SelectValue placeholder="Selecione..." />
             </SelectTrigger>
             <SelectContent>
@@ -237,24 +237,24 @@ const AddAnimalPage = () => {
         </div>
         <div className="space-y-2">
           <Label htmlFor="weight">Peso (kg)</Label>
-          <Input id="weight" type="number" placeholder="Ex: 5.5" />
+          <Input id="weight" type="number" placeholder="Ex: 5.5" className="bg-white rounded-lg border-gray-200 dark:border-gray-600 focus:ring-2 focus:ring-blue-400 placeholder-[#9CA3AF] dark:placeholder-gray-500 transition-all duration-200" />
         </div>
         <div className="space-y-2">
           <Label htmlFor="microchip">Microchip</Label>
-          <Input id="microchip" placeholder="Número do microchip" />
+          <Input id="microchip" placeholder="Número do microchip" className="bg-white rounded-lg border-gray-200 dark:border-gray-600 focus:ring-2 focus:ring-blue-400 placeholder-[#9CA3AF] dark:placeholder-gray-500 transition-all duration-200" />
         </div>
       </div>
 
-      <div className="mt-6 space-y-2">
+      <div className="mt-6 space-y-2 p-6 bg-white/90 backdrop-blur-sm border border-gray-200 dark:border-gray-700 rounded-2xl shadow-[0_1px_3px_rgba(0,0,0,0.05)]">
         <Label htmlFor="animalNotes">Observações</Label>
-        <Textarea id="animalNotes" placeholder="Adicione observações sobre o animal..." rows={5} />
+        <Textarea id="animalNotes" placeholder="Adicione observações sobre o animal..." rows={5} className="bg-white rounded-lg border-gray-200 dark:border-gray-600 focus:ring-2 focus:ring-blue-400 placeholder-[#9CA3AF] dark:placeholder-gray-500 transition-all duration-200" />
       </div>
 
       <div className="flex justify-end gap-2 mt-6">
-        <Button variant="outline">
+        <Button variant="outline" className="bg-white border border-gray-300 text-gray-700 hover:bg-gray-50 rounded-md transition-all duration-200 shadow-sm hover:shadow-md dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200 dark:hover:bg-gray-600">
           <FaTimes className="mr-2 h-4 w-4" /> Cancelar
         </Button>
-        <Button>
+        <Button className="bg-gradient-to-r from-blue-500 to-indigo-500 text-white hover:from-blue-600 hover:to-indigo-600 rounded-md font-semibold transition-all duration-200 shadow-md hover:shadow-lg">
           <FaSave className="mr-2 h-4 w-4" /> Salvar
         </Button>
       </div>
