@@ -204,6 +204,7 @@ interface PrescriptionPdfContentProps {
   tutorAddress: string;
   medications: MedicationData[];
   generalObservations: string;
+  showElectronicSignatureText: boolean; // Nova prop
 }
 
 export const PrescriptionPdfContent = ({
@@ -214,6 +215,7 @@ export const PrescriptionPdfContent = ({
   tutorAddress,
   medications,
   generalObservations,
+  showElectronicSignatureText, // Destructure new prop
 }: PrescriptionPdfContentProps) => {
   // Group medications by useType
   const groupedMedications = medications.reduce((acc: Record<string, MedicationData[]>, med) => {
@@ -336,7 +338,9 @@ export const PrescriptionPdfContent = ({
                   <Text style={styles.signatureDate}>
                     {formatDateToPortuguese(currentDate)}
                   </Text>
-                  <Text style={styles.signatureText}>Assinado eletronicamente por</Text>
+                  {showElectronicSignatureText && (
+                    <Text style={styles.signatureText}>Assinado eletronicamente por</Text>
+                  )}
                   <Text style={styles.signatureName}>{mockUserSettings.signatureText}</Text>
                   <Text style={styles.clinicDetails}>CRMV {mockUserSettings.userCrmv}</Text>
                   <Text style={styles.clinicDetails}>Registro no MAPA {mockUserSettings.userMapaRegistration}</Text>

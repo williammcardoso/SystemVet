@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import { Link, useParams, useNavigate } from "react-router-dom";
-import { FaArrowLeft, FaPlus, FaTimes, FaEye, FaSave } from "react-icons/fa"; // Importar ícones de react-icons
+import { FaArrowLeft, FaPlus, FaTimes, FaEye, FaSave, FaPrint, FaDownload } from "react-icons/fa"; // Importar ícones de react-icons
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Textarea } from "@/components/ui/textarea";
@@ -171,9 +171,9 @@ const AddPrescriptionPage = () => {
     navigate(`/clients/${clientId}/animals/${animalId}/record`);
   };
 
-  const handleViewPrescription = async () => {
+  const handlePrintPrescription = async () => {
     if (currentPrescriptionMedications.length === 0) {
-      toast.error("Adicione pelo menos um medicamento para visualizar a receita.");
+      toast.error("Adicione pelo menos um medicamento para imprimir a receita.");
       return;
     }
 
@@ -187,6 +187,7 @@ const AddPrescriptionPage = () => {
         tutorAddress: client.address,
         medications: currentPrescriptionMedications,
         generalObservations: currentPrescriptionGeneralObservations,
+        showElectronicSignatureText: false, // Não mostrar "Assinado eletronicamente por" para impressão
       })
     ).toBlob();
 
@@ -194,6 +195,38 @@ const AddPrescriptionPage = () => {
     const url = URL.createObjectURL(blob);
     window.open(url, '_blank');
     URL.revokeObjectURL(url); // Limpar a URL do Blob após a abertura
+  };
+
+  const handleSavePdf = async () => {
+    if (currentPrescriptionMedications.length === 0) {
+      toast.error("Adicione pelo menos um medicamento para salvar a receita em PDF.");
+      return;
+    }
+
+    const blob = await pdf(
+      PrescriptionPdfContent({
+        animalName: animal.name,
+        animalId: animal.id,
+        animalSpecies: animal.species,
+        tutorName: client.name,
+        tutorAddress: client.address,
+        medications: currentPrescriptionMedications,
+        generalObservations: currentPrescriptionGeneralObservations,
+        showElectronicSignatureText: true, // Mostrar "Assinado eletronicamente por" para salvar PDF
+      })
+    ).toBlob();
+
+    // Criar um link de download e clicar nele
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `receita_${animal.name}_${client.name}_${new Date().toISOString().split('T')[0]}.pdf`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+
+    toast.success("Receita salva em PDF com sucesso!");
   };
 
   return (
@@ -272,8 +305,11 @@ const AddPrescriptionPage = () => {
         <Button variant="outline" onClick={() => navigate(`/clients/${clientId}/animals/${animalId}/record`)}>
           <FaTimes className="mr-2 h-4 w-4" /> Cancelar
         </Button>
-        <Button variant="secondary" onClick={handleViewPrescription} disabled={currentPrescriptionMedications.length === 0}>
-          <FaEye className="mr-2 h-4 w-4" /> Visualizar
+        <Button variant="secondary" onClick={handlePrintPrescription} disabled={currentPrescriptionMedications.length === 0}>
+          <FaPrint className="mr-2 h-4 w-4" /> Imprimir
+        </Button>
+        <Button variant="secondary" onClick={handleSavePdf} disabled={currentPrescriptionMedications.length === 0}>
+          <FaDownload className="mr-2 h-4 w-4" /> Salvar PDF
         </Button>
         <Button onClick={handleSavePrescription} disabled={currentPrescriptionMedications.length === 0}>
           <FaSave className="mr-2 h-4 w-4" /> Salvar Receita
