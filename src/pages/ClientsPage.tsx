@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { Search, Plus, Filter, RotateCcw, Settings, Eye, Users } from "lucide-react";
+import * as LucideIcons from "lucide-react"; // Padronizando importação de ícones
 import { Link } from "react-router-dom";
 import { cn } from "@/lib/utils"; // Importar cn
 import { Card } from "@/components/ui/card"; // Importar Card
@@ -147,7 +147,7 @@ const ClientsPage = () => {
           <div className="flex items-center gap-4">
             <div>
               <h1 className="text-2xl font-semibold flex items-center gap-3 text-[#1E293B] dark:text-gray-100 group">
-                <Users className="h-5 w-5 text-gray-500 dark:text-gray-400" /> Clientes
+                <LucideIcons.Users className="h-5 w-5 text-gray-500 dark:text-gray-400" /> Clientes
               </h1>
               <p className="text-sm text-[#6B7280] dark:text-gray-400 mt-1 mb-4">
                 Gerencie os responsáveis e seus animais.
@@ -156,7 +156,7 @@ const ClientsPage = () => {
           </div>
           <div className="flex items-center gap-2">
             <Button variant="outline" size="icon" className="rounded-md border-gray-300 text-gray-700 hover:bg-gray-100 hover:text-gray-900 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200 dark:hover:bg-gray-700 transition-colors duration-200">
-              <Settings className="h-4 w-4" />
+              <LucideIcons.Settings className="h-4 w-4" />
             </Button>
           </div>
         </div>
@@ -168,7 +168,7 @@ const ClientsPage = () => {
       <div className="flex-1 p-6">
         <div className="flex items-center gap-2 mb-4 flex-wrap">
           <div className="relative flex-1 min-w-[150px] max-w-xs">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+            <LucideIcons.Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
             <Input
               placeholder="Responsável"
               className="pl-9 bg-white rounded-lg border-gray-200 dark:border-gray-600 focus:ring-2 focus:ring-blue-400 placeholder-[#9CA3AF] dark:placeholder-gray-500 transition-all duration-200"
@@ -177,7 +177,7 @@ const ClientsPage = () => {
             />
           </div>
           <div className="relative flex-1 min-w-[150px] max-w-xs">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+            <LucideIcons.Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
             <Input
               placeholder="Animal"
               className="pl-9 bg-white rounded-lg border-gray-200 dark:border-gray-600 focus:ring-2 focus:ring-blue-400 placeholder-[#9CA3AF] dark:placeholder-gray-500 transition-all duration-200"
@@ -186,22 +186,22 @@ const ClientsPage = () => {
             />
           </div>
           <Button variant="secondary" size="icon" onClick={handleSearch} className="rounded-md bg-white border border-gray-300 text-gray-700 hover:bg-gray-50 transition-colors duration-200 shadow-sm hover:shadow-md dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200 dark:hover:bg-gray-600">
-            <Search className="h-4 w-4" />
+            <LucideIcons.Search className="h-4 w-4" />
           </Button>
           <Button variant="secondary" size="icon" className="rounded-md bg-white border border-gray-300 text-gray-700 hover:bg-gray-50 transition-colors duration-200 shadow-sm hover:shadow-md dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200 dark:hover:bg-gray-600">
-            <Filter className="h-4 w-4" /> {/* Placeholder for advanced filter */}
+            <LucideIcons.Filter className="h-4 w-4" /> {/* Placeholder for advanced filter */}
           </Button>
           <Button variant="secondary" size="icon" onClick={handleReset} className="rounded-md bg-white border border-gray-300 text-gray-700 hover:bg-gray-50 transition-colors duration-200 shadow-sm hover:shadow-md dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200 dark:hover:bg-gray-600">
-            <RotateCcw className="h-4 w-4" />
+            <LucideIcons.RotateCcw className="h-4 w-4" />
           </Button>
           <Link to="/clients/add">
             <Button className="rounded-md bg-gradient-to-r from-blue-500 to-indigo-500 text-white hover:from-blue-600 hover:to-indigo-600 font-semibold transition-all duration-200 shadow-md hover:shadow-lg">
-              <Plus className="mr-2 h-4 w-4" /> Adicionar Responsável
+              <LucideIcons.Plus className="mr-2 h-4 w-4" /> Adicionar Responsável
             </Button>
           </Link>
           <Link to="/animals/add">
             <Button variant="outline" className="rounded-md bg-white border border-gray-300 text-gray-700 hover:bg-gray-50 transition-colors duration-200 shadow-sm hover:shadow-md dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200 dark:hover:bg-gray-600">
-              <Plus className="mr-2 h-4 w-4" /> Adicionar Animal
+              <LucideIcons.Plus className="mr-2 h-4 w-4" /> Adicionar Animal
             </Button>
           </Link>
         </div>
@@ -224,7 +224,7 @@ const ClientsPage = () => {
                     <TableCell className="text-right">
                       <Link to={`/clients/${client.id}`}>
                         <Button variant="ghost" size="sm" className="rounded-md hover:bg-gray-100 hover:text-gray-900 dark:hover:bg-gray-700 dark:hover:text-gray-200 transition-colors duration-200">
-                          <Eye className="h-4 w-4 mr-2" /> Ver
+                          <LucideIcons.Eye className="h-4 w-4 mr-2" /> Ver
                         </Button>
                       </Link>
                     </TableCell>

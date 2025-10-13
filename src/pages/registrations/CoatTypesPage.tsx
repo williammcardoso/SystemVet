@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { Plus, Edit, Trash2, ArrowLeft } from "lucide-react";
+import * as LucideIcons from "lucide-react"; // Padronizando importação de ícones
 import { Link } from "react-router-dom";
 
 interface CoatType {
@@ -42,7 +42,7 @@ const CoatTypesPage = () => {
         <h1 className="text-3xl font-bold">Cadastro de Pelagens</h1>
         <Link to="/registrations">
           <Button variant="outline">
-            <ArrowLeft className="mr-2 h-4 w-4" /> Voltar
+            <LucideIcons.ArrowLeft className="mr-2 h-4 w-4" /> Voltar
           </Button>
         </Link>
       </div>
@@ -55,7 +55,7 @@ const CoatTypesPage = () => {
           onChange={(e) => setNewCoatTypeName(e.target.value)}
         />
         <Button onClick={handleAddCoatType}>
-          <Plus className="mr-2 h-4 w-4" /> Adicionar Pelagem
+          <LucideIcons.Plus className="mr-2 h-4 w-4" /> Adicionar Pelagem
         </Button>
       </div>
 
@@ -73,10 +73,10 @@ const CoatTypesPage = () => {
                 <TableCell className="font-medium">{coatType.name}</TableCell>
                 <TableCell className="text-right">
                   <Button variant="ghost" size="sm" className="mr-2">
-                    <Edit className="h-4 w-4" />
+                    <LucideIcons.Edit className="h-4 w-4" />
                   </Button>
                   <Button variant="ghost" size="sm" onClick={() => handleDeleteCoatType(coatType.id)}>
-                    <Trash2 className="h-4 w-4" />
+                    <LucideIcons.Trash2 className="h-4 w-4" />
                   </Button>
                 </TableCell>
               </TableRow>

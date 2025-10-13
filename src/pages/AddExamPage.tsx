@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Link, useParams, useNavigate } from "react-router-dom";
-import { ArrowLeft, Save, X } from "lucide-react";
+import * as LucideIcons from "lucide-react"; // Padronizando importação de ícones
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -103,7 +103,7 @@ const AddExamPage = () => {
         <h1 className="text-3xl font-bold">Adicionar Exame para Animal {animalId}</h1>
         <Link to={`/clients/${clientId}/animals/${animalId}/record`}>
           <Button variant="outline">
-            <ArrowLeft className="mr-2 h-4 w-4" /> Voltar para Prontuário
+            <LucideIcons.ArrowLeft className="mr-2 h-4 w-4" /> Voltar para Prontuário
           </Button>
         </Link>
       </div>
@@ -288,11 +288,11 @@ const AddExamPage = () => {
       <div className="flex justify-end gap-2 mt-6">
         <Link to={`/clients/${clientId}/animals/${animalId}/record`}>
           <Button variant="outline">
-            <X className="mr-2 h-4 w-4" /> Cancelar
+            <LucideIcons.X className="mr-2 h-4 w-4" /> Cancelar
           </Button>
         </Link>
         <Button onClick={handleSaveExam}>
-          <Save className="mr-2 h-4 w-4" /> Salvar Exame
+          <LucideIcons.Save className="mr-2 h-4 w-4" /> Salvar Exame
         </Button>
       </div>
     </div>

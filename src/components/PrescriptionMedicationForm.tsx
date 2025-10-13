@@ -5,7 +5,7 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Switch } from "@/components/ui/switch";
-import { Plus, Trash2, ChevronUp, ChevronDown, Edit } from "lucide-react";
+import * as LucideIcons from "lucide-react"; // Padronizando importação de ícones
 import { cn } from "@/lib/utils"; // Importar cn para classes condicionais
 import { MedicationData } from "@/types/medication"; // Importar do novo arquivo de tipos
 
@@ -183,14 +183,14 @@ const PrescriptionMedicationForm: React.FC<PrescriptionMedicationFormProps> = ({
         <div className="flex items-center gap-2">
           {isCollapsed && (
             <Button variant="ghost" size="icon" onClick={handleEdit}>
-              <Edit className="h-4 w-4 text-muted-foreground" />
+              <LucideIcons.Edit className="h-4 w-4 text-muted-foreground" />
             </Button>
           )}
           <Button variant="ghost" size="icon" onClick={() => onDelete(medication.id)}>
-            <Trash2 className="h-4 w-4 text-muted-foreground" />
+            <LucideIcons.Trash2 className="h-4 w-4 text-muted-foreground" />
           </Button>
           <Button variant="ghost" size="icon" onClick={() => onToggleCollapse(medication.id)}>
-            {isCollapsed ? <ChevronDown className="h-4 w-4 text-muted-foreground" /> : <ChevronUp className="h-4 w-4 text-muted-foreground" />}
+            {isCollapsed ? <LucideIcons.ChevronDown className="h-4 w-4 text-muted-foreground" /> : <LucideIcons.ChevronUp className="h-4 w-4 text-muted-foreground" />}
           </Button>
         </div>
       </div>
@@ -371,7 +371,7 @@ const PrescriptionMedicationForm: React.FC<PrescriptionMedicationFormProps> = ({
 
           <div className="flex justify-end mt-6">
             <Button onClick={handleSave}>
-              <Plus className="h-4 w-4 mr-2" /> Salvar Medicamento
+              <LucideIcons.Plus className="h-4 w-4 mr-2" /> Salvar Medicamento
             </Button>
           </div>
 
