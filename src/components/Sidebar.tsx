@@ -8,7 +8,7 @@ import {
 } from "@/components/ui/accordion";
 import { cn } from "@/lib/utils";
 import {
-  FaTachometerAlt, FaUsers, FaCalendarAlt, FaShoppingCart, FaFolder, FaPaw, FaPalette, FaDollarSign, FaBox, FaCog, FaSignOutAlt, FaArrowLeft
+  FaTachometerAlt, FaUsers, FaCalendarAlt, FaShoppingCart, FaFolder, FaPaw, FaPalette, FaDollarSign, FaBox, FaCog, FaSignOutAlt
 } from "react-icons/fa"; // Importar ícones de react-icons
 
 interface NavItem {
@@ -31,7 +31,7 @@ const navItems: NavItem[] = [
   },
   {
     title: "Agenda",
-    href: "/agenda",
+    href: "/agenda", // Link atualizado para a nova página de Agenda
     icon: FaCalendarAlt,
   },
   {

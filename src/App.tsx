@@ -15,8 +15,9 @@ import AddPrescriptionPage from "./pages/AddPrescriptionPage";
 import SpeciesPage from "./pages/registrations/SpeciesPage";
 import BreedsPage from "./pages/registrations/BreedsPage";
 import CoatTypesPage from "./pages/registrations/CoatTypesPage";
-import CompanySettingsPage from "./pages/settings/CompanySettingsPage"; // Importar
-import UserSettingsPage from "./pages/settings/UserSettingsPage";     // Importar
+import CompanySettingsPage from "./pages/settings/CompanySettingsPage";
+import UserSettingsPage from "./pages/settings/UserSettingsPage";
+import AgendaPage from "./pages/AgendaPage"; // Importar a nova página de Agenda
 import NotFound from "./pages/NotFound";
 import { ThemeProvider } from "./components/ThemeProvider";
 
@@ -43,8 +44,9 @@ const App = () => (
               <Route path="/registrations/species" element={<SpeciesPage />} />
               <Route path="/registrations/breeds" element={<BreedsPage />} />
               <Route path="/registrations/coat-types" element={<CoatTypesPage />} />
-              <Route path="/settings/company" element={<CompanySettingsPage />} /> {/* Nova rota */}
-              <Route path="/settings/user" element={<UserSettingsPage />} />     {/* Nova rota */}
+              <Route path="/settings/company" element={<CompanySettingsPage />} />
+              <Route path="/settings/user" element={<UserSettingsPage />} />
+              <Route path="/agenda" element={<AgendaPage />} /> {/* Nova rota para a Agenda */}
               {/* ADICIONE TODAS AS ROTAS PERSONALIZADAS ACIMA DA ROTA CATCH-ALL "*" */}
               <Route path="*" element={<NotFound />} />
             </Routes>
