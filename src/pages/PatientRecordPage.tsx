@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Link, useParams, useNavigate } from "react-router-dom";
 import {
-  ArrowLeft, Users, PawPrint, Plus, Eye, Stethoscope, CalendarDays, DollarSign, Syringe, Weight, FileText, ClipboardList, MessageSquare, Heart, Male, Female, Printer, Download, X, Save, User
+  ArrowLeft, Users, PawPrint, Plus, Eye, Stethoscope, CalendarDays, DollarSign, Syringe, Weight, FileText, ClipboardList, MessageSquare, Heart, Male, Female, Printer, Download, X, Save, User, Scale // Adicionado Scale
 } from "lucide-react"; // Importações nomeadas explícitas para todos os ícones
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -1089,9 +1089,7 @@ const PatientRecordPage = () => {
                             <TableCell>{doc.name}</TableCell>
                             <TableCell className="text-right">
                               <a href={doc.fileUrl} target="_blank" rel="noopener noreferrer">
-                                <Button variant="ghost" size="sm" className="rounded-md hover:bg-gray-100 hover:text-gray-900 dark:hover:bg-gray-700 dark:hover:text-gray-200 transition-colors duration-200">
-                                  <Eye className="h-4 w-4" /> Ver
-                                </Button>
+                                <Eye className="h-4 w-4" />
                               </a>
                             </TableCell>
                           </TableRow>
