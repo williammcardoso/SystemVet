@@ -4,7 +4,7 @@ import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { format, isSameDay } from "date-fns";
 import { ptBR } from "date-fns/locale";
-import { FaArrowLeft, FaCalendarPlus, FaPlus, FaTimes, FaSave, FaCalendarAlt, FaClock, FaUser, FaPaw, FaStickyNote } from "react-icons/fa";
+import { FaArrowLeft, FaCalendarPlus, FaPlus, FaTimes, FaSave, FaCalendarAlt, FaClock, FaUser, FaPaw, FaStickyNote, FaEdit, FaTrashAlt } from "react-icons/fa";
 
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -69,7 +69,7 @@ interface Appointment {
   notes?: string;
 }
 
-let mockAppointments: Appointment[] = [
+const initialMockAppointments: Appointment[] = [
   {
     id: "app1",
     date: new Date(2024, 7, 15, 10, 0), // 15 de Agosto de 2024, 10:00
@@ -109,6 +109,7 @@ const AgendaPage = () => {
   const [selectedDate, setSelectedDate] = useState<Date | undefined>(new Date());
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [editingAppointment, setEditingAppointment] = useState<Appointment | null>(null);
+  const [appointments, setAppointments] = useState<Appointment[]>(initialMockAppointments); // Usar useState para agendamentos
 
   const [newAppointmentTitle, setNewAppointmentTitle] = useState("");
   const [newAppointmentTime, setNewAppointmentTime] = useState("09:00");
@@ -121,7 +122,7 @@ const AgendaPage = () => {
     : [];
 
   const appointmentsForSelectedDate = selectedDate
-    ? mockAppointments.filter((app) => isSameDay(app.date, selectedDate))
+    ? appointments.filter((app) => isSameDay(app.date, selectedDate))
     : [];
 
   const handleAddAppointmentClick = (date?: Date) => {
@@ -166,20 +167,22 @@ const AgendaPage = () => {
 
     if (editingAppointment) {
       // Update existing appointment
-      mockAppointments = mockAppointments.map((app) =>
-        app.id === editingAppointment.id
-          ? {
-              ...app,
-              date: appointmentDateTime,
-              time: newAppointmentTime,
-              title: newAppointmentTitle,
-              clientId: newAppointmentClientId,
-              clientName: client.name,
-              animalId: newAppointmentAnimalId,
-              animalName: animal.name,
-              notes: newAppointmentNotes,
-            }
-          : app
+      setAppointments((prevAppointments) =>
+        prevAppointments.map((app) =>
+          app.id === editingAppointment.id
+            ? {
+                ...app,
+                date: appointmentDateTime,
+                time: newAppointmentTime,
+                title: newAppointmentTitle,
+                clientId: newAppointmentClientId,
+                clientName: client.name,
+                animalId: newAppointmentAnimalId,
+                animalName: animal.name,
+                notes: newAppointmentNotes,
+              }
+            : app
+        ).sort((a, b) => a.date.getTime() - b.date.getTime()) // Sort after update
       );
       toast.success("Agendamento atualizado com sucesso!");
     } else {
@@ -195,23 +198,22 @@ const AgendaPage = () => {
         animalName: animal.name,
         notes: newAppointmentNotes,
       };
-      mockAppointments.push(newAppointment);
+      setAppointments((prevAppointments) =>
+        [...prevAppointments, newAppointment].sort((a, b) => a.date.getTime() - b.date.getTime()) // Sort after add
+      );
       toast.success("Agendamento criado com sucesso!");
     }
 
-    // Sort appointments by date and time
-    mockAppointments.sort((a, b) => a.date.getTime() - b.date.getTime());
-
     setIsDialogOpen(false);
-    // Force re-render of appointments list
-    setSelectedDate(new Date(selectedDate));
+    // No need to force re-render selectedDate, as setAppointments will handle it.
   };
 
   const handleDeleteAppointment = (id: string) => {
-    mockAppointments = mockAppointments.filter(app => app.id !== id);
+    setAppointments((prevAppointments) =>
+      prevAppointments.filter(app => app.id !== id).sort((a, b) => a.date.getTime() - b.date.getTime()) // Sort after delete
+    );
     toast.info("Agendamento excluído.");
-    // Force re-render of appointments list
-    setSelectedDate(new Date(selectedDate));
+    // No need to force re-render selectedDate, as setAppointments will handle it.
   };
 
   return (
@@ -256,7 +258,7 @@ const AgendaPage = () => {
               locale={ptBR}
               className="rounded-md border shadow"
               modifiers={{
-                hasAppointments: mockAppointments.map(app => app.date),
+                hasAppointments: appointments.map(app => app.date),
               }}
               modifiersClassNames={{
                 hasAppointments: "bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200 rounded-full",
