@@ -3,7 +3,7 @@ import { Link, useParams, useNavigate } from "react-router-dom";
 import {
   User, Printer, Download, ArrowLeft, Heart, Scale, Male, Female, CalendarDays,
   Stethoscope, Plus, DollarSign, Syringe, Weight, FileText, ClipboardList,
-  MessageSquare, X, Save, Eye // Importações nomeadas explícitas
+  MessageSquare, X, Save, Eye 
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";

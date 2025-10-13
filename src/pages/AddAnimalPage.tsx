@@ -4,8 +4,8 @@ import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { ArrowLeft, X, Save } from "lucide-react"; // Importações nomeadas explícitas
-import { Link } from "react-router-dom";
 import React, { useState } from "react";
+import { Link } from "react-router-dom";
 
 // Mock data for clients (tutors) - consistente com ClientsPage
 interface Animal {
