@@ -3,7 +3,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
-import * as LucideIcons from "lucide-react"; // Padronizando importação de ícones
+import { ArrowLeft, X, Save } from "lucide-react"; // Importações nomeadas explícitas
 import { Link } from "react-router-dom";
 import React, { useState } from "react";
 
@@ -149,7 +149,7 @@ const AddAnimalPage = () => {
         <h1 className="text-3xl font-bold">Adicionar Animal</h1>
         <Link to="/clients">
           <Button variant="outline">
-            <LucideIcons.ArrowLeft className="mr-2 h-4 w-4" /> Voltar
+            <ArrowLeft className="mr-2 h-4 w-4" /> Voltar
           </Button>
         </Link>
       </div>
@@ -252,10 +252,10 @@ const AddAnimalPage = () => {
 
       <div className="flex justify-end gap-2 mt-6">
         <Button variant="outline">
-          <LucideIcons.X className="mr-2 h-4 w-4" /> Cancelar
+          <X className="mr-2 h-4 w-4" /> Cancelar
         </Button>
         <Button>
-          <LucideIcons.Save className="mr-2 h-4 w-4" /> Salvar
+          <Save className="mr-2 h-4 w-4" /> Salvar
         </Button>
       </div>
     </div>
