@@ -468,7 +468,7 @@ const PatientRecordPage = () => {
 
 
   return (
-    <div className="flex flex-col min-h-screen bg-gray-50 dark:bg-gray-950">
+    <div className="flex flex-col min-h-screen bg-white dark:bg-white">
       {/* Header da Página com Gradiente e Breadcrumb */}
       <div className="bg-gradient-to-r from-gray-50 via-white to-gray-50 dark:from-gray-900 dark:via-gray-950 dark:to-gray-950 p-6 pb-4 border-b border-gray-200 dark:border-gray-800">
         <div className="flex items-center justify-between mb-2">
