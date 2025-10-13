@@ -12,8 +12,8 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import * as LucideIcons from "lucide-react"; // Importar todos os ícones sob um alias
-import { useTheme } from "next-themes"; // Para Dark Mode
+import { Menu, Sun, Moon, Bell, HelpCircle, Settings, LogOut } from "lucide-react"; // Importar ícones individualmente
+import { useTheme } from "next-themes";
 
 interface HeaderProps {
   onToggleMobileSidebar: () => void;
@@ -31,7 +31,7 @@ const Header: React.FC<HeaderProps> = ({ onToggleMobileSidebar }) => {
         className="lg:hidden"
         onClick={onToggleMobileSidebar}
       >
-        <LucideIcons.Menu className="h-5 w-5" />
+        <Menu className="h-5 w-5" />
         <span className="sr-only">Toggle Sidebar</span>
       </Button>
 
@@ -46,16 +46,16 @@ const Header: React.FC<HeaderProps> = ({ onToggleMobileSidebar }) => {
           className="transition-colors duration-200"
         >
           {theme === "dark" ? (
-            <LucideIcons.Sun className="h-5 w-5 text-yellow-500" />
+            <Sun className="h-5 w-5 text-yellow-500" />
           ) : (
-            <LucideIcons.Moon className="h-5 w-5 text-blue-600" />
+            <Moon className="h-5 w-5 text-blue-600" />
           )}
           <span className="sr-only">Toggle theme</span>
         </Button>
 
         {/* Notificações */}
         <Button variant="ghost" size="icon" className="relative">
-          <LucideIcons.Bell className="h-5 w-5" />
+          <Bell className="h-5 w-5" />
           <span className="absolute top-1 right-1 h-2 w-2 rounded-full bg-red-500" />
           <span className="sr-only">Notificações</span>
         </Button>
@@ -63,7 +63,7 @@ const Header: React.FC<HeaderProps> = ({ onToggleMobileSidebar }) => {
         {/* Ajuda */}
         <Link to="/help">
           <Button variant="ghost" size="icon">
-            <LucideIcons.HelpCircle className="h-5 w-5" />
+            <HelpCircle className="h-5 w-5" />
             <span className="sr-only">Ajuda</span>
           </Button>
         </Link>
@@ -89,11 +89,11 @@ const Header: React.FC<HeaderProps> = ({ onToggleMobileSidebar }) => {
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
             <DropdownMenuItem>
-              <LucideIcons.Settings className="mr-2 h-4 w-4" />
+              <Settings className="mr-2 h-4 w-4" />
               <span>Configurações</span>
             </DropdownMenuItem>
             <DropdownMenuItem>
-              <LucideIcons.LogOut className="mr-2 h-4 w-4" />
+              <LogOut className="mr-2 h-4 w-4" />
               <span>Sair</span>
             </DropdownMenuItem>
           </DropdownMenuContent>

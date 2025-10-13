@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { Link, useParams, useNavigate } from "react-router-dom";
 import {
-  ArrowLeft, Users, PawPrint, Plus, Eye, Stethoscope, CalendarDays, DollarSign, Syringe, Weight, FileText, ClipboardList, MessageSquare, Heart, Male, Female, Printer, Download, X, Save, User, Scale // Adicionado Scale
-} from "lucide-react"; // Importações nomeadas explícitas para todos os ícones
+  ArrowLeft, Users, PawPrint, Plus, Eye, Stethoscope, CalendarDays, DollarSign, Syringe, Weight, FileText, ClipboardList, MessageSquare, Heart, Male, Female, Printer, Download, X, Save, User, Scale
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -19,12 +19,12 @@ import {
 } from "@/components/ui/dialog";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { toast } from "sonner"; // Importar toast para notificações
-import { PrescriptionEntry } from "@/types/medication"; // Import PrescriptionEntry
-import { mockPrescriptions } from "@/mockData/prescriptions"; // Import mutable mockPrescriptions
-import { cn } from "@/lib/utils"; // Importar cn
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"; // Importar Avatar
-import { Badge } from "@/components/ui/badge"; // Importar Badge
+import { toast } from "sonner";
+import { PrescriptionEntry } from "@/types/medication";
+import { mockPrescriptions } from "@/mockData/prescriptions";
+import { cn } from "@/lib/utils";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Badge } from "@/components/ui/badge";
 
 // Mock data (centralizado aqui para facilitar o exemplo, mas idealmente viria de um serviço)
 interface Animal {
@@ -32,22 +32,22 @@ interface Animal {
   name: string;
   species: string;
   breed: string;
-  gender: "Macho" | "Fêmea" | "Outro"; // Updated gender type
-  birthday: string; // Keep birthday to calculate age
+  gender: "Macho" | "Fêmea" | "Outro";
+  birthday: string;
   coatColor: string;
   weight: number;
   microchip: string;
   notes: string;
-  status: 'Ativo' | 'Inativo'; // New field for status badge
-  lastConsultationDate?: string; // New field for last consultation
-  totalProcedures?: number; // New field for financial summary
-  totalValue?: number; // New field for financial summary
+  status: 'Ativo' | 'Inativo';
+  lastConsultationDate?: string;
+  totalProcedures?: number;
+  totalValue?: number;
 }
 
 interface Client {
   id: string;
   name: string;
-  phone: string; // New field for client phone
+  phone: string;
   animals: Animal[];
 }
 
@@ -55,7 +55,7 @@ const mockClients: Client[] = [
   {
     id: "1",
     name: "William",
-    phone: "(19) 99363-1981", // Example phone
+    phone: "(19) 99363-1981",
     animals: [
       {
         id: "a1",
@@ -63,7 +63,7 @@ const mockClients: Client[] = [
         species: "Cachorro",
         breed: "Labrador",
         gender: "Macho",
-        birthday: "2020-01-15", // Age will be calculated from this
+        birthday: "2020-01-15",
         coatColor: "Dourado",
         weight: 25.0,
         microchip: "123456789",
@@ -187,7 +187,7 @@ interface DocumentEntry {
   id: string;
   date: string;
   name: string;
-  fileUrl: string; // Placeholder for a file URL
+  fileUrl: string;
 }
 
 interface ObservationEntry {

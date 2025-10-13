@@ -1,5 +1,5 @@
 import React from "react";
-import { Link, useLocation } from "react-router-dom"; // Importar useLocation
+import { Link, useLocation } from "react-router-dom";
 import {
   Accordion,
   AccordionContent,
@@ -7,7 +7,9 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import { cn } from "@/lib/utils";
-import * as LucideIcons from "lucide-react"; // Importar todos os ícones sob um alias
+import {
+  LayoutDashboard, Users, Calendar, ShoppingCart, Folder, PawPrint, Palette, DollarSign, Package, Settings, LogOut, ArrowLeft
+} from "lucide-react"; // Importar ícones individualmente
 
 interface NavItem {
   title: string;
@@ -20,21 +22,21 @@ const navItems: NavItem[] = [
   {
     title: "Painel de Controle",
     href: "/",
-    icon: LucideIcons.LayoutDashboard,
+    icon: LayoutDashboard,
   },
   {
     title: "Clientes",
     href: "/clients",
-    icon: LucideIcons.Users,
+    icon: Users,
   },
   {
     title: "Agenda",
     href: "/agenda",
-    icon: LucideIcons.Calendar,
+    icon: Calendar,
   },
   {
     title: "Vendas",
-    icon: LucideIcons.ShoppingCart,
+    icon: ShoppingCart,
     subItems: [
       { title: "Ponto de venda", href: "/sales/pos" },
       { title: "Minhas vendas", href: "/sales/my-sales" },
@@ -53,11 +55,11 @@ const navItems: NavItem[] = [
   },
   {
     title: "Cadastros",
-    icon: LucideIcons.Folder,
+    icon: Folder,
     subItems: [
-      { title: "Espécies", href: "/registrations/species", icon: LucideIcons.PawPrint },
-      { title: "Raças", href: "/registrations/breeds", icon: LucideIcons.PawPrint },
-      { title: "Pelagens", href: "/registrations/coat-types", icon: LucideIcons.Palette },
+      { title: "Espécies", href: "/registrations/species", icon: PawPrint },
+      { title: "Raças", href: "/registrations/breeds", icon: PawPrint },
+      { title: "Pelagens", href: "/registrations/coat-types", icon: Palette },
       { title: "Patologias", href: "/registrations/pathologies" },
       { title: "Tipos de atendimento", href: "/registrations/appointment-types" },
       { title: "Vacinas", href: "/registrations/vaccines" },
@@ -71,7 +73,7 @@ const navItems: NavItem[] = [
   },
   {
     title: "Estoque e serviços",
-    icon: LucideIcons.Package,
+    icon: Package,
     subItems: [
       { title: "Produtos e Serviços", href: "/stock/products-services" },
       { title: "Compras", href: "/stock/purchases" },
@@ -86,7 +88,7 @@ const navItems: NavItem[] = [
   },
   {
     title: "Financeiro",
-    icon: LucideIcons.DollarSign,
+    icon: DollarSign,
     subItems: [
       { title: "Lançamentos", href: "/financial/transactions" },
       { title: "Conciliação de cartões", href: "/financial/card-reconciliation" },
@@ -101,7 +103,7 @@ const navItems: NavItem[] = [
   },
   {
     title: "Configuração",
-    icon: LucideIcons.Settings,
+    icon: Settings,
     subItems: [
       { title: "Empresa", href: "/settings/company" },
       { title: "Usuários", href: "/settings/user" },
@@ -112,7 +114,7 @@ const navItems: NavItem[] = [
   {
     title: "Sair",
     href: "/logout",
-    icon: LucideIcons.LogOut,
+    icon: LogOut,
   },
 ];
 
@@ -140,7 +142,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isMobileOpen, onCloseMobile }) => {
           isMobileOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0"
         )}
       >
-        <div className="flex items-center justify-start h-16 border-b border-sidebar-border mb-4 px-3"> {/* Alterado para justify-start e adicionado px-3 */}
+        <div className="flex items-center justify-start h-16 border-b border-sidebar-border mb-4 px-3">
           <h1 className="text-3xl font-extrabold text-sidebar-primary-foreground">SimplesVet</h1>
         </div>
         <nav className="space-y-1">
@@ -166,7 +168,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isMobileOpen, onCloseMobile }) => {
                       "font-normal",
                       location.pathname.startsWith(item.subItems?.[0]?.href?.split('/')[1] || "") && "bg-sidebar-accent text-sidebar-accent-foreground font-medium"
                     )}>
-                      <div className="flex items-center gap-3"> {/* Adicionado div para agrupar ícone e título e alinhar à esquerda */}
+                      <div className="flex items-center gap-3">
                         <item.icon className="h-4 w-4" />
                         {item.title}
                       </div>
