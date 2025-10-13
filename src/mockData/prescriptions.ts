@@ -7,6 +7,7 @@ export let mockPrescriptions: PrescriptionEntry[] = [
     medicationName: "Antibiótico X, Anti-inflamatório Y",
     treatmentDescription: "Tratamento para infecção bacteriana e inflamação.",
     instructions: "Administrar com alimento e bastante água.",
+    type: 'simple', // Adicionado tipo
     medications: [
       {
         id: "med1",
@@ -50,6 +51,7 @@ export let mockPrescriptions: PrescriptionEntry[] = [
     medicationName: "Receita de Teste Longa",
     treatmentDescription: "Receita de teste com múltiplos medicamentos para verificação de paginação.",
     instructions: "Esta é uma receita de teste com múltiplos medicamentos para verificar a paginação do PDF.",
+    type: 'simple', // Adicionado tipo
     medications: [
       {
         id: "med-long-1",
@@ -186,6 +188,38 @@ export let mockPrescriptions: PrescriptionEntry[] = [
         generalObservations: "",
         totalQuantity: "42",
         totalQuantityDisplay: "42 spray",
+        isCollapsed: true,
+      },
+    ],
+  },
+  {
+    id: "rx-controlled-test",
+    date: new Date().toISOString().split('T')[0],
+    medicationName: "Rivotril",
+    treatmentDescription: "Tratamento para ansiedade severa.",
+    instructions: "Manter fora do alcance de crianças.",
+    type: 'controlled', // Exemplo de receita controlada
+    pharmacistName: "Dra. Farmacêutica Exemplo",
+    pharmacistCpf: "123.456.789-00",
+    pharmacistCfr: "CRF-SP 12345",
+    pharmacistAddress: "Rua da Farmácia, 500, Bairro - Cidade",
+    pharmacistPhone: "(11) 99999-8888",
+    medications: [
+      {
+        id: "med-controlled-1",
+        useType: "Uso Oral",
+        pharmacyType: "Farmácia Humana",
+        medicationName: "Rivotril",
+        concentration: "2mg",
+        pharmaceuticalForm: "Comprimido",
+        dosePerAdministration: "0.25",
+        frequency: "12 horas",
+        period: "30 dias",
+        useCustomInstructions: false,
+        generatedInstructions: "Dê 0.25 comprimido, a cada 12 horas, durante 30 dias.",
+        generalObservations: "Uso contínuo, não interromper abruptamente.",
+        totalQuantity: "15",
+        totalQuantityDisplay: "15 comprimido(s)",
         isCollapsed: true,
       },
     ],

@@ -1125,12 +1125,14 @@ const PatientRecordPage = () => {
                   </DropdownMenuTrigger>
                   <DropdownMenuContent align="end" className="w-56">
                     <DropdownMenuItem asChild>
-                      <Link to={`/clients/${clientId}/animals/${animalId}/add-prescription`}>
+                      <Link to={`/clients/${clientId}/animals/${animalId}/add-prescription?type=simple`}>
                         Receita simples
                       </Link>
                     </DropdownMenuItem>
-                    <DropdownMenuItem onClick={() => toast.info("Funcionalidade em desenvolvimento: Receita controlada")}>
-                      Receita controlada
+                    <DropdownMenuItem asChild>
+                      <Link to={`/clients/${clientId}/animals/${animalId}/add-prescription?type=controlled`}>
+                        Receita controlada
+                      </Link>
                     </DropdownMenuItem>
                     <DropdownMenuItem onClick={() => toast.info("Funcionalidade em desenvolvimento: Receita manipulada")}>
                       Receita manipulada

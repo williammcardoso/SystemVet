@@ -187,6 +187,44 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     marginBottom: 2,
   },
+  // Novos estilos para Receita Controlada
+  controlledPrescriptionHeader: {
+    marginBottom: 20,
+    paddingBottom: 10,
+    borderBottomWidth: 1,
+    borderBottomColor: "#f00", // Borda vermelha para destacar
+  },
+  controlledPrescriptionTitle: {
+    fontSize: 22,
+    textAlign: "center",
+    fontWeight: "bold",
+    color: "#f00",
+    marginBottom: 15,
+  },
+  issuerPharmacistSection: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    marginBottom: 20,
+    gap: 10,
+  },
+  issuerPharmacistCard: {
+    flex: 1,
+    borderWidth: 1,
+    borderColor: "#f00",
+    borderRadius: 5,
+    padding: 10,
+  },
+  issuerPharmacistTitle: {
+    fontSize: 11,
+    fontWeight: "bold",
+    marginBottom: 5,
+    color: "#f00",
+  },
+  issuerPharmacistText: {
+    fontSize: 10,
+    marginBottom: 2,
+    color: "#333",
+  },
 });
 
 // Helper function to format date
@@ -204,7 +242,13 @@ interface PrescriptionPdfContentProps {
   tutorAddress: string;
   medications: MedicationData[];
   generalObservations: string;
-  showElectronicSignatureText: boolean; // Nova prop
+  showElectronicSignatureText: boolean;
+  prescriptionType: 'simple' | 'controlled' | 'manipulated'; // Novo prop
+  pharmacistName?: string; // Dados do farmacêutico
+  pharmacistCpf?: string;
+  pharmacistCfr?: string;
+  pharmacistAddress?: string;
+  pharmacistPhone?: string;
 }
 
 export const PrescriptionPdfContent = ({
@@ -215,7 +259,13 @@ export const PrescriptionPdfContent = ({
   tutorAddress,
   medications,
   generalObservations,
-  showElectronicSignatureText, // Destructure new prop
+  showElectronicSignatureText,
+  prescriptionType, // Destructure new prop
+  pharmacistName,
+  pharmacistCpf,
+  pharmacistCfr,
+  pharmacistAddress,
+  pharmacistPhone,
 }: PrescriptionPdfContentProps) => {
   // Group medications by useType
   const groupedMedications = medications.reduce((acc: Record<string, MedicationData[]>, med) => {
@@ -254,7 +304,33 @@ export const PrescriptionPdfContent = ({
                 </View>
               </View>
 
-              <Text style={styles.mainTitle}>Receita Simples</Text>
+              {prescriptionType === 'controlled' ? (
+                <View style={styles.controlledPrescriptionHeader}>
+                  <Text style={styles.controlledPrescriptionTitle}>RECEITA DE CONTROLE ESPECIAL</Text>
+                </View>
+              ) : (
+                <Text style={styles.mainTitle}>Receita Simples</Text>
+              )}
+
+              {/* Issuer and Pharmacist Info for Controlled Prescriptions */}
+              {prescriptionType === 'controlled' && (
+                <View style={styles.issuerPharmacistSection}>
+                  <View style={styles.issuerPharmacistCard}>
+                    <Text style={styles.issuerPharmacistTitle}>Emitente (Veterinário)</Text>
+                    <Text style={styles.issuerPharmacistText}>Nome: {mockUserSettings.signatureText}</Text>
+                    <Text style={styles.issuerPharmacistText}>CRMV: {mockUserSettings.userCrmv}</Text>
+                    <Text style={styles.issuerPharmacistText}>Registro MAPA: {mockUserSettings.userMapaRegistration}</Text>
+                  </View>
+                  <View style={styles.issuerPharmacistCard}>
+                    <Text style={styles.issuerPharmacistTitle}>Farmacêutico</Text>
+                    <Text style={styles.issuerPharmacistText}>Nome: {pharmacistName || "Não informado"}</Text>
+                    <Text style={styles.issuerPharmacistText}>CPF: {pharmacistCpf || "Não informado"}</Text>
+                    <Text style={styles.issuerPharmacistText}>CRF: {pharmacistCfr || "Não informado"}</Text>
+                    <Text style={styles.issuerPharmacistText}>Endereço: {pharmacistAddress || "Não informado"}</Text>
+                    <Text style={styles.issuerPharmacistText}>Telefone: {pharmacistPhone || "Não informado"}</Text>
+                  </View>
+                </View>
+              )}
 
               {/* Animal and Tutor Info */}
               <View style={styles.infoSectionContainer}>

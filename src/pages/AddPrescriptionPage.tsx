@@ -1,18 +1,29 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { Link, useParams, useNavigate } from "react-router-dom";
+import { Link, useParams, useNavigate, useSearchParams } from "react-router-dom"; // Importar useSearchParams
 import { FaArrowLeft, FaPlus, FaTimes, FaEye, FaSave, FaPrint, FaDownload } from "react-icons/fa"; // Importar ícones de react-icons
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Textarea } from "@/components/ui/textarea";
-import { Label } from "@/components/ui/label"; // Importar Label
+import { Label } from "@/components/ui/label";
+import { Input } from "@/components/ui/input"; // Importar Input
 import PrescriptionMedicationForm, { MedicationData } from "@/components/PrescriptionMedicationForm";
 import { toast } from "sonner";
 import { pdf } from "@react-pdf/renderer";
 import { PrescriptionPdfContent } from "@/components/PrescriptionPdfContent";
 import { PrescriptionEntry } from "@/types/medication";
 import { mockPrescriptions } from "@/mockData/prescriptions";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog"; // Importar AlertDialog
 
 // Mock data para animais e clientes (para exibir informações no cabeçalho)
 interface Animal {
@@ -54,13 +65,27 @@ const mockClients: Client[] = [
 const AddPrescriptionPage = () => {
   const { clientId, animalId, prescriptionId } = useParams<{ clientId: string; animalId: string; prescriptionId?: string }>();
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const prescriptionType = (searchParams.get('type') as 'simple' | 'controlled' | 'manipulated') || 'simple';
 
   const client = mockClients.find(c => c.id === clientId);
   const animal = client?.animals.find(a => a.id === animalId);
 
   const [currentPrescriptionMedications, setCurrentPrescriptionMedications] = useState<MedicationData[]>([]);
   const [currentPrescriptionGeneralObservations, setCurrentPrescriptionGeneralObservations] = useState<string>("");
-  const [treatmentDescription, setTreatmentDescription] = useState<string>(""); // Novo estado para a descrição do tratamento
+  const [treatmentDescription, setTreatmentDescription] = useState<string>("");
+
+  // Estados para dados do farmacêutico (apenas para receita controlada)
+  const [pharmacistName, setPharmacistName] = useState<string>("");
+  const [pharmacistCpf, setPharmacistCpf] = useState<string>("");
+  const [pharmacistCfr, setPharmacistCfr] = useState<string>("");
+  const [pharmacistAddress, setPharmacistAddress] = useState<string>("");
+  const [pharmacistPhone, setPharmacistPhone] = useState<string>("");
+
+  // Estado para o AlertDialog de confirmação de múltiplos medicamentos
+  const [isControlledMedicationWarningOpen, setIsControlledMedicationWarningOpen] = useState(false);
+  const [allowMultipleMedications, setAllowMultipleMedications] = useState(false);
+
 
   useEffect(() => {
     if (prescriptionId) {
@@ -69,13 +94,31 @@ const AddPrescriptionPage = () => {
       if (existingPrescription) {
         setCurrentPrescriptionMedications(existingPrescription.medications.map(med => ({ ...med, isCollapsed: true }))); // Collapse existing meds
         setCurrentPrescriptionGeneralObservations(existingPrescription.instructions);
-        setTreatmentDescription(existingPrescription.treatmentDescription || ""); // Carregar descrição do tratamento
+        setTreatmentDescription(existingPrescription.treatmentDescription || "");
+
+        // Carregar dados do farmacêutico se for receita controlada
+        if (existingPrescription.type === 'controlled') {
+          setPharmacistName(existingPrescription.pharmacistName || "");
+          setPharmacistCpf(existingPrescription.pharmacistCpf || "");
+          setPharmacistCfr(existingPrescription.pharmacistCfr || "");
+          setPharmacistAddress(existingPrescription.pharmacistAddress || "");
+          setPharmacistPhone(existingPrescription.pharmacistPhone || "");
+          setAllowMultipleMedications(existingPrescription.medications.length > 1); // Se já tem mais de um, permite
+        }
       } else {
         toast.error("Receita não encontrada.");
         navigate(`/clients/${clientId}/animals/${animalId}/record`);
       }
+    } else {
+      // Reset pharmacist data for new prescriptions
+      setPharmacistName("");
+      setPharmacistCpf("");
+      setPharmacistCfr("");
+      setPharmacistAddress("");
+      setPharmacistPhone("");
+      setAllowMultipleMedications(false);
     }
-  }, [prescriptionId, clientId, animalId, navigate]);
+  }, [prescriptionId, clientId, animalId, navigate, prescriptionType]);
 
 
   if (!client || !animal) {
@@ -92,6 +135,11 @@ const AddPrescriptionPage = () => {
   }
 
   const handleAddMedication = () => {
+    if (prescriptionType === 'controlled' && currentPrescriptionMedications.length >= 1 && !allowMultipleMedications) {
+      setIsControlledMedicationWarningOpen(true);
+      return;
+    }
+
     const newMedication: MedicationData = {
       id: `med-${Date.now()}`,
       useType: "",
@@ -113,6 +161,12 @@ const AddPrescriptionPage = () => {
       isCollapsed: false, // New medications start expanded
     };
     setCurrentPrescriptionMedications((prev) => [...prev, newMedication]);
+  };
+
+  const handleConfirmAddMultipleMedications = () => {
+    setAllowMultipleMedications(true);
+    setIsControlledMedicationWarningOpen(false);
+    handleAddMedication(); // Add the medication after confirmation
   };
 
   const handleSaveMedication = (updatedMedication: MedicationData) => {
@@ -141,6 +195,12 @@ const AddPrescriptionPage = () => {
       return;
     }
 
+    // Validate pharmacist details for controlled prescriptions
+    if (prescriptionType === 'controlled' && (!pharmacistName.trim() || !pharmacistCpf.trim() || !pharmacistCfr.trim() || !pharmacistAddress.trim() || !pharmacistPhone.trim())) {
+      toast.error("Por favor, preencha todos os dados do farmacêutico para a receita controlada.");
+      return;
+    }
+
     // Generate a summary medication name for the table display
     const summaryMedicationName = currentPrescriptionMedications
       .map(med => med.medicationName)
@@ -151,8 +211,14 @@ const AddPrescriptionPage = () => {
       id: prescriptionId || `rx-${Date.now()}`, // Use existing ID if editing, otherwise new ID
       date: new Date().toISOString().split('T')[0],
       medicationName: summaryMedicationName || "Receita sem medicamentos",
-      treatmentDescription: treatmentDescription.trim() || undefined, // Salvar a descrição do tratamento
+      treatmentDescription: treatmentDescription.trim() || undefined,
       instructions: currentPrescriptionGeneralObservations,
+      type: prescriptionType, // Salvar o tipo de receita
+      pharmacistName: prescriptionType === 'controlled' ? pharmacistName.trim() : undefined,
+      pharmacistCpf: prescriptionType === 'controlled' ? pharmacistCpf.trim() : undefined,
+      pharmacistCfr: prescriptionType === 'controlled' ? pharmacistCfr.trim() : undefined,
+      pharmacistAddress: prescriptionType === 'controlled' ? pharmacistAddress.trim() : undefined,
+      pharmacistPhone: prescriptionType === 'controlled' ? pharmacistPhone.trim() : undefined,
       medications: currentPrescriptionMedications.map(med => ({ ...med, isCollapsed: true })), // Ensure all are collapsed when saved
     };
 
@@ -187,7 +253,13 @@ const AddPrescriptionPage = () => {
         tutorAddress: client.address,
         medications: currentPrescriptionMedications,
         generalObservations: currentPrescriptionGeneralObservations,
-        showElectronicSignatureText: false, // Não mostrar "Assinado eletronicamente por" para impressão
+        showElectronicSignatureText: false,
+        prescriptionType: prescriptionType, // Passar o tipo de receita
+        pharmacistName: pharmacistName,
+        pharmacistCpf: pharmacistCpf,
+        pharmacistCfr: pharmacistCfr,
+        pharmacistAddress: pharmacistAddress,
+        pharmacistPhone: pharmacistPhone,
       })
     ).toBlob();
 
@@ -212,7 +284,13 @@ const AddPrescriptionPage = () => {
         tutorAddress: client.address,
         medications: currentPrescriptionMedications,
         generalObservations: currentPrescriptionGeneralObservations,
-        showElectronicSignatureText: true, // Mostrar "Assinado eletronicamente por" para salvar PDF
+        showElectronicSignatureText: true,
+        prescriptionType: prescriptionType, // Passar o tipo de receita
+        pharmacistName: pharmacistName,
+        pharmacistCpf: pharmacistCpf,
+        pharmacistCfr: pharmacistCfr,
+        pharmacistAddress: pharmacistAddress,
+        pharmacistPhone: pharmacistPhone,
       })
     ).toBlob();
 
@@ -233,7 +311,7 @@ const AddPrescriptionPage = () => {
     <div className="p-6">
       <div className="flex items-center justify-between mb-6">
         <h1 className="text-3xl font-bold">
-          {prescriptionId ? "Editar Receita" : "Adicionar Nova Receita"} para {animal.name}
+          {prescriptionId ? "Editar Receita" : "Adicionar Nova Receita"} ({prescriptionType === 'simple' ? 'Simples' : prescriptionType === 'controlled' ? 'Controlada' : 'Manipulada'}) para {animal.name}
         </h1>
         <Link to={`/clients/${clientId}/animals/${animalId}/record`}>
           <Button variant="outline">
@@ -260,6 +338,41 @@ const AddPrescriptionPage = () => {
             </div>
           </CardContent>
         </Card>
+
+        {prescriptionType === 'controlled' && (
+          <Card className="mb-4 border-t-4 border-red-500">
+            <CardHeader>
+              <CardTitle className="text-red-600 dark:text-red-400">Dados do Farmacêutico (Receita Controlada)</CardTitle>
+              <p className="text-sm text-muted-foreground">Estas informações serão incluídas no PDF da receita controlada.</p>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <Label htmlFor="pharmacistName">Nome do Farmacêutico *</Label>
+                  <Input id="pharmacistName" value={pharmacistName} onChange={(e) => setPharmacistName(e.target.value)} placeholder="Nome completo do farmacêutico" />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="pharmacistCpf">CPF *</Label>
+                  <Input id="pharmacistCpf" value={pharmacistCpf} onChange={(e) => setPharmacistCpf(e.target.value)} placeholder="CPF do farmacêutico" />
+                </div>
+              </div>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <Label htmlFor="pharmacistCfr">CRF *</Label>
+                  <Input id="pharmacistCfr" value={pharmacistCfr} onChange={(e) => setPharmacistCfr(e.target.value)} placeholder="Registro no CRF (Ex: CRF-SP 12345)" />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="pharmacistPhone">Telefone *</Label>
+                  <Input id="pharmacistPhone" value={pharmacistPhone} onChange={(e) => setPharmacistPhone(e.target.value)} placeholder="Telefone do farmacêutico" />
+                </div>
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="pharmacistAddress">Endereço da Farmácia *</Label>
+                <Textarea id="pharmacistAddress" value={pharmacistAddress} onChange={(e) => setPharmacistAddress(e.target.value)} placeholder="Endereço completo da farmácia" rows={2} />
+              </div>
+            </CardContent>
+          </Card>
+        )}
 
         <Card className="mb-4">
           <CardHeader>
@@ -315,6 +428,22 @@ const AddPrescriptionPage = () => {
           <FaSave className="mr-2 h-4 w-4" /> Salvar Receita
         </Button>
       </div>
+
+      {/* AlertDialog para Receita Controlada */}
+      <AlertDialog open={isControlledMedicationWarningOpen} onOpenChange={setIsControlledMedicationWarningOpen}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Receita Controlada: Múltiplos Medicamentos</AlertDialogTitle>
+            <AlertDialogDescription>
+              Receitas controladas geralmente permitem apenas um medicamento por formulário. Deseja adicionar mais de um medicamento mesmo assim?
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancelar</AlertDialogCancel>
+            <AlertDialogAction onClick={handleConfirmAddMultipleMedications}>Continuar</AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 };
