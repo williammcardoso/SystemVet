@@ -4,7 +4,7 @@ import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Textarea } from "@/components/ui/textarea"; // Importar Textarea
-import * as LucideIcons from "lucide-react"; // Padronizando importação de ícones
+import { ArrowLeft, Plus, X, Save } from "lucide-react"; // Importações nomeadas explícitas
 import { Link } from "react-router-dom";
 
 const AddClientPage = () => {
@@ -14,7 +14,7 @@ const AddClientPage = () => {
         <h1 className="text-3xl font-bold">Adicionar responsável</h1>
         <Link to="/clients">
           <Button variant="outline">
-            <LucideIcons.ArrowLeft className="mr-2 h-4 w-4" /> Voltar
+            <ArrowLeft className="mr-2 h-4 w-4" /> Voltar
           </Button>
         </Link>
       </div>
@@ -89,7 +89,7 @@ const AddClientPage = () => {
                 <SelectContent>
                   <SelectItem value="internet">Internet</SelectItem>
                   <SelectItem value="friend">Indicação de amigo</SelectItem>
-                  <SelectItem value="other">Outro</SelectItem>
+                  <SelectItem value="other">Outra</SelectItem>
                 </SelectContent>
               </Select>
             </div>
@@ -173,25 +173,25 @@ const AddClientPage = () => {
                 <Input placeholder="Número/Email" className="flex-1" /> {/* Changed placeholder */}
                 <Input placeholder="Observações" className="flex-1" />
                 <Button variant="outline" size="icon">
-                  <LucideIcons.Plus className="h-4 w-4" />
+                  <Plus className="h-4 w-4" />
                 </Button>
                 <Button variant="outline" size="icon">
-                  <LucideIcons.X className="h-4 w-4" />
+                  <X className="h-4 w-4" />
                 </Button>
               </div>
               {/* More contact fields can be added dynamically */}
             </div>
             <Button variant="outline" className="mt-4">
-              <LucideIcons.Plus className="mr-2 h-4 w-4" /> Adicionar
+              <Plus className="mr-2 h-4 w-4" /> Adicionar
             </Button>
           </div>
 
           <div className="flex justify-end gap-2 mt-6">
             <Button variant="outline">
-              <LucideIcons.X className="mr-2 h-4 w-4" /> Cancelar
+              <X className="mr-2 h-4 w-4" /> Cancelar
             </Button>
             <Button>
-              <LucideIcons.Save className="mr-2 h-4 w-4" /> Salvar
+              <Save className="mr-2 h-4 w-4" /> Salvar
             </Button>
           </div>
         </TabsContent>
@@ -261,10 +261,10 @@ const AddClientPage = () => {
           </div>
           <div className="flex justify-end gap-2 mt-6">
             <Button variant="outline">
-              <LucideIcons.X className="mr-2 h-4 w-4" /> Cancelar
+              <X className="mr-2 h-4 w-4" /> Cancelar
             </Button>
             <Button>
-              <LucideIcons.Save className="mr-2 h-4 w-4" /> Salvar
+              <Save className="mr-2 h-4 w-4" /> Salvar
             </Button>
           </div>
         </TabsContent>
@@ -275,10 +275,10 @@ const AddClientPage = () => {
           </div>
           <div className="flex justify-end gap-2 mt-6">
             <Button variant="outline">
-              <LucideIcons.X className="mr-2 h-4 w-4" /> Cancelar
+              <X className="mr-2 h-4 w-4" /> Cancelar
             </Button>
             <Button>
-              <LucideIcons.Save className="mr-2 h-4 w-4" /> Salvar
+              <Save className="mr-2 h-4 w-4" /> Salvar
             </Button>
           </div>
         </TabsContent>

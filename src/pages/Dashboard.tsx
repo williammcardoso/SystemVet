@@ -1,5 +1,5 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import * as LucideIcons from "lucide-react"; // Padronizando importação de ícones
+import { BarChart, Calendar, LineChart, Package } from "lucide-react"; // Importações nomeadas explícitas
 
 const Dashboard = () => {
   return (
@@ -10,7 +10,7 @@ const Dashboard = () => {
         <Card className="shadow-md hover:shadow-lg transition-all duration-300 ease-in-out transform hover:-translate-y-1 hover:border-primary">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Animais por mês</CardTitle>
-            <LucideIcons.BarChart className="h-5 w-5 text-primary" />
+            <BarChart className="h-5 w-5 text-primary" />
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">0</div>
@@ -22,7 +22,7 @@ const Dashboard = () => {
         <Card className="shadow-md hover:shadow-lg transition-all duration-300 ease-in-out transform hover:-translate-y-1 hover:border-accent">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Últimos atendimentos (24h)</CardTitle>
-            <LucideIcons.Calendar className="h-5 w-5 text-accent" />
+            <Calendar className="h-5 w-5 text-accent" />
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">00:00:00</div>
@@ -34,7 +34,7 @@ const Dashboard = () => {
         <Card className="shadow-md hover:shadow-lg transition-all duration-300 ease-in-out transform hover:-translate-y-1 hover:border-primary">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Consultas por mês</CardTitle>
-            <LucideIcons.LineChart className="h-5 w-5 text-primary" />
+            <LineChart className="h-5 w-5 text-primary" />
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">0</div>
@@ -46,7 +46,7 @@ const Dashboard = () => {
         <Card className="shadow-md hover:shadow-lg transition-all duration-300 ease-in-out transform hover:-translate-y-1 hover:border-destructive">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Estoque abaixo do mínimo</CardTitle>
-            <LucideIcons.Package className="h-5 w-5 text-destructive" />
+            <Package className="h-5 w-5 text-destructive" />
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">0</div>
