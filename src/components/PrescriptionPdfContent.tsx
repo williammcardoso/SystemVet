@@ -84,7 +84,7 @@ const styles = StyleSheet.create({
     borderColor: "#ddd",
     borderRadius: 5,
     padding: 10,
-    marginBottom: 5, // Reduzido
+    marginBottom: 0, // Ajustado para 0
     marginTop: 0,
   },
   patientInfoControlledTitle: {
@@ -227,7 +227,7 @@ const styles = StyleSheet.create({
   },
   // Estilos para o cabeçalho de receita controlada
   controlledPrescriptionHeader: {
-    marginBottom: 0, // Ajustado para 0 para diminuir o espaço
+    marginBottom: 0, // Ajustado para 0
     paddingBottom: 10,
     borderBottomWidth: 0,
     borderBottomColor: "#eee",
