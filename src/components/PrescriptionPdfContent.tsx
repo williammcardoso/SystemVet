@@ -164,12 +164,12 @@ const getDynamicStyles = (isCompactSimplePrescription: boolean, prescriptionType
     marginBottom: 5,
   },
   medicationNumber: {
-    fontSize: isCompactSimplePrescription ? 10 : 11,
+    fontSize: isCompactSimplePrescription ? 9 : 10, // Diminuído
     marginRight: 5,
     width: 15,
   },
   medicationNameConcentration: {
-    fontSize: isCompactSimplePrescription ? 10 : 11,
+    fontSize: isCompactSimplePrescription ? 9 : 10, // Diminuído
     fontWeight: "bold",
     flexShrink: 1,
   },
@@ -206,13 +206,13 @@ const getDynamicStyles = (isCompactSimplePrescription: boolean, prescriptionType
     borderColor: "#aaa",
   },
   medicationInstructions: {
-    fontSize: isCompactSimplePrescription ? 9 : 10,
+    fontSize: isCompactSimplePrescription ? 8 : 9, // Diminuído
     color: "#444",
     marginLeft: 20,
     lineHeight: isCompactSimplePrescription ? 1.3 : 1.4,
   },
   medicationObservations: {
-    fontSize: isCompactSimplePrescription ? 8 : 9,
+    fontSize: isCompactSimplePrescription ? 7 : 8, // Diminuído
     color: "#777",
     marginLeft: 20,
     marginTop: 3,
@@ -443,19 +443,19 @@ const getDynamicStyles = (isCompactSimplePrescription: boolean, prescriptionType
   },
   manipulatedListItem: {
     flexDirection: 'row',
-    alignItems: 'flex-end',
+    alignItems: 'center', // Alinhado ao centro verticalmente
     marginBottom: 5,
-    marginLeft: 10,
+    marginLeft: 25, // Aumentado para mover mais para o centro
   },
   manipulatedBullet: {
-    fontSize: 12, // Aumentado
+    fontSize: 16, // Aumentado
     marginRight: 5,
-    fontWeight: "bold", // Negrito
+    fontWeight: "bold",
   },
   manipulatedItemName: {
-    fontSize: 12, // Aumentado
+    fontSize: 12,
     flexShrink: 1,
-    fontWeight: "bold", // Negrito
+    fontWeight: "bold",
   },
   manipulatedDottedLine: {
     borderBottomWidth: 1,
@@ -463,22 +463,22 @@ const getDynamicStyles = (isCompactSimplePrescription: boolean, prescriptionType
     borderStyle: "dotted",
     flexGrow: 1,
     height: 1,
-    marginHorizontal: 5,
+    marginHorizontal: 8, // Ajustado para um pouco mais de espaço
   },
   manipulatedDosage: {
-    fontSize: 12, // Aumentado
+    fontSize: 12,
     flexShrink: 0,
-    fontWeight: "bold", // Negrito
+    fontWeight: "bold",
   },
   manipulatedInstructionsTitle: {
-    fontSize: 11, // Mantido
-    fontWeight: "normal", // Alterado para normal
+    fontSize: 11,
+    fontWeight: "bold", // Alterado para negrito
     marginTop: 10,
     marginBottom: 5,
     marginLeft: 10,
   },
   manipulatedInstructionsText: {
-    fontSize: 10, // Mantido
+    fontSize: 10,
     marginLeft: 10,
     lineHeight: 1.4,
   },
