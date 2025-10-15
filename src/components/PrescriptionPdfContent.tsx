@@ -1,7 +1,7 @@
 import React from "react";
 import { Document, Page, View, Text, StyleSheet, Font } from "@react-pdf/renderer";
 import { MedicationData } from "@/types/medication";
-import { mockCompanySettings, mockUserSettings } from "@/mockData/settings"; // Importar as configurações
+import { mockCompanySettings, mockUserSettings } from "@/mockData/settings";
 
 // Importar os arquivos de fonte diretamente para que o Vite os processe corretamente
 import RobotoRegular from "/public/fonts/Roboto-Regular.ttf";
@@ -11,15 +11,15 @@ import RobotoBold from "/public/fonts/Roboto-Bold.ttf";
 Font.register({
   family: "Roboto",
   fonts: [
-    { src: RobotoRegular, fontWeight: 400, format: 'truetype' }, // Regular
-    { src: RobotoBold, fontWeight: 700, format: 'truetype' }, // Bold
+    { src: RobotoRegular, fontWeight: 400, format: 'truetype' },
+    { src: RobotoBold, fontWeight: 700, format: 'truetype' },
   ],
 });
 
 const styles = StyleSheet.create({
   page: {
     padding: 30,
-    fontFamily: "Roboto", // Use Roboto as default font
+    fontFamily: "Roboto",
     fontSize: 10,
     color: "#333",
   },
@@ -52,7 +52,7 @@ const styles = StyleSheet.create({
   mainTitle: {
     fontSize: 20,
     textAlign: "center",
-    fontFamily: "Roboto", // Use Roboto as default font
+    fontFamily: "Roboto",
     fontWeight: "bold",
     marginBottom: 20,
   },
@@ -246,7 +246,7 @@ const styles = StyleSheet.create({
   controlledPrescriptionTitle: {
     fontSize: 22,
     textAlign: "center",
-    fontFamily: "Roboto", // Use Roboto as default font
+    fontFamily: "Roboto",
     fontWeight: "bold",
     color: "#333",
     marginBottom: 15,
@@ -341,8 +341,8 @@ interface PrescriptionPdfContentProps {
   medications: MedicationData[];
   generalObservations: string;
   showElectronicSignatureText: boolean;
-  prescriptionType: 'simple' | 'controlled' | 'manipulated'; // Novo prop
-  pharmacistName?: string; // Dados do farmacêutico
+  prescriptionType: 'simple' | 'controlled' | 'manipulated';
+  pharmacistName?: string;
   pharmacistCpf?: string;
   pharmacistCfr?: string;
   pharmacistAddress?: string;
@@ -405,8 +405,7 @@ export const PrescriptionPdfContent = ({
               <Text style={styles.issuerVetText}>CRMV: {mockUserSettings.userCrmv}</Text>
               <Text style={styles.issuerVetText}>Registro MAPA: {mockUserSettings.userMapaRegistration}</Text>
             </View>
-            {/* Este View é intencionalmente vazio para layout, agora com fechamento automático */}
-            <View style={styles.infoCard} />
+            <View style={styles.infoCard}/>
           </View>
         )}
 
@@ -450,7 +449,7 @@ export const PrescriptionPdfContent = ({
                       return 'Medicamento sem nome';
                     })()}
                   </Text>
-                  <View style={styles.lineSeparator} />
+                  <View style={styles.lineSeparator}/>
                   <View style={styles.badgeContainer}>
                     {med.pharmacyType && (<Text style={styles.pharmacyBadge}>{med.pharmacyType === "Farmácia Veterinária" ? "VET" : "HUMANA"}</Text>)}
                     {med.totalQuantityDisplay && (<Text style={styles.quantityBadge}>{med.totalQuantityDisplay}</Text>)}
@@ -479,7 +478,7 @@ export const PrescriptionPdfContent = ({
         <View style={styles.signatureLineContainer} break>
           <Text style={styles.signatureDateText}>Data: {formatDateToPortuguese(currentDate)}</Text>
           <View style={styles.signatureBlockRight}>
-            <View style={styles.signatureLine} />
+            <View style={styles.signatureLine}/>
             <Text style={styles.signatureLabel}>Assinatura</Text>
           </View>
         </View>
@@ -490,44 +489,44 @@ export const PrescriptionPdfContent = ({
               <Text style={styles.identificationTitle}>IDENTIFICAÇÃO DO COMPRADOR</Text>
               <View style={styles.identificationField}>
                 <Text style={styles.identificationLabel}>Nome completo</Text>
-                <View style={styles.identificationLine} />
+                <View style={styles.identificationLine}/>
               </View>
               <View style={styles.identificationField}>
                 <Text style={styles.identificationLabel}>Ident.</Text>
-                <View style={[styles.identificationLine, { width: 80 }]} />
+                <View style={[styles.identificationLine, { width: 80 }]}/>
                 <Text style={styles.identificationLabel}>Org Emissor</Text>
-                <View style={[styles.identificationLine, { width: 40 }]} />
+                <View style={[styles.identificationLine, { width: 40 }]}/>
               </View>
               <View style={styles.identificationField}>
                 <Text style={styles.identificationLabel}>End. Completo</Text>
-                <View style={styles.identificationLine} />
+                <View style={styles.identificationLine}/>
               </View>
               <View style={styles.identificationField}>
                 <Text style={styles.identificationLabel}>Telefone</Text>
-                <View style={styles.identificationLine} />
+                <View style={styles.identificationLine}/>
               </View>
               <View style={styles.identificationField}>
                 <Text style={styles.identificationLabel}>Cidade</Text>
-                <View style={[styles.identificationLine, { width: 100 }]} />
+                <View style={[styles.identificationLine, { width: 100 }]}/>
                 <Text style={styles.identificationLabel}>UF</Text>
-                <View style={[styles.identificationLine, { width: 20 }]} />
+                <View style={[styles.identificationLine, { width: 20 }]}/>
               </View>
             </View>
 
             <View style={styles.identificationCard}>
               <Text style={styles.identificationTitle}>IDENTIFICAÇÃO DO FORNECEDOR</Text>
               <View style={{ marginTop: 20, marginBottom: 20 }}>
-                <View style={styles.identificationLine} />
+                <View style={styles.identificationLine}/>
                 <Text style={styles.identificationLabel}>Assinatura do Farmacêutico</Text>
               </View>
               <View style={styles.identificationDateLine}>
                 <Text style={styles.identificationLabel}>Data</Text>
                 <View style={styles.identificationDatePart}>
-                  <View style={[styles.identificationLine, { width: 20 }]} />
+                  <View style={[styles.identificationLine, { width: 20 }]}/>
                   <Text style={styles.identificationDateSeparator}>/</Text>
-                  <View style={[styles.identificationLine, { width: 20 }]} />
+                  <View style={[styles.identificationLine, { width: 20 }]}/>
                   <Text style={styles.identificationDateSeparator}>/</Text>
-                  <View style={[styles.identificationLine, { width: 20 }]} />
+                  <View style={[styles.identificationLine, { width: 20 }]}/>
                 </View>
               </View>
             </View>
