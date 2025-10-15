@@ -306,6 +306,25 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     borderBottomColor: "#333",
   },
+  pharmacistSignatureBlock: {
+    marginTop: 'auto',
+    marginBottom: 5,
+    flexDirection: 'column', // Adicionado para organizar os itens em coluna
+    alignItems: 'center',    // Adicionado para centralizar os itens horizontalmente
+    width: '100%',           // Garante que o bloco ocupe a largura total para centralização
+  },
+  pharmacistSignatureLine: {
+    width: 180, // Largura fixa para a linha de assinatura
+    borderBottomWidth: 1,
+    borderBottomColor: "#333",
+    marginBottom: 3,
+    marginTop: 20,
+  },
+  pharmacistSignatureLabel: {
+    fontSize: 9,
+    color: "#333",
+    textAlign: 'center',
+  },
   identificationDateLine: {
     flexDirection: 'row',
     alignItems: 'flex-end',
@@ -318,22 +337,6 @@ const styles = StyleSheet.create({
   },
   identificationDateSeparator: {
     marginHorizontal: 2,
-  },
-  pharmacistSignatureBlock: {
-    marginTop: 'auto',
-    marginBottom: 5,
-  },
-  pharmacistSignatureLine: {
-    width: '100%',
-    borderBottomWidth: 1,
-    borderBottomColor: "#333",
-    marginBottom: 3,
-    marginTop: 20,
-  },
-  pharmacistSignatureLabel: {
-    fontSize: 9,
-    color: "#333",
-    textAlign: 'center',
   },
   // Estilos para o bloco de Data e Assinatura do Comprador (receita controlada, in-flow)
   buyerSignatureDateContainer: {
