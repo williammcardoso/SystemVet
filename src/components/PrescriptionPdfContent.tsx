@@ -3,12 +3,12 @@ import { Document, Page, View, Text, StyleSheet, Font } from "@react-pdf/rendere
 import { MedicationData } from "@/types/medication";
 import { mockCompanySettings, mockUserSettings } from "@/mockData/settings"; // Importar as configurações
 
-// Register Roboto font with regular and bold weights
+// Register Roboto font with regular and bold weights using local files
 Font.register({
   family: "Roboto",
   fonts: [
-    { src: "https://fonts.gstatic.com/s/roboto/v27/KFOmCnqEu92Fr1Mu4mxK.ttf", fontWeight: 400 }, // Regular
-    { src: "https://fonts.gstatic.com/s/roboto/v27/KFOlCnqEu92Fr1MmWUlfBBc4.ttf", fontWeight: 700 }, // Bold
+    { src: "/fonts/Roboto-Regular.ttf", fontWeight: 400 }, // Regular
+    { src: "/fonts/Roboto-Bold.ttf", fontWeight: 700 }, // Bold
   ],
 });
 
@@ -94,6 +94,7 @@ const styles = StyleSheet.create({
   patientInfoControlledText: {
     fontSize: 10,
     marginBottom: 2,
+    color: "#333",
   },
   groupTitle: {
     fontSize: 13,
