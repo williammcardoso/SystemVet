@@ -442,23 +442,28 @@ const getDynamicStyles = (isCompactSimplePrescription: boolean, prescriptionType
     borderBottomWidth: 1,
     borderBottomColor: "#000",
     paddingBottom: 4,
+    textAlign: 'center', // Centraliza o título
+  },
+  manipulatedListContainer: {
+    width: '80%', // Define uma largura para o contêiner da lista
+    marginHorizontal: 'auto', // Centraliza o contêiner da lista
   },
   manipulatedListItem: {
     flexDirection: 'row',
-    alignItems: 'center', // Alinhado ao centro verticalmente
+    alignItems: 'center',
     marginBottom: 5,
-    paddingLeft: 10, // Reduzido o recuo
-    paddingRight: 10, // Reduzido o espaço em branco à direita
+    paddingLeft: 0, // Removido o recuo para centralizar melhor
+    paddingRight: 0, // Removido o espaço em branco à direita
   },
   manipulatedBullet: {
-    width: 4, // Tamanho do círculo reduzido
+    width: 4,
     height: 4,
-    borderRadius: 2, // Metade para ser um círculo
-    backgroundColor: '#333', // Cor do círculo
-    marginRight: 5, // Espaço após o bullet
+    borderRadius: 2,
+    backgroundColor: '#333',
+    marginRight: 5,
   },
   manipulatedItemName: {
-    fontSize: 10, // Diminuído
+    fontSize: 10,
     flexShrink: 1,
     fontWeight: "bold",
   },
@@ -466,27 +471,27 @@ const getDynamicStyles = (isCompactSimplePrescription: boolean, prescriptionType
     borderBottomWidth: 1,
     borderBottomColor: "#ccc",
     borderStyle: "dotted",
-    flexGrow: 0.3, // Reduzido para ter menos pontos
+    flexGrow: 0.3,
     height: 1,
-    marginHorizontal: 8, // Ajustado para um pouco mais de espaço
+    marginHorizontal: 8,
   },
   manipulatedDosage: {
-    fontSize: 10, // Diminuído
+    fontSize: 10,
     flexShrink: 0,
     fontWeight: "bold",
-    marginLeft: 5, // Espaço antes da dosagem da linha pontilhada
+    marginLeft: 5,
   },
   manipulatedInstructionsTitle: {
     fontSize: 11,
-    fontWeight: "bold", // Confirmado como negrito
+    fontWeight: "bold",
     marginTop: 10,
     marginBottom: 5,
-    marginLeft: 10,
+    textAlign: 'center', // Centraliza o título das instruções
   },
   manipulatedInstructionsText: {
     fontSize: 10,
-    marginLeft: 10,
     lineHeight: 1.4,
+    textAlign: 'center', // Centraliza o texto das instruções
   },
 });
 
@@ -587,7 +592,7 @@ export const PrescriptionPdfContent = ({
           {prescriptionType === 'manipulated' && manipulatedPrescription ? (
             <>
               <Text style={styles.manipulatedGroupTitle}>VIA {manipulatedPrescription.productDetails.route.toUpperCase()}</Text>
-              <View>
+              <View style={styles.manipulatedListContainer}>
                 {manipulatedPrescription.formulaComponents.map((comp) => (
                   <View key={comp.id} style={styles.manipulatedListItem}>
                     <View style={styles.manipulatedBullet} /> {/* Bullet point como View */}
