@@ -4,8 +4,9 @@ import { MedicationData } from "@/types/medication";
 import { mockCompanySettings, mockUserSettings } from "@/mockData/settings";
 
 // Importando as fontes diretamente para que o Vite as processe corretamente
-import ExoRegular from '/public/fonts/Exo-Regular.ttf';
-import ExoBold from '/public/fonts/Exo-Bold.ttf';
+// Ajustado o caminho para ser relativo à raiz do servidor (sem /public)
+import ExoRegular from '/fonts/Exo-Regular.ttf';
+import ExoBold from '/fonts/Exo-Bold.ttf';
 
 // Registrando a fonte Exo com pesos regular e bold usando arquivos locais
 Font.register({
