@@ -12,15 +12,6 @@ Font.register({
   ],
 });
 
-// Removendo o registro da fonte Roboto, pois usaremos Times-Roman que é embutida.
-// Font.register({
-//   family: "Roboto",
-//   fonts: [
-//     { src: '/fonts/Roboto-Regular.ttf', fontWeight: 400, format: 'truetype' },
-//     { src: '/fonts/Roboto-Bold.ttf', fontWeight: 700, format: 'truetype' },
-//   ],
-// });
-
 const styles = StyleSheet.create({
   page: {
     padding: 30,
@@ -518,7 +509,8 @@ export const PrescriptionPdfContent = ({
                 </Text>
                 {med.generalObservations && med.generalObservations.trim().length > 0 ? (
                   <Text style={styles.medicationObservations}>
-                    Obs. Medicamento: {med.generalObservations}
+                    <Text style={{ fontFamily: "Times-Roman", fontWeight: "bold" }}>Obs.:</Text>
+                    <Text style={{ fontFamily: "Times-Roman", fontWeight: "normal" }}> {med.generalObservations}</Text>
                   </Text>
                 ) : null}
               </View>
