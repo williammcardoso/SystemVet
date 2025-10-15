@@ -8,7 +8,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { FaPlus, FaFlask, FaPills, FaVial, FaFileMedical, FaInfoCircle } from "react-icons/fa";
+import { FaPlus, FaFlask, FaPills, FaVial, FaFileMedical, FaInfoCircle, FaSave } from "react-icons/fa"; // Adicionado FaSave
 import {
   ManipulatedFormulaComponent,
   ManipulatedVehicleExcipient,
@@ -27,7 +27,7 @@ interface PrescriptionManipulatedFormProps {
 }
 
 const mockVehicleTypes = ["Bastão", "Cápsula", "Comprimido", "Creme", "Drágea", "Gel", "Gotas", "Líquido", "Pó", "Dose", "Outro"];
-const mockVehicleUnits = ["%", "Grama (g)", "Micrograma (mcg)", "Miligrama (mg)", "Mililitro (mL)", "UFC", "UFC/g", "UFC/kg", "Unidade"];
+const mockVehicleUnits = ["%", "Grama (g)", "Miligrama (mg)", "Mililitro (mL)", "Micrograma (mcg)", "UFC", "UFC/g", "UFC/kg", "Unidade"];
 
 const mockPosologyMeasures = ["Comprimido", "Cápsula", "Líquido (ml)", "Gotas", "Aplicação", "Spray", "Pomada", "Outro"];
 const mockPosologyFrequencies = ["1", "2", "3", "4", "6", "8", "12", "24"]; // Valores numéricos
