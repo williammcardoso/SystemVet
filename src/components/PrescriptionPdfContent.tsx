@@ -12,14 +12,14 @@ Font.register({
   ],
 });
 
-// Registrando a fonte Exo para uso específico
-Font.register({
-  family: "Exo",
-  fonts: [
-    { src: '/fonts/Exo-Regular.ttf', fontWeight: 400, format: 'truetype' }, // Assumindo Exo-Regular é a base
-    { src: '/fonts/Exo-Bold.ttf', fontWeight: 700, format: 'truetype' },
-  ],
-});
+// Removendo o registro da fonte Exo para evitar o erro 'Unknown font format'.
+// Font.register({
+//   family: "Exo",
+//   fonts: [
+//     { src: '/fonts/Exo-Regular.ttf', fontWeight: 400, format: 'truetype' },
+//     { src: '/fonts/Exo-Bold.ttf', fontWeight: 700, format: 'truetype' },
+//   ],
+// });
 
 const styles = StyleSheet.create({
   page: {
@@ -179,7 +179,7 @@ const styles = StyleSheet.create({
     marginLeft: 20,
     marginTop: 3,
     fontStyle: "italic",
-    fontFamily: "Exo", // Apenas este campo usará a fonte Exo
+    // Removendo fontFamily: "Exo" para usar a fonte padrão (Roboto)
   },
   generalObservationsSection: {
     marginTop: 25,
