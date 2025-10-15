@@ -450,8 +450,8 @@ const getDynamicStyles = (isCompactSimplePrescription: boolean, prescriptionType
     flexDirection: 'column', // Explicitly set for clarity
   },
   manipulatedListContainer: {
-    // Removido width e marginHorizontal para que o wrapper possa centralizá-lo
-    paddingHorizontal: 20, // Adiciona um padding interno para o conteúdo da lista
+    width: '80%', // Define uma largura para o contêiner da lista
+    // Removido paddingHorizontal para dar mais espaço à linha pontilhada
   },
   manipulatedListItem: {
     flexDirection: 'row',
@@ -476,7 +476,7 @@ const getDynamicStyles = (isCompactSimplePrescription: boolean, prescriptionType
     borderBottomWidth: 1,
     borderBottomColor: "#ccc",
     borderStyle: "dotted",
-    flexGrow: 0.3,
+    flexGrow: 1, // Alterado para 1 para preencher o espaço
     height: 1,
     marginHorizontal: 8,
   },
