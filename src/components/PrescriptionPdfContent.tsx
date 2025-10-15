@@ -227,7 +227,7 @@ const styles = StyleSheet.create({
   },
   // Estilos para o cabeçalho de receita controlada
   controlledPrescriptionHeader: {
-    marginBottom: 15, // Ajustado para 15
+    marginBottom: 5, // Ajustado de volta para 5
     paddingBottom: 10,
     borderBottomWidth: 0,
     borderBottomColor: "#eee",
