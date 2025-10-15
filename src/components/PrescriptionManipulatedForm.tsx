@@ -8,7 +8,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { FaPlus, FaFlask, FaPills, FaVial, FaFileMedical, FaInfoCircle, FaSave } from "react-icons/fa"; // Adicionado FaSave
+import { FaPlus, FaFlask, FaPills, FaVial, FaFileMedical, FaInfoCircle, FaSave } from "react-icons/fa";
 import {
   ManipulatedFormulaComponent,
   ManipulatedVehicleExcipient,
@@ -27,7 +27,7 @@ interface PrescriptionManipulatedFormProps {
 }
 
 const mockVehicleTypes = ["Bastão", "Cápsula", "Comprimido", "Creme", "Drágea", "Gel", "Gotas", "Líquido", "Pó", "Dose", "Outro"];
-const mockVehicleUnits = ["%", "Grama (g)", "Miligrama (mg)", "Mililitro (mL)", "Micrograma (mcg)", "UFC", "UFC/g", "UFC/kg", "Unidade"];
+const mockVehicleUnits = ["%", "Grama (g)", "Micrograma (mcg)", "Miligrama (mg)", "Mililitro (mL)", "UFC", "UFC/g", "UFC/kg", "Unidade(s)"]; // Alterado para Unidade(s)
 
 const mockPosologyMeasures = ["Comprimido", "Cápsula", "Líquido (ml)", "Gotas", "Aplicação", "Spray", "Pomada", "Outro"];
 const mockPosologyFrequencies = ["1", "2", "3", "4", "6", "8", "12", "24"]; // Valores numéricos
@@ -35,9 +35,23 @@ const mockPosologyFrequencyUnits = ["Hora(s)", "Dia(s)"];
 const mockPosologyDurations = ["1", "3", "5", "7", "10", "14", "21", "30"]; // Valores numéricos
 const mockPosologyDurationUnits = ["Dia(s)", "Mês(es)"];
 
-// Removidos: mockProductTypes, mockProductQuantities, mockProductPharmacies
 const mockProductRoutes = ["Oral", "Tópica", "Injetável", "Oftálmica", "Auricular", "Outra"];
 
+// Helper para abreviar unidades para a prévia
+const getShortUnitAbbreviation = (unit: string): string => {
+  switch (unit) {
+    case "Grama (g)": return "g";
+    case "Miligrama (mg)": return "mg";
+    case "Mililitro (mL)": return "mL";
+    case "Micrograma (mcg)": return "mcg";
+    case "Unidade(s)": return "un";
+    case "%": return "%";
+    case "UFC": return "UFC";
+    case "UFC/g": return "UFC/g";
+    case "UFC/kg": return "UFC/kg";
+    default: return unit;
+  }
+};
 
 const PrescriptionManipulatedForm: React.FC<PrescriptionManipulatedFormProps> = ({
   initialData,
@@ -235,7 +249,7 @@ const PrescriptionManipulatedForm: React.FC<PrescriptionManipulatedFormProps> = 
               <Label htmlFor="vehicle-unit">Unidade*</Label>
               <Select onValueChange={(value) => setVehicleExcipient(prev => ({ ...prev, unit: value }))} value={vehicleExcipient.unit}>
                 <SelectTrigger id="vehicle-unit" className="bg-white rounded-lg border-gray-200 dark:border-gray-600 focus:ring-2 focus:ring-blue-400 placeholder-[#9CA3AF] dark:placeholder-gray-500 transition-all duration-200">
-                  <SelectValue placeholder="Ex: Unidade" />
+                  <SelectValue placeholder="Ex: Unidade(s)" />
                 </SelectTrigger>
                 <SelectContent>
                   {mockVehicleUnits.map((unit) => (
@@ -289,7 +303,7 @@ const PrescriptionManipulatedForm: React.FC<PrescriptionManipulatedFormProps> = 
                       </SelectContent>
                     </Select>
                   </div>
-                  <div className="space-y-2">
+                  <div className="space-y-2 col-span-full md:col-span-1 lg:col-span-2"> {/* Ajustado para ocupar mais espaço */}
                     <Label htmlFor="posology-frequency-value">Frequência*</Label>
                     <div className="flex gap-2">
                       <Select onValueChange={(value) => setPosologyAutomatic(prev => ({ ...prev, frequencyValue: value }))} value={posologyAutomatic.frequencyValue}>
@@ -318,7 +332,7 @@ const PrescriptionManipulatedForm: React.FC<PrescriptionManipulatedFormProps> = 
                       </Select>
                     </div>
                   </div>
-                  <div className="space-y-2">
+                  <div className="space-y-2 col-span-full md:col-span-1 lg:col-span-2"> {/* Ajustado para ocupar mais espaço */}
                     <Label htmlFor="posology-duration-value">Duração*</Label>
                     <div className="flex gap-2">
                       <Select onValueChange={(value) => setPosologyAutomatic(prev => ({ ...prev, durationValue: value }))} value={posologyAutomatic.durationValue}>
@@ -429,42 +443,42 @@ const PrescriptionManipulatedForm: React.FC<PrescriptionManipulatedFormProps> = 
             <CardTitle className="text-lg font-semibold text-[#374151] dark:text-gray-100">Prévia da Fórmula</CardTitle>
           </CardHeader>
           <CardContent className="text-sm text-muted-foreground space-y-4">
+            {productDetails.route && (
+              <div className="pb-2 border-b border-gray-300 dark:border-gray-600">
+                <p className="font-bold text-base text-foreground">VIA {productDetails.route.toUpperCase()}</p>
+              </div>
+            )}
+
             <div>
               <h4 className="font-semibold text-foreground mb-2">Composição:</h4>
               {formulaComponents.length > 0 ? (
-                <ul className="list-disc list-inside space-y-1">
-                  {formulaComponents.map((comp, index) => (
-                    <li key={comp.id}>
-                      {comp.name} {comp.dosageQuantity} {comp.dosageUnit}
-                    </li>
+                <div className="space-y-1">
+                  {formulaComponents.map((comp) => (
+                    <div key={comp.id} className="flex items-end">
+                      <span className="flex-shrink-0">• {comp.name}</span>
+                      <span className="flex-grow border-b border-dotted border-gray-400 dark:border-gray-500 mx-1 h-3"></span>
+                      <span className="flex-shrink-0">{comp.dosageQuantity} {getShortUnitAbbreviation(comp.dosageUnit)}</span>
+                    </div>
                   ))}
-                </ul>
+                  {vehicleExcipient.type && vehicleExcipient.quantity && vehicleExcipient.unit && (
+                    <div className="flex items-end">
+                      <span className="flex-shrink-0">• {(vehicleExcipient.type === "Outro" && customVehicleType) ? customVehicleType : vehicleExcipient.type} q.s.p.</span>
+                      <span className="flex-grow border-b border-dotted border-gray-400 dark:border-gray-500 mx-1 h-3"></span>
+                      <span className="flex-shrink-0">{vehicleExcipient.quantity} {getShortUnitAbbreviation(vehicleExcipient.unit)}</span>
+                    </div>
+                  )}
+                </div>
               ) : (
                 <p>Nenhum componente adicionado.</p>
               )}
             </div>
-            <div>
-              <h4 className="font-semibold text-foreground mb-2">Veículo / Excipiente:</h4>
-              {vehicleExcipient.type ? (
-                <p>{(vehicleExcipient.type === "Outro" && customVehicleType) ? customVehicleType : vehicleExcipient.type} {vehicleExcipient.quantity} {vehicleExcipient.unit}</p>
-              ) : (
-                <p>Nenhum veículo/excipiente.</p>
-              )}
-            </div>
+
             <div>
               <h4 className="font-semibold text-foreground mb-2">Posologia:</h4>
               {posologyType === 'automatic' ? (
                 <p>{posologyAutomatic.finalDescription || "Preencha a posologia automática."}</p>
               ) : (
                 <p>{posologyFreeText.finalDescription || "Preencha a posologia em texto livre."}</p>
-              )}
-            </div>
-            <div>
-              <h4 className="font-semibold text-foreground mb-2">Via:</h4>
-              {productDetails.route ? (
-                <p>{productDetails.route}</p>
-              ) : (
-                <p>Nenhuma via selecionada.</p>
               )}
             </div>
           </CardContent>

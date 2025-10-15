@@ -21,6 +21,22 @@ const formatDateToPortuguese = (date: Date) => {
   return formattedDate.toUpperCase();
 };
 
+// Helper para formatar unidades para o PDF (formato longo)
+const getLongUnitAbbreviation = (unit: string): string => {
+  switch (unit) {
+    case "Grama (g)": return "Grama (g)";
+    case "Miligrama (mg)": return "Miligrama (mg)";
+    case "Mililitro (mL)": return "Mililitro (mL)";
+    case "Micrograma (mcg)": return "Micrograma (mcg)";
+    case "Unidade(s)": return "Unidade"; // No PDF, volta para 'Unidade' sem o '(s)'
+    case "%": return "%";
+    case "UFC": return "UFC";
+    case "UFC/g": return "UFC/g";
+    case "UFC/kg": return "UFC/kg";
+    default: return unit;
+  }
+};
+
 interface PrescriptionPdfContentProps {
   animalName: string;
   animalId: string;
@@ -571,7 +587,7 @@ export const PrescriptionPdfContent = ({
                     <Text style={styles.manipulatedBullet}>•</Text>
                     <Text style={styles.manipulatedItemName}>{comp.name}</Text>
                     <View style={styles.manipulatedDottedLine} />
-                    <Text style={styles.manipulatedDosage}>{comp.dosageQuantity} {comp.dosageUnit}</Text>
+                    <Text style={styles.manipulatedDosage}>{comp.dosageQuantity} {getLongUnitAbbreviation(comp.dosageUnit)}</Text>
                   </View>
                 ))}
                 {manipulatedPrescription.vehicleExcipient && (
@@ -579,7 +595,7 @@ export const PrescriptionPdfContent = ({
                     <Text style={styles.manipulatedBullet}>•</Text>
                     <Text style={styles.manipulatedItemName}>{manipulatedPrescription.vehicleExcipient.type} q.s.p.</Text>
                     <View style={styles.manipulatedDottedLine} />
-                    <Text style={styles.manipulatedDosage}>{manipulatedPrescription.vehicleExcipient.quantity} {manipulatedPrescription.vehicleExcipient.unit}</Text>
+                    <Text style={styles.manipulatedDosage}>{manipulatedPrescription.vehicleExcipient.quantity} {getLongUnitAbbreviation(manipulatedPrescription.vehicleExcipient.unit)}</Text>
                   </View>
                 )}
               </View>
