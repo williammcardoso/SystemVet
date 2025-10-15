@@ -337,26 +337,26 @@ const styles = StyleSheet.create({
   buyerSignatureDateContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    alignItems: 'flex-end',
+    alignItems: 'flex-start', // Alinha os itens pelo topo
     marginTop: 30, // Espaço após observações gerais
-    marginBottom: 20, // Espaço antes do rodapé fixo
+    marginBottom: 15, // Reduzido para 'grudar' mais na linha de separação
     width: '100%',
   },
   buyerDateText: {
     fontSize: 10,
     color: "#333",
-    flexDirection: 'row',
-    alignItems: 'flex-end',
+    // Removido flexDirection e alignItems, pois é apenas texto
   },
   buyerSignatureBlock: {
     textAlign: 'center',
     width: 180, // Largura fixa para a linha de assinatura
+    marginTop: 0, // Garante alinhamento com o topo do texto da data
   },
   buyerSignatureLine: {
     borderBottomWidth: 1,
     borderBottomColor: "#333",
     marginBottom: 3,
-    marginTop: 10, // Espaço acima da linha
+    marginTop: 5, // Espaço entre o label 'Assinatura' e a linha
   },
   buyerSignatureLabel: {
     fontSize: 9,
@@ -369,14 +369,6 @@ const formatDateToPortuguese = (date: Date) => {
   const options: Intl.DateTimeFormatOptions = { day: '2-digit', month: 'long', year: 'numeric' };
   const formattedDate = date.toLocaleDateString('pt-BR', options);
   return formattedDate.toUpperCase();
-};
-
-// Helper function to format date as DD/MM/YYYY
-const formatDateAsDDMMYYYY = (date: Date) => {
-  const day = String(date.getDate()).padStart(2, '0');
-  const month = String(date.getMonth() + 1).padStart(2, '0'); // Month is 0-indexed
-  const year = date.getFullYear();
-  return `${day}/${month}/${year}`;
 };
 
 interface PrescriptionPdfContentProps {
@@ -521,11 +513,11 @@ export const PrescriptionPdfContent = ({
         {prescriptionType === 'controlled' && (
           <View style={styles.buyerSignatureDateContainer}>
             <Text style={styles.buyerDateText}>
-              Data: {formatDateAsDDMMYYYY(currentDate)}
+              Data: {formatDateToPortuguese(currentDate)}
             </Text>
             <View style={styles.buyerSignatureBlock}>
-              <View style={styles.buyerSignatureLine}/>
               <Text style={styles.buyerSignatureLabel}>Assinatura</Text>
+              <View style={styles.buyerSignatureLine}/>
             </View>
           </View>
         )}
