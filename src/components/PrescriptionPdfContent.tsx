@@ -187,16 +187,16 @@ const styles = StyleSheet.create({
     fontSize: 10,
     lineHeight: 1.5,
   },
-  // Novos estilos para o bloco de assinatura do veterinário
+  // Estilos para o bloco de data e assinatura do VETERINÁRIO (rodapé fixo para simples)
   vetSignatureBlock: {
     textAlign: 'center',
-    width: 180, // Largura fixa para a linha de assinatura
+    width: 180,
   },
   vetSignatureLine: {
     borderBottomWidth: 1,
     borderBottomColor: "#333",
     marginBottom: 3,
-    marginTop: 10, // Espaço acima da linha
+    marginTop: 10,
   },
   vetSignatureLabel: {
     fontSize: 9,
@@ -218,23 +218,16 @@ const styles = StyleSheet.create({
     right: 30,
     flexDirection: 'row',
     justifyContent: 'space-between',
-    alignItems: 'flex-end', // Alinha o conteúdo na parte inferior da área do rodapé
+    alignItems: 'flex-end',
     paddingTop: 20,
     borderTopWidth: 1,
     borderTopColor: "#eee",
   },
-  // Seção de assinatura do veterinário para receitas controladas (no fluxo do documento)
-  controlledVetSignatureSection: {
-    marginTop: 30, // Espaço após observações gerais
-    marginBottom: 20, // Espaço antes dos cartões de identificação
-    flexDirection: 'row',
-    justifyContent: 'flex-end', // Alinha à direita
-    width: '100%', // Ocupa a largura total
-  },
+  // Estilos para o cabeçalho de receita controlada
   controlledPrescriptionHeader: {
     marginBottom: 0,
     paddingBottom: 10,
-    borderBottomWidth: 0, // REMOVIDO A LINHA AQUI
+    borderBottomWidth: 0,
     borderBottomColor: "#eee",
   },
   controlledPrescriptionTitle: {
@@ -269,6 +262,7 @@ const styles = StyleSheet.create({
     marginBottom: 2,
     color: "#333",
   },
+  // Estilos para o rodapé fixo de identificação (comprador/fornecedor)
   identificationCardContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -339,6 +333,35 @@ const styles = StyleSheet.create({
     color: "#333",
     textAlign: 'center',
   },
+  // NOVOS ESTILOS para o bloco de Data e Assinatura do Comprador (receita controlada, in-flow)
+  buyerSignatureDateContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'flex-end',
+    marginTop: 30, // Espaço após observações gerais
+    marginBottom: 20, // Espaço antes do rodapé fixo
+    width: '100%',
+  },
+  buyerDateText: {
+    fontSize: 10,
+    color: "#333",
+    flexDirection: 'row',
+    alignItems: 'flex-end',
+  },
+  buyerSignatureBlock: {
+    textAlign: 'center',
+    width: 180, // Largura fixa para a linha de assinatura
+  },
+  buyerSignatureLine: {
+    borderBottomWidth: 1,
+    borderBottomColor: "#333",
+    marginBottom: 3,
+    marginTop: 10, // Espaço acima da linha
+  },
+  buyerSignatureLabel: {
+    fontSize: 9,
+    color: "#333",
+  },
 });
 
 // Helper function to format date
@@ -346,6 +369,14 @@ const formatDateToPortuguese = (date: Date) => {
   const options: Intl.DateTimeFormatOptions = { day: '2-digit', month: 'long', year: 'numeric' };
   const formattedDate = date.toLocaleDateString('pt-BR', options);
   return formattedDate.toUpperCase();
+};
+
+// Helper function to format date as DD/MM/YYYY
+const formatDateAsDDMMYYYY = (date: Date) => {
+  const day = String(date.getDate()).padStart(2, '0');
+  const month = String(date.getMonth() + 1).padStart(2, '0'); // Month is 0-indexed
+  const year = date.getFullYear();
+  return `${day}/${month}/${year}`;
 };
 
 interface PrescriptionPdfContentProps {
@@ -486,20 +517,15 @@ export const PrescriptionPdfContent = ({
           </View>
         ) : null}
 
-        {/* Veterinarian Signature and Date for Controlled Prescriptions (in-flow) */}
+        {/* NOVO BLOCO: Data e Assinatura do Comprador (para Receitas Controladas, in-flow) */}
         {prescriptionType === 'controlled' && (
-          <View style={styles.controlledVetSignatureSection}>
-            <View style={styles.vetSignatureBlock}>
-              <Text style={styles.vetSignatureDateText}>
-                Data: {formatDateToPortuguese(currentDate)}
-              </Text>
-              {showElectronicSignatureText ? (
-                <Text style={styles.vetSignatureLabel}>Assinado eletronicamente por</Text>
-              ) : null}
-              <View style={styles.vetSignatureLine}/>
-              <Text style={styles.vetSignatureLabel}>{mockUserSettings.signatureText}</Text>
-              <Text style={styles.vetSignatureDetails}>CRMV {mockUserSettings.userCrmv}</Text>
-              <Text style={styles.vetSignatureDetails}>Registro no MAPA {mockUserSettings.userMapaRegistration}</Text>
+          <View style={styles.buyerSignatureDateContainer}>
+            <Text style={styles.buyerDateText}>
+              Data: {formatDateAsDDMMYYYY(currentDate)}
+            </Text>
+            <View style={styles.buyerSignatureBlock}>
+              <View style={styles.buyerSignatureLine}/>
+              <Text style={styles.buyerSignatureLabel}>Assinatura</Text>
             </View>
           </View>
         )}
