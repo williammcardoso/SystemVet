@@ -4,15 +4,16 @@ import { MedicationData } from "@/types/medication";
 import { mockCompanySettings, mockUserSettings } from "@/mockData/settings";
 
 // Importar os arquivos de fonte diretamente para que o Vite os processe corretamente
-import RobotoRegular from "/public/fonts/Roboto-Regular.ttf";
-import RobotoBold from "/public/fonts/Roboto-Bold.ttf";
+// Estes imports locais não serão mais usados diretamente no Font.register, mas são mantidos para referência
+// import RobotoRegular from "/public/fonts/Roboto-Regular.ttf";
+// import RobotoBold from "/public/fonts/Roboto-Bold.ttf";
 
-// Register Roboto font with regular and bold weights using local files
+// Register Roboto font with regular and bold weights using CDN links for better compatibility with react-pdf/renderer
 Font.register({
   family: "Roboto",
   fonts: [
-    { src: RobotoRegular, fontWeight: 400, format: 'truetype' },
-    { src: RobotoBold, fontWeight: 700, format: 'truetype' },
+    { src: "https://fonts.gstatic.com/s/roboto/v20/KFOmCnqEu92Fr1Mu4mxK.ttf", fontWeight: 400, format: 'truetype' }, // Roboto Regular
+    { src: "https://fonts.gstatic.com/s/roboto/v20/KFOlCnqEu92Fr1MmWUlfChc4EsA.ttf", fontWeight: 700, format: 'truetype' }, // Roboto Bold
   ],
 });
 
