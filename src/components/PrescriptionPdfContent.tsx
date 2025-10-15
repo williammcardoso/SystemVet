@@ -241,7 +241,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'flex-start',
-    marginBottom: 0, // Ajustado para 0
+    marginBottom: -10, // Ajustado para -10
   },
   issuerVetCard: {
     borderWidth: 1,
