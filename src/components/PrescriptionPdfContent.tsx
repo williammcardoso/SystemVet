@@ -432,12 +432,14 @@ const getDynamicStyles = (isCompactSimplePrescription: boolean, prescriptionType
     marginLeft: 10,
   },
   manipulatedBullet: {
-    fontSize: 10,
+    fontSize: 12, // Aumentado
     marginRight: 5,
+    fontWeight: "bold", // Negrito
   },
   manipulatedItemName: {
-    fontSize: 10,
+    fontSize: 12, // Aumentado
     flexShrink: 1,
+    fontWeight: "bold", // Negrito
   },
   manipulatedDottedLine: {
     borderBottomWidth: 1,
@@ -448,18 +450,19 @@ const getDynamicStyles = (isCompactSimplePrescription: boolean, prescriptionType
     marginHorizontal: 5,
   },
   manipulatedDosage: {
-    fontSize: 10,
+    fontSize: 12, // Aumentado
     flexShrink: 0,
+    fontWeight: "bold", // Negrito
   },
   manipulatedInstructionsTitle: {
-    fontSize: 11,
-    fontWeight: "bold",
+    fontSize: 11, // Mantido
+    fontWeight: "normal", // Alterado para normal
     marginTop: 10,
     marginBottom: 5,
     marginLeft: 10,
   },
   manipulatedInstructionsText: {
-    fontSize: 10,
+    fontSize: 10, // Mantido
     marginLeft: 10,
     lineHeight: 1.4,
   },
@@ -561,7 +564,7 @@ export const PrescriptionPdfContent = ({
         <View style={styles.contentWrapper}>
           {prescriptionType === 'manipulated' && manipulatedPrescription ? (
             <>
-              <Text style={styles.manipulatedGroupTitle}>{manipulatedPrescription.productDetails.route.toUpperCase()}</Text>
+              <Text style={styles.manipulatedGroupTitle}>VIA {manipulatedPrescription.productDetails.route.toUpperCase()}</Text>
               <View>
                 {manipulatedPrescription.formulaComponents.map((comp) => (
                   <View key={comp.id} style={styles.manipulatedListItem}>
