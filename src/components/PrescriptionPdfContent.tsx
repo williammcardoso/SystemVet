@@ -12,10 +12,19 @@ Font.register({
   ],
 });
 
+// Registrando a fonte Exo para uso específico
+Font.register({
+  family: "Exo",
+  fonts: [
+    { src: '/fonts/Exo-Regular.ttf', fontWeight: 400, format: 'truetype' }, // Assumindo Exo-Regular é a base
+    { src: '/fonts/Exo-Bold.ttf', fontWeight: 700, format: 'truetype' },
+  ],
+});
+
 const styles = StyleSheet.create({
   page: {
     padding: 30,
-    fontFamily: "Roboto", // Usando a fonte Roboto
+    fontFamily: "Roboto", // Mantém Roboto como a fonte principal do documento
     fontSize: 10,
     color: "#333",
   },
@@ -48,7 +57,7 @@ const styles = StyleSheet.create({
   mainTitle: {
     fontSize: 20,
     textAlign: "center",
-    fontFamily: "Roboto", // Usando Roboto para o título principal
+    fontFamily: "Roboto", // Mantém Roboto para o título principal
     fontWeight: "bold",
     marginBottom: 20,
   },
@@ -170,6 +179,7 @@ const styles = StyleSheet.create({
     marginLeft: 20,
     marginTop: 3,
     fontStyle: "italic",
+    fontFamily: "Exo", // Apenas este campo usará a fonte Exo
   },
   generalObservationsSection: {
     marginTop: 25,
@@ -232,7 +242,7 @@ const styles = StyleSheet.create({
   controlledPrescriptionTitle: {
     fontSize: 22,
     textAlign: "center",
-    fontFamily: "Roboto", // Usando Roboto para o título principal
+    fontFamily: "Roboto", // Mantém Roboto para o título principal
     fontWeight: "bold",
     color: "#333",
     marginBottom: 15,
