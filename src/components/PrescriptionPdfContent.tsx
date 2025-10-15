@@ -345,27 +345,14 @@ interface PrescriptionPdfContentProps {
 }
 
 export const PrescriptionPdfContent = ({
-  animalName,
-  animalId,
-  animalSpecies,
-  tutorName,
-  tutorAddress,
-  medications,
-  generalObservations,
-  showElectronicSignatureText,
-  prescriptionType, // Destructure new prop
-  pharmacistName,
-  pharmacistCpf,
-  pharmacistCfr,
-  pharmacistAddress,
-  pharmacistPhone,
+  animalName, animalId, animalSpecies, tutorName, tutorAddress,
+  medications, generalObservations, showElectronicSignatureText,
+  prescriptionType, pharmacistName, pharmacistCpf, pharmacistCfr,
+  pharmacistAddress, pharmacistPhone,
 }: PrescriptionPdfContentProps) => {
-  // Group medications by useType
   const groupedMedications = medications.reduce((acc: Record<string, MedicationData[]>, med) => {
     const useType = med.useType || "Outros";
-    if (!acc[useType]) {
-      acc[useType] = [];
-    }
+    if (!acc[useType]) { acc[useType] = []; }
     acc[useType].push(med);
     return acc;
   }, {});
@@ -374,14 +361,9 @@ export const PrescriptionPdfContent = ({
 
   return (
     <Document>
-      <Page
-        size="A4"
-        style={styles.page}
-      >
-        {/* Clinic Header */}
+      <Page size="A4" style={styles.page}>
         <View style={styles.clinicHeader}>
           <View style={styles.clinicInfoLeft}>
-            {/* <Image src="/public/placeholder.svg" style={{ width: 40, height: 40, marginRight: 10 }} /> */}
             <View>
               <Text style={styles.clinicName}>{mockCompanySettings.companyName}</Text>
               <Text style={styles.clinicDetails}>CRMV {mockCompanySettings.crmv}</Text>
@@ -403,7 +385,6 @@ export const PrescriptionPdfContent = ({
           <Text style={styles.mainTitle}>Receita Simples</Text>
         )}
 
-        {/* 1.ª VIA / 2.ª VIA for Controlled Prescriptions */}
         {prescriptionType === 'controlled' && (
           <View style={styles.viaTextContainer}>
             <Text>1.ª VIA - FARMÁCIA</Text>
@@ -411,7 +392,6 @@ export const PrescriptionPdfContent = ({
           </View>
         )}
 
-        {/* Issuer (Veterinarian) Info for Controlled Prescriptions at the top */}
         {prescriptionType === 'controlled' && (
           <View style={styles.infoSectionContainer}>
             <View style={styles.issuerVetCard}>
@@ -420,14 +400,12 @@ export const PrescriptionPdfContent = ({
               <Text style={styles.issuerVetText}>CRMV: {mockUserSettings.userCrmv}</Text>
               <Text style={styles.issuerVetText}>Registro MAPA: {mockUserSettings.userMapaRegistration}</Text>
             </View>
-            {/* Empty card to maintain layout, or could be removed if not needed */}
             <View style={styles.infoCard}>
               {/* This space can be used for other info if needed, or removed */}
             </View>
           </View>
         )}
 
-        {/* Patient/Proprietário/Endereço section (full width for controlled, or existing cards for simple) */}
         {prescriptionType === 'controlled' ? (
           <View style={styles.patientInfoControlled}>
             <Text style={styles.patientInfoControlledTitle}>Informações do Paciente/Proprietário</Text>
@@ -451,7 +429,6 @@ export const PrescriptionPdfContent = ({
           </View>
         )}
 
-        {/* Medication List Grouped by Use Type */}
         {Object.keys(groupedMedications).map((useType) => (
           <View key={useType}>
             <Text style={styles.groupTitle}>{useType}</Text>
@@ -463,29 +440,16 @@ export const PrescriptionPdfContent = ({
                     {(() => {
                       const name = (med.medicationName && med.medicationName.trim()) || '';
                       const concentration = (med.concentration && med.concentration.trim()) || '';
-                      
-                      if (name.length > 0 && concentration.length > 0) {
-                        return `${name} ${concentration}`;
-                      } else if (name.length > 0) {
-                        return name;
-                      } else if (concentration.length > 0) {
-                        return concentration;
-                      }
+                      if (name.length > 0 && concentration.length > 0) { return `${name} ${concentration}`; }
+                      else if (name.length > 0) { return name; }
+                      else if (concentration.length > 0) { return concentration; }
                       return 'Medicamento sem nome';
                     })()}
                   </Text>
                   <View style={styles.lineSeparator} />
                   <View style={styles.badgeContainer}>
-                    {med.pharmacyType && (
-                      <Text style={styles.pharmacyBadge}>
-                        {med.pharmacyType === "Farmácia Veterinária" ? "VET" : "HUMANA"}
-                      </Text>
-                    )}
-                    {med.totalQuantityDisplay && (
-                      <Text style={styles.quantityBadge}>
-                        {med.totalQuantityDisplay}
-                      </Text>
-                    )}
+                    {med.pharmacyType && (<Text style={styles.pharmacyBadge}>{med.pharmacyType === "Farmácia Veterinária" ? "VET" : "HUMANA"}</Text>)}
+                    {med.totalQuantityDisplay && (<Text style={styles.quantityBadge}>{med.totalQuantityDisplay}</Text>)}
                   </View>
                 </View>
                 <Text style={styles.medicationInstructions}>
@@ -501,7 +465,6 @@ export const PrescriptionPdfContent = ({
           </View>
         ))}
 
-        {/* General Observations for the entire prescription */}
         {generalObservations && (
           <View style={styles.generalObservationsSection}>
             <Text style={styles.generalObservationsTitle}>Observações Gerais da Receita</Text>
@@ -509,7 +472,6 @@ export const PrescriptionPdfContent = ({
           </View>
         )}
 
-        {/* Signature Line (Vet) - Flows with content */}
         <View style={styles.signatureLineContainer} break>
           <Text style={styles.signatureDateText}>Data: {formatDateToPortuguese(currentDate)}</Text>
           <View style={styles.signatureBlockRight}>
@@ -518,7 +480,6 @@ export const PrescriptionPdfContent = ({
           </View>
         </View>
 
-        {/* FIXED FOOTER - Conditional based on prescriptionType */}
         {prescriptionType === 'controlled' ? (
           <View style={styles.identificationCardContainer} fixed>
             <View style={styles.identificationCard}>
@@ -569,7 +530,6 @@ export const PrescriptionPdfContent = ({
           </View>
         ) : (
           <View style={styles.footerContainer} fixed>
-            {/* Card de Assinatura do Veterinário (para receitas simples) */}
             <View style={styles.vetSignatureCard}>
               <Text style={styles.signatureDate}>
                 {formatDateToPortuguese(currentDate)}
