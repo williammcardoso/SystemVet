@@ -492,7 +492,7 @@ const PatientRecordPage = () => {
         animalSpecies: animal.species,
         tutorName: client.name,
         tutorAddress: client.address,
-        medications: rx.medications,
+        medications: rx.medications || [], // Passar array vazio se for manipulada
         generalObservations: rx.instructions,
         showElectronicSignatureText: false,
         prescriptionType: rx.type,
@@ -501,6 +501,7 @@ const PatientRecordPage = () => {
         pharmacistCfr: "CRF: 00000",
         pharmacistAddress: "Endereço da Farmácia, 000 - Cidade - UF",
         pharmacistPhone: "Telefone: (00) 00000-0000",
+        manipulatedPrescription: rx.manipulatedPrescription, // Passar dados da manipulada
       })
     ).toBlob();
 
@@ -825,7 +826,7 @@ const PatientRecordPage = () => {
                       </div>
 
                       <h3 className="col-span-4 text-lg font-semibold mt-4 mb-2 text-[#374151] dark:text-gray-100">Leucograma</h3>
-                      <div className="grid grid-cols-2 col-span-4 gap-4">
+                      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
                         <div className="space-y-2">
                           <Label htmlFor="leucocitos" className="text-[#4B5563] dark:text-gray-400 font-medium">Leucócitos (m/mm3)</Label>
                           <Input id="leucocitos" type="number" placeholder="Ex: 6.0" value={newLeucocitos} onChange={(e) => setNewLeucocitos(e.target.value)} className="bg-white rounded-lg border-gray-200 dark:border-gray-600 focus:ring-2 focus:ring-blue-400 placeholder-[#9CA3AF] dark:placeholder-gray-500 transition-all duration-200" />
@@ -857,81 +858,71 @@ const PatientRecordPage = () => {
                       </div>
                     </>
                   ) : (
-                    <div className="grid grid-cols-4 items-center gap-4">
-                      <Label htmlFor="examResult" className="text-right text-[#4B5563] dark:text-gray-400 font-medium">
-                        Resultado
-                      </Label>
+                    <div className="space-y-2 col-span-full">
+                      <Label htmlFor="examResult">Resultado</Label>
                       <Input
                         id="examResult"
                         placeholder="Resultado do exame"
                         value={newExamResult}
                         onChange={(e) => setNewExamResult(e.target.value)}
-                        className="col-span-3 bg-white rounded-lg border-gray-200 dark:border-gray-600 focus:ring-2 focus:ring-blue-400 placeholder-[#9CA3AF] dark:placeholder-gray-500 transition-all duration-200"
+                        className="bg-white rounded-lg border-gray-200 dark:border-gray-600 focus:ring-2 focus:ring-blue-400 placeholder-[#9CA3AF] dark:placeholder-gray-500 transition-all duration-200"
                       />
                     </div>
                   )}
 
-                  <div className="grid grid-cols-4 items-center gap-4 mt-4">
-                    <Label htmlFor="examObservations" className="text-right text-[#4B5563] dark:text-gray-400 font-medium">
-                      Observações
-                    </Label>
+                  <div className="space-y-2 col-span-full mt-4">
+                    <Label htmlFor="examObservations">Observações</Label>
                     <Textarea
                       id="examObservations"
                       placeholder="Observações gerais do exame"
                       value={newExamObservations}
                       onChange={(e) => setNewExamObservations(e.target.value)}
-                      className="col-span-3 bg-white rounded-lg border-gray-200 dark:border-gray-600 focus:ring-2 focus:ring-blue-400 placeholder-[#9CA3AF] dark:placeholder-gray-500 transition-all duration-200"
                       rows={3}
+                      className="bg-white rounded-lg border-gray-200 dark:border-gray-600 focus:ring-2 focus:ring-blue-400 placeholder-[#9CA3AF] dark:placeholder-gray-500 transition-all duration-200"
                     />
                   </div>
-                  <div className="grid grid-cols-4 items-center gap-4">
-                    <Label htmlFor="operator" className="text-right text-[#4B5563] dark:text-gray-400 font-medium">
-                      Operador
-                    </Label>
-                    <Input
-                      id="operator"
-                      placeholder="Nome do operador"
-                      value={newOperator}
-                      onChange={(e) => setNewOperator(e.target.value)}
-                      className="col-span-3 bg-white rounded-lg border-gray-200 dark:border-gray-600 focus:ring-2 focus:ring-blue-400 placeholder-[#9CA3AF] dark:placeholder-gray-500 transition-all duration-200"
-                    />
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div className="space-y-2">
+                      <Label htmlFor="operator">Operador</Label>
+                      <Input
+                        id="operator"
+                        placeholder="Nome do operador"
+                        value={newOperator}
+                        onChange={(e) => setNewOperator(e.target.value)}
+                        className="bg-white rounded-lg border-gray-200 dark:border-gray-600 focus:ring-2 focus:ring-blue-400 placeholder-[#9CA3AF] dark:placeholder-gray-500 transition-all duration-200"
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="referenceDate">Data de Referência</Label>
+                      <Input
+                        id="referenceDate"
+                        type="date"
+                        value={newReferenceDate}
+                        onChange={(e) => setNewReferenceDate(e.target.value)}
+                        className="bg-white rounded-lg border-gray-200 dark:border-gray-600 focus:ring-2 focus:ring-blue-400 placeholder-[#9CA3AF] dark:placeholder-gray-500 transition-all duration-200"
+                      />
+                    </div>
                   </div>
-                  <div className="grid grid-cols-4 items-center gap-4">
-                    <Label htmlFor="referenceDate" className="text-right text-[#4B5563] dark:text-gray-400 font-medium">
-                      Data de Referência
-                    </Label>
-                    <Input
-                      id="referenceDate"
-                      type="date"
-                      value={newReferenceDate}
-                      onChange={(e) => setNewReferenceDate(e.target.value)}
-                      className="col-span-3 bg-white rounded-lg border-gray-200 dark:border-gray-600 focus:ring-2 focus:ring-blue-400 placeholder-[#9CA3AF] dark:placeholder-gray-500 transition-all duration-200"
-                    />
-                  </div>
-                  <div className="grid grid-cols-4 items-center gap-4">
-                    <Label htmlFor="referenceTables" className="text-right text-[#4B5563] dark:text-gray-400 font-medium">
-                      Tabelas de referência
-                    </Label>
+                  <div className="space-y-2 col-span-full">
+                    <Label htmlFor="referenceTables">Tabelas de referência</Label>
                     <Textarea
                       id="referenceTables"
                       placeholder="Tabelas de referência"
                       value={newReferenceTables}
                       onChange={(e) => setNewReferenceTables(e.target.value)}
-                      className="col-span-3 bg-white rounded-lg border-gray-200 dark:border-gray-600 focus:ring-2 focus:ring-blue-400 placeholder-[#9CA3AF] dark:placeholder-gray-500 transition-all duration-200"
                       rows={3}
+                      className="bg-white rounded-lg border-gray-200 dark:border-gray-600 focus:ring-2 focus:ring-blue-400 placeholder-[#9CA3AF] dark:placeholder-gray-500 transition-all duration-200"
                     />
                   </div>
-                  <div className="grid grid-cols-4 items-center gap-4">
-                    <Label htmlFor="conclusions" className="text-right text-[#4B5563] dark:text-gray-400 font-medium">
-                      Conclusões
-                    </Label>
+                  <div className="space-y-2 col-span-full">
+                    <Label htmlFor="conclusions">Conclusões</Label>
                     <Textarea
                       id="conclusions"
                       placeholder="Conclusões do exame"
                       value={newConclusions}
                       onChange={(e) => setNewConclusions(e.target.value)}
-                      className="col-span-3 bg-white rounded-lg border-gray-200 dark:border-gray-600 focus:ring-2 focus:ring-blue-400 placeholder-[#9CA3AF] dark:placeholder-gray-500 transition-all duration-200"
                       rows={5}
+                      className="bg-white rounded-lg border-gray-200 dark:border-gray-600 focus:ring-2 focus:ring-blue-400 placeholder-[#9CA3AF] dark:placeholder-gray-500 transition-all duration-200"
                     />
                   </div>
                 </div>
@@ -1223,7 +1214,7 @@ const PatientRecordPage = () => {
                             <FaStethoscope className="h-3 w-3" /> Dr. William Cardoso {/* Placeholder para o veterinário */}
                           </div>
                           <div className="flex items-center gap-1 col-span-full">
-                            <FaClipboardList className="h-3 w-3" /> {rx.medications.length} medicamento(s)
+                            <FaClipboardList className="h-3 w-3" /> {rx.type === 'manipulated' ? (rx.manipulatedPrescription?.formulaComponents?.length || 0) : (rx.medications?.length || 0)} medicamento(s)
                           </div>
                         </div>
                         {rx.medicationName && (
