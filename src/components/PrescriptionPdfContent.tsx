@@ -337,25 +337,23 @@ const styles = StyleSheet.create({
   buyerSignatureDateContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    alignItems: 'flex-start', // Alinha os itens pelo topo
+    alignItems: 'flex-end', // Alinha os itens pela base
     marginTop: 30, // Espaço após observações gerais
-    marginBottom: 15, // Reduzido para 'grudar' mais na linha de separação
+    marginBottom: 10, // Reduzido para 'grudar' mais na linha de separação
     width: '100%',
   },
   buyerDateText: {
     fontSize: 10,
     color: "#333",
-    // Removido flexDirection e alignItems, pois é apenas texto
   },
   buyerSignatureBlock: {
     textAlign: 'center',
     width: 180, // Largura fixa para a linha de assinatura
-    marginTop: 0, // Garante alinhamento com o topo do texto da data
   },
   buyerSignatureLine: {
     borderBottomWidth: 1,
     borderBottomColor: "#333",
-    marginBottom: 3,
+    marginBottom: 0, // Ajustado para ficar mais próximo do texto
     marginTop: 5, // Espaço entre o label 'Assinatura' e a linha
   },
   buyerSignatureLabel: {
