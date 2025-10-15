@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Link, useParams, useNavigate } from "react-router-dom";
 import {
-  FaArrowLeft, FaUsers, FaPaw, FaPlus, FaEye, FaStethoscope, FaCalendarAlt, FaDollarSign, FaSyringe, FaWeightHanging, FaFileAlt, FaClipboardList, FaCommentAlt, FaHeart, FaMale, FaUser, FaPrint, FaDownload, FaTimes, FaSave, FaBalanceScale, FaFileMedical, FaExclamationTriangle, FaFlask, FaEdit
+  FaArrowLeft, FaUsers, FaPaw, FaPlus, FaEye, FaStethoscope, FaCalendarAlt, FaDollarSign, FaSyringe, FaWeightHanging, FaFileAlt, FaClipboardList, FaCommentAlt, FaHeart, FaMale, FaUser, FaPrint, FaDownload, FaTimes, FaSave, FaBalanceScale, FaFileMedical, FaExclamationTriangle, FaFlask
 } from "react-icons/fa"; // Importar ícones de react-icons
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -1193,7 +1193,7 @@ const PatientRecordPage = () => {
                         <div className="flex items-center justify-between mb-2">
                           <div className="flex items-center gap-2">
                             <p className="text-lg font-semibold text-foreground">
-                              {rx.treatmentDescription || rx.medicationName || "Receita sem descrição"}
+                              {rx.treatmentDescription || "Receita sem descrição"}
                             </p>
                             <Badge className={cn(
                               "px-2 py-0.5 text-xs font-medium rounded-full",
@@ -1213,11 +1213,6 @@ const PatientRecordPage = () => {
                                 <FaEye className="h-4 w-4" />
                               </Button>
                             </Link>
-                            <Link to={`/clients/${clientId}/animals/${animalId}/edit-prescription/${rx.id}`}>
-                              <Button variant="ghost" size="icon" className="rounded-md hover:bg-gray-100 hover:text-gray-900 dark:hover:bg-gray-700 dark:hover:text-gray-200 transition-colors duration-200">
-                                <FaEdit className="h-4 w-4" />
-                              </Button>
-                            </Link>
                           </div>
                         </div>
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-2 text-sm text-muted-foreground mb-3">
@@ -1228,12 +1223,12 @@ const PatientRecordPage = () => {
                             <FaStethoscope className="h-3 w-3" /> Dr. William Cardoso {/* Placeholder para o veterinário */}
                           </div>
                           <div className="flex items-center gap-1 col-span-full">
-                            <FaClipboardList className="h-3 w-3" /> Medicamentos: {rx.medicationName || "Nenhum"}
+                            <FaClipboardList className="h-3 w-3" /> {rx.medications.length} medicamento(s)
                           </div>
                         </div>
-                        {rx.instructions && (
+                        {rx.medicationName && (
                           <p className="text-sm text-foreground bg-muted/50 dark:bg-muted/30 p-3 rounded-md border border-muted dark:border-gray-700">
-                            {rx.instructions}
+                            Medicamentos: {rx.medicationName}
                           </p>
                         )}
                       </Card>
