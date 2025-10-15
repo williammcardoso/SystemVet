@@ -9,11 +9,11 @@ import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import PrescriptionMedicationForm, { MedicationData } from "@/components/PrescriptionMedicationForm";
-import PrescriptionManipulatedForm from "@/components/PrescriptionManipulatedForm"; // Importar o novo componente
+import PrescriptionManipulatedForm from "@/components/PrescriptionManipulatedForm";
 import { toast } from "sonner";
 import { pdf } from "@react-pdf/renderer";
 import { PrescriptionPdfContent } from "@/components/PrescriptionPdfContent";
-import { PrescriptionEntry, ManipulatedPrescriptionData } from "@/types/medication"; // Importar ManipulatedPrescriptionData
+import { PrescriptionEntry, ManipulatedPrescriptionData } from "@/types/medication";
 import { mockPrescriptions } from "@/mockData/prescriptions";
 import {
   AlertDialog,
@@ -345,6 +345,9 @@ const AddPrescriptionPage = () => {
     return `${baseTitle} (${typeText}) para ${animal.name}`;
   };
 
+  // Condição para desabilitar os botões de impressão/salvamento
+  const isPrintSaveDisabled = (prescriptionType !== 'manipulated' && currentPrescriptionMedications.length === 0) || (prescriptionType === 'manipulated' && !manipulatedPrescriptionData);
+
   return (
     <div className="flex flex-col min-h-screen bg-gray-50 dark:bg-gray-950">
       {/* Header da Página com Gradiente e Breadcrumb */}
@@ -448,13 +451,13 @@ const AddPrescriptionPage = () => {
         <Button variant="outline" onClick={() => navigate(`/clients/${clientId}/animals/${animalId}/record`)} className="bg-white border border-gray-300 text-gray-700 hover:bg-gray-50 rounded-md transition-all duration-200 shadow-sm hover:shadow-md dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200 dark:hover:bg-gray-600">
           <FaTimes className="mr-2 h-4 w-4" /> Cancelar
         </Button>
-        <Button variant="secondary" onClick={handlePrintPrescription} disabled={(prescriptionType !== 'manipulated' && currentPrescriptionMedications.length === 0) || (prescriptionType === 'manipulated' && !manipulatedPrescriptionData)} className="rounded-md bg-white border border-gray-300 text-gray-700 hover:bg-gray-50 transition-colors duration-200 shadow-sm hover:shadow-md dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200 dark:hover:bg-gray-600">
+        <Button variant="secondary" onClick={handlePrintPrescription} disabled={isPrintSaveDisabled} className="rounded-md bg-white border border-gray-300 text-gray-700 hover:bg-gray-50 transition-colors duration-200 shadow-sm hover:shadow-md dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200 dark:hover:bg-gray-600">
           <FaPrint className="mr-2 h-4 w-4" /> Imprimir
         </Button>
-        <Button variant="secondary" onClick={handleSavePdf} disabled={(prescriptionType !== 'manipulated' && currentPrescriptionMedications.length === 0) || (prescriptionType === 'manipulated' && !manipulatedPrescriptionData)} className="rounded-md bg-white border border-gray-300 text-gray-700 hover:bg-gray-50 transition-colors duration-200 shadow-sm hover:shadow-md dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200 dark:hover:bg-gray-600">
+        <Button variant="secondary" onClick={handleSavePdf} disabled={isPrintSaveDisabled} className="rounded-md bg-white border border-gray-300 text-gray-700 hover:bg-gray-50 transition-colors duration-200 shadow-sm hover:shadow-md dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200 dark:hover:bg-gray-600">
           <FaDownload className="mr-2 h-4 w-4" /> Salvar PDF
         </Button>
-        <Button onClick={handleSavePrescription} disabled={(prescriptionType !== 'manipulated' && currentPrescriptionMedications.length === 0) || (prescriptionType === 'manipulated' && !manipulatedPrescriptionData)} className="bg-gradient-to-r from-blue-500 to-indigo-500 text-white hover:from-blue-600 hover:to-indigo-600 rounded-md font-semibold transition-all duration-200 shadow-md hover:shadow-lg">
+        <Button onClick={handleSavePrescription} disabled={isPrintSaveDisabled} className="bg-gradient-to-r from-blue-500 to-indigo-500 text-white hover:from-blue-600 hover:to-indigo-600 rounded-md font-semibold transition-all duration-200 shadow-md hover:shadow-lg">
           <FaSave className="mr-2 h-4 w-4" /> Salvar Receita
         </Button>
       </div>

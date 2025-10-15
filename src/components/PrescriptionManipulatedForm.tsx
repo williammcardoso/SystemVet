@@ -35,9 +35,7 @@ const mockPosologyFrequencyUnits = ["Hora(s)", "Dia(s)"];
 const mockPosologyDurations = ["1", "3", "5", "7", "10", "14", "21", "30"]; // Valores numéricos
 const mockPosologyDurationUnits = ["Dia(s)", "Mês(es)"];
 
-const mockProductTypes = ["Simples", "Controlado", "Manipulado"]; // Mantido como na imagem, embora 'Manipulado' seja o contexto
-const mockProductQuantities = ["1 unidade", "2 unidades", "3 unidades", "Outro"];
-const mockProductPharmacies = ["Farmácia Veterinária", "Farmácia Humana"];
+// Removidos: mockProductTypes, mockProductQuantities, mockProductPharmacies
 const mockProductRoutes = ["Oral", "Tópica", "Injetável", "Oftálmica", "Auricular", "Outra"];
 
 
@@ -51,6 +49,7 @@ const PrescriptionManipulatedForm: React.FC<PrescriptionManipulatedFormProps> = 
   const [vehicleExcipient, setVehicleExcipient] = useState<ManipulatedVehicleExcipient>(
     initialData?.vehicleExcipient || { type: "", quantity: "", unit: "" }
   );
+  const [customVehicleType, setCustomVehicleType] = useState<string>(initialData?.vehicleExcipient?.type === "Outro" ? initialData.vehicleExcipient.type : "");
   const [posologyType, setPosologyType] = useState<'automatic' | 'freeText'>(
     initialData?.posology.type || 'automatic'
   );
@@ -66,6 +65,16 @@ const PrescriptionManipulatedForm: React.FC<PrescriptionManipulatedFormProps> = 
     initialData?.productDetails || { productType: "", quantity: "", pharmacy: "", route: "" }
   );
   const [generalObservations, setGeneralObservations] = useState<string>(initialData?.generalObservations || "");
+
+  // Sincronizar customVehicleType quando vehicleExcipient.type muda
+  useEffect(() => {
+    if (vehicleExcipient.type !== "Outro") {
+      setCustomVehicleType("");
+    } else if (initialData?.vehicleExcipient?.type === "Outro") {
+      setCustomVehicleType(initialData.vehicleExcipient.type);
+    }
+  }, [vehicleExcipient.type, initialData]);
+
 
   // Auto-generate final description for automatic posology
   useEffect(() => {
@@ -115,10 +124,13 @@ const PrescriptionManipulatedForm: React.FC<PrescriptionManipulatedFormProps> = 
       toast.error("Por favor, preencha todos os campos obrigatórios dos componentes da fórmula.");
       return;
     }
-    if (!vehicleExcipient.type.trim() || !vehicleExcipient.quantity.trim() || !vehicleExcipient.unit.trim()) {
+    
+    const finalVehicleType = vehicleExcipient.type === "Outro" ? customVehicleType.trim() : vehicleExcipient.type.trim();
+    if (!finalVehicleType || !vehicleExcipient.quantity.trim() || !vehicleExcipient.unit.trim()) {
       toast.error("Por favor, preencha todos os campos obrigatórios do veículo/excipiente.");
       return;
     }
+
     if (posologyType === 'automatic' && (!posologyAutomatic.dosage.trim() || !posologyAutomatic.measure.trim() || !posologyAutomatic.frequencyValue.trim() || !posologyAutomatic.frequencyUnit.trim() || !posologyAutomatic.durationValue.trim() || !posologyAutomatic.durationUnit.trim())) {
       toast.error("Por favor, preencha todos os campos obrigatórios da posologia automática.");
       return;
@@ -127,16 +139,26 @@ const PrescriptionManipulatedForm: React.FC<PrescriptionManipulatedFormProps> = 
       toast.error("Por favor, preencha a descrição final da posologia em texto livre.");
       return;
     }
-    if (!productDetails.productType.trim() || !productDetails.quantity.trim() || !productDetails.pharmacy.trim() || !productDetails.route.trim()) {
-      toast.error("Por favor, preencha todos os campos obrigatórios dos detalhes do produto.");
+    // Validação para o campo 'Via' que é o único restante em productDetails
+    if (!productDetails.route.trim()) {
+      toast.error("Por favor, preencha o campo 'Via' dos detalhes do produto.");
       return;
     }
 
     const dataToSave: ManipulatedPrescriptionData = {
       formulaComponents,
-      vehicleExcipient,
+      vehicleExcipient: {
+        type: finalVehicleType,
+        quantity: vehicleExcipient.quantity,
+        unit: vehicleExcipient.unit,
+      },
       posology: posologyType === 'automatic' ? { type: 'automatic', data: posologyAutomatic } : { type: 'freeText', data: posologyFreeText },
-      productDetails,
+      productDetails: {
+        productType: "Manipulado", // Definido como fixo, pois é uma receita manipulada
+        quantity: "1 unidade", // Definido como fixo, pois não há campo para isso
+        pharmacy: "Farmácia de Manipulação", // Definido como fixo
+        route: productDetails.route,
+      },
       generalObservations,
     };
     onSave(dataToSave);
@@ -190,6 +212,14 @@ const PrescriptionManipulatedForm: React.FC<PrescriptionManipulatedFormProps> = 
                   ))}
                 </SelectContent>
               </Select>
+              {vehicleExcipient.type === "Outro" && (
+                <Input
+                  placeholder="Digite o tipo personalizado"
+                  value={customVehicleType}
+                  onChange={(e) => setCustomVehicleType(e.target.value)}
+                  className="mt-2 bg-white rounded-lg border-gray-200 dark:border-gray-600 focus:ring-2 focus:ring-blue-400 placeholder-[#9CA3AF] dark:placeholder-gray-500 transition-all duration-200"
+                />
+              )}
             </div>
             <div className="space-y-2">
               <Label htmlFor="vehicle-quantity">Quantidade / q.s.p*</Label>
@@ -340,7 +370,7 @@ const PrescriptionManipulatedForm: React.FC<PrescriptionManipulatedFormProps> = 
           </CardContent>
         </Card>
 
-        {/* Tipo de Produto */}
+        {/* Detalhes do Produto (apenas 'Via' agora) */}
         <Card className="bg-white/90 backdrop-blur-sm border border-gray-200 dark:border-gray-700 rounded-2xl shadow-[0_1px_3px_rgba(0,0,0,0.05)]">
           <CardHeader>
             <CardTitle className="flex items-center gap-2 text-lg font-semibold text-[#374151] dark:text-gray-100">
@@ -348,51 +378,6 @@ const PrescriptionManipulatedForm: React.FC<PrescriptionManipulatedFormProps> = 
             </CardTitle>
           </CardHeader>
           <CardContent className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div className="space-y-2">
-              <Label htmlFor="product-type">Tipo de Produto*</Label>
-              <Select onValueChange={(value) => setProductDetails(prev => ({ ...prev, productType: value }))} value={productDetails.productType}>
-                <SelectTrigger id="product-type" className="bg-white rounded-lg border-gray-200 dark:border-gray-600 focus:ring-2 focus:ring-blue-400 placeholder-[#9CA3AF] dark:placeholder-gray-500 transition-all duration-200">
-                  <SelectValue placeholder="Selecione o tipo" />
-                </SelectTrigger>
-                <SelectContent>
-                  {mockProductTypes.map((type) => (
-                    <SelectItem key={type} value={type}>
-                      {type}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="product-quantity">Quantidade*</Label>
-              <Select onValueChange={(value) => setProductDetails(prev => ({ ...prev, quantity: value }))} value={productDetails.quantity}>
-                <SelectTrigger id="product-quantity" className="bg-white rounded-lg border-gray-200 dark:border-gray-600 focus:ring-2 focus:ring-blue-400 placeholder-[#9CA3AF] dark:placeholder-gray-500 transition-all duration-200">
-                  <SelectValue placeholder="Selecione a quantidade" />
-                </SelectTrigger>
-                <SelectContent>
-                  {mockProductQuantities.map((qty) => (
-                    <SelectItem key={qty} value={qty}>
-                      {qty}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="product-pharmacy">Farmácia*</Label>
-              <Select onValueChange={(value) => setProductDetails(prev => ({ ...prev, pharmacy: value }))} value={productDetails.pharmacy}>
-                <SelectTrigger id="product-pharmacy" className="bg-white rounded-lg border-gray-200 dark:border-gray-600 focus:ring-2 focus:ring-blue-400 placeholder-[#9CA3AF] dark:placeholder-gray-500 transition-all duration-200">
-                  <SelectValue placeholder="Selecione a farmácia" />
-                </SelectTrigger>
-                <SelectContent>
-                  {mockProductPharmacies.map((pharmacy) => (
-                    <SelectItem key={pharmacy} value={pharmacy}>
-                      {pharmacy}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
             <div className="space-y-2">
               <Label htmlFor="product-route">Via*</Label>
               <Select onValueChange={(value) => setProductDetails(prev => ({ ...prev, route: value }))} value={productDetails.route}>
@@ -408,6 +393,7 @@ const PrescriptionManipulatedForm: React.FC<PrescriptionManipulatedFormProps> = 
                 </SelectContent>
               </Select>
             </div>
+            {/* Campos removidos: Tipo de Produto, Quantidade, Farmácia */}
           </CardContent>
         </Card>
 
@@ -429,6 +415,11 @@ const PrescriptionManipulatedForm: React.FC<PrescriptionManipulatedFormProps> = 
             />
           </CardContent>
         </Card>
+        <div className="flex justify-end mt-6">
+          <Button onClick={handleSave} className="bg-gradient-to-r from-blue-500 to-indigo-500 text-white hover:from-blue-600 hover:to-indigo-600 rounded-md font-semibold transition-all duration-200 shadow-md hover:shadow-lg">
+            <FaSave className="h-4 w-4 mr-2" /> Salvar Dados da Receita
+          </Button>
+        </div>
       </div>
 
       {/* Prévia da Fórmula (Sidebar) */}
@@ -455,7 +446,7 @@ const PrescriptionManipulatedForm: React.FC<PrescriptionManipulatedFormProps> = 
             <div>
               <h4 className="font-semibold text-foreground mb-2">Veículo / Excipiente:</h4>
               {vehicleExcipient.type ? (
-                <p>{vehicleExcipient.type} {vehicleExcipient.quantity} {vehicleExcipient.unit}</p>
+                <p>{(vehicleExcipient.type === "Outro" && customVehicleType) ? customVehicleType : vehicleExcipient.type} {vehicleExcipient.quantity} {vehicleExcipient.unit}</p>
               ) : (
                 <p>Nenhum veículo/excipiente.</p>
               )}
@@ -466,6 +457,14 @@ const PrescriptionManipulatedForm: React.FC<PrescriptionManipulatedFormProps> = 
                 <p>{posologyAutomatic.finalDescription || "Preencha a posologia automática."}</p>
               ) : (
                 <p>{posologyFreeText.finalDescription || "Preencha a posologia em texto livre."}</p>
+              )}
+            </div>
+            <div>
+              <h4 className="font-semibold text-foreground mb-2">Via:</h4>
+              {productDetails.route ? (
+                <p>{productDetails.route}</p>
+              ) : (
+                <p>Nenhuma via selecionada.</p>
               )}
             </div>
           </CardContent>

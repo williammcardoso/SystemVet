@@ -1,6 +1,6 @@
 import React from "react";
 import { Document, Page, View, Text, StyleSheet, Font } from "@react-pdf/renderer";
-import { MedicationData, ManipulatedPrescriptionData } from "@/types/medication"; // Importar ManipulatedPrescriptionData
+import { MedicationData, ManipulatedPrescriptionData } from "@/types/medication";
 import { mockCompanySettings, mockUserSettings } from "@/mockData/settings";
 
 // Registrando a fonte Exo com pesos regular, bold, italic e bold-italic
@@ -414,6 +414,55 @@ const getDynamicStyles = (isCompactSimplePrescription: boolean, prescriptionType
     fontSize: 10,
     marginBottom: 5,
   },
+  // Novos estilos para o formato de receita manipulada
+  manipulatedGroupTitle: {
+    fontSize: 13,
+    fontWeight: "bold",
+    marginTop: 15,
+    marginBottom: 10,
+    textTransform: "uppercase",
+    borderBottomWidth: 1,
+    borderBottomColor: "#000",
+    paddingBottom: 4,
+  },
+  manipulatedListItem: {
+    flexDirection: 'row',
+    alignItems: 'flex-end',
+    marginBottom: 5,
+    marginLeft: 10,
+  },
+  manipulatedBullet: {
+    fontSize: 10,
+    marginRight: 5,
+  },
+  manipulatedItemName: {
+    fontSize: 10,
+    flexShrink: 1,
+  },
+  manipulatedDottedLine: {
+    borderBottomWidth: 1,
+    borderBottomColor: "#ccc",
+    borderStyle: "dotted",
+    flexGrow: 1,
+    height: 1,
+    marginHorizontal: 5,
+  },
+  manipulatedDosage: {
+    fontSize: 10,
+    flexShrink: 0,
+  },
+  manipulatedInstructionsTitle: {
+    fontSize: 11,
+    fontWeight: "bold",
+    marginTop: 10,
+    marginBottom: 5,
+    marginLeft: 10,
+  },
+  manipulatedInstructionsText: {
+    fontSize: 10,
+    marginLeft: 10,
+    lineHeight: 1.4,
+  },
 });
 
 
@@ -512,55 +561,36 @@ export const PrescriptionPdfContent = ({
         <View style={styles.contentWrapper}>
           {prescriptionType === 'manipulated' && manipulatedPrescription ? (
             <>
-              <Text style={styles.manipulatedSectionTitle}>Composição da Fórmula</Text>
-              {manipulatedPrescription.formulaComponents.length > 0 ? (
-                <View>
-                  {manipulatedPrescription.formulaComponents.map((comp, index) => (
-                    <Text key={comp.id} style={styles.manipulatedComponentItem}>
-                      {index + 1}) {comp.name} {comp.dosageQuantity} {comp.dosageUnit}
-                    </Text>
-                  ))}
-                </View>
-              ) : (
-                <Text style={styles.manipulatedComponentItem}>Nenhum componente na fórmula.</Text>
-              )}
+              <Text style={styles.manipulatedGroupTitle}>{manipulatedPrescription.productDetails.route.toUpperCase()}</Text>
+              <View>
+                {manipulatedPrescription.formulaComponents.map((comp) => (
+                  <View key={comp.id} style={styles.manipulatedListItem}>
+                    <Text style={styles.manipulatedBullet}>•</Text>
+                    <Text style={styles.manipulatedItemName}>{comp.name}</Text>
+                    <View style={styles.manipulatedDottedLine} />
+                    <Text style={styles.manipulatedDosage}>{comp.dosageQuantity} {comp.dosageUnit}</Text>
+                  </View>
+                ))}
+                {manipulatedPrescription.vehicleExcipient && (
+                  <View style={styles.manipulatedListItem}>
+                    <Text style={styles.manipulatedBullet}>•</Text>
+                    <Text style={styles.manipulatedItemName}>{manipulatedPrescription.vehicleExcipient.type} q.s.p.</Text>
+                    <View style={styles.manipulatedDottedLine} />
+                    <Text style={styles.manipulatedDosage}>{manipulatedPrescription.vehicleExcipient.quantity} {manipulatedPrescription.vehicleExcipient.unit}</Text>
+                  </View>
+                )}
+              </View>
 
-              {manipulatedPrescription.vehicleExcipient && (
-                <>
-                  <Text style={styles.manipulatedSectionTitle}>Veículo / Excipiente</Text>
-                  <Text style={styles.manipulatedDetailItem}>
-                    Tipo: {manipulatedPrescription.vehicleExcipient.type}
-                  </Text>
-                  <Text style={styles.manipulatedDetailItem}>
-                    Quantidade: {manipulatedPrescription.vehicleExcipient.quantity} {manipulatedPrescription.vehicleExcipient.unit}
-                  </Text>
-                </>
-              )}
-
-              <Text style={styles.manipulatedSectionTitle}>Posologia</Text>
+              <Text style={styles.manipulatedInstructionsTitle}>Instruções de uso:</Text>
               {manipulatedPrescription.posology.type === 'automatic' ? (
-                <Text style={styles.manipulatedDetailItem}>
+                <Text style={styles.manipulatedInstructionsText}>
                   {manipulatedPrescription.posology.data.finalDescription || "Posologia automática não preenchida."}
                 </Text>
               ) : (
-                <Text style={styles.manipulatedDetailItem}>
+                <Text style={styles.manipulatedInstructionsText}>
                   {manipulatedPrescription.posology.data.finalDescription || "Posologia em texto livre não preenchida."}
                 </Text>
               )}
-
-              <Text style={styles.manipulatedSectionTitle}>Detalhes do Produto</Text>
-              <Text style={styles.manipulatedDetailItem}>
-                Tipo de Produto: {manipulatedPrescription.productDetails.productType}
-              </Text>
-              <Text style={styles.manipulatedDetailItem}>
-                Quantidade: {manipulatedPrescription.productDetails.quantity}
-              </Text>
-              <Text style={styles.manipulatedDetailItem}>
-                Farmácia: {manipulatedPrescription.productDetails.pharmacy}
-              </Text>
-              <Text style={styles.manipulatedDetailItem}>
-                Via: {manipulatedPrescription.productDetails.route}
-              </Text>
 
               {manipulatedPrescription.generalObservations && (
                 <View style={styles.generalObservationsSection}>
