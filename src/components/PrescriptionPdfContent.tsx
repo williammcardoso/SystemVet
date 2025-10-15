@@ -474,7 +474,7 @@ export const PrescriptionPdfContent = ({
           </View>
         )}
 
-        <View style={{ flexGrow: 1 }}> {/* Wrapper para o conteúdo que deve paginar */}
+        <View> {/* Removido flexGrow: 1 para forçar o conteúdo a caber em uma página */}
           {Object.keys(groupedMedications).map((useType) => (
             <View key={useType}>
               <Text style={styles.groupTitle}>{useType}</Text>
