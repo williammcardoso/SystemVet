@@ -84,7 +84,7 @@ const styles = StyleSheet.create({
     borderColor: "#ddd",
     borderRadius: 5,
     padding: 10,
-    marginBottom: 0, // Ajustado para 0
+    marginBottom: 0,
     marginTop: 0,
   },
   patientInfoControlledTitle: {
@@ -101,7 +101,7 @@ const styles = StyleSheet.create({
   groupTitle: {
     fontSize: 13,
     fontWeight: "bold",
-    marginTop: 10, // Reduzido
+    marginTop: 10,
     marginBottom: 8,
     textTransform: "uppercase",
     borderBottomWidth: 1,
@@ -110,7 +110,7 @@ const styles = StyleSheet.create({
   },
   medicationItem: {
     flexDirection: "column",
-    marginBottom: 10, // Reduzido
+    marginBottom: 10,
   },
   medicationHeaderLine: {
     flexDirection: "row",
@@ -171,8 +171,8 @@ const styles = StyleSheet.create({
     color: "#777",
     marginLeft: 20,
     marginTop: 3,
-    fontStyle: "italic", // Todo o bloco em itálico
-    fontFamily: "Exo", // Usando Exo para as observações
+    fontStyle: "italic",
+    fontFamily: "Exo",
   },
   generalObservationsSection: {
     marginTop: 25,
@@ -189,7 +189,6 @@ const styles = StyleSheet.create({
     fontSize: 10,
     lineHeight: 1.5,
   },
-  // Estilos para o bloco de data e assinatura do VETERINÁRIO (rodapé fixo para simples)
   vetSignatureBlock: {
     textAlign: 'center',
     width: 180,
@@ -212,7 +211,6 @@ const styles = StyleSheet.create({
     fontSize: 10,
     color: "#333",
   },
-  // Rodapé para receitas simples (fixo na parte inferior)
   footerContainer: {
     position: 'absolute',
     bottom: 30,
@@ -225,9 +223,8 @@ const styles = StyleSheet.create({
     borderTopWidth: 1,
     borderTopColor: "#eee",
   },
-  // Estilos para o cabeçalho de receita controlada
   controlledPrescriptionHeader: {
-    marginBottom: 0, // Ajustado para 0
+    marginBottom: 0,
     paddingBottom: 10,
     borderBottomWidth: 0,
     borderBottomColor: "#eee",
@@ -244,7 +241,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'flex-start',
-    marginBottom: 5,
+    marginBottom: 0, // Ajustado para 0
   },
   issuerVetCard: {
     borderWidth: 1,
@@ -264,12 +261,11 @@ const styles = StyleSheet.create({
     marginBottom: 2,
     color: "#333",
   },
-  // Estilos para o rodapé fixo de identificação (comprador/fornecedor)
   identificationCardContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    position: 'absolute', // Alterado para absolute para ser relativo à página
-    bottom: 30, // 30px do fundo da página
+    position: 'absolute',
+    bottom: 30,
     left: 30,
     right: 30,
     paddingTop: 20,
@@ -309,12 +305,12 @@ const styles = StyleSheet.create({
   pharmacistSignatureBlock: {
     marginTop: 'auto',
     marginBottom: 5,
-    flexDirection: 'column', // Adicionado para organizar os itens em coluna
-    alignItems: 'center',    // Adicionado para centralizar os itens horizontalmente
-    width: '100%',           // Garante que o bloco ocupe a largura total para centralização
+    flexDirection: 'column',
+    alignItems: 'center',
+    width: '100%',
   },
   pharmacistSignatureLine: {
-    width: 180, // Largura fixa para a linha de assinatura
+    width: 180,
     borderBottomWidth: 1,
     borderBottomColor: "#333",
     marginBottom: 3,
@@ -338,16 +334,15 @@ const styles = StyleSheet.create({
   identificationDateSeparator: {
     marginHorizontal: 2,
   },
-  // Estilos para o bloco de Data e Assinatura do Comprador (receita controlada, in-flow)
   buyerSignatureDateContainer: {
-    position: 'absolute', // Alterado para absolute
-    bottom: 206, // Posição calculada para ficar acima do rodapé de identificação
+    position: 'absolute',
+    bottom: 206,
     left: 30,
     right: 30,
     flexDirection: 'row',
     justifyContent: 'space-between',
-    alignItems: 'flex-end', // Alinha os itens pela base
-    width: 'auto', // Ajusta a largura automaticamente com left/right
+    alignItems: 'flex-end',
+    width: 'auto',
   },
   buyerDateText: {
     fontSize: 10,
@@ -355,13 +350,13 @@ const styles = StyleSheet.create({
   },
   buyerSignatureBlock: {
     textAlign: 'center',
-    width: 180, // Largura fixa para a linha de assinatura
+    width: 180,
   },
   buyerSignatureLine: {
     borderBottomWidth: 1,
     borderBottomColor: "#333",
-    marginBottom: 0, // Ajustado para ficar mais próximo do texto
-    marginTop: 5, // Espaço entre o label 'Assinatura' e a linha
+    marginBottom: 0,
+    marginTop: 5,
   },
   buyerSignatureLabel: {
     fontSize: 9,
