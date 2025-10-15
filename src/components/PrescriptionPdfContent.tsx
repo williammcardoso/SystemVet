@@ -3,12 +3,14 @@ import { Document, Page, View, Text, StyleSheet, Font } from "@react-pdf/rendere
 import { MedicationData } from "@/types/medication";
 import { mockCompanySettings, mockUserSettings } from "@/mockData/settings";
 
-// Registrando a fonte Exo com pesos regular e bold usando caminhos de string literais
+// Registrando a fonte Exo com pesos regular, bold, italic e bold-italic
 Font.register({
   family: "Exo",
   fonts: [
     { src: '/fonts/Exo-Regular.ttf', fontWeight: 400, format: 'truetype' },
     { src: '/fonts/Exo-Bold.ttf', fontWeight: 700, format: 'truetype' },
+    { src: '/fonts/Exo-Italic.ttf', fontStyle: 'italic', fontWeight: 400, format: 'truetype' },
+    { src: '/fonts/Exo-BoldItalic.ttf', fontStyle: 'italic', fontWeight: 700, format: 'truetype' },
   ],
 });
 
@@ -169,8 +171,8 @@ const styles = StyleSheet.create({
     color: "#777",
     marginLeft: 20,
     marginTop: 3,
-    fontStyle: "italic",
-    fontFamily: "Times-Roman", // Aplicando a fonte Times-Roman aqui
+    fontStyle: "italic", // Todo o bloco em itálico
+    fontFamily: "Exo", // Usando Exo para as observações
   },
   generalObservationsSection: {
     marginTop: 25,
@@ -404,17 +406,10 @@ export const PrescriptionPdfContent = ({
   const currentDate = new Date();
 
   // Altura estimada do identificationCardContainer (rodapé fixo)
-  // Título (11px + 5mb + 5pb + 1bw) = 22px
-  // 5 campos (10px + 5mb) = 15px * 5 = 75px
-  // Bloco do farmacêutico (20mt + 1bw + 3mb + 9px + 5mt + 10px) = 48px
-  // Total de um card: 22 + 75 + 48 = 145px
-  // identificationCardContainer: 20pt + 1bw + 145px = 166px
   const IDENTIFICATION_FOOTER_HEIGHT = 166;
   const PAGE_BOTTOM_PADDING = 30;
-  const GAP_ABOVE_FOOTER = 10; // Espaço entre o bloco de assinatura e o rodapé de identificação
+  const GAP_ABOVE_FOOTER = 10; 
 
-  // Posição bottom para o buyerSignatureDateContainer
-  // PAGE_BOTTOM_PADDING (30) + IDENTIFICATION_FOOTER_HEIGHT (166) + GAP_ABOVE_FOOTER (10) = 206
   const BUYER_SIGNATURE_BOTTOM_POSITION = PAGE_BOTTOM_PADDING + IDENTIFICATION_FOOTER_HEIGHT + GAP_ABOVE_FOOTER;
 
 
@@ -509,8 +504,8 @@ export const PrescriptionPdfContent = ({
                 </Text>
                 {med.generalObservations && med.generalObservations.trim().length > 0 ? (
                   <Text style={styles.medicationObservations}>
-                    <Text style={{ fontFamily: "Times-Roman", fontWeight: "bold" }}>Obs.:</Text>
-                    <Text style={{ fontFamily: "Times-Roman", fontWeight: "normal" }}> {med.generalObservations}</Text>
+                    <Text style={{ fontFamily: "Exo", fontWeight: "bold" }}>Obs.:</Text>
+                    <Text style={{ fontFamily: "Exo", fontWeight: "normal" }}> {med.generalObservations}</Text>
                   </Text>
                 ) : null}
               </View>
