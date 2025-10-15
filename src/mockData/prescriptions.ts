@@ -221,30 +221,38 @@ export let mockPrescriptions: PrescriptionEntry[] = [
     ],
   },
   {
-    id: "rx-new-controlled",
+    id: "rx-new-manipulated", // ID atualizado para refletir o tipo
     date: new Date().toISOString().split('T')[0],
-    medicationName: "Diazepam",
-    treatmentDescription: "Tratamento para convulsões.",
-    instructions: "Administrar com cautela. Não exceder a dose diária.",
-    type: 'controlled',
-    medications: [
-      {
-        id: "med-new-controlled-1",
-        useType: "Uso Oral",
-        pharmacyType: "Farmácia Humana",
-        medicationName: "Diazepam",
-        concentration: "5mg",
-        pharmaceuticalForm: "Comprimido",
-        dosePerAdministration: "1",
-        frequency: "24 horas (1x/dia)",
-        period: "10 dias",
-        useCustomInstructions: false,
-        generatedInstructions: "Dê 1 comprimido, a cada 24 horas (1x/dia), durante 10 dias.",
-        generalObservations: "Pode causar sonolência.",
-        totalQuantity: "10",
-        totalQuantityDisplay: "10 comprimido(s)",
-        isCollapsed: true,
+    medicationName: "Fórmula Manipulada para Pele",
+    treatmentDescription: "Tratamento dermatológico com fórmula personalizada.",
+    instructions: "Aplicar na área afetada conforme orientação. Manter em local fresco.",
+    type: 'manipulated', // Tipo alterado para 'manipulated'
+    manipulatedPrescription: {
+      formulaComponents: [
+        { id: "comp1", name: "Hidrocortisona", dosageQuantity: "1", dosageUnit: "%" },
+        { id: "comp2", name: "Miconazol", dosageQuantity: "2", dosageUnit: "%" },
+        { id: "comp3", name: "Aloe Vera", dosageQuantity: "5", dosageUnit: "mL" },
+      ],
+      vehicleExcipient: { type: "Creme", quantity: "30", unit: "g" },
+      posology: {
+        type: 'automatic',
+        data: {
+          dosage: "1",
+          measure: "Aplicação",
+          frequencyValue: "12",
+          frequencyUnit: "Hora(s)",
+          durationValue: "7",
+          durationUnit: "Dia(s)",
+          finalDescription: "Dar 1 Aplicação(s) a cada 12 Hora(s), durante 7 Dia(s).",
+        },
       },
-    ],
+      productDetails: {
+        productType: "Manipulado",
+        quantity: "1 unidade",
+        pharmacy: "Farmácia de Manipulação",
+        route: "Tópica",
+      },
+      generalObservations: "Evitar exposição solar após a aplicação. Uso externo apenas.",
+    },
   },
 ];
