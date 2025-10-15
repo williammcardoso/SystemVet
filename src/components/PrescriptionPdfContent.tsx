@@ -3,10 +3,6 @@ import { Document, Page, View, Text, StyleSheet, Font } from "@react-pdf/rendere
 import { MedicationData } from "@/types/medication";
 import { mockCompanySettings, mockUserSettings } from "@/mockData/settings";
 
-// Removendo as importações diretas dos arquivos .ttf
-// import ExoRegular from '/fonts/Exo-Regular.ttf';
-// import ExoBold from '/fonts/Exo-Bold.ttf';
-
 // Registrando a fonte Exo com pesos regular e bold usando caminhos de string literais
 Font.register({
   family: "Exo",
@@ -16,10 +12,19 @@ Font.register({
   ],
 });
 
+// Registrando a fonte Roboto para uso nas observações
+Font.register({
+  family: "Roboto",
+  fonts: [
+    { src: '/fonts/Roboto-Regular.ttf', fontWeight: 400, format: 'truetype' },
+    { src: '/fonts/Roboto-Bold.ttf', fontWeight: 700, format: 'truetype' },
+  ],
+});
+
 const styles = StyleSheet.create({
   page: {
     padding: 30,
-    fontFamily: "Exo", // Usando a fonte Exo
+    fontFamily: "Exo", // Usando a fonte Exo como padrão
     fontSize: 10,
     color: "#333",
   },
@@ -174,6 +179,7 @@ const styles = StyleSheet.create({
     marginLeft: 20,
     marginTop: 3,
     fontStyle: "italic",
+    fontFamily: "Roboto", // Aplicando a fonte Roboto aqui
   },
   generalObservationsSection: {
     marginTop: 25,
