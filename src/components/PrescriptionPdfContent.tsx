@@ -7,8 +7,8 @@ import { mockCompanySettings, mockUserSettings } from "@/mockData/settings"; // 
 Font.register({
   family: "Roboto",
   fonts: [
-    { src: "/fonts/Roboto-Regular.ttf", fontWeight: 400 }, // Regular
-    { src: "/fonts/Roboto-Bold.ttf", fontWeight: 700 }, // Bold
+    { src: "/fonts/Roboto-Regular.ttf", fontWeight: 400, format: 'truetype' }, // Regular
+    { src: "/fonts/Roboto-Bold.ttf", fontWeight: 700, format: 'truetype' }, // Bold
   ],
 });
 
@@ -402,7 +402,7 @@ export const PrescriptionPdfContent = ({
               <Text style={styles.issuerVetText}>Registro MAPA: {mockUserSettings.userMapaRegistration}</Text>
             </View>
             <View style={styles.infoCard}>
-              {/* This space can be used for other info if needed, or removed */}
+              <Text></Text>{/* Placeholder to prevent empty string child warning */}
             </View>
           </View>
         )}
