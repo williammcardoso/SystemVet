@@ -14,10 +14,38 @@ Font.register({
   ],
 });
 
-const styles = StyleSheet.create({
+// Helper function to format date
+const formatDateToPortuguese = (date: Date) => {
+  const options: Intl.DateTimeFormatOptions = { day: '2-digit', month: 'long', year: 'numeric' };
+  const formattedDate = date.toLocaleDateString('pt-BR', options);
+  return formattedDate.toUpperCase();
+};
+
+interface PrescriptionPdfContentProps {
+  animalName: string;
+  animalId: string;
+  animalSpecies: string;
+  tutorName: string;
+  tutorAddress: string;
+  medications: MedicationData[];
+  generalObservations: string;
+  showElectronicSignatureText: boolean;
+  prescriptionType: 'simple' | 'controlled' | 'manipulated';
+  pharmacistName?: string;
+  pharmacistCpf?: string;
+  pharmacistCfr?: string;
+  pharmacistAddress?: string;
+  pharmacistPhone?: string;
+}
+
+// Define a threshold for when to apply compact styles for simple prescriptions
+const MEDICATION_COUNT_THRESHOLD = 6; // Adjust this number as needed
+
+// Function to get dynamic styles based on whether it's a compact simple prescription
+const getDynamicStyles = (isCompactSimplePrescription: boolean) => StyleSheet.create({
   page: {
     padding: 30,
-    fontFamily: "Exo", // Usando a fonte Exo como padrão
+    fontFamily: "Exo",
     fontSize: 10,
     color: "#333",
   },
@@ -50,7 +78,7 @@ const styles = StyleSheet.create({
   mainTitle: {
     fontSize: 20,
     textAlign: "center",
-    fontFamily: "Exo", // Usando Exo para o título principal
+    fontFamily: "Exo",
     fontWeight: "bold",
     marginBottom: 20,
   },
@@ -99,10 +127,10 @@ const styles = StyleSheet.create({
     color: "#333",
   },
   groupTitle: {
-    fontSize: 12, // Reduzido
+    fontSize: isCompactSimplePrescription ? 12 : 13,
     fontWeight: "bold",
-    marginTop: 10,
-    marginBottom: 8,
+    marginTop: isCompactSimplePrescription ? 10 : 15,
+    marginBottom: isCompactSimplePrescription ? 8 : 10,
     textTransform: "uppercase",
     borderBottomWidth: 1,
     borderBottomColor: "#000",
@@ -110,7 +138,7 @@ const styles = StyleSheet.create({
   },
   medicationItem: {
     flexDirection: "column",
-    marginBottom: 8, // Reduzido
+    marginBottom: isCompactSimplePrescription ? 8 : 10,
   },
   medicationHeaderLine: {
     flexDirection: "row",
@@ -119,12 +147,12 @@ const styles = StyleSheet.create({
     marginBottom: 5,
   },
   medicationNumber: {
-    fontSize: 10, // Reduzido
+    fontSize: isCompactSimplePrescription ? 10 : 11,
     marginRight: 5,
     width: 15,
   },
   medicationNameConcentration: {
-    fontSize: 10, // Reduzido
+    fontSize: isCompactSimplePrescription ? 10 : 11,
     fontWeight: "bold",
     flexShrink: 1,
   },
@@ -141,9 +169,9 @@ const styles = StyleSheet.create({
     flexShrink: 0,
   },
   pharmacyBadge: {
-    fontSize: 7, // Reduzido
-    paddingHorizontal: 5, // Reduzido
-    paddingVertical: 2, // Reduzido
+    fontSize: isCompactSimplePrescription ? 7 : 8,
+    paddingHorizontal: isCompactSimplePrescription ? 5 : 6,
+    paddingVertical: isCompactSimplePrescription ? 2 : 3,
     borderRadius: 8,
     backgroundColor: "#f0f0f0",
     color: "#555",
@@ -151,9 +179,9 @@ const styles = StyleSheet.create({
     borderColor: "#ccc",
   },
   quantityBadge: {
-    fontSize: 8, // Reduzido
-    paddingHorizontal: 7, // Reduzido
-    paddingVertical: 3, // Reduzido
+    fontSize: isCompactSimplePrescription ? 8 : 9,
+    paddingHorizontal: isCompactSimplePrescription ? 7 : 8,
+    paddingVertical: isCompactSimplePrescription ? 3 : 4,
     borderRadius: 8,
     backgroundColor: "#e0e0ff",
     color: "#333",
@@ -161,13 +189,13 @@ const styles = StyleSheet.create({
     borderColor: "#aaa",
   },
   medicationInstructions: {
-    fontSize: 9, // Reduzido
+    fontSize: isCompactSimplePrescription ? 9 : 10,
     color: "#444",
     marginLeft: 20,
-    lineHeight: 1.3, // Reduzido
+    lineHeight: isCompactSimplePrescription ? 1.3 : 1.4,
   },
   medicationObservations: {
-    fontSize: 8, // Reduzido
+    fontSize: isCompactSimplePrescription ? 8 : 9,
     color: "#777",
     marginLeft: 20,
     marginTop: 3,
@@ -175,19 +203,19 @@ const styles = StyleSheet.create({
     fontFamily: "Exo",
   },
   generalObservationsSection: {
-    marginTop: 15, // Reduzido
-    paddingTop: 8, // Reduzido
+    marginTop: isCompactSimplePrescription ? 15 : 25,
+    paddingTop: isCompactSimplePrescription ? 8 : 10,
     borderTopWidth: 1,
     borderTopColor: "#eee",
   },
   generalObservationsTitle: {
-    fontSize: 12, // Reduzido
+    fontSize: isCompactSimplePrescription ? 12 : 13,
     fontWeight: "bold",
     marginBottom: 8,
   },
   generalObservationsText: {
-    fontSize: 9, // Reduzido
-    lineHeight: 1.4, // Reduzido
+    fontSize: isCompactSimplePrescription ? 9 : 10,
+    lineHeight: isCompactSimplePrescription ? 1.4 : 1.5,
   },
   vetSignatureBlock: {
     textAlign: 'center',
@@ -364,29 +392,6 @@ const styles = StyleSheet.create({
   },
 });
 
-// Helper function to format date
-const formatDateToPortuguese = (date: Date) => {
-  const options: Intl.DateTimeFormatOptions = { day: '2-digit', month: 'long', year: 'numeric' };
-  const formattedDate = date.toLocaleDateString('pt-BR', options);
-  return formattedDate.toUpperCase();
-};
-
-interface PrescriptionPdfContentProps {
-  animalName: string;
-  animalId: string;
-  animalSpecies: string;
-  tutorName: string;
-  tutorAddress: string;
-  medications: MedicationData[];
-  generalObservations: string;
-  showElectronicSignatureText: boolean;
-  prescriptionType: 'simple' | 'controlled' | 'manipulated';
-  pharmacistName?: string;
-  pharmacistCpf?: string;
-  pharmacistCfr?: string;
-  pharmacistAddress?: string;
-  pharmacistPhone?: string;
-}
 
 export const PrescriptionPdfContent = ({
   animalName, animalId, animalSpecies, tutorName, tutorAddress,
@@ -402,6 +407,10 @@ export const PrescriptionPdfContent = ({
   }, {});
 
   const currentDate = new Date();
+
+  // Determine if compact styles should be applied for simple prescriptions
+  const isCompactSimplePrescription = prescriptionType === 'simple' && medications.length >= MEDICATION_COUNT_THRESHOLD;
+  const styles = getDynamicStyles(isCompactSimplePrescription);
 
   // Altura estimada do identificationCardContainer (rodapé fixo)
   const IDENTIFICATION_FOOTER_HEIGHT = 166;
