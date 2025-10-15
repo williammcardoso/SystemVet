@@ -227,30 +227,35 @@ const AddPrescriptionPage = () => {
       return;
     }
 
-    // Gerar o PDF como um Blob, chamando a função PrescriptionPdfContent
-    const blob = await pdf(
-      PrescriptionPdfContent({
-        animalName: animal.name,
-        animalId: animal.id,
-        animalSpecies: animal.species,
-        tutorName: client.name,
-        tutorAddress: client.address,
-        medications: currentPrescriptionMedications,
-        generalObservations: currentPrescriptionGeneralObservations,
-        showElectronicSignatureText: false,
-        prescriptionType: prescriptionType, // Passar o tipo de receita
-        pharmacistName: pharmacistName,
-        pharmacistCpf: pharmacistCpf,
-        pharmacistCfr: pharmacistCfr,
-        pharmacistAddress: pharmacistAddress,
-        pharmacistPhone: pharmacistPhone,
-      })
-    ).toBlob();
+    try {
+      // Gerar o PDF como um Blob, chamando a função PrescriptionPdfContent
+      const blob = await pdf(
+        PrescriptionPdfContent({
+          animalName: animal.name,
+          animalId: animal.id,
+          animalSpecies: animal.species,
+          tutorName: client.name,
+          tutorAddress: client.address,
+          medications: currentPrescriptionMedications,
+          generalObservations: currentPrescriptionGeneralObservations,
+          showElectronicSignatureText: false,
+          prescriptionType: prescriptionType, // Passar o tipo de receita
+          pharmacistName: pharmacistName,
+          pharmacistCpf: pharmacistCpf,
+          pharmacistCfr: pharmacistCfr,
+          pharmacistAddress: pharmacistAddress,
+          pharmacistPhone: pharmacistPhone,
+        })
+      ).toBlob();
 
-    // Criar uma URL para o Blob e abrir em uma nova aba
-    const url = URL.createObjectURL(blob);
-    window.open(url, '_blank');
-    URL.revokeObjectURL(url); // Limpar a URL do Blob após a abertura
+      // Criar uma URL para o Blob e abrir em uma nova aba
+      const url = URL.createObjectURL(blob);
+      window.open(url, '_blank');
+      URL.revokeObjectURL(url); // Limpar a URL do Blob após a abertura
+    } catch (error) {
+      console.error("Erro ao imprimir a receita:", error);
+      toast.error("Erro ao gerar PDF para impressão. Verifique o console para detalhes.");
+    }
   };
 
   const handleSavePdf = async () => {
@@ -259,36 +264,41 @@ const AddPrescriptionPage = () => {
       return;
     }
 
-    const blob = await pdf(
-      PrescriptionPdfContent({
-        animalName: animal.name,
-        animalId: animal.id,
-        animalSpecies: animal.species,
-        tutorName: client.name,
-        tutorAddress: client.address,
-        medications: currentPrescriptionMedications,
-        generalObservations: currentPrescriptionGeneralObservations,
-        showElectronicSignatureText: true,
-        prescriptionType: prescriptionType, // Passar o tipo de receita
-        pharmacistName: pharmacistName,
-        pharmacistCpf: pharmacistCpf,
-        pharmacistCfr: pharmacistCfr,
-        pharmacistAddress: pharmacistAddress,
-        pharmacistPhone: pharmacistPhone,
-      })
-    ).toBlob();
+    try {
+      const blob = await pdf(
+        PrescriptionPdfContent({
+          animalName: animal.name,
+          animalId: animal.id,
+          animalSpecies: animal.species,
+          tutorName: client.name,
+          tutorAddress: client.address,
+          medications: currentPrescriptionMedications,
+          generalObservations: currentPrescriptionGeneralObservations,
+          showElectronicSignatureText: true,
+          prescriptionType: prescriptionType, // Passar o tipo de receita
+          pharmacistName: pharmacistName,
+          pharmacistCpf: pharmacistCpf,
+          pharmacistCfr: pharmacistCfr,
+          pharmacistAddress: pharmacistAddress,
+          pharmacistPhone: pharmacistPhone,
+        })
+      ).toBlob();
 
-    // Criar um link de download e clicar nele
-    const url = URL.createObjectURL(blob);
-    const link = document.createElement('a');
-    link.href = url;
-    link.download = `receita_${animal.name}_${client.name}_${new Date().toISOString().split('T')[0]}.pdf`;
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-    URL.revokeObjectURL(url);
+      // Criar um link de download e clicar nele
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = `receita_${animal.name}_${client.name}_${new Date().toISOString().split('T')[0]}.pdf`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      URL.revokeObjectURL(url);
 
-    toast.success("Receita salva em PDF com sucesso!");
+      toast.success("Receita salva em PDF com sucesso!");
+    } catch (error) {
+      console.error("Erro ao salvar a receita em PDF:", error);
+      toast.error("Erro ao gerar PDF para download. Verifique o console para detalhes.");
+    }
   };
 
   const getPrescriptionTitle = () => {
