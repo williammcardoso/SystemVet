@@ -85,7 +85,7 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     padding: 10,
     marginBottom: 10, // Reduzido para aproximar
-    marginTop: 10, // Adicionado para dar um pequeno espaçamento após o bloco superior
+    marginTop: 5, // Reduzido para aproximar
   },
   patientInfoControlledTitle: {
     fontSize: 11,
@@ -188,6 +188,7 @@ const styles = StyleSheet.create({
     fontSize: 10,
     lineHeight: 1.5,
   },
+  // Este estilo não será mais usado diretamente para o footer simples, mas mantido para referência
   signatureLineContainer: {
     marginTop: 30,
     marginBottom: 20,
@@ -222,23 +223,20 @@ const styles = StyleSheet.create({
     right: 30,
     flexDirection: 'row',
     justifyContent: 'space-between',
+    alignItems: 'flex-end', // Alinha a data e a assinatura na parte inferior
     paddingTop: 20,
     borderTopWidth: 1,
     borderTopColor: "#eee",
   },
-  vetSignatureCard: {
-    flex: 1,
-    borderWidth: 1,
-    borderColor: "#ddd",
-    borderRadius: 5,
-    padding: 10,
-    marginRight: 5,
+  vetSignatureCard: { // Este card agora é o bloco da direita no footer simples
     textAlign: "center",
+    // Removido flex: 1, borderWidth, borderColor, borderRadius, padding, marginRight
+    // para que ele se comporte como um bloco de assinatura simples
   },
   controlledPrescriptionHeader: {
     marginBottom: 0, // Removido marginBottom para aproximar
     paddingBottom: 10,
-    borderBottomWidth: 1,
+    borderBottomWidth: 0, // REMOVIDO A LINHA AQUI
     borderBottomColor: "#eee",
   },
   controlledPrescriptionTitle: {
@@ -253,7 +251,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'flex-start',
-    marginBottom: 10, // Espaçamento entre este bloco e o próximo
+    marginBottom: 5, // Reduzido para aproximar
   },
   issuerVetCard: {
     borderWidth: 1,
@@ -492,13 +490,13 @@ export const PrescriptionPdfContent = ({
           </View>
         ) : null}
 
-        {/* A assinatura e data do veterinário para receitas simples agora estão no footer fixo */}
+        {/* Rodapé para Receitas Simples */}
         {prescriptionType !== 'controlled' && (
           <View style={styles.footerContainer} fixed>
-            <View style={styles.vetSignatureCard}>
-              <Text style={styles.signatureDateText}>
-                Data: {formatDateToPortuguese(currentDate)}
-              </Text>
+            <Text style={styles.signatureDateText}>
+              Data: {formatDateToPortuguese(currentDate)}
+            </Text>
+            <View style={styles.signatureBlockRight}>
               {showElectronicSignatureText ? (
                 <Text style={styles.signatureLabel}>Assinado eletronicamente por</Text>
               ) : null}
@@ -510,6 +508,7 @@ export const PrescriptionPdfContent = ({
           </View>
         )}
 
+        {/* Rodapé para Receitas Controladas */}
         {prescriptionType === 'controlled' ? (
           <View style={styles.identificationCardContainer} fixed>
             <View style={styles.identificationCard}>
@@ -528,7 +527,6 @@ export const PrescriptionPdfContent = ({
                 <Text style={styles.identificationLabel}>End. Completo</Text>
                 <View style={styles.identificationLine}/>
               </View>
-              {/* Telefone movido para a última linha */}
               <View style={styles.identificationField}>
                 <Text style={styles.identificationLabel}>Cidade</Text>
                 <View style={[styles.identificationLine, { width: 100 }]}/>
