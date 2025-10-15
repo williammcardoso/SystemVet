@@ -12,14 +12,14 @@ Font.register({
   ],
 });
 
-// Registrando a fonte Roboto para uso nas observações
-Font.register({
-  family: "Roboto",
-  fonts: [
-    { src: '/fonts/Roboto-Regular.ttf', fontWeight: 400, format: 'truetype' },
-    { src: '/fonts/Roboto-Bold.ttf', fontWeight: 700, format: 'truetype' },
-  ],
-});
+// Removendo o registro da fonte Roboto, pois usaremos Times-Roman que é embutida.
+// Font.register({
+//   family: "Roboto",
+//   fonts: [
+//     { src: '/fonts/Roboto-Regular.ttf', fontWeight: 400, format: 'truetype' },
+//     { src: '/fonts/Roboto-Bold.ttf', fontWeight: 700, format: 'truetype' },
+//   ],
+// });
 
 const styles = StyleSheet.create({
   page: {
@@ -179,7 +179,7 @@ const styles = StyleSheet.create({
     marginLeft: 20,
     marginTop: 3,
     fontStyle: "italic",
-    fontFamily: "Roboto", // Aplicando a fonte Roboto aqui
+    fontFamily: "Times-Roman", // Aplicando a fonte Times-Roman aqui
   },
   generalObservationsSection: {
     marginTop: 25,
