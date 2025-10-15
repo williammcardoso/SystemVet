@@ -261,15 +261,6 @@ const PrescriptionMedicationForm: React.FC<PrescriptionMedicationFormProps> = ({
             </div>
           </div>
 
-          <div className="flex items-center space-x-2 mt-4">
-            <Switch
-              id={`custom-instructions-${medication.id}`}
-              checked={useCustomInstructions}
-              onCheckedChange={setUseCustomInstructions}
-            />
-            <Label htmlFor={`custom-instructions-${medication.id}`}>Usar instrução personalizada</Label>
-          </div>
-
           {useCustomInstructions ? (
             <div className="space-y-2 mt-4">
               <Label htmlFor={`customInstructionInput-${medication.id}`}>Instrução Personalizada *</Label>
@@ -384,6 +375,16 @@ const PrescriptionMedicationForm: React.FC<PrescriptionMedicationFormProps> = ({
               )}
             </>
           )}
+          
+          {/* O switch foi movido para cá, após os blocos condicionais */}
+          <div className="flex items-center space-x-2 mt-4">
+            <Switch
+              id={`custom-instructions-${medication.id}`}
+              checked={useCustomInstructions}
+              onCheckedChange={setUseCustomInstructions}
+            />
+            <Label htmlFor={`custom-instructions-${medication.id}`}>Usar instrução personalizada</Label>
+          </div>
 
           <div className="space-y-2 mt-6">
             <h4 className="text-lg font-semibold">Observações Gerais do Medicamento</h4>
