@@ -3,19 +3,20 @@ import { Document, Page, View, Text, StyleSheet, Font } from "@react-pdf/rendere
 import { MedicationData } from "@/types/medication";
 import { mockCompanySettings, mockUserSettings } from "@/mockData/settings";
 
-// Removendo o registro de fontes personalizadas para usar as fontes padrão do react-pdf/renderer
-// Font.register({
-//   family: "Roboto",
-//   fonts: [
-//     { src: '/fonts/Roboto-Regular.ttf', fontWeight: 400, format: 'truetype' },
-//     { src: '/fonts/Roboto-Bold.ttf', fontWeight: 700, format: 'truetype' },
-//   ],
-// });
+// Registrando a fonte Exo com pesos regular e bold usando arquivos locais
+// Certifique-se de que os arquivos 'Exo-Regular.ttf' e 'Exo-Bold.ttf' estejam na pasta 'public/fonts'
+Font.register({
+  family: "Exo",
+  fonts: [
+    { src: '/fonts/Exo-Regular.ttf', fontWeight: 400, format: 'truetype' },
+    { src: '/fonts/Exo-Bold.ttf', fontWeight: 700, format: 'truetype' },
+  ],
+});
 
 const styles = StyleSheet.create({
   page: {
     padding: 30,
-    fontFamily: "Times-Roman", // Alterado para Times-Roman para teste
+    fontFamily: "Exo", // Usando a fonte Exo
     fontSize: 10,
     color: "#333",
   },
@@ -48,7 +49,7 @@ const styles = StyleSheet.create({
   mainTitle: {
     fontSize: 20,
     textAlign: "center",
-    fontFamily: "Times-Bold", // Usando Times-Bold para o título principal
+    fontFamily: "Exo", // Usando Exo para o título principal
     fontWeight: "bold",
     marginBottom: 20,
   },
@@ -242,7 +243,7 @@ const styles = StyleSheet.create({
   controlledPrescriptionTitle: {
     fontSize: 22,
     textAlign: "center",
-    fontFamily: "Times-Bold", // Usando Times-Bold para o título
+    fontFamily: "Exo", // Usando Exo para o título
     fontWeight: "bold",
     color: "#333",
     marginBottom: 15,
