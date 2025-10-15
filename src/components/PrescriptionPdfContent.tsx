@@ -57,7 +57,7 @@ const styles = StyleSheet.create({
     textAlign: 'right',
     fontSize: 9,
     color: '#333',
-    marginBottom: 10,
+    marginBottom: 10, // Espaçamento abaixo das vias
   },
   infoSectionContainer: {
     flexDirection: "row",
@@ -235,7 +235,7 @@ const styles = StyleSheet.create({
     textAlign: "center",
   },
   controlledPrescriptionHeader: {
-    marginBottom: 20,
+    marginBottom: 10, // Reduzido para compactar
     paddingBottom: 10,
     borderBottomWidth: 1,
     borderBottomColor: "#eee",
@@ -254,7 +254,7 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     padding: 10,
     marginBottom: 20,
-    width: '48%',
+    width: '48%', // Ocupa metade da largura
   },
   issuerVetTitle: {
     fontSize: 11,
@@ -284,6 +284,7 @@ const styles = StyleSheet.create({
     borderColor: "#ddd",
     borderRadius: 5,
     padding: 10,
+    justifyContent: 'space-between', // Para empurrar o conteúdo para as extremidades
   },
   identificationTitle: {
     fontSize: 11,
@@ -310,7 +311,7 @@ const styles = StyleSheet.create({
   identificationDateLine: {
     flexDirection: 'row',
     alignItems: 'flex-end',
-    marginTop: 10,
+    marginTop: 5, // Reduzido para ficar mais próximo
   },
   identificationDatePart: {
     flexDirection: 'row',
@@ -319,6 +320,22 @@ const styles = StyleSheet.create({
   },
   identificationDateSeparator: {
     marginHorizontal: 2,
+  },
+  pharmacistSignatureBlock: {
+    marginTop: 'auto', // Empurra para o final do card
+    marginBottom: 5, // Espaço para a data
+  },
+  pharmacistSignatureLine: {
+    width: '100%',
+    borderBottomWidth: 1,
+    borderBottomColor: "#333",
+    marginBottom: 3,
+    marginTop: 20, // Espaço para carimbo
+  },
+  pharmacistSignatureLabel: {
+    fontSize: 9,
+    color: "#333",
+    textAlign: 'center',
   },
 });
 
@@ -382,17 +399,14 @@ export const PrescriptionPdfContent = ({
         {prescriptionType === 'controlled' ? (
           <View style={styles.controlledPrescriptionHeader}>
             <Text style={styles.controlledPrescriptionTitle}>RECEITUÁRIO DE CONTROLE ESPECIAL</Text>
+            <View style={styles.viaTextContainer}>
+              <Text>1.ª VIA - FARMÁCIA</Text>
+              <Text>2.ª VIA - PACIENTE</Text>
+            </View>
           </View>
         ) : (
           <Text style={styles.mainTitle}>Receita Simples</Text>
         )}
-
-        {prescriptionType === 'controlled' ? (
-          <View style={styles.viaTextContainer}>
-            <Text>1.ª VIA - FARMÁCIA</Text>
-            <Text>2.ª VIA - PACIENTE</Text>
-          </View>
-        ) : null}
 
         {prescriptionType === 'controlled' ? (
           <View style={styles.infoSectionContainer}>
@@ -402,16 +416,7 @@ export const PrescriptionPdfContent = ({
               <Text style={styles.issuerVetText}>CRMV: {mockUserSettings.userCrmv}</Text>
               <Text style={styles.issuerVetText}>Registro MAPA: {mockUserSettings.userMapaRegistration}</Text>
             </View>
-            <View style={styles.infoCard}/>
-          </View>
-        ) : null}
-
-        {prescriptionType === 'controlled' ? (
-          <View style={styles.patientInfoControlled}>
-            <Text style={styles.patientInfoControlledTitle}>Informações do Paciente/Proprietário</Text>
-            <Text style={styles.patientInfoControlledText}>Paciente: {animalName}</Text>
-            <Text style={styles.patientInfoControlledText}>Proprietário: {tutorName}</Text>
-            <Text style={styles.patientInfoControlledText}>Endereço: {tutorAddress || "Não informado"}</Text>
+            {/* O painel em branco foi removido */}
           </View>
         ) : (
           <View style={styles.infoSectionContainer}>
@@ -428,6 +433,15 @@ export const PrescriptionPdfContent = ({
             </View>
           </View>
         )}
+
+        {prescriptionType === 'controlled' ? (
+          <View style={styles.patientInfoControlled}>
+            <Text style={styles.patientInfoControlledTitle}>Informações do Paciente/Proprietário</Text>
+            <Text style={styles.patientInfoControlledText}>Paciente: {animalName}</Text>
+            <Text style={styles.patientInfoControlledText}>Proprietário: {tutorName}</Text>
+            <Text style={styles.patientInfoControlledText}>Endereço: {tutorAddress || "Não informado"}</Text>
+          </View>
+        ) : null}
 
         {Object.keys(groupedMedications).map((useType) => (
           <View key={useType}>
@@ -472,13 +486,23 @@ export const PrescriptionPdfContent = ({
           </View>
         ) : null}
 
-        <View style={styles.signatureLineContainer} break>
-          <Text style={styles.signatureDateText}>Data: {formatDateToPortuguese(currentDate)}</Text>
-          <View style={styles.signatureBlockRight}>
-            <View style={styles.signatureLine}/>
-            <Text style={styles.signatureLabel}>Assinatura</Text>
+        {/* A assinatura e data do veterinário para receitas simples agora estão no footer fixo */}
+        {prescriptionType !== 'controlled' && (
+          <View style={styles.footerContainer} fixed>
+            <View style={styles.vetSignatureCard}>
+              <Text style={styles.signatureDateText}>
+                Data: {formatDateToPortuguese(currentDate)}
+              </Text>
+              {showElectronicSignatureText ? (
+                <Text style={styles.signatureLabel}>Assinado eletronicamente por</Text>
+              ) : null}
+              <View style={styles.signatureLine}/>
+              <Text style={styles.signatureLabel}>{mockUserSettings.signatureText}</Text>
+              <Text style={styles.clinicDetails}>CRMV {mockUserSettings.userCrmv}</Text>
+              <Text style={styles.clinicDetails}>Registro no MAPA {mockUserSettings.userMapaRegistration}</Text>
+            </View>
           </View>
-        </View>
+        )}
 
         {prescriptionType === 'controlled' ? (
           <View style={styles.identificationCardContainer} fixed>
@@ -498,51 +522,38 @@ export const PrescriptionPdfContent = ({
                 <Text style={styles.identificationLabel}>End. Completo</Text>
                 <View style={styles.identificationLine}/>
               </View>
-              <View style={styles.identificationField}>
-                <Text style={styles.identificationLabel}>Telefone</Text>
-                <View style={styles.identificationLine}/>
-              </View>
+              {/* Telefone movido para a última linha */}
               <View style={styles.identificationField}>
                 <Text style={styles.identificationLabel}>Cidade</Text>
                 <View style={[styles.identificationLine, { width: 100 }]}/>
                 <Text style={styles.identificationLabel}>UF</Text>
                 <View style={[styles.identificationLine, { width: 20 }]}/>
               </View>
+              <View style={styles.identificationField}>
+                <Text style={styles.identificationLabel}>Telefone</Text>
+                <View style={styles.identificationLine}/>
+              </View>
             </View>
 
             <View style={styles.identificationCard}>
               <Text style={styles.identificationTitle}>IDENTIFICAÇÃO DO FORNECEDOR</Text>
-              <View style={{ marginTop: 20, marginBottom: 20 }}>
-                <View style={styles.identificationLine}/>
-                <Text style={styles.identificationLabel}>Assinatura do Farmacêutico</Text>
-              </View>
-              <View style={styles.identificationDateLine}>
-                <Text style={styles.identificationLabel}>Data</Text>
-                <View style={styles.identificationDatePart}>
-                  <View style={[styles.identificationLine, { width: 20 }]}/>
-                  <Text style={styles.identificationDateSeparator}>/</Text>
-                  <View style={[styles.identificationLine, { width: 20 }]}/>
-                  <Text style={styles.identificationDateSeparator}>/</Text>
-                  <View style={[styles.identificationLine, { width: 20 }]}/>
+              <View style={styles.pharmacistSignatureBlock}>
+                <View style={styles.pharmacistSignatureLine}/>
+                <Text style={styles.pharmacistSignatureLabel}>Assinatura do Farmacêutico</Text>
+                <View style={styles.identificationDateLine}>
+                  <Text style={styles.identificationLabel}>Data</Text>
+                  <View style={styles.identificationDatePart}>
+                    <View style={[styles.identificationLine, { width: 20 }]}/>
+                    <Text style={styles.identificationDateSeparator}>/</Text>
+                    <View style={[styles.identificationLine, { width: 20 }]}/>
+                    <Text style={styles.identificationDateSeparator}>/</Text>
+                    <View style={[styles.identificationLine, { width: 20 }]}/>
+                  </View>
                 </View>
               </View>
             </View>
           </View>
-        ) : (
-          <View style={styles.footerContainer} fixed>
-            <View style={styles.vetSignatureCard}>
-              <Text style={styles.signatureDate}>
-                {formatDateToPortuguese(currentDate)}
-              </Text>
-              {showElectronicSignatureText ? (
-                <Text style={styles.signatureText}>Assinado eletronicamente por</Text>
-              ) : null}
-              <Text style={styles.signatureName}>{mockUserSettings.signatureText}</Text>
-              <Text style={styles.clinicDetails}>CRMV {mockUserSettings.userCrmv}</Text>
-              <Text style={styles.clinicDetails}>Registro no MAPA {mockUserSettings.userMapaRegistration}</Text>
-            </View>
-          </View>
-        )}
+        ) : null}
       </Page>
     </Document>
   );
