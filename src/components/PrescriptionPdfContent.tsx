@@ -390,14 +390,14 @@ export const PrescriptionPdfContent = ({
           <Text style={styles.mainTitle}>Receita Simples</Text>
         )}
 
-        {prescriptionType === 'controlled' && (
+        {prescriptionType === 'controlled' ? (
           <View style={styles.viaTextContainer}>
             <Text>1.ª VIA - FARMÁCIA</Text>
             <Text>2.ª VIA - PACIENTE</Text>
           </View>
-        )}
+        ) : null}
 
-        {prescriptionType === 'controlled' && (
+        {prescriptionType === 'controlled' ? (
           <View style={styles.infoSectionContainer}>
             <View style={styles.issuerVetCard}>
               <Text style={styles.issuerVetTitle}>Emitente (Veterinário)</Text>
@@ -407,7 +407,7 @@ export const PrescriptionPdfContent = ({
             </View>
             <View style={styles.infoCard}/>
           </View>
-        )}
+        ) : null}
 
         {prescriptionType === 'controlled' ? (
           <View style={styles.patientInfoControlled}>
@@ -451,8 +451,8 @@ export const PrescriptionPdfContent = ({
                   </Text>
                   <View style={styles.lineSeparator}/>
                   <View style={styles.badgeContainer}>
-                    {med.pharmacyType && (<Text style={styles.pharmacyBadge}>{med.pharmacyType === "Farmácia Veterinária" ? "VET" : "HUMANA"}</Text>)}
-                    {med.totalQuantityDisplay && (<Text style={styles.quantityBadge}>{med.totalQuantityDisplay}</Text>)}
+                    {med.pharmacyType ? (<Text style={styles.pharmacyBadge}>{med.pharmacyType === "Farmácia Veterinária" ? "VET" : "HUMANA"}</Text>) : null}
+                    {med.totalQuantityDisplay ? (<Text style={styles.quantityBadge}>{med.totalQuantityDisplay}</Text>) : null}
                   </View>
                 </View>
                 <Text style={styles.medicationInstructions}>
@@ -468,12 +468,12 @@ export const PrescriptionPdfContent = ({
           </View>
         ))}
 
-        {generalObservations && (
+        {generalObservations ? (
           <View style={styles.generalObservationsSection}>
             <Text style={styles.generalObservationsTitle}>Observações Gerais da Receita</Text>
             <Text style={styles.generalObservationsText}>{generalObservations}</Text>
           </View>
-        )}
+        ) : null}
 
         <View style={styles.signatureLineContainer} break>
           <Text style={styles.signatureDateText}>Data: {formatDateToPortuguese(currentDate)}</Text>
@@ -537,9 +537,9 @@ export const PrescriptionPdfContent = ({
               <Text style={styles.signatureDate}>
                 {formatDateToPortuguese(currentDate)}
               </Text>
-              {showElectronicSignatureText && (
+              {showElectronicSignatureText ? (
                 <Text style={styles.signatureText}>Assinado eletronicamente por</Text>
-              )}
+              ) : null}
               <Text style={styles.signatureName}>{mockUserSettings.signatureText}</Text>
               <Text style={styles.clinicDetails}>CRMV {mockUserSettings.userCrmv}</Text>
               <Text style={styles.clinicDetails}>Registro no MAPA {mockUserSettings.userMapaRegistration}</Text>
