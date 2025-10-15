@@ -57,7 +57,6 @@ const styles = StyleSheet.create({
     textAlign: 'right',
     fontSize: 9,
     color: '#333',
-    // Removido marginBottom para melhor alinhamento no novo layout
   },
   infoSectionContainer: {
     flexDirection: "row",
@@ -84,8 +83,8 @@ const styles = StyleSheet.create({
     borderColor: "#ddd",
     borderRadius: 5,
     padding: 10,
-    marginBottom: 10, // Reduzido para aproximar
-    marginTop: 5, // Reduzido para aproximar
+    marginBottom: 10,
+    marginTop: 0, // Ajustado para aproximar
   },
   patientInfoControlledTitle: {
     fontSize: 11,
@@ -188,17 +187,6 @@ const styles = StyleSheet.create({
     fontSize: 10,
     lineHeight: 1.5,
   },
-  // Este estilo não será mais usado diretamente para o footer simples, mas mantido para referência
-  signatureLineContainer: {
-    marginTop: 30,
-    marginBottom: 20,
-    paddingTop: 10,
-    borderTopWidth: 1,
-    borderTopColor: "#eee",
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'flex-end',
-  },
   signatureDateText: {
     fontSize: 10,
     color: "#333",
@@ -223,18 +211,13 @@ const styles = StyleSheet.create({
     right: 30,
     flexDirection: 'row',
     justifyContent: 'space-between',
-    alignItems: 'flex-end', // Alinha a data e a assinatura na parte inferior
+    alignItems: 'flex-end',
     paddingTop: 20,
     borderTopWidth: 1,
     borderTopColor: "#eee",
   },
-  vetSignatureCard: { // Este card agora é o bloco da direita no footer simples
-    textAlign: "center",
-    // Removido flex: 1, borderWidth, borderColor, borderRadius, padding, marginRight
-    // para que ele se comporte como um bloco de assinatura simples
-  },
   controlledPrescriptionHeader: {
-    marginBottom: 0, // Removido marginBottom para aproximar
+    marginBottom: 0,
     paddingBottom: 10,
     borderBottomWidth: 0, // REMOVIDO A LINHA AQUI
     borderBottomColor: "#eee",
@@ -242,24 +225,23 @@ const styles = StyleSheet.create({
   controlledPrescriptionTitle: {
     fontSize: 22,
     textAlign: "center",
-    fontFamily: "Exo", // Usando Exo para o título
+    fontFamily: "Exo",
     fontWeight: "bold",
     color: "#333",
     marginBottom: 15,
   },
-  controlledHeaderDetails: { // Novo estilo para alinhar emitente e vias
+  controlledHeaderDetails: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'flex-start',
-    marginBottom: 5, // Reduzido para aproximar
+    marginBottom: 5,
   },
   issuerVetCard: {
     borderWidth: 1,
     borderColor: "#ddd",
     borderRadius: 5,
     padding: 10,
-    width: '48%', // Ocupa metade da largura
-    // Removido marginBottom para melhor alinhamento no novo layout
+    width: '48%',
   },
   issuerVetTitle: {
     fontSize: 11,
@@ -289,7 +271,7 @@ const styles = StyleSheet.create({
     borderColor: "#ddd",
     borderRadius: 5,
     padding: 10,
-    justifyContent: 'space-between', // Para empurrar o conteúdo para as extremidades
+    justifyContent: 'space-between',
   },
   identificationTitle: {
     fontSize: 11,
@@ -316,7 +298,7 @@ const styles = StyleSheet.create({
   identificationDateLine: {
     flexDirection: 'row',
     alignItems: 'flex-end',
-    marginTop: 5, // Reduzido para ficar mais próximo
+    marginTop: 5,
   },
   identificationDatePart: {
     flexDirection: 'row',
@@ -327,15 +309,15 @@ const styles = StyleSheet.create({
     marginHorizontal: 2,
   },
   pharmacistSignatureBlock: {
-    marginTop: 'auto', // Empurra para o final do card
-    marginBottom: 5, // Espaço para a data
+    marginTop: 'auto',
+    marginBottom: 5,
   },
   pharmacistSignatureLine: {
     width: '100%',
     borderBottomWidth: 1,
     borderBottomColor: "#333",
     marginBottom: 3,
-    marginTop: 20, // Espaço para carimbo
+    marginTop: 20,
   },
   pharmacistSignatureLabel: {
     fontSize: 9,
@@ -404,7 +386,6 @@ export const PrescriptionPdfContent = ({
         {prescriptionType === 'controlled' ? (
           <View style={styles.controlledPrescriptionHeader}>
             <Text style={styles.controlledPrescriptionTitle}>RECEITUÁRIO DE CONTROLE ESPECIAL</Text>
-            {/* Novo contêiner para alinhar emitente e vias */}
             <View style={styles.controlledHeaderDetails}>
               <View style={styles.issuerVetCard}>
                 <Text style={styles.issuerVetTitle}>Emitente (Veterinário)</Text>
