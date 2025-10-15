@@ -4,20 +4,21 @@ import { MedicationData } from "@/types/medication";
 import { mockCompanySettings, mockUserSettings } from "@/mockData/settings"; // Importar as configurações
 import { FaUser } from "react-icons/fa"; // Importação de react-icons
 
-// Register a font if needed (e.g., for custom fonts or if default is not working)
-// Font.register({ family: "Roboto", src: "https://fonts.gstatic.com/s/roboto/v20/KFOmCnqEu92Fr1Mu4mxP.ttf" });
+// Register Inter font with regular and bold weights
+Font.register({
+  family: "Inter",
+  fonts: [
+    { src: "https://fonts.gstatic.com/s/inter/v12/UcCOgDWKxCtSlz05NdozHAYw.ttf", fontWeight: 400 }, // Regular
+    { src: "https://fonts.gstatic.com/s/inter/v12/UcCOgDWKxCtSlz05NdozHAYw.ttf", fontWeight: 700 }, // Bold
+  ],
+});
 
 const styles = StyleSheet.create({
   page: {
     padding: 30,
-    fontFamily: "Helvetica", // Default font
+    fontFamily: "Inter", // Use Inter as default font
     fontSize: 10,
     color: "#333",
-  },
-  mainContentContainer: {
-    // This view will contain all content that flows across pages
-    // It will automatically break into new pages if content is too long
-    marginBottom: 140, // Aumenta a margem inferior para dar mais espaço ao rodapé da assinatura
   },
   clinicHeader: {
     flexDirection: "row",
@@ -48,8 +49,16 @@ const styles = StyleSheet.create({
   mainTitle: {
     fontSize: 20,
     textAlign: "center",
+    fontFamily: "Inter",
     fontWeight: "bold",
     marginBottom: 20,
+  },
+  // Style for the "1.ª VIA / 2.ª VIA" text, now flowing with content
+  viaTextContainer: {
+    textAlign: 'right',
+    fontSize: 9,
+    color: '#333',
+    marginBottom: 10, // Space after the via text
   },
   infoSectionContainer: {
     flexDirection: "row",
@@ -69,6 +78,23 @@ const styles = StyleSheet.create({
     marginBottom: 5,
   },
   infoText: {
+    fontSize: 10,
+    marginBottom: 2,
+  },
+  // New style for full-width patient info for controlled prescriptions
+  patientInfoControlled: {
+    borderWidth: 1,
+    borderColor: "#ddd",
+    borderRadius: 5,
+    padding: 10,
+    marginBottom: 20,
+  },
+  patientInfoControlledTitle: {
+    fontSize: 11,
+    fontWeight: "bold",
+    marginBottom: 5,
+  },
+  patientInfoControlledText: {
     fontSize: 10,
     marginBottom: 2,
   },
@@ -162,7 +188,35 @@ const styles = StyleSheet.create({
     fontSize: 10,
     lineHeight: 1.5,
   },
-  // Rodapé geral, agora com flex para duas colunas
+  // New style for the signature line above the footer
+  signatureLineContainer: {
+    marginTop: 30,
+    marginBottom: 20, // Space before the fixed footer
+    paddingTop: 10,
+    borderTopWidth: 1,
+    borderTopColor: "#eee",
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'flex-end',
+  },
+  signatureDateText: {
+    fontSize: 10,
+    color: "#333",
+  },
+  signatureBlockRight: {
+    textAlign: 'center',
+  },
+  signatureLine: {
+    width: 180, // Fixed width for the line
+    borderBottomWidth: 1,
+    borderBottomColor: "#333",
+    marginBottom: 3,
+  },
+  signatureLabel: {
+    fontSize: 9,
+    color: "#333",
+  },
+  // Rodapé geral, agora com flex para duas colunas (para receitas simples)
   footerContainer: {
     position: 'absolute',
     bottom: 30,
@@ -174,7 +228,7 @@ const styles = StyleSheet.create({
     borderTopWidth: 1,
     borderTopColor: "#eee",
   },
-  // Estilo para o card de assinatura do veterinário no rodapé
+  // Estilo para o card de assinatura do veterinário no rodapé (para receitas simples)
   vetSignatureCard: {
     flex: 1,
     borderWidth: 1,
@@ -184,37 +238,25 @@ const styles = StyleSheet.create({
     marginRight: 5, // Espaço entre os cards
     textAlign: "center",
   },
-  signatureDate: {
-    fontSize: 10,
-    marginBottom: 5,
-  },
-  signatureText: {
-    fontSize: 10,
-    marginBottom: 2,
-  },
-  signatureName: {
-    fontSize: 12,
-    fontWeight: "bold",
-    marginBottom: 2,
-  },
-  // Novos estilos para Receita Controlada
+  // Novos estilos para Receita Controlada (sem vermelho)
   controlledPrescriptionHeader: {
     marginBottom: 20,
     paddingBottom: 10,
     borderBottomWidth: 1,
-    borderBottomColor: "#f00", // Borda vermelha para destacar
+    borderBottomColor: "#eee", // Borda preta/cinza
   },
   controlledPrescriptionTitle: {
     fontSize: 22,
     textAlign: "center",
+    fontFamily: "Inter",
     fontWeight: "bold",
-    color: "#f00",
+    color: "#333", // Cor preta
     marginBottom: 15,
   },
-  // Card do emitente (veterinário) no topo para receita controlada
+  // Card do emitente (veterinário) no topo para receita controlada (sem vermelho)
   issuerVetCard: {
     borderWidth: 1,
-    borderColor: "#f00",
+    borderColor: "#ddd", // Borda preta/cinza
     borderRadius: 5,
     padding: 10,
     marginBottom: 20, // Espaço abaixo do card
@@ -224,33 +266,66 @@ const styles = StyleSheet.create({
     fontSize: 11,
     fontWeight: "bold",
     marginBottom: 5,
-    color: "#f00",
+    color: "#333", // Cor preta
   },
   issuerVetText: {
     fontSize: 10,
     marginBottom: 2,
     color: "#333",
   },
-  // Card do farmacêutico no rodapé para receita controlada
-  pharmacistSignatureCard: {
-    flex: 1,
+  // Card de identificação do comprador/fornecedor (novo footer para controlada)
+  identificationCardContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    position: 'absolute',
+    bottom: 30,
+    left: 30,
+    right: 30,
+    paddingTop: 20,
+    borderTopWidth: 1,
+    borderTopColor: "#eee",
+  },
+  identificationCard: {
+    width: '48%',
     borderWidth: 1,
-    borderColor: "#f00",
+    borderColor: "#ddd",
     borderRadius: 5,
     padding: 10,
-    marginLeft: 5, // Espaço entre os cards
-    textAlign: "center",
   },
-  pharmacistSignatureTitle: {
+  identificationTitle: {
     fontSize: 11,
     fontWeight: "bold",
     marginBottom: 5,
-    color: "#f00",
+    borderBottomWidth: 1,
+    borderBottomColor: "#eee",
+    paddingBottom: 5,
   },
-  pharmacistSignatureText: {
+  identificationField: {
     fontSize: 10,
-    marginBottom: 2,
-    color: "#333",
+    marginBottom: 5,
+    flexDirection: 'row',
+    alignItems: 'flex-end',
+  },
+  identificationLabel: {
+    marginRight: 3,
+  },
+  identificationLine: {
+    flexGrow: 1,
+    borderBottomWidth: 1,
+    borderBottomColor: "#333",
+  },
+  identificationDateLine: {
+    flexDirection: 'row',
+    alignItems: 'flex-end',
+    marginTop: 10,
+  },
+  identificationDatePart: {
+    flexDirection: 'row',
+    alignItems: 'flex-end',
+    marginRight: 5,
+  },
+  identificationDateSeparator: {
+    marginHorizontal: 2,
   },
 });
 
@@ -311,178 +386,213 @@ export const PrescriptionPdfContent = ({
       <Page
         size="A4"
         style={styles.page}
-        render={({ pageNumber, totalPages }) => {
-          return (
-            <>
-              {/* Clinic Header */}
-              <View style={styles.clinicHeader}>
-                <View style={styles.clinicInfoLeft}>
-                  {/* <Image src="/public/placeholder.svg" style={{ width: 40, height: 40, marginRight: 10 }} /> */}
-                  <View>
-                    <Text style={styles.clinicName}>{mockCompanySettings.companyName}</Text>
-                    <Text style={styles.clinicDetails}>CRMV {mockCompanySettings.crmv}</Text>
-                    <Text style={styles.clinicDetails}>Registro no MAPA {mockCompanySettings.mapaRegistration}</Text>
-                  </View>
-                </View>
-                <View style={styles.clinicAddressPhone}>
-                  <Text>{mockCompanySettings.address}</Text>
-                  <Text>{mockCompanySettings.city} - CEP: {mockCompanySettings.zipCode}</Text>
-                  <Text>Telefone: {mockCompanySettings.phone}</Text>
-                </View>
-              </View>
+      >
+        {/* Clinic Header */}
+        <View style={styles.clinicHeader}>
+          <View style={styles.clinicInfoLeft}>
+            {/* <Image src="/public/placeholder.svg" style={{ width: 40, height: 40, marginRight: 10 }} /> */}
+            <View>
+              <Text style={styles.clinicName}>{mockCompanySettings.companyName}</Text>
+              <Text style={styles.clinicDetails}>CRMV {mockCompanySettings.crmv}</Text>
+              <Text style={styles.clinicDetails}>Registro no MAPA {mockCompanySettings.mapaRegistration}</Text>
+            </View>
+          </View>
+          <View style={styles.clinicAddressPhone}>
+            <Text>{mockCompanySettings.address}</Text>
+            <Text>{mockCompanySettings.city} - CEP: {mockCompanySettings.zipCode}</Text>
+            <Text>Telefone: {mockCompanySettings.phone}</Text>
+          </View>
+        </View>
 
-              {prescriptionType === 'controlled' ? (
-                <View style={styles.controlledPrescriptionHeader}>
-                  <Text style={styles.controlledPrescriptionTitle}>RECEITA DE CONTROLE ESPECIAL</Text>
-                </View>
-              ) : (
-                <Text style={styles.mainTitle}>Receita Simples</Text>
-              )}
+        {prescriptionType === 'controlled' ? (
+          <View style={styles.controlledPrescriptionHeader}>
+            <Text style={styles.controlledPrescriptionTitle}>RECEITUÁRIO DE CONTROLE ESPECIAL</Text>
+          </View>
+        ) : (
+          <Text style={styles.mainTitle}>Receita Simples</Text>
+        )}
 
-              {/* Issuer (Veterinarian) Info for Controlled Prescriptions at the top */}
-              {prescriptionType === 'controlled' && (
-                <View style={styles.infoSectionContainer}> {/* Usar infoSectionContainer para layout de duas colunas */}
-                  <View style={styles.issuerVetCard}>
-                    <Text style={styles.issuerVetTitle}>Emitente (Veterinário)</Text>
-                    <Text style={styles.issuerVetText}>Nome: {mockUserSettings.signatureText}</Text>
-                    <Text style={styles.issuerVetText}>CRMV: {mockUserSettings.userCrmv}</Text>
-                    <Text style={styles.issuerVetText}>Registro MAPA: {mockUserSettings.userMapaRegistration}</Text>
-                  </View>
-                  {/* Animal and Tutor Info - Mantido aqui para preencher a segunda coluna do topo */}
-                  <View style={styles.infoCard}>
-                    <Text style={styles.infoTitle}>Animal</Text>
-                    <Text style={styles.infoText}>ID: {animalId}</Text>
-                    <Text style={styles.infoText}>Nome: {animalName}</Text>
-                    <Text style={styles.infoText}>Espécie: {animalSpecies}</Text>
-                  </View>
-                </View>
-              )}
+        {/* 1.ª VIA / 2.ª VIA for Controlled Prescriptions */}
+        {prescriptionType === 'controlled' && (
+          <View style={styles.viaTextContainer}>
+            <Text>1.ª VIA - FARMÁCIA</Text>
+            <Text>2.ª VIA - PACIENTE</Text>
+          </View>
+        )}
 
-              {/* Animal and Tutor Info (for simple prescriptions, or as a separate card for controlled) */}
-              {prescriptionType !== 'controlled' && (
-                <View style={styles.infoSectionContainer}>
-                  <View style={styles.infoCard}>
-                    <Text style={styles.infoTitle}>Animal</Text>
-                    <Text style={styles.infoText}>ID: {animalId}</Text>
-                    <Text style={styles.infoText}>Nome: {animalName}</Text>
-                    <Text style={styles.infoText}>Espécie: {animalSpecies}</Text>
-                  </View>
-                  <View style={styles.infoCard}>
-                    <Text style={styles.infoTitle}>Tutor</Text>
-                    <Text style={styles.infoText}>Nome: {tutorName}</Text>
-                    <Text style={styles.infoText}>Endereço: {tutorAddress || "Não informado"}</Text>
-                  </View>
-                </View>
-              )}
-              {/* Para receita controlada, o tutor é o "comprador" e já está no card do animal acima */}
-              {prescriptionType === 'controlled' && (
-                <View style={styles.infoSectionContainer}>
-                  <View style={styles.infoCard}>
-                    <Text style={styles.infoTitle}>Tutor (Comprador)</Text>
-                    <Text style={styles.infoText}>Nome: {tutorName}</Text>
-                    <Text style={styles.infoText}>Endereço: {tutorAddress || "Não informado"}</Text>
-                  </View>
-                  <View style={styles.infoCard}>
-                    {/* Espaço vazio ou informações adicionais se necessário */}
-                  </View>
-                </View>
-              )}
+        {/* Issuer (Veterinarian) Info for Controlled Prescriptions at the top */}
+        {prescriptionType === 'controlled' && (
+          <View style={styles.infoSectionContainer}> {/* Using infoSectionContainer for layout */}
+            <View style={styles.issuerVetCard}>
+              <Text style={styles.issuerVetTitle}>Emitente (Veterinário)</Text>
+              <Text style={styles.issuerVetText}>Nome: {mockUserSettings.signatureText}</Text>
+              <Text style={styles.issuerVetText}>CRMV: {mockUserSettings.userCrmv}</Text>
+              <Text style={styles.issuerVetText}>Registro MAPA: {mockUserSettings.userMapaRegistration}</Text>
+            </View>
+            {/* Empty card to maintain layout, or could be removed if not needed */}
+            <View style={styles.infoCard}>
+              {/* This space can be used for other info if needed, or removed */}
+            </View>
+          </View>
+        )}
 
+        {/* Patient/Proprietário/Endereço section (full width for controlled, or existing cards for simple) */}
+        {prescriptionType === 'controlled' ? (
+          <View style={styles.patientInfoControlled}>
+            <Text style={styles.patientInfoControlledTitle}>Informações do Paciente/Proprietário</Text>
+            <Text style={styles.patientInfoControlledText}>Paciente: {animalName}</Text>
+            <Text style={styles.patientInfoControlledText}>Proprietário: {tutorName}</Text>
+            <Text style={styles.patientInfoControlledText}>Endereço: {tutorAddress || "Não informado"}</Text>
+          </View>
+        ) : (
+          <View style={styles.infoSectionContainer}>
+            <View style={styles.infoCard}>
+              <Text style={styles.infoTitle}>Animal</Text>
+              <Text style={styles.infoText}>ID: {animalId}</Text>
+              <Text style={styles.infoText}>Nome: {animalName}</Text>
+              <Text style={styles.infoText}>Espécie: {animalSpecies}</Text>
+            </View>
+            <View style={styles.infoCard}>
+              <Text style={styles.infoTitle}>Tutor</Text>
+              <Text style={styles.infoText}>Nome: {tutorName}</Text>
+              <Text style={styles.infoText}>Endereço: {tutorAddress || "Não informado"}</Text>
+            </View>
+          </View>
+        )}
 
-              {/* Main Content that flows across pages */}
-              <View style={styles.mainContentContainer}>
-                {/* Medication List Grouped by Use Type */}
-                {Object.keys(groupedMedications).map((useType) => (
-                  <View key={useType}>
-                    <Text style={styles.groupTitle}>{useType}</Text>
-                    {groupedMedications[useType].map((med, index) => (
-                      <View key={med.id} style={styles.medicationItem}>
-                        <View style={styles.medicationHeaderLine}>
-                          <Text style={styles.medicationNumber}>{index + 1})</Text>
-                          <Text style={styles.medicationNameConcentration}>
-                            {(() => {
-                              const name = (med.medicationName && med.medicationName.trim()) || '';
-                              const concentration = (med.concentration && med.concentration.trim()) || '';
-                              
-                              if (name.length > 0 && concentration.length > 0) {
-                                return `${name} ${concentration}`;
-                              } else if (name.length > 0) {
-                                return name;
-                              } else if (concentration.length > 0) {
-                                return concentration;
-                              }
-                              return 'Medicamento sem nome';
-                            })()}
-                          </Text>
-                          <View style={styles.lineSeparator} />
-                          <View style={styles.badgeContainer}>
-                            {med.pharmacyType && (
-                              <Text style={styles.pharmacyBadge}>
-                                {med.pharmacyType === "Farmácia Veterinária" ? "VET" : "HUMANA"}
-                              </Text>
-                            )}
-                            {med.totalQuantityDisplay && (
-                              <Text style={styles.quantityBadge}>
-                                {med.totalQuantityDisplay}
-                              </Text>
-                            )}
-                          </View>
-                        </View>
-                        <Text style={styles.medicationInstructions}>
-                          {med.generatedInstructions || 'Sem instruções de uso.'}
-                        </Text>
-                        {med.generalObservations && med.generalObservations.trim().length > 0 ? (
-                          <Text style={styles.medicationObservations}>
-                            Obs. Medicamento: {med.generalObservations}
-                          </Text>
-                        ) : null}
-                      </View>
-                    ))}
-                  </View>
-                ))}
-
-                {/* General Observations for the entire prescription */}
-                {generalObservations && (
-                  <View style={styles.generalObservationsSection}>
-                    <Text style={styles.generalObservationsTitle}>Observações Gerais da Receita</Text>
-                    <Text style={styles.generalObservationsText}>{generalObservations}</Text>
-                  </View>
-                )}
-              </View>
-
-              {/* FOOTER - Assinatura e dados do farmacêutico */}
-              {pageNumber === totalPages && (
-                <View style={styles.footerContainer}>
-                  {/* Card de Assinatura do Veterinário */}
-                  <View style={styles.vetSignatureCard}>
-                    <Text style={styles.signatureDate}>
-                      {formatDateToPortuguese(currentDate)}
-                    </Text>
-                    {showElectronicSignatureText && (
-                      <Text style={styles.signatureText}>Assinado eletronicamente por</Text>
+        {/* Medication List Grouped by Use Type */}
+        {Object.keys(groupedMedications).map((useType) => (
+          <View key={useType}>
+            <Text style={styles.groupTitle}>{useType}</Text>
+            {groupedMedications[useType].map((med, index) => (
+              <View key={med.id} style={styles.medicationItem}>
+                <View style={styles.medicationHeaderLine}>
+                  <Text style={styles.medicationNumber}>{index + 1})</Text>
+                  <Text style={styles.medicationNameConcentration}>
+                    {(() => {
+                      const name = (med.medicationName && med.medicationName.trim()) || '';
+                      const concentration = (med.concentration && med.concentration.trim()) || '';
+                      
+                      if (name.length > 0 && concentration.length > 0) {
+                        return `${name} ${concentration}`;
+                      } else if (name.length > 0) {
+                        return name;
+                      } else if (concentration.length > 0) {
+                        return concentration;
+                      }
+                      return 'Medicamento sem nome';
+                    })()}
+                  </Text>
+                  <View style={styles.lineSeparator} />
+                  <View style={styles.badgeContainer}>
+                    {med.pharmacyType && (
+                      <Text style={styles.pharmacyBadge}>
+                        {med.pharmacyType === "Farmácia Veterinária" ? "VET" : "HUMANA"}
+                      </Text>
                     )}
-                    <Text style={styles.signatureName}>{mockUserSettings.signatureText}</Text>
-                    <Text style={styles.clinicDetails}>CRMV {mockUserSettings.userCrmv}</Text>
-                    <Text style={styles.clinicDetails}>Registro no MAPA {mockUserSettings.userMapaRegistration}</Text>
+                    {med.totalQuantityDisplay && (
+                      <Text style={styles.quantityBadge}>
+                        {med.totalQuantityDisplay}
+                      </Text>
+                    )}
                   </View>
-
-                  {/* Card de Dados do Farmacêutico (apenas para receita controlada) */}
-                  {prescriptionType === 'controlled' && (
-                    <View style={styles.pharmacistSignatureCard}>
-                      <Text style={styles.pharmacistSignatureTitle}>Farmacêutico</Text>
-                      <Text style={styles.pharmacistSignatureText}>Nome: {pharmacistName || "Não informado"}</Text>
-                      <Text style={styles.pharmacistSignatureText}>CPF: {pharmacistCpf || "Não informado"}</Text>
-                      <Text style={styles.pharmacistSignatureText}>CRF: {pharmacistCfr || "Não informado"}</Text>
-                      <Text style={styles.pharmacistSignatureText}>Endereço: {pharmacistAddress || "Não informado"}</Text>
-                      <Text style={styles.pharmacistSignatureText}>Telefone: {pharmacistPhone || "Não informado"}</Text>
-                    </View>
-                  )}
                 </View>
+                <Text style={styles.medicationInstructions}>
+                  {med.generatedInstructions || 'Sem instruções de uso.'}
+                </Text>
+                {med.generalObservations && med.generalObservations.trim().length > 0 ? (
+                  <Text style={styles.medicationObservations}>
+                    Obs. Medicamento: {med.generalObservations}
+                  </Text>
+                ) : null}
+              </View>
+            ))}
+          </View>
+        ))}
+
+        {/* General Observations for the entire prescription */}
+        {generalObservations && (
+          <View style={styles.generalObservationsSection}>
+            <Text style={styles.generalObservationsTitle}>Observações Gerais da Receita</Text>
+            <Text style={styles.generalObservationsText}>{generalObservations}</Text>
+          </View>
+        )}
+
+        {/* Signature Line (Vet) - Flows with content */}
+        <View style={styles.signatureLineContainer} break> {/* Use break to ensure it's at the bottom of the current page or new page */}
+          <Text style={styles.signatureDateText}>Data: {formatDateToPortuguese(currentDate)}</Text>
+          <View style={styles.signatureBlockRight}>
+            <View style={styles.signatureLine} />
+            <Text style={styles.signatureLabel}>Assinatura</Text>
+          </View>
+        </View>
+
+        {/* FIXED FOOTER - Conditional based on prescriptionType */}
+        {prescriptionType === 'controlled' ? (
+          <View style={styles.identificationCardContainer} fixed>
+            <View style={styles.identificationCard}>
+              <Text style={styles.identificationTitle}>IDENTIFICAÇÃO DO COMPRADOR</Text>
+              <View style={styles.identificationField}>
+                <Text style={styles.identificationLabel}>Nome completo</Text>
+                <View style={styles.identificationLine} />
+              </View>
+              <View style={styles.identificationField}>
+                <Text style={styles.identificationLabel}>Ident.</Text>
+                <View style={[styles.identificationLine, { width: 80 }]} /> {/* Adjusted width */}
+                <Text style={styles.identificationLabel}>Org Emissor</Text>
+                <View style={[styles.identificationLine, { width: 40 }]} /> {/* Adjusted width */}
+              </View>
+              <View style={styles.identificationField}>
+                <Text style={styles.identificationLabel}>End. Completo</Text>
+                <View style={styles.identificationLine} />
+              </View>
+              <View style={styles.identificationField}>
+                <Text style={styles.identificationLabel}>Telefone</Text>
+                <View style={styles.identificationLine} />
+              </View>
+              <View style={styles.identificationField}>
+                <Text style={styles.identificationLabel}>Cidade</Text>
+                <View style={[styles.identificationLine, { width: 100 }]} /> {/* Adjusted width */}
+                <Text style={styles.identificationLabel}>UF</Text>
+                <View style={[styles.identificationLine, { width: 20 }]} /> {/* Adjusted width */}
+              </View>
+            </View>
+
+            <View style={styles.identificationCard}>
+              <Text style={styles.identificationTitle}>IDENTIFICAÇÃO DO FORNECEDOR</Text>
+              <View style={{ marginTop: 20, marginBottom: 20 }}>
+                <View style={styles.identificationLine} />
+                <Text style={styles.identificationLabel}>Assinatura do Farmacêutico</Text>
+              </View>
+              <View style={styles.identificationDateLine}>
+                <Text style={styles.identificationLabel}>Data</Text>
+                <View style={styles.identificationDatePart}>
+                  <View style={[styles.identificationLine, { width: 20 }]} />
+                  <Text style={styles.identificationDateSeparator}>/</Text>
+                  <View style={[styles.identificationLine, { width: 20 }]} />
+                  <Text style={styles.identificationDateSeparator}>/</Text>
+                  <View style={[styles.identificationLine, { width: 20 }]} />
+                </View>
+              </View>
+            </View>
+          </View>
+        ) : (
+          <View style={styles.footerContainer} fixed>
+            {/* Card de Assinatura do Veterinário (para receitas simples) */}
+            <View style={styles.vetSignatureCard}>
+              <Text style={styles.signatureDate}>
+                {formatDateToPortuguese(currentDate)}
+              </Text>
+              {showElectronicSignatureText && (
+                <Text style={styles.signatureText}>Assinado eletronicamente por</Text>
               )}
-            </>
-          );
-        }}
-      />
+              <Text style={styles.signatureName}>{mockUserSettings.signatureText}</Text>
+              <Text style={styles.clinicDetails}>CRMV {mockUserSettings.userCrmv}</Text>
+              <Text style={styles.clinicDetails}>Registro no MAPA {mockUserSettings.userMapaRegistration}</Text>
+            </View>
+          </View>
+        )}
+      </Page>
     </Document>
   );
 };
