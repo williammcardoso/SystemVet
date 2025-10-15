@@ -187,23 +187,30 @@ const styles = StyleSheet.create({
     fontSize: 10,
     lineHeight: 1.5,
   },
-  signatureDateText: {
-    fontSize: 10,
-    color: "#333",
-  },
-  signatureBlockRight: {
+  // Novos estilos para o bloco de assinatura do veterinário
+  vetSignatureBlock: {
     textAlign: 'center',
+    width: 180, // Largura fixa para a linha de assinatura
   },
-  signatureLine: {
-    width: 180,
+  vetSignatureLine: {
     borderBottomWidth: 1,
     borderBottomColor: "#333",
     marginBottom: 3,
+    marginTop: 10, // Espaço acima da linha
   },
-  signatureLabel: {
+  vetSignatureLabel: {
     fontSize: 9,
     color: "#333",
   },
+  vetSignatureDetails: {
+    fontSize: 9,
+    color: "#666",
+  },
+  vetSignatureDateText: {
+    fontSize: 10,
+    color: "#333",
+  },
+  // Rodapé para receitas simples (fixo na parte inferior)
   footerContainer: {
     position: 'absolute',
     bottom: 30,
@@ -211,10 +218,18 @@ const styles = StyleSheet.create({
     right: 30,
     flexDirection: 'row',
     justifyContent: 'space-between',
-    alignItems: 'flex-end',
+    alignItems: 'flex-end', // Alinha o conteúdo na parte inferior da área do rodapé
     paddingTop: 20,
     borderTopWidth: 1,
     borderTopColor: "#eee",
+  },
+  // Seção de assinatura do veterinário para receitas controladas (no fluxo do documento)
+  controlledVetSignatureSection: {
+    marginTop: 30, // Espaço após observações gerais
+    marginBottom: 20, // Espaço antes dos cartões de identificação
+    flexDirection: 'row',
+    justifyContent: 'flex-end', // Alinha à direita
+    width: '100%', // Ocupa a largura total
   },
   controlledPrescriptionHeader: {
     marginBottom: 0,
@@ -403,7 +418,7 @@ export const PrescriptionPdfContent = ({
           <Text style={styles.mainTitle}>Receita Simples</Text>
         )}
 
-        {/* Informações do Paciente/Proprietário para receita controlada */}
+        {/* Informações do Paciente/Proprietário */}
         {prescriptionType === 'controlled' ? (
           <View style={styles.patientInfoControlled}>
             <Text style={styles.patientInfoControlledTitle}>Informações do Paciente/Proprietário</Text>
@@ -471,25 +486,43 @@ export const PrescriptionPdfContent = ({
           </View>
         ) : null}
 
-        {/* Rodapé para Receitas Simples */}
-        {prescriptionType !== 'controlled' && (
-          <View style={styles.footerContainer} fixed>
-            <Text style={styles.signatureDateText}>
-              Data: {formatDateToPortuguese(currentDate)}
-            </Text>
-            <View style={styles.signatureBlockRight}>
+        {/* Veterinarian Signature and Date for Controlled Prescriptions (in-flow) */}
+        {prescriptionType === 'controlled' && (
+          <View style={styles.controlledVetSignatureSection}>
+            <View style={styles.vetSignatureBlock}>
+              <Text style={styles.vetSignatureDateText}>
+                Data: {formatDateToPortuguese(currentDate)}
+              </Text>
               {showElectronicSignatureText ? (
-                <Text style={styles.signatureLabel}>Assinado eletronicamente por</Text>
+                <Text style={styles.vetSignatureLabel}>Assinado eletronicamente por</Text>
               ) : null}
-              <View style={styles.signatureLine}/>
-              <Text style={styles.signatureLabel}>{mockUserSettings.signatureText}</Text>
-              <Text style={styles.clinicDetails}>CRMV {mockUserSettings.userCrmv}</Text>
-              <Text style={styles.clinicDetails}>Registro no MAPA {mockUserSettings.userMapaRegistration}</Text>
+              <View style={styles.vetSignatureLine}/>
+              <Text style={styles.vetSignatureLabel}>{mockUserSettings.signatureText}</Text>
+              <Text style={styles.vetSignatureDetails}>CRMV {mockUserSettings.userCrmv}</Text>
+              <Text style={styles.vetSignatureDetails}>Registro no MAPA {mockUserSettings.userMapaRegistration}</Text>
             </View>
           </View>
         )}
 
-        {/* Rodapé para Receitas Controladas */}
+        {/* Rodapé para Receitas Simples (fixed) */}
+        {prescriptionType !== 'controlled' && (
+          <View style={styles.footerContainer} fixed>
+            <Text style={styles.vetSignatureDateText}>
+              Data: {formatDateToPortuguese(currentDate)}
+            </Text>
+            <View style={styles.vetSignatureBlock}>
+              {showElectronicSignatureText ? (
+                <Text style={styles.vetSignatureLabel}>Assinado eletronicamente por</Text>
+              ) : null}
+              <View style={styles.vetSignatureLine}/>
+              <Text style={styles.vetSignatureLabel}>{mockUserSettings.signatureText}</Text>
+              <Text style={styles.vetSignatureDetails}>CRMV {mockUserSettings.userCrmv}</Text>
+              <Text style={styles.vetSignatureDetails}>Registro no MAPA {mockUserSettings.userMapaRegistration}</Text>
+            </View>
+          </View>
+        )}
+
+        {/* Rodapé para Receitas Controladas (fixed) */}
         {prescriptionType === 'controlled' ? (
           <View style={styles.identificationCardContainer} fixed>
             <View style={styles.identificationCard}>
