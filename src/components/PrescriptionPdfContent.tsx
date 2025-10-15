@@ -442,7 +442,7 @@ const getDynamicStyles = (isCompactSimplePrescription: boolean, prescriptionType
     borderBottomWidth: 1,
     borderBottomColor: "#000",
     paddingBottom: 4,
-    textAlign: 'center', // Centraliza o título
+    textAlign: 'left', // Revertido para left-aligned
   },
   manipulatedListContainer: {
     width: '80%', // Define uma largura para o contêiner da lista
@@ -486,12 +486,12 @@ const getDynamicStyles = (isCompactSimplePrescription: boolean, prescriptionType
     fontWeight: "bold",
     marginTop: 10,
     marginBottom: 5,
-    textAlign: 'center', // Centraliza o título das instruções
+    textAlign: 'left', // Revertido para left-aligned
   },
   manipulatedInstructionsText: {
     fontSize: 10,
     lineHeight: 1.4,
-    textAlign: 'center', // Centraliza o texto das instruções
+    textAlign: 'left', // Revertido para left-aligned
   },
 });
 
