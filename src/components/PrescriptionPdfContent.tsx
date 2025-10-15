@@ -42,7 +42,7 @@ interface PrescriptionPdfContentProps {
 const MEDICATION_COUNT_THRESHOLD = 6; // Adjust this number as needed
 
 // Function to get dynamic styles based on whether it's a compact simple prescription
-const getDynamicStyles = (isCompactSimplePrescription: boolean) => StyleSheet.create({
+const getDynamicStyles = (isCompactSimplePrescription: boolean, prescriptionType: 'simple' | 'controlled' | 'manipulated') => StyleSheet.create({
   page: {
     padding: 30,
     fontFamily: "Exo",
@@ -390,6 +390,11 @@ const getDynamicStyles = (isCompactSimplePrescription: boolean) => StyleSheet.cr
     fontSize: 9,
     color: "#333",
   },
+  // New style for the main content wrapper
+  contentWrapper: {
+    // Conditional margin for simple prescriptions to avoid overlap with fixed footer
+    marginBottom: prescriptionType === 'controlled' ? 226 : (isCompactSimplePrescription ? 100 : 120), 
+  },
 });
 
 
@@ -410,7 +415,7 @@ export const PrescriptionPdfContent = ({
 
   // Determine if compact styles should be applied for simple prescriptions
   const isCompactSimplePrescription = prescriptionType === 'simple' && medications.length >= MEDICATION_COUNT_THRESHOLD;
-  const styles = getDynamicStyles(isCompactSimplePrescription);
+  const styles = getDynamicStyles(isCompactSimplePrescription, prescriptionType); // Pass prescriptionType to getDynamicStyles
 
   // Altura estimada do identificationCardContainer (rodapé fixo)
   const IDENTIFICATION_FOOTER_HEIGHT = 166;
@@ -483,7 +488,7 @@ export const PrescriptionPdfContent = ({
           </View>
         )}
 
-        <View> {/* Este View não tem flexGrow: 1 para evitar paginação automática */}
+        <View style={styles.contentWrapper}> {/* Aplicando o novo estilo de wrapper aqui */}
           {Object.keys(groupedMedications).map((useType) => (
             <View key={useType}>
               <Text style={styles.groupTitle}>{useType}</Text>
