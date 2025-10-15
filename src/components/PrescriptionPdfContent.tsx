@@ -2,21 +2,20 @@ import React from "react";
 import { Document, Page, View, Text, StyleSheet, Font } from "@react-pdf/renderer";
 import { MedicationData } from "@/types/medication";
 import { mockCompanySettings, mockUserSettings } from "@/mockData/settings"; // Importar as configurações
-import { FaUser } from "react-icons/fa"; // Importação de react-icons
 
-// Register Inter font with regular and bold weights
+// Register Roboto font with regular and bold weights
 Font.register({
-  family: "Inter",
+  family: "Roboto",
   fonts: [
-    { src: "https://fonts.gstatic.com/s/inter/v12/UcCOgDWKxCtSlz05NdozHAYw.ttf", fontWeight: 400 }, // Regular
-    { src: "https://fonts.gstatic.com/s/inter/v12/UcCOgDWKxCtSlz05NdozHAYw.ttf", fontWeight: 700 }, // Bold
+    { src: "https://fonts.gstatic.com/s/roboto/v27/KFOmCnqEu92Fr1Mu4mxK.ttf", fontWeight: 400 }, // Regular
+    { src: "https://fonts.gstatic.com/s/roboto/v27/KFOlCnqEu92Fr1MmWUlfBBc4.ttf", fontWeight: 700 }, // Bold
   ],
 });
 
 const styles = StyleSheet.create({
   page: {
     padding: 30,
-    fontFamily: "Inter", // Use Inter as default font
+    fontFamily: "Roboto", // Use Roboto as default font
     fontSize: 10,
     color: "#333",
   },
@@ -49,16 +48,15 @@ const styles = StyleSheet.create({
   mainTitle: {
     fontSize: 20,
     textAlign: "center",
-    fontFamily: "Inter",
+    fontFamily: "Roboto", // Use Roboto as default font
     fontWeight: "bold",
     marginBottom: 20,
   },
-  // Style for the "1.ª VIA / 2.ª VIA" text, now flowing with content
   viaTextContainer: {
     textAlign: 'right',
     fontSize: 9,
     color: '#333',
-    marginBottom: 10, // Space after the via text
+    marginBottom: 10,
   },
   infoSectionContainer: {
     flexDirection: "row",
@@ -81,7 +79,6 @@ const styles = StyleSheet.create({
     fontSize: 10,
     marginBottom: 2,
   },
-  // New style for full-width patient info for controlled prescriptions
   patientInfoControlled: {
     borderWidth: 1,
     borderColor: "#ddd",
@@ -188,10 +185,9 @@ const styles = StyleSheet.create({
     fontSize: 10,
     lineHeight: 1.5,
   },
-  // New style for the signature line above the footer
   signatureLineContainer: {
     marginTop: 30,
-    marginBottom: 20, // Space before the fixed footer
+    marginBottom: 20,
     paddingTop: 10,
     borderTopWidth: 1,
     borderTopColor: "#eee",
@@ -207,7 +203,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   signatureLine: {
-    width: 180, // Fixed width for the line
+    width: 180,
     borderBottomWidth: 1,
     borderBottomColor: "#333",
     marginBottom: 3,
@@ -216,7 +212,6 @@ const styles = StyleSheet.create({
     fontSize: 9,
     color: "#333",
   },
-  // Rodapé geral, agora com flex para duas colunas (para receitas simples)
   footerContainer: {
     position: 'absolute',
     bottom: 30,
@@ -228,52 +223,48 @@ const styles = StyleSheet.create({
     borderTopWidth: 1,
     borderTopColor: "#eee",
   },
-  // Estilo para o card de assinatura do veterinário no rodapé (para receitas simples)
   vetSignatureCard: {
     flex: 1,
     borderWidth: 1,
     borderColor: "#ddd",
     borderRadius: 5,
     padding: 10,
-    marginRight: 5, // Espaço entre os cards
+    marginRight: 5,
     textAlign: "center",
   },
-  // Novos estilos para Receita Controlada (sem vermelho)
   controlledPrescriptionHeader: {
     marginBottom: 20,
     paddingBottom: 10,
     borderBottomWidth: 1,
-    borderBottomColor: "#eee", // Borda preta/cinza
+    borderBottomColor: "#eee",
   },
   controlledPrescriptionTitle: {
     fontSize: 22,
     textAlign: "center",
-    fontFamily: "Inter",
+    fontFamily: "Roboto", // Use Roboto as default font
     fontWeight: "bold",
-    color: "#333", // Cor preta
+    color: "#333",
     marginBottom: 15,
   },
-  // Card do emitente (veterinário) no topo para receita controlada (sem vermelho)
   issuerVetCard: {
     borderWidth: 1,
-    borderColor: "#ddd", // Borda preta/cinza
+    borderColor: "#ddd",
     borderRadius: 5,
     padding: 10,
-    marginBottom: 20, // Espaço abaixo do card
-    width: '48%', // Ocupa metade da largura para ficar ao lado do tutor
+    marginBottom: 20,
+    width: '48%',
   },
   issuerVetTitle: {
     fontSize: 11,
     fontWeight: "bold",
     marginBottom: 5,
-    color: "#333", // Cor preta
+    color: "#333",
   },
   issuerVetText: {
     fontSize: 10,
     marginBottom: 2,
     color: "#333",
   },
-  // Card de identificação do comprador/fornecedor (novo footer para controlada)
   identificationCardContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -422,7 +413,7 @@ export const PrescriptionPdfContent = ({
 
         {/* Issuer (Veterinarian) Info for Controlled Prescriptions at the top */}
         {prescriptionType === 'controlled' && (
-          <View style={styles.infoSectionContainer}> {/* Using infoSectionContainer for layout */}
+          <View style={styles.infoSectionContainer}>
             <View style={styles.issuerVetCard}>
               <Text style={styles.issuerVetTitle}>Emitente (Veterinário)</Text>
               <Text style={styles.issuerVetText}>Nome: {mockUserSettings.signatureText}</Text>
@@ -519,7 +510,7 @@ export const PrescriptionPdfContent = ({
         )}
 
         {/* Signature Line (Vet) - Flows with content */}
-        <View style={styles.signatureLineContainer} break> {/* Use break to ensure it's at the bottom of the current page or new page */}
+        <View style={styles.signatureLineContainer} break>
           <Text style={styles.signatureDateText}>Data: {formatDateToPortuguese(currentDate)}</Text>
           <View style={styles.signatureBlockRight}>
             <View style={styles.signatureLine} />
@@ -538,9 +529,9 @@ export const PrescriptionPdfContent = ({
               </View>
               <View style={styles.identificationField}>
                 <Text style={styles.identificationLabel}>Ident.</Text>
-                <View style={[styles.identificationLine, { width: 80 }]} /> {/* Adjusted width */}
+                <View style={[styles.identificationLine, { width: 80 }]} />
                 <Text style={styles.identificationLabel}>Org Emissor</Text>
-                <View style={[styles.identificationLine, { width: 40 }]} /> {/* Adjusted width */}
+                <View style={[styles.identificationLine, { width: 40 }]} />
               </View>
               <View style={styles.identificationField}>
                 <Text style={styles.identificationLabel}>End. Completo</Text>
@@ -552,9 +543,9 @@ export const PrescriptionPdfContent = ({
               </View>
               <View style={styles.identificationField}>
                 <Text style={styles.identificationLabel}>Cidade</Text>
-                <View style={[styles.identificationLine, { width: 100 }]} /> {/* Adjusted width */}
+                <View style={[styles.identificationLine, { width: 100 }]} />
                 <Text style={styles.identificationLabel}>UF</Text>
-                <View style={[styles.identificationLine, { width: 20 }]} /> {/* Adjusted width */}
+                <View style={[styles.identificationLine, { width: 20 }]} />
               </View>
             </View>
 
