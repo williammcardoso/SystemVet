@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Link, useParams, useNavigate } from "react-router-dom";
 import {
-  FaArrowLeft, FaUsers, FaPaw, FaPlus, FaEye, FaStethoscope, FaCalendarAlt, FaDollarSign, FaSyringe, FaWeightHanging, FaFileAlt, FaClipboardList, FaCommentAlt, FaHeart, FaMale, FaUser, FaPrint, FaDownload, FaTimes, FaSave, FaBalanceScale
+  FaArrowLeft, FaUsers, FaPaw, FaPlus, FaEye, FaStethoscope, FaCalendarAlt, FaDollarSign, FaSyringe, FaWeightHanging, FaFileAlt, FaClipboardList, FaCommentAlt, FaHeart, FaMale, FaUser, FaPrint, FaDownload, FaTimes, FaSave, FaBalanceScale, FaFileMedical, FaExclamationTriangle, FaFlask, FaEdit
 } from "react-icons/fa"; // Importar ícones de react-icons
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -1112,63 +1112,98 @@ const PatientRecordPage = () => {
 
           {/* Nova aba: Receitas */}
           <TabsContent value="prescriptions" className="mt-4">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+              {/* Card para Receita Simples */}
+              <Link to={`/clients/${clientId}/animals/${animalId}/add-prescription?type=simple`}>
+                <Card className="flex flex-col items-center justify-center p-6 text-center bg-white/90 backdrop-blur-sm border border-gray-200 dark:border-gray-700 rounded-2xl shadow-[0_1px_3px_rgba(0,0,0,0.05)] hover:shadow-[0_4px_8px_rgba(0,0,0,0.08)] transition-all duration-300 h-full">
+                  <FaFileMedical className="h-12 w-12 text-blue-500 mb-3" />
+                  <CardTitle className="text-lg font-semibold text-[#374151] dark:text-gray-100">Receita Simples</CardTitle>
+                  <p className="text-sm text-[#6B7280] dark:text-gray-400 mt-1">Medicamentos de uso comum</p>
+                </Card>
+              </Link>
+
+              {/* Card para Receita Controlada */}
+              <Link to={`/clients/${clientId}/animals/${animalId}/add-prescription?type=controlled`}>
+                <Card className="flex flex-col items-center justify-center p-6 text-center bg-white/90 backdrop-blur-sm border border-gray-200 dark:border-gray-700 rounded-2xl shadow-[0_1px_3px_rgba(0,0,0,0.05)] hover:shadow-[0_4px_8px_rgba(0,0,0,0.08)] transition-all duration-300 h-full">
+                  <FaExclamationTriangle className="h-12 w-12 text-red-500 mb-3" />
+                  <CardTitle className="text-lg font-semibold text-[#374151] dark:text-gray-100">Receita Controlada</CardTitle>
+                  <p className="text-sm text-[#6B7280] dark:text-gray-400 mt-1">Medicamentos controlados</p>
+                </Card>
+              </Link>
+
+              {/* Card para Receita Manipulada */}
+              <Link to={`/clients/${clientId}/animals/${animalId}/add-prescription?type=manipulated`}>
+                <Card className="flex flex-col items-center justify-center p-6 text-center bg-white/90 backdrop-blur-sm border border-gray-200 dark:border-gray-700 rounded-2xl shadow-[0_1px_3px_rgba(0,0,0,0.05)] hover:shadow-[0_4px_8px_rgba(0,0,0,0.08)] transition-all duration-300 h-full">
+                  <FaFlask className="h-12 w-12 text-green-500 mb-3" />
+                  <CardTitle className="text-lg font-semibold text-[#374151] dark:text-gray-100">Receita Manipulada</CardTitle>
+                  <p className="text-sm text-[#6B7280] dark:text-gray-400 mt-1">Medicamentos manipulados</p>
+                </Card>
+              </Link>
+            </div>
+
             <Card className="bg-white/90 backdrop-blur-sm border border-gray-200 dark:border-gray-700 rounded-2xl shadow-[0_1px_3px_rgba(0,0,0,0.05)] hover:shadow-[0_4px_8px_rgba(0,0,0,0.08)] transition-all duration-300 border-t-4 border-indigo-400 dark:bg-gray-800/90">
               <CardHeader className="flex flex-row items-center justify-between pb-3">
                 <CardTitle className="flex items-center gap-2 text-lg font-semibold text-[#374151] dark:text-gray-100">
-                  <FaClipboardList className="h-5 w-5 text-indigo-500" /> Receitas
+                  <FaClipboardList className="h-5 w-5 text-indigo-500" /> Prescrições Recentes
                 </CardTitle>
-                <DropdownMenu>
-                  <DropdownMenuTrigger asChild>
-                    <Button size="sm" className="rounded-md bg-gradient-to-r from-blue-500 to-indigo-500 text-white hover:from-blue-600 hover:to-indigo-600 font-semibold transition-all duration-200 shadow-md hover:shadow-lg">
-                      <FaPlus className="h-4 w-4 mr-2" /> Adicionar Nova Receita
-                    </Button>
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent align="end" className="w-56">
-                    <DropdownMenuItem asChild>
-                      <Link to={`/clients/${clientId}/animals/${animalId}/add-prescription?type=simple`}>
-                        Receita simples
-                      </Link>
-                    </DropdownMenuItem>
-                    <DropdownMenuItem asChild>
-                      <Link to={`/clients/${clientId}/animals/${animalId}/add-prescription?type=controlled`}>
-                        Receita controlada
-                      </Link>
-                    </DropdownMenuItem>
-                    <DropdownMenuItem onClick={() => toast.info("Funcionalidade em desenvolvimento: Receita manipulada")}>
-                      Receita manipulada
-                    </DropdownMenuItem>
-                  </DropdownMenuContent>
-                </DropdownMenu>
               </CardHeader>
               <CardContent className="pt-0">
                 {prescriptions.length > 0 ? (
-                  <div className="overflow-hidden">
-                    <Table>
-                      <TableHeader>
-                        <TableRow>
-                          <TableHead>Data</TableHead>
-                          <TableHead>Medicação</TableHead>
-                          <TableHead>Tratamento</TableHead>
-                          <TableHead className="text-right">Ações</TableHead>
-                        </TableRow>
-                      </TableHeader>
-                      <TableBody>
-                        {prescriptions.map((rx, index) => (
-                          <TableRow key={rx.id} className={cn(index % 2 === 1 && "bg-muted/50")}>
-                            <TableCell>{formatDate(rx.date)}</TableCell>
-                            <TableCell>{rx.medicationName}</TableCell>
-                            <TableCell>{rx.treatmentDescription || "N/A"}</TableCell>
-                            <TableCell className="text-right">
-                              <Link to={`/clients/${clientId}/animals/${animalId}/edit-prescription/${rx.id}`}>
-                                <Button variant="ghost" size="sm" className="rounded-md hover:bg-gray-100 hover:text-gray-900 dark:hover:bg-gray-700 dark:hover:text-gray-200 transition-colors duration-200">
-                                  <FaEye className="h-4 w-4" /> Ver
-                                </Button>
-                              </Link>
-                            </TableCell>
-                          </TableRow>
-                        ))}
-                      </TableBody>
-                    </Table>
+                  <div className="space-y-4">
+                    {prescriptions.map((rx) => (
+                      <Card key={rx.id} className="p-4 bg-background dark:bg-gray-800 shadow-sm border border-gray-200 dark:border-gray-700">
+                        <div className="flex items-center justify-between mb-2">
+                          <div className="flex items-center gap-2">
+                            <p className="text-lg font-semibold text-foreground">{animal.name} - {animal.species}</p>
+                            <Badge className={cn(
+                              "px-2 py-0.5 text-xs font-medium rounded-full",
+                              rx.type === 'simple' && "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200",
+                              rx.type === 'controlled' && "bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200",
+                              rx.type === 'manipulated' && "bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-200"
+                            )}>
+                              {rx.type === 'simple' ? 'Receita Simples' : rx.type === 'controlled' ? 'Controlada' : 'Manipulada'}
+                            </Badge>
+                            <Badge className="bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200 px-2 py-0.5 text-xs font-medium rounded-full">
+                              Ativa
+                            </Badge>
+                          </div>
+                          <div className="flex items-center gap-2">
+                            <Button variant="ghost" size="icon" onClick={() => { /* Lógica para imprimir */ }} className="rounded-md hover:bg-gray-100 hover:text-gray-900 dark:hover:bg-gray-700 dark:hover:text-gray-200 transition-colors duration-200">
+                              <FaPrint className="h-4 w-4" />
+                            </Button>
+                            <Link to={`/clients/${clientId}/animals/${animalId}/edit-prescription/${rx.id}`}>
+                              <Button variant="ghost" size="icon" className="rounded-md hover:bg-gray-100 hover:text-gray-900 dark:hover:bg-gray-700 dark:hover:text-gray-200 transition-colors duration-200">
+                                <FaEye className="h-4 w-4" />
+                              </Button>
+                            </Link>
+                            <Link to={`/clients/${clientId}/animals/${animalId}/edit-prescription/${rx.id}`}>
+                              <Button variant="ghost" size="icon" className="rounded-md hover:bg-gray-100 hover:text-gray-900 dark:hover:bg-gray-700 dark:hover:text-gray-200 transition-colors duration-200">
+                                <FaEdit className="h-4 w-4" />
+                              </Button>
+                            </Link>
+                          </div>
+                        </div>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-2 text-sm text-muted-foreground mb-3">
+                          <div className="flex items-center gap-1">
+                            <FaUser className="h-3 w-3" /> Tutor: {client.name}
+                          </div>
+                          <div className="flex items-center gap-1">
+                            <FaCalendarAlt className="h-3 w-3" /> {formatDate(rx.date)}
+                          </div>
+                          <div className="flex items-center gap-1">
+                            <FaClipboardList className="h-3 w-3" /> {rx.medications.length} medicamento(s)
+                          </div>
+                          <div className="flex items-center gap-1">
+                            <FaStethoscope className="h-3 w-3" /> Dr. William Cardoso {/* Placeholder para o veterinário */}
+                          </div>
+                        </div>
+                        {rx.instructions && (
+                          <p className="text-sm text-foreground bg-muted/50 dark:bg-muted/30 p-3 rounded-md border border-muted dark:border-gray-700">
+                            {rx.instructions}
+                          </p>
+                        )}
+                      </Card>
+                    ))}
                   </div>
                 ) : (
                   <p className="text-muted-foreground mt-4 py-4">Nenhuma receita registrada.</p>
