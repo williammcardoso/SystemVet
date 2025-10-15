@@ -527,8 +527,8 @@ export const PrescriptionPdfContent = ({
               Data: {formatDateToPortuguese(currentDate)}
             </Text>
             <View style={styles.buyerSignatureBlock}>
-              <Text style={styles.buyerSignatureLabel}>Assinatura</Text>
               <View style={styles.buyerSignatureLine}/>
+              <Text style={styles.buyerSignatureLabel}>Assinatura</Text>
             </View>
           </View>
         )}
