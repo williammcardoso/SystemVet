@@ -97,15 +97,6 @@
   }
 }
 
-/* Adicionando uma fonte moderna */
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
-
-@layer base {
-  html {
-    font-family: 'Inter', sans-serif;
-  }
-}
-
 /* Estilos para ocultar a barra de rolagem */
 .hide-scrollbar::-webkit-scrollbar {
   display: none; /* Para navegadores baseados em WebKit (Chrome, Safari) */
