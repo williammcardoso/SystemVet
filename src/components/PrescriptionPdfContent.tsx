@@ -447,15 +447,15 @@ const getDynamicStyles = (isCompactSimplePrescription: boolean, prescriptionType
     flexDirection: 'row',
     alignItems: 'center', // Alinhado ao centro verticalmente
     marginBottom: 5,
-    paddingLeft: 25, // Recuo para centralizar mais
-    paddingRight: 15, // Espaço em branco à direita
+    paddingLeft: 10, // Reduzido o recuo
+    paddingRight: 10, // Reduzido o espaço em branco à direita
   },
   manipulatedBullet: {
-    width: 8, // Tamanho do círculo
-    height: 8,
-    borderRadius: 4, // Metade para ser um círculo
+    width: 4, // Tamanho do círculo reduzido
+    height: 4,
+    borderRadius: 2, // Metade para ser um círculo
     backgroundColor: '#333', // Cor do círculo
-    marginRight: 8, // Espaço após o bullet
+    marginRight: 5, // Espaço após o bullet
   },
   manipulatedItemName: {
     fontSize: 10, // Diminuído
@@ -466,7 +466,7 @@ const getDynamicStyles = (isCompactSimplePrescription: boolean, prescriptionType
     borderBottomWidth: 1,
     borderBottomColor: "#ccc",
     borderStyle: "dotted",
-    flexGrow: 1,
+    flexGrow: 0.3, // Reduzido para ter menos pontos
     height: 1,
     marginHorizontal: 8, // Ajustado para um pouco mais de espaço
   },
