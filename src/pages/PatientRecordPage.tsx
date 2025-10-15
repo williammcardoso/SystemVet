@@ -395,7 +395,7 @@ const PatientRecordPage = () => {
     if (newObservation.trim()) {
       const newEntry: ObservationEntry = {
         id: String(observations.length + 1),
-        date: newObservation.trim(),
+        date: new Date().toISOString().split('T')[0], // Usar a data atual para a observação
         observation: newObservation.trim(),
       };
       setObservations([...observations, newEntry]);
@@ -1208,7 +1208,7 @@ const PatientRecordPage = () => {
                             <Button variant="ghost" size="icon" onClick={() => handlePrintSinglePrescription(rx)} className="rounded-md hover:bg-gray-100 hover:text-gray-900 dark:hover:bg-gray-700 dark:hover:text-gray-200 transition-colors duration-200">
                               <FaPrint className="h-4 w-4" />
                             </Button>
-                            <Link to={`/clients/${clientId}/animals/${animalId}/edit-prescription/${rx.id}`}>
+                            <Link to={`/clients/${clientId}/animals/${animalId}/edit-prescription/${rx.id}?type=${rx.type}`}> {/* Adicionado ?type=${rx.type} */}
                               <Button variant="ghost" size="icon" className="rounded-md hover:bg-gray-100 hover:text-gray-900 dark:hover:bg-gray-700 dark:hover:text-gray-200 transition-colors duration-200">
                                 <FaEye className="h-4 w-4" />
                               </Button>
