@@ -3,12 +3,16 @@ import { Document, Page, View, Text, StyleSheet, Font } from "@react-pdf/rendere
 import { MedicationData } from "@/types/medication";
 import { mockCompanySettings, mockUserSettings } from "@/mockData/settings"; // Importar as configurações
 
+// Importar os arquivos de fonte diretamente para que o Vite os processe corretamente
+import RobotoRegular from "/public/fonts/Roboto-Regular.ttf";
+import RobotoBold from "/public/fonts/Roboto-Bold.ttf";
+
 // Register Roboto font with regular and bold weights using local files
 Font.register({
   family: "Roboto",
   fonts: [
-    { src: "/fonts/Roboto-Regular.ttf", fontWeight: 400, format: 'truetype' }, // Regular
-    { src: "/fonts/Roboto-Bold.ttf", fontWeight: 700, format: 'truetype' }, // Bold
+    { src: RobotoRegular, fontWeight: 400, format: 'truetype' }, // Regular
+    { src: RobotoBold, fontWeight: 700, format: 'truetype' }, // Bold
   ],
 });
 
@@ -402,7 +406,7 @@ export const PrescriptionPdfContent = ({
               <Text style={styles.issuerVetText}>Registro MAPA: {mockUserSettings.userMapaRegistration}</Text>
             </View>
             <View style={styles.infoCard}>
-              <Text></Text>{/* Placeholder to prevent empty string child warning */}
+              {/* Este View é intencionalmente vazio para layout, não deve ter string children */}
             </View>
           </View>
         )}
