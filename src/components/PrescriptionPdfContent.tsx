@@ -444,9 +444,14 @@ const getDynamicStyles = (isCompactSimplePrescription: boolean, prescriptionType
     paddingBottom: 4,
     textAlign: 'left', // Revertido para left-aligned
   },
+  centeringWrapper: {
+    width: '100%',
+    alignItems: 'center', // Centers children horizontally in a column flex container
+    flexDirection: 'column', // Explicitly set for clarity
+  },
   manipulatedListContainer: {
-    width: '80%', // Define uma largura para o contêiner da lista
-    marginHorizontal: 'auto', // Centraliza o contêiner da lista
+    // Removido width e marginHorizontal para que o wrapper possa centralizá-lo
+    paddingHorizontal: 20, // Adiciona um padding interno para o conteúdo da lista
   },
   manipulatedListItem: {
     flexDirection: 'row',
@@ -592,23 +597,25 @@ export const PrescriptionPdfContent = ({
           {prescriptionType === 'manipulated' && manipulatedPrescription ? (
             <>
               <Text style={styles.manipulatedGroupTitle}>VIA {manipulatedPrescription.productDetails.route.toUpperCase()}</Text>
-              <View style={styles.manipulatedListContainer}>
-                {manipulatedPrescription.formulaComponents.map((comp) => (
-                  <View key={comp.id} style={styles.manipulatedListItem}>
-                    <View style={styles.manipulatedBullet} /> {/* Bullet point como View */}
-                    <Text style={styles.manipulatedItemName}>{comp.name}</Text>
-                    <View style={styles.manipulatedDottedLine} />
-                    <Text style={styles.manipulatedDosage}>{comp.dosageQuantity} {getLongUnitAbbreviation(comp.dosageUnit)}</Text>
-                  </View>
-                ))}
-                {manipulatedPrescription.vehicleExcipient && (
-                  <View style={styles.manipulatedListItem}>
-                    <View style={styles.manipulatedBullet} /> {/* Bullet point como View */}
-                    <Text style={styles.manipulatedItemName}>{manipulatedPrescription.vehicleExcipient.type} q.s.p.</Text>
-                    <View style={styles.manipulatedDottedLine} />
-                    <Text style={styles.manipulatedDosage}>{manipulatedPrescription.vehicleExcipient.quantity} {getLongUnitAbbreviation(manipulatedPrescription.vehicleExcipient.unit)}</Text>
-                  </View>
-                )}
+              <View style={styles.centeringWrapper}>
+                <View style={styles.manipulatedListContainer}>
+                  {manipulatedPrescription.formulaComponents.map((comp) => (
+                    <View key={comp.id} style={styles.manipulatedListItem}>
+                      <View style={styles.manipulatedBullet} /> {/* Bullet point como View */}
+                      <Text style={styles.manipulatedItemName}>{comp.name}</Text>
+                      <View style={styles.manipulatedDottedLine} />
+                      <Text style={styles.manipulatedDosage}>{comp.dosageQuantity} {getLongUnitAbbreviation(comp.dosageUnit)}</Text>
+                    </View>
+                  ))}
+                  {manipulatedPrescription.vehicleExcipient && (
+                    <View style={styles.manipulatedListItem}>
+                      <View style={styles.manipulatedBullet} /> {/* Bullet point como View */}
+                      <Text style={styles.manipulatedItemName}>{manipulatedPrescription.vehicleExcipient.type} q.s.p.</Text>
+                      <View style={styles.manipulatedDottedLine} />
+                      <Text style={styles.manipulatedDosage}>{manipulatedPrescription.vehicleExcipient.quantity} {getLongUnitAbbreviation(manipulatedPrescription.vehicleExcipient.unit)}</Text>
+                    </View>
+                  )}
+                </View>
               </View>
 
               <Text style={styles.manipulatedInstructionsTitle}>Instruções de uso:</Text>
