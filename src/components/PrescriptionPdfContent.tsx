@@ -57,7 +57,7 @@ const styles = StyleSheet.create({
     textAlign: 'right',
     fontSize: 9,
     color: '#333',
-    marginBottom: 10, // Espaçamento abaixo das vias
+    // Removido marginBottom para melhor alinhamento no novo layout
   },
   infoSectionContainer: {
     flexDirection: "row",
@@ -84,7 +84,8 @@ const styles = StyleSheet.create({
     borderColor: "#ddd",
     borderRadius: 5,
     padding: 10,
-    marginBottom: 20,
+    marginBottom: 10, // Reduzido para aproximar
+    marginTop: 10, // Adicionado para dar um pequeno espaçamento após o bloco superior
   },
   patientInfoControlledTitle: {
     fontSize: 11,
@@ -235,7 +236,7 @@ const styles = StyleSheet.create({
     textAlign: "center",
   },
   controlledPrescriptionHeader: {
-    marginBottom: 10, // Reduzido para compactar
+    marginBottom: 0, // Removido marginBottom para aproximar
     paddingBottom: 10,
     borderBottomWidth: 1,
     borderBottomColor: "#eee",
@@ -248,13 +249,19 @@ const styles = StyleSheet.create({
     color: "#333",
     marginBottom: 15,
   },
+  controlledHeaderDetails: { // Novo estilo para alinhar emitente e vias
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'flex-start',
+    marginBottom: 10, // Espaçamento entre este bloco e o próximo
+  },
   issuerVetCard: {
     borderWidth: 1,
     borderColor: "#ddd",
     borderRadius: 5,
     padding: 10,
-    marginBottom: 20,
     width: '48%', // Ocupa metade da largura
+    // Removido marginBottom para melhor alinhamento no novo layout
   },
   issuerVetTitle: {
     fontSize: 11,
@@ -399,26 +406,34 @@ export const PrescriptionPdfContent = ({
         {prescriptionType === 'controlled' ? (
           <View style={styles.controlledPrescriptionHeader}>
             <Text style={styles.controlledPrescriptionTitle}>RECEITUÁRIO DE CONTROLE ESPECIAL</Text>
-            <View style={styles.viaTextContainer}>
-              <Text>1.ª VIA - FARMÁCIA</Text>
-              <Text>2.ª VIA - PACIENTE</Text>
+            {/* Novo contêiner para alinhar emitente e vias */}
+            <View style={styles.controlledHeaderDetails}>
+              <View style={styles.issuerVetCard}>
+                <Text style={styles.issuerVetTitle}>Emitente (Veterinário)</Text>
+                <Text style={styles.issuerVetText}>Nome: {mockUserSettings.signatureText}</Text>
+                <Text style={styles.issuerVetText}>CRMV: {mockUserSettings.userCrmv}</Text>
+                <Text style={styles.issuerVetText}>Registro MAPA: {mockUserSettings.userMapaRegistration}</Text>
+              </View>
+              <View style={styles.viaTextContainer}>
+                <Text>1.ª VIA - FARMÁCIA</Text>
+                <Text>2.ª VIA - PACIENTE</Text>
+              </View>
             </View>
           </View>
         ) : (
           <Text style={styles.mainTitle}>Receita Simples</Text>
         )}
 
+        {/* Informações do Paciente/Proprietário para receita controlada */}
         {prescriptionType === 'controlled' ? (
-          <View style={styles.infoSectionContainer}>
-            <View style={styles.issuerVetCard}>
-              <Text style={styles.issuerVetTitle}>Emitente (Veterinário)</Text>
-              <Text style={styles.issuerVetText}>Nome: {mockUserSettings.signatureText}</Text>
-              <Text style={styles.issuerVetText}>CRMV: {mockUserSettings.userCrmv}</Text>
-              <Text style={styles.issuerVetText}>Registro MAPA: {mockUserSettings.userMapaRegistration}</Text>
-            </View>
-            {/* O painel em branco foi removido */}
+          <View style={styles.patientInfoControlled}>
+            <Text style={styles.patientInfoControlledTitle}>Informações do Paciente/Proprietário</Text>
+            <Text style={styles.patientInfoControlledText}>Paciente: {animalName}</Text>
+            <Text style={styles.patientInfoControlledText}>Proprietário: {tutorName}</Text>
+            <Text style={styles.patientInfoControlledText}>Endereço: {tutorAddress || "Não informado"}</Text>
           </View>
         ) : (
+          // Informações do Animal e Tutor para receita simples
           <View style={styles.infoSectionContainer}>
             <View style={styles.infoCard}>
               <Text style={styles.infoTitle}>Animal</Text>
@@ -433,15 +448,6 @@ export const PrescriptionPdfContent = ({
             </View>
           </View>
         )}
-
-        {prescriptionType === 'controlled' ? (
-          <View style={styles.patientInfoControlled}>
-            <Text style={styles.patientInfoControlledTitle}>Informações do Paciente/Proprietário</Text>
-            <Text style={styles.patientInfoControlledText}>Paciente: {animalName}</Text>
-            <Text style={styles.patientInfoControlledText}>Proprietário: {tutorName}</Text>
-            <Text style={styles.patientInfoControlledText}>Endereço: {tutorAddress || "Não informado"}</Text>
-          </View>
-        ) : null}
 
         {Object.keys(groupedMedications).map((useType) => (
           <View key={useType}>
