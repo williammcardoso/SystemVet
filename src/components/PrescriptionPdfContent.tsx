@@ -3,12 +3,12 @@ import { Document, Page, View, Text, StyleSheet, Font } from "@react-pdf/rendere
 import { MedicationData } from "@/types/medication";
 import { mockCompanySettings, mockUserSettings } from "@/mockData/settings";
 
-// Register Roboto font with regular and bold weights using direct .ttf links from GitHub
+// Register Roboto font with regular and bold weights using local files with correct paths
 Font.register({
   family: "Roboto",
   fonts: [
-    { src: "https://github.com/google/fonts/raw/main/apache/roboto/Roboto-Regular.ttf", fontWeight: 400, format: 'truetype' }, // Roboto Regular
-    { src: "https://github.com/google/fonts/raw/main/apache/roboto/Roboto-Bold.ttf", fontWeight: 700, format: 'truetype' },   // Roboto Bold
+    { src: '/fonts/Roboto-Regular.ttf', fontWeight: 400, format: 'truetype' }, // Caminho correto para a fonte local
+    { src: '/fonts/Roboto-Bold.ttf', fontWeight: 700, format: 'truetype' },   // Caminho correto para a fonte local
   ],
 });
 
