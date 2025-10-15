@@ -21,14 +21,14 @@ const formatDateToPortuguese = (date: Date) => {
   return formattedDate.toUpperCase();
 };
 
-// Helper para formatar unidades para o PDF (formato longo)
+// Helper para formatar unidades para o PDF (formato abreviado)
 const getLongUnitAbbreviation = (unit: string): string => {
   switch (unit) {
-    case "Grama (g)": return "Grama (g)";
-    case "Miligrama (mg)": return "Miligrama (mg)";
-    case "Mililitro (mL)": return "Mililitro (mL)";
-    case "Micrograma (mcg)": return "Micrograma (mcg)";
-    case "Unidade(s)": return "Unidade"; // No PDF, volta para 'Unidade' sem o '(s)'
+    case "Grama (g)": return "g";
+    case "Miligrama (mg)": return "mg";
+    case "Mililitro (mL)": return "mL";
+    case "Micrograma (mcg)": return "mcg";
+    case "Unidade(s)": return "un";
     case "%": return "%";
     case "UFC": return "UFC";
     case "UFC/g": return "UFC/g";
@@ -164,12 +164,12 @@ const getDynamicStyles = (isCompactSimplePrescription: boolean, prescriptionType
     marginBottom: 5,
   },
   medicationNumber: {
-    fontSize: isCompactSimplePrescription ? 9 : 10, // Diminuído
+    fontSize: isCompactSimplePrescription ? 8 : 9, // Diminuído novamente
     marginRight: 5,
     width: 15,
   },
   medicationNameConcentration: {
-    fontSize: isCompactSimplePrescription ? 9 : 10, // Diminuído
+    fontSize: isCompactSimplePrescription ? 8 : 9, // Diminuído novamente
     fontWeight: "bold",
     flexShrink: 1,
   },
@@ -206,13 +206,13 @@ const getDynamicStyles = (isCompactSimplePrescription: boolean, prescriptionType
     borderColor: "#aaa",
   },
   medicationInstructions: {
-    fontSize: isCompactSimplePrescription ? 8 : 9, // Diminuído
+    fontSize: isCompactSimplePrescription ? 8 : 9, // Diminuído novamente
     color: "#444",
     marginLeft: 20,
     lineHeight: isCompactSimplePrescription ? 1.3 : 1.4,
   },
   medicationObservations: {
-    fontSize: isCompactSimplePrescription ? 7 : 8, // Diminuído
+    fontSize: isCompactSimplePrescription ? 7 : 8, // Diminuído novamente
     color: "#777",
     marginLeft: 20,
     marginTop: 3,
@@ -453,7 +453,7 @@ const getDynamicStyles = (isCompactSimplePrescription: boolean, prescriptionType
     fontWeight: "bold",
   },
   manipulatedItemName: {
-    fontSize: 12,
+    fontSize: 10, // Diminuído
     flexShrink: 1,
     fontWeight: "bold",
   },
@@ -463,16 +463,16 @@ const getDynamicStyles = (isCompactSimplePrescription: boolean, prescriptionType
     borderStyle: "dotted",
     flexGrow: 1,
     height: 1,
-    marginHorizontal: 8, // Ajustado para um pouco mais de espaço
+    marginHorizontal: 5, // Ajustado para encurtar a linha e aproximar a dosagem
   },
   manipulatedDosage: {
-    fontSize: 12,
+    fontSize: 10, // Diminuído
     flexShrink: 0,
     fontWeight: "bold",
   },
   manipulatedInstructionsTitle: {
     fontSize: 11,
-    fontWeight: "bold", // Alterado para negrito
+    fontWeight: "bold", // Confirmado como negrito
     marginTop: 10,
     marginBottom: 5,
     marginLeft: 10,
