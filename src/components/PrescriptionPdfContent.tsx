@@ -3,17 +3,16 @@ import { Document, Page, View, Text, StyleSheet, Font } from "@react-pdf/rendere
 import { MedicationData } from "@/types/medication";
 import { mockCompanySettings, mockUserSettings } from "@/mockData/settings";
 
-// Importando as fontes diretamente para que o Vite as processe corretamente
-// Ajustado o caminho para ser relativo à raiz do servidor (sem /public)
-import ExoRegular from '/fonts/Exo-Regular.ttf';
-import ExoBold from '/fonts/Exo-Bold.ttf';
+// Removendo as importações diretas dos arquivos .ttf
+// import ExoRegular from '/fonts/Exo-Regular.ttf';
+// import ExoBold from '/fonts/Exo-Bold.ttf';
 
-// Registrando a fonte Exo com pesos regular e bold usando arquivos locais
+// Registrando a fonte Exo com pesos regular e bold usando caminhos de string literais
 Font.register({
   family: "Exo",
   fonts: [
-    { src: ExoRegular, fontWeight: 400, format: 'truetype' },
-    { src: ExoBold, fontWeight: 700, format: 'truetype' },
+    { src: '/fonts/Exo-Regular.ttf', fontWeight: 400, format: 'truetype' },
+    { src: '/fonts/Exo-Bold.ttf', fontWeight: 700, format: 'truetype' },
   ],
 });
 
