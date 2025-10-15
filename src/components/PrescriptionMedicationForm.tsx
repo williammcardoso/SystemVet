@@ -1,17 +1,17 @@
 "use client";
 
-import React, { useState, useEffect, useRef } from "react"; // Importar useRef
+import React, { useState, useEffect, useRef } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Switch } from "@/components/ui/switch";
-import { FaPlus, FaEdit, FaTrashAlt, FaChevronDown, FaChevronUp } from "react-icons/fa"; // Importar ícones de react-icons
-import { cn } from "@/lib/utils"; // Importar cn
-import { MedicationData } from "@/types/medication"; // Importar do novo arquivo de tipos
+import { FaPlus, FaEdit, FaTrashAlt, FaChevronDown, FaChevronUp } from "react-icons/fa";
+import { cn } from "@/lib/utils";
+import { MedicationData } from "@/types/medication";
 
-export type { MedicationData }; // Re-exportar a interface para outros módulos TypeScript
+export type { MedicationData };
 
 interface PrescriptionMedicationFormProps {
   medication: MedicationData;
@@ -48,13 +48,14 @@ const PrescriptionMedicationForm: React.FC<PrescriptionMedicationFormProps> = ({
   const [useCustomInstructions, setUseCustomInstructions] = useState<boolean>(medication.useCustomInstructions);
   const [customInstructionInput, setCustomInstructionInput] = useState<string>(
     medication.useCustomInstructions ? medication.generatedInstructions : ""
-  ); // New state for custom instruction text
+  );
   const [generalObservations, setGeneralObservations] = useState<string>(medication.generalObservations);
   const [totalQuantity, setTotalQuantity] = useState<string>(medication.totalQuantity);
   const [totalQuantityDisplay, setTotalQuantityDisplay] = useState<string>(medication.totalQuantityDisplay || "");
-  const [isCollapsed, setIsCollapsed] = useState<boolean>(medication.isCollapsed || false); // Start expanded by default for new forms
+  const [isCollapsed, setIsCollapsed] = useState<boolean>(medication.isCollapsed || false);
 
-  const useTypeRef = useRef<HTMLButtonElement>(null); // Ref para o campo Tipo de Uso
+  const useTypeRef = useRef<HTMLButtonElement>(null);
+  const customInstructionInputRef = useRef<HTMLTextAreaElement>(null); // Ref para o campo de instrução personalizada
 
   // Foco no campo Tipo de Uso quando o formulário é expandido (novo ou editado)
   useEffect(() => {
@@ -63,7 +64,13 @@ const PrescriptionMedicationForm: React.FC<PrescriptionMedicationFormProps> = ({
     }
   }, [isCollapsed]);
 
-  // Função para gerar as instruções automaticamente
+  // Foco no campo de instrução personalizada quando o switch é ativado
+  useEffect(() => {
+    if (useCustomInstructions && customInstructionInputRef.current) {
+      customInstructionInputRef.current.focus();
+    }
+  }, [useCustomInstructions]);
+
   const generateAutoInstructions = () => {
     let instructions = "";
     const doseText = dosePerAdministration.trim();
@@ -71,7 +78,6 @@ const PrescriptionMedicationForm: React.FC<PrescriptionMedicationFormProps> = ({
     const freqText = frequency === "Outro" && customFrequency.trim() ? customFrequency.trim() : frequency.trim();
     const periodText = period === "Outro" && customPeriod.trim() ? customPeriod.trim() : period.trim();
 
-    // Ensure formText is lowercase for the instruction, but keep original for display if needed elsewhere
     const displayFormText = formText.toLowerCase(); 
     const pluralFormText = (displayFormText.includes("comprimido") || displayFormText.includes("cápsula"))
         ? `${displayFormText}(s)`
@@ -90,11 +96,10 @@ const PrescriptionMedicationForm: React.FC<PrescriptionMedicationFormProps> = ({
   };
 
   useEffect(() => {
-    // Calculate total quantity (simple example, can be more complex)
     let calculatedQuantity = 0;
     const doseNum = parseFloat(dosePerAdministration);
     const periodValue = period === "Outro" && customPeriod.trim() ? customPeriod.trim() : period.trim();
-    const periodNum = parseFloat(periodValue.split(' ')[0]); // e.g., "7 dias" -> 7
+    const periodNum = parseFloat(periodValue.split(' ')[0]);
 
     if (!isNaN(doseNum) && !isNaN(periodNum)) {
       let freqMultiplier = 1;
@@ -107,19 +112,17 @@ const PrescriptionMedicationForm: React.FC<PrescriptionMedicationFormProps> = ({
     }
     setTotalQuantity(calculatedQuantity > 0 ? calculatedQuantity.toString() : "");
 
-    // Format total quantity for display in PDF
     let formattedTotalQuantity = "";
     if (calculatedQuantity > 0) {
       let formUnit = (pharmaceuticalForm === "Outro" && customPharmaceuticalForm.trim()) ? customPharmaceuticalForm.trim() : pharmaceuticalForm.trim();
-      formUnit = formUnit.toLowerCase(); // Ensure lowercase for unit
+      formUnit = formUnit.toLowerCase();
       
-      // Simple pluralization logic
       if (formUnit.includes("comprimido") || formUnit.includes("cápsula") || formUnit.includes("gota") || formUnit.includes("aplicacao")) {
         formattedTotalQuantity = `${calculatedQuantity} ${formUnit}(s)`;
       } else if (formUnit.includes("ml")) {
         formattedTotalQuantity = `${calculatedQuantity} mL`;
       } else {
-        formattedTotalQuantity = `${calculatedQuantity} ${formUnit}`; // Fallback for other units
+        formattedTotalQuantity = `${calculatedQuantity} ${formUnit}`;
       }
     }
     setTotalQuantityDisplay(formattedTotalQuantity);
@@ -131,14 +134,14 @@ const PrescriptionMedicationForm: React.FC<PrescriptionMedicationFormProps> = ({
       !useType ||
       !pharmacyType ||
       !medicationName.trim() ||
-      (!useCustomInstructions && (!pharmaceuticalForm || !dosePerAdministration.trim() || !frequency || !period)) || // Validate auto-generated fields
-      (useCustomInstructions && !customInstructionInput.trim()) // Custom instruction is required if enabled
+      (!useCustomInstructions && (!pharmaceuticalForm || !dosePerAdministration.trim() || !frequency || !period)) ||
+      (useCustomInstructions && !customInstructionInput.trim())
     ) {
       alert("Por favor, preencha todos os campos obrigatórios.");
       return;
     }
 
-    const currentAutoGeneratedInstructions = generateAutoInstructions(); // Gerar instruções aqui
+    const currentAutoGeneratedInstructions = generateAutoInstructions();
 
     const updatedMedication: MedicationData = {
       ...medication,
@@ -154,23 +157,23 @@ const PrescriptionMedicationForm: React.FC<PrescriptionMedicationFormProps> = ({
       period: useCustomInstructions ? "" : (period === "Outro" ? customPeriod.trim() : period),
       customPeriod: useCustomInstructions ? undefined : (period === "Outro" ? customPeriod.trim() : undefined),
       useCustomInstructions,
-      generatedInstructions: useCustomInstructions ? customInstructionInput.trim() : currentAutoGeneratedInstructions, // Usar as instruções geradas
+      generatedInstructions: useCustomInstructions ? customInstructionInput.trim() : currentAutoGeneratedInstructions,
       generalObservations: generalObservations.trim(),
-      totalQuantity: useCustomInstructions ? "" : totalQuantity, // Clear if custom instructions are used
-      totalQuantityDisplay: useCustomInstructions ? "" : totalQuantityDisplay, // Clear if custom instructions are used
-      isCollapsed: true, // Collapse after saving
+      totalQuantity: useCustomInstructions ? "" : totalQuantity,
+      totalQuantityDisplay: useCustomInstructions ? "" : totalQuantityDisplay,
+      isCollapsed: true,
     };
     onSave(updatedMedication);
-    setIsCollapsed(true); // Collapse after saving
+    setIsCollapsed(true);
   };
 
   const handleEdit = () => {
-    setIsCollapsed(false); // Expand to edit
+    setIsCollapsed(false);
   };
 
   const displayMedicationName = medicationName.trim() || "Medicamento sem nome";
   const displayPharmacyType = pharmacyType === "Farmácia Veterinária" ? "Vet" : "Humana";
-  const currentAutoGeneratedInstructionsForDisplay = generateAutoInstructions(); // Gerar para exibição
+  const currentAutoGeneratedInstructionsForDisplay = generateAutoInstructions();
 
   return (
     <div className="border rounded-lg p-4 space-y-4 bg-white dark:bg-gray-800 shadow-sm">
@@ -265,6 +268,7 @@ const PrescriptionMedicationForm: React.FC<PrescriptionMedicationFormProps> = ({
             <div className="space-y-2 mt-4">
               <Label htmlFor={`customInstructionInput-${medication.id}`}>Instrução Personalizada *</Label>
               <Textarea
+                ref={customInstructionInputRef} // Adicionando a ref aqui
                 id={`customInstructionInput-${medication.id}`}
                 placeholder="Digite a instrução de uso personalizada..."
                 rows={3}
@@ -376,7 +380,6 @@ const PrescriptionMedicationForm: React.FC<PrescriptionMedicationFormProps> = ({
             </>
           )}
           
-          {/* O switch foi movido para cá, após os blocos condicionais */}
           <div className="flex items-center space-x-2 mt-4">
             <Switch
               id={`custom-instructions-${medication.id}`}
