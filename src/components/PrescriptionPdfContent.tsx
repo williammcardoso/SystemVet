@@ -3,19 +3,19 @@ import { Document, Page, View, Text, StyleSheet, Font } from "@react-pdf/rendere
 import { MedicationData } from "@/types/medication";
 import { mockCompanySettings, mockUserSettings } from "@/mockData/settings";
 
-// Register Roboto font with regular and bold weights using local files with correct paths
-Font.register({
-  family: "Roboto",
-  fonts: [
-    { src: '/fonts/Roboto-Regular.ttf', fontWeight: 400, format: 'truetype' }, // Caminho correto para a fonte local
-    { src: '/fonts/Roboto-Bold.ttf', fontWeight: 700, format: 'truetype' },   // Caminho correto para a fonte local
-  ],
-});
+// Removendo o registro de fontes personalizadas para usar as fontes padrão do react-pdf/renderer
+// Font.register({
+//   family: "Roboto",
+//   fonts: [
+//     { src: '/fonts/Roboto-Regular.ttf', fontWeight: 400, format: 'truetype' },
+//     { src: '/fonts/Roboto-Bold.ttf', fontWeight: 700, format: 'truetype' },
+//   ],
+// });
 
 const styles = StyleSheet.create({
   page: {
     padding: 30,
-    fontFamily: "Roboto",
+    fontFamily: "Times-Roman", // Alterado para Times-Roman para teste
     fontSize: 10,
     color: "#333",
   },
@@ -48,7 +48,7 @@ const styles = StyleSheet.create({
   mainTitle: {
     fontSize: 20,
     textAlign: "center",
-    fontFamily: "Roboto",
+    fontFamily: "Times-Bold", // Usando Times-Bold para o título principal
     fontWeight: "bold",
     marginBottom: 20,
   },
@@ -73,7 +73,6 @@ const styles = StyleSheet.create({
   infoTitle: {
     fontSize: 11,
     fontWeight: "bold",
-    marginBottom: 5,
   },
   infoText: {
     fontSize: 10,
@@ -90,6 +89,7 @@ const styles = StyleSheet.create({
     fontSize: 11,
     fontWeight: "bold",
     marginBottom: 5,
+    color: "#333",
   },
   patientInfoControlledText: {
     fontSize: 10,
@@ -242,7 +242,7 @@ const styles = StyleSheet.create({
   controlledPrescriptionTitle: {
     fontSize: 22,
     textAlign: "center",
-    fontFamily: "Roboto",
+    fontFamily: "Times-Bold", // Usando Times-Bold para o título
     fontWeight: "bold",
     color: "#333",
     marginBottom: 15,
