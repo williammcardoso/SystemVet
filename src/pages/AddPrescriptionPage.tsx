@@ -1,18 +1,19 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { Link, useParams, useNavigate, useSearchParams } from "react-router-dom"; // Importar useSearchParams
-import { FaArrowLeft, FaPlus, FaTimes, FaEye, FaSave, FaPrint, FaDownload, FaClipboardList } from "react-icons/fa"; // Importar ícones de react-icons
+import { Link, useParams, useNavigate, useSearchParams } from "react-router-dom";
+import { FaArrowLeft, FaPlus, FaTimes, FaEye, FaSave, FaPrint, FaDownload, FaClipboardList } from "react-icons/fa";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
-import { Input } from "@/components/ui/input"; // Importar Input
+import { Input } from "@/components/ui/input";
 import PrescriptionMedicationForm, { MedicationData } from "@/components/PrescriptionMedicationForm";
+import PrescriptionManipulatedForm from "@/components/PrescriptionManipulatedForm"; // Importar o novo componente
 import { toast } from "sonner";
 import { pdf } from "@react-pdf/renderer";
 import { PrescriptionPdfContent } from "@/components/PrescriptionPdfContent";
-import { PrescriptionEntry } from "@/types/medication";
+import { PrescriptionEntry, ManipulatedPrescriptionData } from "@/types/medication"; // Importar ManipulatedPrescriptionData
 import { mockPrescriptions } from "@/mockData/prescriptions";
 import {
   AlertDialog,
@@ -23,7 +24,7 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-} from "@/components/ui/alert-dialog"; // Importar AlertDialog
+} from "@/components/ui/alert-dialog";
 
 // Mock data para animais e clientes (para exibir informações no cabeçalho)
 interface Animal {
@@ -36,7 +37,7 @@ interface Animal {
 interface Client {
   id: string;
   name: string;
-  address: string; // Adicionado endereço para o tutor
+  address: string;
   animals: Animal[];
 }
 
@@ -71,12 +72,15 @@ const AddPrescriptionPage = () => {
   const client = mockClients.find(c => c.id === clientId);
   const animal = client?.animals.find(a => a.id === animalId);
 
+  // Estados para Receita Simples/Controlada
   const [currentPrescriptionMedications, setCurrentPrescriptionMedications] = useState<MedicationData[]>([]);
   const [currentPrescriptionGeneralObservations, setCurrentPrescriptionGeneralObservations] = useState<string>("");
   const [treatmentDescription, setTreatmentDescription] = useState<string>("");
 
+  // Estados para Receita Manipulada
+  const [manipulatedPrescriptionData, setManipulatedPrescriptionData] = useState<ManipulatedPrescriptionData | undefined>(undefined);
+
   // Estados para dados do farmacêutico (NÃO APARECEM NO FORMULÁRIO, APENAS PARA O PDF)
-  // Inicializados com dados mock fixos, como no exemplo da imagem
   const [pharmacistName] = useState<string>("Farmacêutico(a) Responsável");
   const [pharmacistCpf] = useState<string>("CPF: 000.000.000-00");
   const [pharmacistCfr] = useState<string>("CRF: 00000");
@@ -90,25 +94,31 @@ const AddPrescriptionPage = () => {
 
   useEffect(() => {
     if (prescriptionId) {
-      // Load existing prescription data if in edit mode
       const existingPrescription = mockPrescriptions.find(p => p.id === prescriptionId);
       if (existingPrescription) {
-        setCurrentPrescriptionMedications(existingPrescription.medications.map(med => ({ ...med, isCollapsed: true }))); // Collapse existing meds
-        setCurrentPrescriptionGeneralObservations(existingPrescription.instructions);
         setTreatmentDescription(existingPrescription.treatmentDescription || "");
 
-        // Para receitas controladas, os dados do farmacêutico não são carregados do mock,
-        // pois não são armazenados. Eles seriam preenchidos novamente pelo usuário.
-        if (existingPrescription.type === 'controlled') {
-          setAllowMultipleMedications(existingPrescription.medications.length > 1); // Se já tem mais de um, permite
+        if (existingPrescription.type === 'manipulated' && existingPrescription.manipulatedPrescription) {
+          setManipulatedPrescriptionData(existingPrescription.manipulatedPrescription);
+          setCurrentPrescriptionGeneralObservations(existingPrescription.manipulatedPrescription.generalObservations); // Usar as observações da manipulada
+        } else if (existingPrescription.medications) {
+          setCurrentPrescriptionMedications(existingPrescription.medications.map(med => ({ ...med, isCollapsed: true })));
+          setCurrentPrescriptionGeneralObservations(existingPrescription.instructions); // Usar as observações da simples/controlada
+          if (existingPrescription.type === 'controlled') {
+            setAllowMultipleMedications(existingPrescription.medications.length > 1);
+          }
         }
       } else {
         toast.error("Receita não encontrada.");
         navigate(`/clients/${clientId}/animals/${animalId}/record`);
       }
     } else {
-      // Reset allowMultipleMedications for new prescriptions
       setAllowMultipleMedications(false);
+      // Reset manipulated data for new prescriptions
+      setManipulatedPrescriptionData(undefined);
+      setCurrentPrescriptionMedications([]);
+      setCurrentPrescriptionGeneralObservations("");
+      setTreatmentDescription("");
     }
   }, [prescriptionId, clientId, animalId, navigate, prescriptionType]);
 
@@ -150,7 +160,7 @@ const AddPrescriptionPage = () => {
       generalObservations: "",
       totalQuantity: "",
       totalQuantityDisplay: "",
-      isCollapsed: false, // New medications start expanded
+      isCollapsed: false,
     };
     setCurrentPrescriptionMedications((prev) => [...prev, newMedication]);
   };
@@ -158,7 +168,7 @@ const AddPrescriptionPage = () => {
   const handleConfirmAddMultipleMedications = () => {
     setAllowMultipleMedications(true);
     setIsControlledMedicationWarningOpen(false);
-    handleAddMedication(); // Add the medication after confirmation
+    handleAddMedication();
   };
 
   const handleSaveMedication = (updatedMedication: MedicationData) => {
@@ -181,39 +191,57 @@ const AddPrescriptionPage = () => {
     );
   };
 
+  const handleSaveManipulatedPrescription = (data: ManipulatedPrescriptionData) => {
+    setManipulatedPrescriptionData(data);
+    setCurrentPrescriptionGeneralObservations(data.generalObservations); // Sincronizar observações gerais
+    toast.success("Dados da receita manipulada salvos no formulário!");
+  };
+
   const handleSavePrescription = () => {
-    if (currentPrescriptionMedications.length === 0) {
+    if (prescriptionType !== 'manipulated' && currentPrescriptionMedications.length === 0) {
       toast.error("Adicione pelo menos um medicamento à receita.");
       return;
     }
+    if (prescriptionType === 'manipulated' && !manipulatedPrescriptionData) {
+      toast.error("Preencha os dados da receita manipulada antes de salvar.");
+      return;
+    }
 
-    // Não há validação de dados do farmacêutico aqui, pois eles não são inseridos pelo usuário.
+    let newPrescription: PrescriptionEntry;
 
-    // Generate a summary medication name for the table display
-    const summaryMedicationName = currentPrescriptionMedications
-      .map(med => med.medicationName)
-      .filter(name => name.trim() !== "")
-      .join(", ");
+    if (prescriptionType === 'manipulated' && manipulatedPrescriptionData) {
+      newPrescription = {
+        id: prescriptionId || `rx-${Date.now()}`,
+        date: new Date().toISOString().split('T')[0],
+        medicationName: manipulatedPrescriptionData.formulaComponents.map(c => c.name).join(", ") || "Receita Manipulada",
+        treatmentDescription: treatmentDescription.trim() || undefined,
+        instructions: manipulatedPrescriptionData.generalObservations,
+        type: prescriptionType,
+        manipulatedPrescription: manipulatedPrescriptionData,
+      };
+    } else {
+      const summaryMedicationName = currentPrescriptionMedications
+        .map(med => med.medicationName)
+        .filter(name => name.trim() !== "")
+        .join(", ");
 
-    const newPrescription: PrescriptionEntry = {
-      id: prescriptionId || `rx-${Date.now()}`, // Use existing ID if editing, otherwise new ID
-      date: new Date().toISOString().split('T')[0],
-      medicationName: summaryMedicationName || "Receita sem medicamentos",
-      treatmentDescription: treatmentDescription.trim() || undefined,
-      instructions: currentPrescriptionGeneralObservations,
-      type: prescriptionType, // Salvar o tipo de receita
-      // Dados do farmacêutico não são salvos na PrescriptionEntry
-      medications: currentPrescriptionMedications.map(med => ({ ...med, isCollapsed: true })), // Ensure all are collapsed when saved
-    };
+      newPrescription = {
+        id: prescriptionId || `rx-${Date.now()}`,
+        date: new Date().toISOString().split('T')[0],
+        medicationName: summaryMedicationName || "Receita sem medicamentos",
+        treatmentDescription: treatmentDescription.trim() || undefined,
+        instructions: currentPrescriptionGeneralObservations,
+        type: prescriptionType,
+        medications: currentPrescriptionMedications.map(med => ({ ...med, isCollapsed: true })),
+      };
+    }
 
     if (prescriptionId) {
-      // Update existing prescription
       const index = mockPrescriptions.findIndex(p => p.id === prescriptionId);
       if (index !== -1) {
         mockPrescriptions[index] = newPrescription;
       }
     } else {
-      // Add new prescription
       mockPrescriptions.push(newPrescription);
     }
 
@@ -222,13 +250,16 @@ const AddPrescriptionPage = () => {
   };
 
   const handlePrintPrescription = async () => {
-    if (currentPrescriptionMedications.length === 0) {
+    if (prescriptionType !== 'manipulated' && currentPrescriptionMedications.length === 0) {
       toast.error("Adicione pelo menos um medicamento para imprimir a receita.");
+      return;
+    }
+    if (prescriptionType === 'manipulated' && !manipulatedPrescriptionData) {
+      toast.error("Preencha os dados da receita manipulada antes de imprimir.");
       return;
     }
 
     try {
-      // Gerar o PDF como um Blob, chamando a função PrescriptionPdfContent
       const blob = await pdf(
         PrescriptionPdfContent({
           animalName: animal.name,
@@ -236,22 +267,22 @@ const AddPrescriptionPage = () => {
           animalSpecies: animal.species,
           tutorName: client.name,
           tutorAddress: client.address,
-          medications: currentPrescriptionMedications,
+          medications: currentPrescriptionMedications, // Passar vazio se for manipulada
           generalObservations: currentPrescriptionGeneralObservations,
           showElectronicSignatureText: false,
-          prescriptionType: prescriptionType, // Passar o tipo de receita
+          prescriptionType: prescriptionType,
           pharmacistName: pharmacistName,
           pharmacistCpf: pharmacistCpf,
           pharmacistCfr: pharmacistCfr,
           pharmacistAddress: pharmacistAddress,
           pharmacistPhone: pharmacistPhone,
+          manipulatedPrescription: manipulatedPrescriptionData, // Passar dados da manipulada
         })
       ).toBlob();
 
-      // Criar uma URL para o Blob e abrir em uma nova aba
       const url = URL.createObjectURL(blob);
       window.open(url, '_blank');
-      URL.revokeObjectURL(url); // Limpar a URL do Blob após a abertura
+      URL.revokeObjectURL(url);
     } catch (error) {
       console.error("Erro ao imprimir a receita:", error);
       toast.error("Erro ao gerar PDF para impressão. Verifique o console para detalhes.");
@@ -259,8 +290,12 @@ const AddPrescriptionPage = () => {
   };
 
   const handleSavePdf = async () => {
-    if (currentPrescriptionMedications.length === 0) {
+    if (prescriptionType !== 'manipulated' && currentPrescriptionMedications.length === 0) {
       toast.error("Adicione pelo menos um medicamento para salvar a receita em PDF.");
+      return;
+    }
+    if (prescriptionType === 'manipulated' && !manipulatedPrescriptionData) {
+      toast.error("Preencha os dados da receita manipulada antes de salvar em PDF.");
       return;
     }
 
@@ -272,19 +307,19 @@ const AddPrescriptionPage = () => {
           animalSpecies: animal.species,
           tutorName: client.name,
           tutorAddress: client.address,
-          medications: currentPrescriptionMedications,
+          medications: currentPrescriptionMedications, // Passar vazio se for manipulada
           generalObservations: currentPrescriptionGeneralObservations,
           showElectronicSignatureText: true,
-          prescriptionType: prescriptionType, // Passar o tipo de receita
+          prescriptionType: prescriptionType,
           pharmacistName: pharmacistName,
           pharmacistCpf: pharmacistCpf,
           pharmacistCfr: pharmacistCfr,
           pharmacistAddress: pharmacistAddress,
           pharmacistPhone: pharmacistPhone,
+          manipulatedPrescription: manipulatedPrescriptionData, // Passar dados da manipulada
         })
       ).toBlob();
 
-      // Criar um link de download e clicar nele
       const url = URL.createObjectURL(blob);
       const link = document.createElement('a');
       link.href = url;
@@ -357,45 +392,55 @@ const AddPrescriptionPage = () => {
             </CardContent>
           </Card>
 
-          <Card className="mb-4 bg-white/90 backdrop-blur-sm border border-gray-200 dark:border-gray-700 rounded-2xl shadow-[0_1px_3px_rgba(0,0,0,0.05)]">
-            <CardHeader>
-              <CardTitle>Medicamentos</CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              {currentPrescriptionMedications.length === 0 && (
-                <p className="text-muted-foreground">Nenhum medicamento adicionado ainda.</p>
-              )}
-              {currentPrescriptionMedications.map((med, index) => (
-                <PrescriptionMedicationForm
-                  key={med.id}
-                  medication={med}
-                  index={index}
-                  onSave={handleSaveMedication}
-                  onDelete={handleDeleteMedication}
-                  onToggleCollapse={handleToggleMedicationCollapse}
-                />
-              ))}
-              <Button onClick={handleAddMedication} className="w-full bg-gradient-to-r from-blue-500 to-indigo-500 text-white hover:from-blue-600 hover:to-indigo-600 font-semibold transition-all duration-200 shadow-md hover:shadow-lg">
-                <FaPlus className="mr-2 h-4 w-4" /> Adicionar Medicamento
-              </Button>
-            </CardContent>
-          </Card>
+          {prescriptionType === 'manipulated' ? (
+            <PrescriptionManipulatedForm
+              initialData={manipulatedPrescriptionData}
+              onSave={handleSaveManipulatedPrescription}
+            />
+          ) : (
+            <Card className="mb-4 bg-white/90 backdrop-blur-sm border border-gray-200 dark:border-gray-700 rounded-2xl shadow-[0_1px_3px_rgba(0,0,0,0.05)]">
+              <CardHeader>
+                <CardTitle>Medicamentos</CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                {currentPrescriptionMedications.length === 0 && (
+                  <p className="text-muted-foreground">Nenhum medicamento adicionado ainda.</p>
+                )}
+                {currentPrescriptionMedications.map((med, index) => (
+                  <PrescriptionMedicationForm
+                    key={med.id}
+                    medication={med}
+                    index={index}
+                    onSave={handleSaveMedication}
+                    onDelete={handleDeleteMedication}
+                    onToggleCollapse={handleToggleMedicationCollapse}
+                  />
+                ))}
+                <Button onClick={handleAddMedication} className="w-full bg-gradient-to-r from-blue-500 to-indigo-500 text-white hover:from-blue-600 hover:to-indigo-600 font-semibold transition-all duration-200 shadow-md hover:shadow-lg">
+                  <FaPlus className="mr-2 h-4 w-4" /> Adicionar Medicamento
+                </Button>
+              </CardContent>
+            </Card>
+          )}
 
-          <Card className="bg-white/90 backdrop-blur-sm border border-gray-200 dark:border-gray-700 rounded-2xl shadow-[0_1px_3px_rgba(0,0,0,0.05)]">
-            <CardHeader>
-              <CardTitle>Observações Gerais da Receita</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <Textarea
-                id="prescriptionGeneralObservations"
-                placeholder="Instruções especiais, restrições alimentares, ou outras observações para a receita..."
-                rows={5}
-                value={currentPrescriptionGeneralObservations}
-                onChange={(e) => setCurrentPrescriptionGeneralObservations(e.target.value)}
-                className="bg-white rounded-lg border-gray-200 dark:border-gray-600 focus:ring-2 focus:ring-blue-400 placeholder-[#9CA3AF] dark:placeholder-gray-500 transition-all duration-200"
-              />
-            </CardContent>
-          </Card>
+          {/* Observações Gerais da Receita (este campo será preenchido pelo estado de manipulatedPrescriptionData.generalObservations se for manipulada) */}
+          {prescriptionType !== 'manipulated' && (
+            <Card className="bg-white/90 backdrop-blur-sm border border-gray-200 dark:border-gray-700 rounded-2xl shadow-[0_1px_3px_rgba(0,0,0,0.05)]">
+              <CardHeader>
+                <CardTitle>Observações Gerais da Receita</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <Textarea
+                  id="prescriptionGeneralObservations"
+                  placeholder="Instruções especiais, restrições alimentares, ou outras observações para a receita..."
+                  rows={5}
+                  value={currentPrescriptionGeneralObservations}
+                  onChange={(e) => setCurrentPrescriptionGeneralObservations(e.target.value)}
+                  className="bg-white rounded-lg border-gray-200 dark:border-gray-600 focus:ring-2 focus:ring-blue-400 placeholder-[#9CA3AF] dark:placeholder-gray-500 transition-all duration-200"
+                />
+              </CardContent>
+            </Card>
+          )}
         </div>
       </div>
 
@@ -403,13 +448,13 @@ const AddPrescriptionPage = () => {
         <Button variant="outline" onClick={() => navigate(`/clients/${clientId}/animals/${animalId}/record`)} className="bg-white border border-gray-300 text-gray-700 hover:bg-gray-50 rounded-md transition-all duration-200 shadow-sm hover:shadow-md dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200 dark:hover:bg-gray-600">
           <FaTimes className="mr-2 h-4 w-4" /> Cancelar
         </Button>
-        <Button variant="secondary" onClick={handlePrintPrescription} disabled={currentPrescriptionMedications.length === 0} className="rounded-md bg-white border border-gray-300 text-gray-700 hover:bg-gray-50 transition-colors duration-200 shadow-sm hover:shadow-md dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200 dark:hover:bg-gray-600">
+        <Button variant="secondary" onClick={handlePrintPrescription} disabled={(prescriptionType !== 'manipulated' && currentPrescriptionMedications.length === 0) || (prescriptionType === 'manipulated' && !manipulatedPrescriptionData)} className="rounded-md bg-white border border-gray-300 text-gray-700 hover:bg-gray-50 transition-colors duration-200 shadow-sm hover:shadow-md dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200 dark:hover:bg-gray-600">
           <FaPrint className="mr-2 h-4 w-4" /> Imprimir
         </Button>
-        <Button variant="secondary" onClick={handleSavePdf} disabled={currentPrescriptionMedications.length === 0} className="rounded-md bg-white border border-gray-300 text-gray-700 hover:bg-gray-50 transition-colors duration-200 shadow-sm hover:shadow-md dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200 dark:hover:bg-gray-600">
+        <Button variant="secondary" onClick={handleSavePdf} disabled={(prescriptionType !== 'manipulated' && currentPrescriptionMedications.length === 0) || (prescriptionType === 'manipulated' && !manipulatedPrescriptionData)} className="rounded-md bg-white border border-gray-300 text-gray-700 hover:bg-gray-50 transition-colors duration-200 shadow-sm hover:shadow-md dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200 dark:hover:bg-gray-600">
           <FaDownload className="mr-2 h-4 w-4" /> Salvar PDF
         </Button>
-        <Button onClick={handleSavePrescription} disabled={currentPrescriptionMedications.length === 0} className="bg-gradient-to-r from-blue-500 to-indigo-500 text-white hover:from-blue-600 hover:to-indigo-600 rounded-md font-semibold transition-all duration-200 shadow-md hover:shadow-lg">
+        <Button onClick={handleSavePrescription} disabled={(prescriptionType !== 'manipulated' && currentPrescriptionMedications.length === 0) || (prescriptionType === 'manipulated' && !manipulatedPrescriptionData)} className="bg-gradient-to-r from-blue-500 to-indigo-500 text-white hover:from-blue-600 hover:to-indigo-600 rounded-md font-semibold transition-all duration-200 shadow-md hover:shadow-lg">
           <FaSave className="mr-2 h-4 w-4" /> Salvar Receita
         </Button>
       </div>

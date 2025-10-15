@@ -19,13 +19,59 @@ export interface MedicationData {
   isCollapsed?: boolean; // To control collapse state in the form
 }
 
+// Novas interfaces para Receita Manipulada
+export interface ManipulatedFormulaComponent {
+  id: string;
+  name: string;
+  dosageQuantity: string;
+  dosageUnit: string; // Ex: Grama (g), Miligrama (mg), Mililitro (mL)
+}
+
+export interface ManipulatedVehicleExcipient {
+  type: string; // Ex: Comprimido, Cápsula, Líquido
+  quantity: string; // Ex: "30"
+  unit: string; // Ex: %, Grama (g), Micrograma (mcg)
+}
+
+export interface ManipulatedPosologyAutomatic {
+  dosage: string;
+  measure: string; // Ex: Comprimido, Cápsula
+  frequencyValue: string; // Ex: "1"
+  frequencyUnit: string; // Ex: "Dia"
+  durationValue: string; // Ex: "5"
+  durationUnit: string; // Ex: "Dia"
+  finalDescription: string; // Auto-gerada
+}
+
+export interface ManipulatedPosologyFreeText {
+  finalDescription: string; // Texto livre
+}
+
+export type ManipulatedPosology = { type: 'automatic', data: ManipulatedPosologyAutomatic } | { type: 'freeText', data: ManipulatedPosologyFreeText };
+
+export interface ManipulatedProductDetails {
+  productType: string; // Ex: "Simples" (do sistema de origem da imagem)
+  quantity: string; // Ex: "1 unidade"
+  pharmacy: string; // Ex: "Veterinária"
+  route: string; // Ex: "Oral"
+}
+
+export interface ManipulatedPrescriptionData {
+  formulaComponents: ManipulatedFormulaComponent[];
+  vehicleExcipient?: ManipulatedVehicleExcipient;
+  posology: ManipulatedPosology;
+  productDetails: ManipulatedProductDetails;
+  generalObservations: string; // Observações gerais para a receita manipulada
+}
+
+// Atualização da PrescriptionEntry para ser um tipo de união
 export interface PrescriptionEntry {
   id: string;
   date: string;
-  medicationName: string; // Summary for the table
+  medicationName: string; // Resumo para a tabela
   treatmentDescription?: string; // Novo campo para descrição do tratamento
-  instructions: string; // General observations for the prescription
-  medications: MedicationData[]; // Full details of medications
+  instructions: string; // Observações gerais da receita (para simples/controlada)
   type: 'simple' | 'controlled' | 'manipulated'; // Novo campo para o tipo de receita
-  // Os dados do farmacêutico não serão mais armazenados aqui
+  medications?: MedicationData[]; // Detalhes completos dos medicamentos (apenas para simples/controlada)
+  manipulatedPrescription?: ManipulatedPrescriptionData; // Detalhes da receita manipulada (apenas para manipulada)
 }

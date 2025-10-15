@@ -1,6 +1,6 @@
 import React from "react";
 import { Document, Page, View, Text, StyleSheet, Font } from "@react-pdf/renderer";
-import { MedicationData } from "@/types/medication";
+import { MedicationData, ManipulatedPrescriptionData } from "@/types/medication"; // Importar ManipulatedPrescriptionData
 import { mockCompanySettings, mockUserSettings } from "@/mockData/settings";
 
 // Registrando a fonte Exo com pesos regular, bold, italic e bold-italic
@@ -27,7 +27,7 @@ interface PrescriptionPdfContentProps {
   animalSpecies: string;
   tutorName: string;
   tutorAddress: string;
-  medications: MedicationData[];
+  medications: MedicationData[]; // Para receitas simples/controladas
   generalObservations: string;
   showElectronicSignatureText: boolean;
   prescriptionType: 'simple' | 'controlled' | 'manipulated';
@@ -36,6 +36,7 @@ interface PrescriptionPdfContentProps {
   pharmacistCfr?: string;
   pharmacistAddress?: string;
   pharmacistPhone?: string;
+  manipulatedPrescription?: ManipulatedPrescriptionData; // Novo campo para dados da receita manipulada
 }
 
 // Define a threshold for when to apply compact styles for simple prescriptions
@@ -390,10 +391,28 @@ const getDynamicStyles = (isCompactSimplePrescription: boolean, prescriptionType
     fontSize: 9,
     color: "#333",
   },
-  // New style for the main content wrapper
   contentWrapper: {
-    // Conditional margin for simple prescriptions to avoid overlap with fixed footer
     marginBottom: prescriptionType === 'controlled' ? 226 : (isCompactSimplePrescription ? 100 : 120), 
+  },
+  // Estilos específicos para Receita Manipulada
+  manipulatedSectionTitle: {
+    fontSize: 13,
+    fontWeight: "bold",
+    marginTop: 15,
+    marginBottom: 10,
+    textTransform: "uppercase",
+    borderBottomWidth: 1,
+    borderBottomColor: "#000",
+    paddingBottom: 4,
+  },
+  manipulatedComponentItem: {
+    fontSize: 10,
+    marginBottom: 5,
+    marginLeft: 10,
+  },
+  manipulatedDetailItem: {
+    fontSize: 10,
+    marginBottom: 5,
   },
 });
 
@@ -402,7 +421,7 @@ export const PrescriptionPdfContent = ({
   animalName, animalId, animalSpecies, tutorName, tutorAddress,
   medications, generalObservations, showElectronicSignatureText,
   prescriptionType, pharmacistName, pharmacistCpf, pharmacistCfr,
-  pharmacistAddress, pharmacistPhone,
+  pharmacistAddress, pharmacistPhone, manipulatedPrescription,
 }: PrescriptionPdfContentProps) => {
   const groupedMedications = medications.reduce((acc: Record<string, MedicationData[]>, med) => {
     const useType = med.useType || "Outros";
@@ -415,7 +434,7 @@ export const PrescriptionPdfContent = ({
 
   // Determine if compact styles should be applied for simple prescriptions
   const isCompactSimplePrescription = prescriptionType === 'simple' && medications.length >= MEDICATION_COUNT_THRESHOLD;
-  const styles = getDynamicStyles(isCompactSimplePrescription, prescriptionType); // Pass prescriptionType to getDynamicStyles
+  const styles = getDynamicStyles(isCompactSimplePrescription, prescriptionType);
 
   // Altura estimada do identificationCardContainer (rodapé fixo)
   const IDENTIFICATION_FOOTER_HEIGHT = 166;
@@ -428,7 +447,7 @@ export const PrescriptionPdfContent = ({
   return (
     <Document>
       <Page size="A4" style={styles.page}>
-        <View style={styles.clinicHeader} fixed> {/* Tornando o cabeçalho da clínica fixo */}
+        <View style={styles.clinicHeader} fixed>
           <View style={styles.clinicInfoLeft}>
             <View>
               <Text style={styles.clinicName}>{mockCompanySettings.companyName}</Text>
@@ -460,7 +479,9 @@ export const PrescriptionPdfContent = ({
             </View>
           </View>
         ) : (
-          <Text style={styles.mainTitle}>Receita Simples</Text>
+          <Text style={styles.mainTitle}>
+            {prescriptionType === 'manipulated' ? 'Receita Manipulada' : 'Receita Simples'}
+          </Text>
         )}
 
         {/* Informações do Paciente/Proprietário */}
@@ -472,7 +493,7 @@ export const PrescriptionPdfContent = ({
             <Text style={styles.patientInfoControlledText}>Endereço: {tutorAddress || "Não informado"}</Text>
           </View>
         ) : (
-          // Informações do Animal e Tutor para receita simples
+          // Informações do Animal e Tutor para receita simples/manipulada
           <View style={styles.infoSectionContainer}>
             <View style={styles.infoCard}>
               <Text style={styles.infoTitle}>Animal</Text>
@@ -488,50 +509,114 @@ export const PrescriptionPdfContent = ({
           </View>
         )}
 
-        <View style={styles.contentWrapper}> {/* Aplicando o novo estilo de wrapper aqui */}
-          {Object.keys(groupedMedications).map((useType) => (
-            <View key={useType}>
-              <Text style={styles.groupTitle}>{useType}</Text>
-              {groupedMedications[useType].map((med, index) => (
-                <View key={med.id} style={styles.medicationItem}>
-                  <View style={styles.medicationHeaderLine}>
-                    <Text style={styles.medicationNumber}>{index + 1})</Text>
-                    <Text style={styles.medicationNameConcentration}>
-                      {(() => {
-                        const name = (med.medicationName && med.medicationName.trim()) || '';
-                        const concentration = (med.concentration && med.concentration.trim()) || '';
-                        if (name.length > 0 && concentration.length > 0) { return `${name} ${concentration}`; }
-                        else if (name.length > 0) { return name; }
-                        else if (concentration.length > 0) { return concentration; }
-                        return 'Medicamento sem nome';
-                      })()}
+        <View style={styles.contentWrapper}>
+          {prescriptionType === 'manipulated' && manipulatedPrescription ? (
+            <>
+              <Text style={styles.manipulatedSectionTitle}>Composição da Fórmula</Text>
+              {manipulatedPrescription.formulaComponents.length > 0 ? (
+                <View>
+                  {manipulatedPrescription.formulaComponents.map((comp, index) => (
+                    <Text key={comp.id} style={styles.manipulatedComponentItem}>
+                      {index + 1}) {comp.name} {comp.dosageQuantity} {comp.dosageUnit}
                     </Text>
-                    <View style={styles.lineSeparator}/>
-                    <View style={styles.badgeContainer}>
-                      {med.pharmacyType ? (<Text style={styles.pharmacyBadge}>{med.pharmacyType === "Farmácia Veterinária" ? "VET" : "HUMANA"}</Text>) : null}
-                      {med.totalQuantityDisplay ? (<Text style={styles.quantityBadge}>{med.totalQuantityDisplay}</Text>) : null}
-                    </View>
-                  </View>
-                  <Text style={styles.medicationInstructions}>
-                    {med.generatedInstructions || 'Sem instruções de uso.'}
+                  ))}
+                </View>
+              ) : (
+                <Text style={styles.manipulatedComponentItem}>Nenhum componente na fórmula.</Text>
+              )}
+
+              {manipulatedPrescription.vehicleExcipient && (
+                <>
+                  <Text style={styles.manipulatedSectionTitle}>Veículo / Excipiente</Text>
+                  <Text style={styles.manipulatedDetailItem}>
+                    Tipo: {manipulatedPrescription.vehicleExcipient.type}
                   </Text>
-                  {med.generalObservations && med.generalObservations.trim().length > 0 ? (
-                    <Text style={styles.medicationObservations}>
-                      <Text style={{ fontFamily: "Exo", fontWeight: "bold" }}>Obs.:</Text>
-                      <Text style={{ fontFamily: "Exo", fontWeight: "normal" }}> {med.generalObservations}</Text>
-                    </Text>
-                  ) : null}
+                  <Text style={styles.manipulatedDetailItem}>
+                    Quantidade: {manipulatedPrescription.vehicleExcipient.quantity} {manipulatedPrescription.vehicleExcipient.unit}
+                  </Text>
+                </>
+              )}
+
+              <Text style={styles.manipulatedSectionTitle}>Posologia</Text>
+              {manipulatedPrescription.posology.type === 'automatic' ? (
+                <Text style={styles.manipulatedDetailItem}>
+                  {manipulatedPrescription.posology.data.finalDescription || "Posologia automática não preenchida."}
+                </Text>
+              ) : (
+                <Text style={styles.manipulatedDetailItem}>
+                  {manipulatedPrescription.posology.data.finalDescription || "Posologia em texto livre não preenchida."}
+                </Text>
+              )}
+
+              <Text style={styles.manipulatedSectionTitle}>Detalhes do Produto</Text>
+              <Text style={styles.manipulatedDetailItem}>
+                Tipo de Produto: {manipulatedPrescription.productDetails.productType}
+              </Text>
+              <Text style={styles.manipulatedDetailItem}>
+                Quantidade: {manipulatedPrescription.productDetails.quantity}
+              </Text>
+              <Text style={styles.manipulatedDetailItem}>
+                Farmácia: {manipulatedPrescription.productDetails.pharmacy}
+              </Text>
+              <Text style={styles.manipulatedDetailItem}>
+                Via: {manipulatedPrescription.productDetails.route}
+              </Text>
+
+              {manipulatedPrescription.generalObservations && (
+                <View style={styles.generalObservationsSection}>
+                  <Text style={styles.generalObservationsTitle}>Observações Gerais da Receita</Text>
+                  <Text style={styles.generalObservationsText}>{manipulatedPrescription.generalObservations}</Text>
+                </View>
+              )}
+            </>
+          ) : (
+            // Conteúdo para receitas simples/controladas
+            <>
+              {Object.keys(groupedMedications).map((useType) => (
+                <View key={useType}>
+                  <Text style={styles.groupTitle}>{useType}</Text>
+                  {groupedMedications[useType].map((med, index) => (
+                    <View key={med.id} style={styles.medicationItem}>
+                      <View style={styles.medicationHeaderLine}>
+                        <Text style={styles.medicationNumber}>{index + 1})</Text>
+                        <Text style={styles.medicationNameConcentration}>
+                          {(() => {
+                            const name = (med.medicationName && med.medicationName.trim()) || '';
+                            const concentration = (med.concentration && med.concentration.trim()) || '';
+                            if (name.length > 0 && concentration.length > 0) { return `${name} ${concentration}`; }
+                            else if (name.length > 0) { return name; }
+                            else if (concentration.length > 0) { return concentration; }
+                            return 'Medicamento sem nome';
+                          })()}
+                        </Text>
+                        <View style={styles.lineSeparator}/>
+                        <View style={styles.badgeContainer}>
+                          {med.pharmacyType ? (<Text style={styles.pharmacyBadge}>{med.pharmacyType === "Farmácia Veterinária" ? "VET" : "HUMANA"}</Text>) : null}
+                          {med.totalQuantityDisplay ? (<Text style={styles.quantityBadge}>{med.totalQuantityDisplay}</Text>) : null}
+                        </View>
+                      </View>
+                      <Text style={styles.medicationInstructions}>
+                        {med.generatedInstructions || 'Sem instruções de uso.'}
+                      </Text>
+                      {med.generalObservations && med.generalObservations.trim().length > 0 ? (
+                        <Text style={styles.medicationObservations}>
+                          <Text style={{ fontFamily: "Exo", fontWeight: "bold" }}>Obs.:</Text>
+                          <Text style={{ fontFamily: "Exo", fontWeight: "normal" }}> {med.generalObservations}</Text>
+                        </Text>
+                      ) : null}
+                    </View>
+                  ))}
                 </View>
               ))}
-            </View>
-          ))}
 
-          {generalObservations ? (
-            <View style={styles.generalObservationsSection}>
-              <Text style={styles.generalObservationsTitle}>Observações Gerais da Receita</Text>
-              <Text style={styles.generalObservationsText}>{generalObservations}</Text>
-            </View>
-          ) : null}
+              {generalObservations ? (
+                <View style={styles.generalObservationsSection}>
+                  <Text style={styles.generalObservationsTitle}>Observações Gerais da Receita</Text>
+                  <Text style={styles.generalObservationsText}>{generalObservations}</Text>
+                </View>
+              ) : null}
+            </>
+          )}
         </View>
 
         {/* NOVO BLOCO: Data e Assinatura do Comprador (para Receitas Controladas, fixo na parte inferior) */}
@@ -547,7 +632,7 @@ export const PrescriptionPdfContent = ({
           </View>
         )}
 
-        {/* Rodapé para Receitas Simples (fixed) */}
+        {/* Rodapé para Receitas Simples/Manipuladas (fixed) */}
         {prescriptionType !== 'controlled' && (
           <View style={styles.footerContainer} fixed>
             <Text style={styles.vetSignatureDateText}>
