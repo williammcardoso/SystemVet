@@ -266,8 +266,8 @@ const styles = StyleSheet.create({
   identificationCardContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    position: 'absolute',
-    bottom: 30,
+    position: 'absolute', // Alterado para absolute para ser relativo à página
+    bottom: 30, // 30px do fundo da página
     left: 30,
     right: 30,
     paddingTop: 20,
@@ -333,14 +333,16 @@ const styles = StyleSheet.create({
     color: "#333",
     textAlign: 'center',
   },
-  // NOVOS ESTILOS para o bloco de Data e Assinatura do Comprador (receita controlada, in-flow)
+  // Estilos para o bloco de Data e Assinatura do Comprador (receita controlada, in-flow)
   buyerSignatureDateContainer: {
+    position: 'absolute', // Alterado para absolute
+    bottom: 206, // Posição calculada para ficar acima do rodapé de identificação
+    left: 30,
+    right: 30,
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'flex-end', // Alinha os itens pela base
-    marginTop: 30, // Espaço após observações gerais
-    marginBottom: 10, // Reduzido para 'grudar' mais na linha de separação
-    width: '100%',
+    width: 'auto', // Ajusta a largura automaticamente com left/right
   },
   buyerDateText: {
     fontSize: 10,
@@ -400,6 +402,21 @@ export const PrescriptionPdfContent = ({
   }, {});
 
   const currentDate = new Date();
+
+  // Altura estimada do identificationCardContainer (rodapé fixo)
+  // Título (11px + 5mb + 5pb + 1bw) = 22px
+  // 5 campos (10px + 5mb) = 15px * 5 = 75px
+  // Bloco do farmacêutico (20mt + 1bw + 3mb + 9px + 5mt + 10px) = 48px
+  // Total de um card: 22 + 75 + 48 = 145px
+  // identificationCardContainer: 20pt + 1bw + 145px = 166px
+  const IDENTIFICATION_FOOTER_HEIGHT = 166;
+  const PAGE_BOTTOM_PADDING = 30;
+  const GAP_ABOVE_FOOTER = 10; // Espaço entre o bloco de assinatura e o rodapé de identificação
+
+  // Posição bottom para o buyerSignatureDateContainer
+  // PAGE_BOTTOM_PADDING (30) + IDENTIFICATION_FOOTER_HEIGHT (166) + GAP_ABOVE_FOOTER (10) = 206
+  const BUYER_SIGNATURE_BOTTOM_POSITION = PAGE_BOTTOM_PADDING + IDENTIFICATION_FOOTER_HEIGHT + GAP_ABOVE_FOOTER;
+
 
   return (
     <Document>
@@ -507,9 +524,9 @@ export const PrescriptionPdfContent = ({
           </View>
         ) : null}
 
-        {/* NOVO BLOCO: Data e Assinatura do Comprador (para Receitas Controladas, in-flow) */}
+        {/* NOVO BLOCO: Data e Assinatura do Comprador (para Receitas Controladas, fixo na parte inferior) */}
         {prescriptionType === 'controlled' && (
-          <View style={styles.buyerSignatureDateContainer}>
+          <View style={[styles.buyerSignatureDateContainer, { bottom: BUYER_SIGNATURE_BOTTOM_POSITION }]} fixed>
             <Text style={styles.buyerDateText}>
               Data: {formatDateToPortuguese(currentDate)}
             </Text>
