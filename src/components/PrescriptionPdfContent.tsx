@@ -3,14 +3,14 @@ import { Document, Page, View, Text, StyleSheet, Font } from "@react-pdf/rendere
 import { MedicationData, ManipulatedPrescriptionData } from "@/types/medication";
 import { mockCompanySettings, mockUserSettings } from "@/mockData/settings";
 
-// Registrando a fonte Exo com pesos regular, bold, italic e bold-italic
+// Registrando a fonte Verdana
 Font.register({
-  family: "Exo",
+  family: "Verdana",
   fonts: [
-    { src: '/fonts/Exo-Regular.ttf', fontWeight: 400, format: 'truetype' },
-    { src: '/fonts/Exo-Bold.ttf', fontWeight: 700, format: 'truetype' },
-    { src: '/fonts/Exo-Italic.ttf', fontStyle: 'italic', fontWeight: 400, format: 'truetype' },
-    { src: '/fonts/Exo-BoldItalic.ttf', fontStyle: 'italic', fontWeight: 700, format: 'truetype' },
+    { src: 'Verdana', fontWeight: 400 }, // Assumindo que Verdana é uma fonte de sistema
+    { src: 'Verdana-Bold', fontWeight: 700 }, // Pode ser necessário um arquivo .ttf para bold
+    { src: 'Verdana-Italic', fontStyle: 'italic', fontWeight: 400 }, // Pode ser necessário um arquivo .ttf para italic
+    { src: 'Verdana-BoldItalic', fontStyle: 'italic', fontWeight: 700 }, // Pode ser necessário um arquivo .ttf para bold-italic
   ],
 });
 
@@ -62,7 +62,7 @@ const MEDICATION_COUNT_THRESHOLD = 6; // Adjust this number as needed
 const getDynamicStyles = (isCompactSimplePrescription: boolean, prescriptionType: 'simple' | 'controlled' | 'manipulated') => StyleSheet.create({
   page: {
     padding: 30,
-    fontFamily: "Exo",
+    fontFamily: "Verdana", // Alterado para Verdana
     fontSize: 10,
     color: "#333",
   },
@@ -95,7 +95,7 @@ const getDynamicStyles = (isCompactSimplePrescription: boolean, prescriptionType
   mainTitle: {
     fontSize: 20,
     textAlign: "center",
-    fontFamily: "Exo",
+    fontFamily: "Verdana", // Alterado para Verdana
     fontWeight: "bold",
     marginBottom: 20,
   },
@@ -217,7 +217,7 @@ const getDynamicStyles = (isCompactSimplePrescription: boolean, prescriptionType
     marginLeft: 20,
     marginTop: 3,
     fontStyle: "italic",
-    fontFamily: "Exo",
+    fontFamily: "Verdana", // Alterado para Verdana
   },
   generalObservationsSection: {
     marginTop: isCompactSimplePrescription ? 15 : 25,
@@ -277,7 +277,7 @@ const getDynamicStyles = (isCompactSimplePrescription: boolean, prescriptionType
   controlledPrescriptionTitle: {
     fontSize: 22,
     textAlign: "center",
-    fontFamily: "Exo",
+    fontFamily: "Verdana", // Alterado para Verdana
     fontWeight: "bold",
     color: "#333",
     marginBottom: 15,
@@ -445,12 +445,15 @@ const getDynamicStyles = (isCompactSimplePrescription: boolean, prescriptionType
     flexDirection: 'row',
     alignItems: 'center', // Alinhado ao centro verticalmente
     marginBottom: 5,
-    marginLeft: 25, // Aumentado para mover mais para o centro
+    paddingLeft: 25, // Recuo para centralizar mais
+    paddingRight: 15, // Espaço em branco à direita
   },
   manipulatedBullet: {
-    fontSize: 16, // Aumentado
-    marginRight: 5,
-    fontWeight: "bold",
+    width: 8, // Tamanho do círculo
+    height: 8,
+    borderRadius: 4, // Metade para ser um círculo
+    backgroundColor: '#333', // Cor do círculo
+    marginRight: 8, // Espaço após o bullet
   },
   manipulatedItemName: {
     fontSize: 10, // Diminuído
@@ -463,12 +466,13 @@ const getDynamicStyles = (isCompactSimplePrescription: boolean, prescriptionType
     borderStyle: "dotted",
     flexGrow: 1,
     height: 1,
-    marginHorizontal: 5, // Ajustado para encurtar a linha e aproximar a dosagem
+    marginHorizontal: 8, // Ajustado para um pouco mais de espaço
   },
   manipulatedDosage: {
     fontSize: 10, // Diminuído
     flexShrink: 0,
     fontWeight: "bold",
+    marginLeft: 5, // Espaço antes da dosagem da linha pontilhada
   },
   manipulatedInstructionsTitle: {
     fontSize: 11,
@@ -584,7 +588,7 @@ export const PrescriptionPdfContent = ({
               <View>
                 {manipulatedPrescription.formulaComponents.map((comp) => (
                   <View key={comp.id} style={styles.manipulatedListItem}>
-                    <Text style={styles.manipulatedBullet}>•</Text>
+                    <View style={styles.manipulatedBullet} /> {/* Bullet point como View */}
                     <Text style={styles.manipulatedItemName}>{comp.name}</Text>
                     <View style={styles.manipulatedDottedLine} />
                     <Text style={styles.manipulatedDosage}>{comp.dosageQuantity} {getLongUnitAbbreviation(comp.dosageUnit)}</Text>
@@ -592,7 +596,7 @@ export const PrescriptionPdfContent = ({
                 ))}
                 {manipulatedPrescription.vehicleExcipient && (
                   <View style={styles.manipulatedListItem}>
-                    <Text style={styles.manipulatedBullet}>•</Text>
+                    <View style={styles.manipulatedBullet} /> {/* Bullet point como View */}
                     <Text style={styles.manipulatedItemName}>{manipulatedPrescription.vehicleExcipient.type} q.s.p.</Text>
                     <View style={styles.manipulatedDottedLine} />
                     <Text style={styles.manipulatedDosage}>{manipulatedPrescription.vehicleExcipient.quantity} {getLongUnitAbbreviation(manipulatedPrescription.vehicleExcipient.unit)}</Text>
@@ -649,8 +653,8 @@ export const PrescriptionPdfContent = ({
                       </Text>
                       {med.generalObservations && med.generalObservations.trim().length > 0 ? (
                         <Text style={styles.medicationObservations}>
-                          <Text style={{ fontFamily: "Exo", fontWeight: "bold" }}>Obs.:</Text>
-                          <Text style={{ fontFamily: "Exo", fontWeight: "normal" }}> {med.generalObservations}</Text>
+                          <Text style={{ fontFamily: "Verdana", fontWeight: "bold" }}>Obs.:</Text>
+                          <Text style={{ fontFamily: "Verdana", fontWeight: "normal" }}> {med.generalObservations}</Text>
                         </Text>
                       ) : null}
                     </View>
@@ -719,7 +723,7 @@ export const PrescriptionPdfContent = ({
                 <View style={styles.identificationLine}/>
               </View>
               <View style={styles.identificationField}>
-                <Text style={styles.identificationLabel}>Cidade</Text>
+                <Text style style={styles.identificationLabel}>Cidade</Text>
                 <View style={[styles.identificationLine, { width: 100 }]}/>
                 <Text style={styles.identificationLabel}>UF</Text>
                 <View style={[styles.identificationLine, { width: 20 }]}/>
