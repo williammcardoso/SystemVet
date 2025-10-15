@@ -4,13 +4,18 @@ import { MedicationData, ManipulatedPrescriptionData } from "@/types/medication"
 import { mockCompanySettings, mockUserSettings } from "@/mockData/settings";
 
 // Registrando a fonte Verdana
+// ATENÇÃO: Para que a fonte Verdana funcione corretamente, os arquivos .ttf (Verdana.ttf, Verdana-Bold.ttf, etc.)
+// precisam estar disponíveis no diretório public/fonts e serem referenciados aqui.
+// Por enquanto, estamos assumindo que 'Verdana' é uma fonte de sistema ou que os arquivos serão adicionados.
+// Se o erro "Unknown font format" persistir, por favor, adicione os arquivos .ttf da Verdana em public/fonts
+// e atualize os 'src' para apontar para eles (ex: src: '/fonts/Verdana.ttf').
 Font.register({
   family: "Verdana",
   fonts: [
-    { src: 'Verdana', fontWeight: 400 }, // Assumindo que Verdana é uma fonte de sistema
-    { src: 'Verdana-Bold', fontWeight: 700 }, // Pode ser necessário um arquivo .ttf para bold
-    { src: 'Verdana-Italic', fontStyle: 'italic', fontWeight: 400 }, // Pode ser necessário um arquivo .ttf para italic
-    { src: 'Verdana-BoldItalic', fontStyle: 'italic', fontWeight: 700 }, // Pode ser necessário um arquivo .ttf para bold-italic
+    { src: 'Verdana', fontWeight: 400 },
+    { src: 'Verdana-Bold', fontWeight: 700 },
+    { src: 'Verdana-Italic', fontStyle: 'italic', fontWeight: 400 },
+    { src: 'Verdana-BoldItalic', fontStyle: 'italic', fontWeight: 700 },
   ],
 });
 
@@ -164,20 +169,21 @@ const getDynamicStyles = (isCompactSimplePrescription: boolean, prescriptionType
     marginBottom: 5,
   },
   medicationNumber: {
-    fontSize: isCompactSimplePrescription ? 8 : 9, // Diminuído novamente
+    fontSize: isCompactSimplePrescription ? 8 : 9, // Diminuído
     marginRight: 5,
     width: 15,
   },
   medicationNameConcentration: {
-    fontSize: isCompactSimplePrescription ? 8 : 9, // Diminuído novamente
+    fontSize: isCompactSimplePrescription ? 8 : 9, // Diminuído
     fontWeight: "bold",
     flexShrink: 1,
   },
   lineSeparator: {
-    borderBottomWidth: 1,
+    borderBottomWidth: 2, // Aumentado para ser mais visível
     borderBottomColor: "#ccc",
+    borderStyle: "dotted", // Adicionado estilo pontilhado
     flexGrow: 1,
-    height: 1,
+    height: 2, // Aumentado para ser mais visível
     marginHorizontal: 8,
   },
   badgeContainer: {
@@ -206,13 +212,13 @@ const getDynamicStyles = (isCompactSimplePrescription: boolean, prescriptionType
     borderColor: "#aaa",
   },
   medicationInstructions: {
-    fontSize: isCompactSimplePrescription ? 8 : 9, // Diminuído novamente
+    fontSize: isCompactSimplePrescription ? 8 : 9, // Diminuído
     color: "#444",
     marginLeft: 20,
     lineHeight: isCompactSimplePrescription ? 1.3 : 1.4,
   },
   medicationObservations: {
-    fontSize: isCompactSimplePrescription ? 7 : 8, // Diminuído novamente
+    fontSize: isCompactSimplePrescription ? 7 : 8, // Diminuído
     color: "#777",
     marginLeft: 20,
     marginTop: 3,
@@ -449,9 +455,9 @@ const getDynamicStyles = (isCompactSimplePrescription: boolean, prescriptionType
     paddingRight: 15, // Espaço em branco à direita
   },
   manipulatedBullet: {
-    width: 8, // Tamanho do círculo
-    height: 8,
-    borderRadius: 4, // Metade para ser um círculo
+    width: 6, // Tamanho do círculo
+    height: 6,
+    borderRadius: 3, // Metade para ser um círculo
     backgroundColor: '#333', // Cor do círculo
     marginRight: 8, // Espaço após o bullet
   },
@@ -466,13 +472,12 @@ const getDynamicStyles = (isCompactSimplePrescription: boolean, prescriptionType
     borderStyle: "dotted",
     flexGrow: 1,
     height: 1,
-    marginHorizontal: 8, // Ajustado para um pouco mais de espaço
+    marginHorizontal: 5, // Ajustado para encurtar a linha e aproximar a dosagem
   },
   manipulatedDosage: {
     fontSize: 10, // Diminuído
     flexShrink: 0,
     fontWeight: "bold",
-    marginLeft: 5, // Espaço antes da dosagem da linha pontilhada
   },
   manipulatedInstructionsTitle: {
     fontSize: 11,
@@ -723,7 +728,7 @@ export const PrescriptionPdfContent = ({
                 <View style={styles.identificationLine}/>
               </View>
               <View style={styles.identificationField}>
-                <Text style style={styles.identificationLabel}>Cidade</Text>
+                <Text style={styles.identificationLabel}>Cidade</Text>
                 <View style={[styles.identificationLine, { width: 100 }]}/>
                 <Text style={styles.identificationLabel}>UF</Text>
                 <View style={[styles.identificationLine, { width: 20 }]}/>
