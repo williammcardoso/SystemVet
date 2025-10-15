@@ -31,6 +31,8 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"; // Importar DropdownMenu
+import { pdf } from "@react-pdf/renderer"; // Importar pdf para impressão
+import { PrescriptionPdfContent } from "@/components/PrescriptionPdfContent"; // Importar o componente de conteúdo do PDF
 
 // Mock data (centralizado aqui para facilitar o exemplo, mas idealmente viria de um serviço)
 interface Animal {
@@ -54,6 +56,7 @@ interface Client {
   id: string;
   name: string;
   phone: string;
+  address: string; // Adicionado endereço para o tutor
   animals: Animal[];
 }
 
@@ -62,6 +65,7 @@ const mockClients: Client[] = [
     id: "1",
     name: "William",
     phone: "(19) 99363-1981",
+    address: "Rua Exemplo, 123, Cidade - Estado",
     animals: [
       {
         id: "a1",
@@ -101,6 +105,7 @@ const mockClients: Client[] = [
     id: "2",
     name: "Maria",
     phone: "(11) 98765-4321",
+    address: "Avenida Teste, 456, Outra Cidade - Outro Estado",
     animals: [
       {
         id: "a3",
@@ -140,6 +145,7 @@ const mockClients: Client[] = [
     id: "3",
     name: "João",
     phone: "(21) 91234-5678",
+    address: "Rua da Paz, 789, Vila Feliz - RJ",
     animals: [
       {
         id: "a5",
@@ -163,6 +169,7 @@ const mockClients: Client[] = [
     id: "4",
     name: "Ana",
     phone: "(31) 99876-5432",
+    address: "Rua das Flores, 10, Bairro Jardim - MG",
     animals: [],
   },
 ];
@@ -470,6 +477,37 @@ const PatientRecordPage = () => {
     setNewReferenceDate("");
     setNewReferenceTables("");
     setNewConclusions("");
+  };
+
+  const handlePrintSinglePrescription = async (rx: PrescriptionEntry) => {
+    if (!client || !animal) {
+      toast.error("Erro: Dados do cliente ou animal não disponíveis para impressão.");
+      return;
+    }
+
+    const blob = await pdf(
+      PrescriptionPdfContent({
+        animalName: animal.name,
+        animalId: animal.id,
+        animalSpecies: animal.species,
+        tutorName: client.name,
+        tutorAddress: client.address,
+        medications: rx.medications,
+        generalObservations: rx.instructions,
+        showElectronicSignatureText: false,
+        prescriptionType: rx.type,
+        pharmacistName: "Farmacêutico(a) Responsável", // Mock data for pharmacist
+        pharmacistCpf: "CPF: 000.000.000-00",
+        pharmacistCfr: "CRF: 00000",
+        pharmacistAddress: "Endereço da Farmácia, 000 - Cidade - UF",
+        pharmacistPhone: "Telefone: (00) 00000-0000",
+      })
+    ).toBlob();
+
+    const url = URL.createObjectURL(blob);
+    window.open(url, '_blank');
+    URL.revokeObjectURL(url);
+    toast.success("Receita enviada para impressão!");
   };
 
 
@@ -1154,7 +1192,9 @@ const PatientRecordPage = () => {
                       <Card key={rx.id} className="p-4 bg-background dark:bg-gray-800 shadow-sm border border-gray-200 dark:border-gray-700">
                         <div className="flex items-center justify-between mb-2">
                           <div className="flex items-center gap-2">
-                            <p className="text-lg font-semibold text-foreground">{animal.name} - {animal.species}</p>
+                            <p className="text-lg font-semibold text-foreground">
+                              {rx.treatmentDescription || rx.medicationName || "Receita sem descrição"}
+                            </p>
                             <Badge className={cn(
                               "px-2 py-0.5 text-xs font-medium rounded-full",
                               rx.type === 'simple' && "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200",
@@ -1163,12 +1203,9 @@ const PatientRecordPage = () => {
                             )}>
                               {rx.type === 'simple' ? 'Receita Simples' : rx.type === 'controlled' ? 'Controlada' : 'Manipulada'}
                             </Badge>
-                            <Badge className="bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200 px-2 py-0.5 text-xs font-medium rounded-full">
-                              Ativa
-                            </Badge>
                           </div>
                           <div className="flex items-center gap-2">
-                            <Button variant="ghost" size="icon" onClick={() => { /* Lógica para imprimir */ }} className="rounded-md hover:bg-gray-100 hover:text-gray-900 dark:hover:bg-gray-700 dark:hover:text-gray-200 transition-colors duration-200">
+                            <Button variant="ghost" size="icon" onClick={() => handlePrintSinglePrescription(rx)} className="rounded-md hover:bg-gray-100 hover:text-gray-900 dark:hover:bg-gray-700 dark:hover:text-gray-200 transition-colors duration-200">
                               <FaPrint className="h-4 w-4" />
                             </Button>
                             <Link to={`/clients/${clientId}/animals/${animalId}/edit-prescription/${rx.id}`}>
@@ -1185,16 +1222,13 @@ const PatientRecordPage = () => {
                         </div>
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-2 text-sm text-muted-foreground mb-3">
                           <div className="flex items-center gap-1">
-                            <FaUser className="h-3 w-3" /> Tutor: {client.name}
-                          </div>
-                          <div className="flex items-center gap-1">
                             <FaCalendarAlt className="h-3 w-3" /> {formatDate(rx.date)}
                           </div>
                           <div className="flex items-center gap-1">
-                            <FaClipboardList className="h-3 w-3" /> {rx.medications.length} medicamento(s)
-                          </div>
-                          <div className="flex items-center gap-1">
                             <FaStethoscope className="h-3 w-3" /> Dr. William Cardoso {/* Placeholder para o veterinário */}
+                          </div>
+                          <div className="flex items-center gap-1 col-span-full">
+                            <FaClipboardList className="h-3 w-3" /> Medicamentos: {rx.medicationName || "Nenhum"}
                           </div>
                         </div>
                         {rx.instructions && (
