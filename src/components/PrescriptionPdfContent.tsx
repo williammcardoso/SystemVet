@@ -3,19 +3,15 @@ import { Document, Page, View, Text, StyleSheet, Font } from "@react-pdf/rendere
 import { MedicationData, ManipulatedPrescriptionData } from "@/types/medication";
 import { mockCompanySettings, mockUserSettings } from "@/mockData/settings";
 
-// Registrando a fonte Verdana
-// ATENÇÃO: Para que a fonte Verdana funcione corretamente, os arquivos .ttf (Verdana.ttf, Verdana-Bold.ttf, etc.)
-// precisam estar disponíveis no diretório public/fonts e serem referenciados aqui.
-// Por enquanto, estamos assumindo que 'Verdana' é uma fonte de sistema ou que os arquivos serão adicionados.
-// Se o erro "Unknown font format" persistir, por favor, adicione os arquivos .ttf da Verdana em public/fonts
-// e atualize os 'src' para apontar para eles (ex: src: '/fonts/Verdana.ttf').
+// Registrando a fonte Exo com pesos regular, bold, italic e bold-italic
+// Usando os arquivos .ttf disponíveis na pasta public/fonts
 Font.register({
-  family: "Verdana",
+  family: "Exo",
   fonts: [
-    { src: 'Verdana', fontWeight: 400 },
-    { src: 'Verdana-Bold', fontWeight: 700 },
-    { src: 'Verdana-Italic', fontStyle: 'italic', fontWeight: 400 },
-    { src: 'Verdana-BoldItalic', fontStyle: 'italic', fontWeight: 700 },
+    { src: '/fonts/Exo-Regular.ttf', fontWeight: 400, format: 'truetype' },
+    { src: '/fonts/Exo-Bold.ttf', fontWeight: 700, format: 'truetype' },
+    { src: '/fonts/Exo-Italic.ttf', fontStyle: 'italic', fontWeight: 400, format: 'truetype' },
+    { src: '/fonts/Exo-BoldItalic.ttf', fontStyle: 'italic', fontWeight: 700, format: 'truetype' },
   ],
 });
 
@@ -67,7 +63,7 @@ const MEDICATION_COUNT_THRESHOLD = 6; // Adjust this number as needed
 const getDynamicStyles = (isCompactSimplePrescription: boolean, prescriptionType: 'simple' | 'controlled' | 'manipulated') => StyleSheet.create({
   page: {
     padding: 30,
-    fontFamily: "Verdana", // Alterado para Verdana
+    fontFamily: "Exo", // Alterado para Exo
     fontSize: 10,
     color: "#333",
   },
@@ -100,7 +96,7 @@ const getDynamicStyles = (isCompactSimplePrescription: boolean, prescriptionType
   mainTitle: {
     fontSize: 20,
     textAlign: "center",
-    fontFamily: "Verdana", // Alterado para Verdana
+    fontFamily: "Exo", // Alterado para Exo
     fontWeight: "bold",
     marginBottom: 20,
   },
@@ -169,21 +165,21 @@ const getDynamicStyles = (isCompactSimplePrescription: boolean, prescriptionType
     marginBottom: 5,
   },
   medicationNumber: {
-    fontSize: isCompactSimplePrescription ? 8 : 9, // Diminuído
+    fontSize: isCompactSimplePrescription ? 8 : 9,
     marginRight: 5,
     width: 15,
   },
   medicationNameConcentration: {
-    fontSize: isCompactSimplePrescription ? 8 : 9, // Diminuído
+    fontSize: isCompactSimplePrescription ? 8 : 9,
     fontWeight: "bold",
     flexShrink: 1,
   },
   lineSeparator: {
-    borderBottomWidth: 2, // Aumentado para ser mais visível
+    borderBottomWidth: 2,
     borderBottomColor: "#ccc",
-    borderStyle: "dotted", // Adicionado estilo pontilhado
+    borderStyle: "dotted",
     flexGrow: 1,
-    height: 2, // Aumentado para ser mais visível
+    height: 2,
     marginHorizontal: 8,
   },
   badgeContainer: {
@@ -212,18 +208,18 @@ const getDynamicStyles = (isCompactSimplePrescription: boolean, prescriptionType
     borderColor: "#aaa",
   },
   medicationInstructions: {
-    fontSize: isCompactSimplePrescription ? 8 : 9, // Diminuído
+    fontSize: isCompactSimplePrescription ? 8 : 9,
     color: "#444",
     marginLeft: 20,
     lineHeight: isCompactSimplePrescription ? 1.3 : 1.4,
   },
   medicationObservations: {
-    fontSize: isCompactSimplePrescription ? 7 : 8, // Diminuído
+    fontSize: isCompactSimplePrescription ? 7 : 8,
     color: "#777",
     marginLeft: 20,
     marginTop: 3,
     fontStyle: "italic",
-    fontFamily: "Verdana", // Alterado para Verdana
+    fontFamily: "Exo", // Alterado para Exo
   },
   generalObservationsSection: {
     marginTop: isCompactSimplePrescription ? 15 : 25,
@@ -283,7 +279,7 @@ const getDynamicStyles = (isCompactSimplePrescription: boolean, prescriptionType
   controlledPrescriptionTitle: {
     fontSize: 22,
     textAlign: "center",
-    fontFamily: "Verdana", // Alterado para Verdana
+    fontFamily: "Exo", // Alterado para Exo
     fontWeight: "bold",
     color: "#333",
     marginBottom: 15,
@@ -455,9 +451,9 @@ const getDynamicStyles = (isCompactSimplePrescription: boolean, prescriptionType
     paddingRight: 15, // Espaço em branco à direita
   },
   manipulatedBullet: {
-    width: 6, // Tamanho do círculo
-    height: 6,
-    borderRadius: 3, // Metade para ser um círculo
+    width: 8, // Tamanho do círculo
+    height: 8,
+    borderRadius: 4, // Metade para ser um círculo
     backgroundColor: '#333', // Cor do círculo
     marginRight: 8, // Espaço após o bullet
   },
@@ -472,12 +468,13 @@ const getDynamicStyles = (isCompactSimplePrescription: boolean, prescriptionType
     borderStyle: "dotted",
     flexGrow: 1,
     height: 1,
-    marginHorizontal: 5, // Ajustado para encurtar a linha e aproximar a dosagem
+    marginHorizontal: 8, // Ajustado para um pouco mais de espaço
   },
   manipulatedDosage: {
     fontSize: 10, // Diminuído
     flexShrink: 0,
     fontWeight: "bold",
+    marginLeft: 5, // Espaço antes da dosagem da linha pontilhada
   },
   manipulatedInstructionsTitle: {
     fontSize: 11,
@@ -658,8 +655,8 @@ export const PrescriptionPdfContent = ({
                       </Text>
                       {med.generalObservations && med.generalObservations.trim().length > 0 ? (
                         <Text style={styles.medicationObservations}>
-                          <Text style={{ fontFamily: "Verdana", fontWeight: "bold" }}>Obs.:</Text>
-                          <Text style={{ fontFamily: "Verdana", fontWeight: "normal" }}> {med.generalObservations}</Text>
+                          <Text style={{ fontFamily: "Exo", fontWeight: "bold" }}>Obs.:</Text>
+                          <Text style={{ fontFamily: "Exo", fontWeight: "normal" }}> {med.generalObservations}</Text>
                         </Text>
                       ) : null}
                     </View>
