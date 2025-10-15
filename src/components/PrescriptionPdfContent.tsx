@@ -405,9 +405,8 @@ export const PrescriptionPdfContent = ({
               <Text style={styles.issuerVetText}>CRMV: {mockUserSettings.userCrmv}</Text>
               <Text style={styles.issuerVetText}>Registro MAPA: {mockUserSettings.userMapaRegistration}</Text>
             </View>
-            <View style={styles.infoCard}>
-              {/* Este View é intencionalmente vazio para layout, não deve ter string children */}
-            </View>
+            {/* Este View é intencionalmente vazio para layout, agora com fechamento automático */}
+            <View style={styles.infoCard} />
           </View>
         )}
 
