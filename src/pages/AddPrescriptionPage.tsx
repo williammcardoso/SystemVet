@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import { Link, useParams, useNavigate, useSearchParams } from "react-router-dom"; // Importar useSearchParams
-import { FaArrowLeft, FaPlus, FaTimes, FaEye, FaSave, FaPrint, FaDownload } from "react-icons/fa"; // Importar ícones de react-icons
+import { FaArrowLeft, FaPlus, FaTimes, FaEye, FaSave, FaPrint, FaDownload, FaClipboardList } from "react-icons/fa"; // Importar ícones de react-icons
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Textarea } from "@/components/ui/textarea";
@@ -291,81 +291,105 @@ const AddPrescriptionPage = () => {
     toast.success("Receita salva em PDF com sucesso!");
   };
 
+  const getPrescriptionTitle = () => {
+    let baseTitle = prescriptionId ? "Editar Receita" : "Adicionar Nova Receita";
+    let typeText = '';
+    if (prescriptionType === 'simple') typeText = 'Simples';
+    else if (prescriptionType === 'controlled') typeText = 'Controlada';
+    else if (prescriptionType === 'manipulated') typeText = 'Manipulada';
+    return `${baseTitle} (${typeText}) para ${animal.name}`;
+  };
+
   return (
-    <div className="p-6">
-      <div className="flex items-center justify-between mb-6">
-        <h1 className="text-3xl font-bold">
-          {prescriptionId ? "Editar Receita" : "Adicionar Nova Receita"} ({prescriptionType === 'simple' ? 'Simples' : prescriptionType === 'controlled' ? 'Controlada' : 'Manipulada'}) para {animal.name}
-        </h1>
-        <Link to={`/clients/${clientId}/animals/${animalId}/record`}>
-          <Button variant="outline" className="rounded-md border-gray-300 text-gray-700 hover:bg-gray-100 hover:text-gray-900 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200 dark:hover:bg-gray-700 transition-colors duration-200">
-            <FaArrowLeft className="mr-2 h-4 w-4" /> Voltar para Prontuário
-          </Button>
-        </Link>
+    <div className="flex flex-col min-h-screen bg-gray-50 dark:bg-gray-950">
+      {/* Header da Página com Gradiente e Breadcrumb */}
+      <div className="bg-gradient-to-r from-gray-50 via-white to-gray-50 dark:from-gray-900 dark:via-gray-950 dark:to-gray-950 p-6 pb-4 border-b border-gray-200 dark:border-gray-800">
+        <div className="flex items-center justify-between mb-2">
+          <div className="flex items-center gap-4">
+            <div>
+              <h1 className="text-2xl font-semibold flex items-center gap-3 text-[#1E293B] dark:text-gray-100 group">
+                <FaClipboardList className="h-5 w-5 text-gray-500 dark:text-gray-400" /> {getPrescriptionTitle()}
+              </h1>
+              <p className="text-sm text-[#6B7280] dark:text-gray-400 mt-1 mb-4">
+                Gerencie os detalhes da receita para {animal.name}.
+              </p>
+            </div>
+          </div>
+          <Link to={`/clients/${clientId}/animals/${animalId}/record`}>
+            <Button variant="outline" className="rounded-md border-gray-300 text-gray-700 hover:bg-gray-100 hover:text-gray-900 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200 dark:hover:bg-gray-700 transition-colors duration-200">
+              <FaArrowLeft className="mr-2 h-4 w-4" /> Voltar para Prontuário
+            </Button>
+          </Link>
+        </div>
+        <p className="text-sm text-gray-400 dark:text-gray-500">
+          Painel &gt; <Link to="/clients" className="hover:text-blue-500 dark:hover:text-blue-400">Clientes</Link> &gt; <Link to={`/clients/${client.id}`} className="hover:text-blue-500 dark:hover:text-blue-400">{client.name}</Link> &gt; <Link to={`/clients/${clientId}/animals/${animalId}/record`} className="hover:text-blue-500 dark:hover:text-blue-400">{animal.name}</Link> &gt; Receita
+        </p>
       </div>
 
-      <div className="grid gap-4 py-4">
-        <Card className="mb-4 bg-white/90 backdrop-blur-sm border border-gray-200 dark:border-gray-700 rounded-2xl shadow-[0_1px_3px_rgba(0,0,0,0.05)]">
-          <CardHeader>
-            <CardTitle>Descrição do Tratamento</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="space-y-2">
-              <Label htmlFor="treatmentDescription">Tratamento (Ex: Tratamento de Anemia)</Label>
+      <div className="flex-1 p-6">
+        <div className="grid gap-4 py-4">
+          <Card className="mb-4 bg-white/90 backdrop-blur-sm border border-gray-200 dark:border-gray-700 rounded-2xl shadow-[0_1px_3px_rgba(0,0,0,0.05)]">
+            <CardHeader>
+              <CardTitle>Descrição do Tratamento</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-2">
+                <Label htmlFor="treatmentDescription">Tratamento (Ex: Tratamento de Anemia)</Label>
+                <Textarea
+                  id="treatmentDescription"
+                  placeholder="Descreva o tratamento geral da receita..."
+                  rows={3}
+                  value={treatmentDescription}
+                  onChange={(e) => setTreatmentDescription(e.target.value)}
+                  className="bg-white rounded-lg border-gray-200 dark:border-gray-600 focus:ring-2 focus:ring-blue-400 placeholder-[#9CA3AF] dark:placeholder-gray-500 transition-all duration-200"
+                />
+              </div>
+            </CardContent>
+          </Card>
+
+          <Card className="mb-4 bg-white/90 backdrop-blur-sm border border-gray-200 dark:border-gray-700 rounded-2xl shadow-[0_1px_3px_rgba(0,0,0,0.05)]">
+            <CardHeader>
+              <CardTitle>Medicamentos</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              {currentPrescriptionMedications.length === 0 && (
+                <p className="text-muted-foreground">Nenhum medicamento adicionado ainda.</p>
+              )}
+              {currentPrescriptionMedications.map((med, index) => (
+                <PrescriptionMedicationForm
+                  key={med.id}
+                  medication={med}
+                  index={index}
+                  onSave={handleSaveMedication}
+                  onDelete={handleDeleteMedication}
+                  onToggleCollapse={handleToggleMedicationCollapse}
+                />
+              ))}
+              <Button onClick={handleAddMedication} className="w-full bg-gradient-to-r from-blue-500 to-indigo-500 text-white hover:from-blue-600 hover:to-indigo-600 font-semibold transition-all duration-200 shadow-md hover:shadow-lg">
+                <FaPlus className="mr-2 h-4 w-4" /> Adicionar Medicamento
+              </Button>
+            </CardContent>
+          </Card>
+
+          <Card className="bg-white/90 backdrop-blur-sm border border-gray-200 dark:border-gray-700 rounded-2xl shadow-[0_1px_3px_rgba(0,0,0,0.05)]">
+            <CardHeader>
+              <CardTitle>Observações Gerais da Receita</CardTitle>
+            </CardHeader>
+            <CardContent>
               <Textarea
-                id="treatmentDescription"
-                placeholder="Descreva o tratamento geral da receita..."
-                rows={3}
-                value={treatmentDescription}
-                onChange={(e) => setTreatmentDescription(e.target.value)}
+                id="prescriptionGeneralObservations"
+                placeholder="Instruções especiais, restrições alimentares, ou outras observações para a receita..."
+                rows={5}
+                value={currentPrescriptionGeneralObservations}
+                onChange={(e) => setCurrentPrescriptionGeneralObservations(e.target.value)}
                 className="bg-white rounded-lg border-gray-200 dark:border-gray-600 focus:ring-2 focus:ring-blue-400 placeholder-[#9CA3AF] dark:placeholder-gray-500 transition-all duration-200"
               />
-            </div>
-          </CardContent>
-        </Card>
-
-        <Card className="mb-4 bg-white/90 backdrop-blur-sm border border-gray-200 dark:border-gray-700 rounded-2xl shadow-[0_1px_3px_rgba(0,0,0,0.05)]">
-          <CardHeader>
-            <CardTitle>Medicamentos</CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            {currentPrescriptionMedications.length === 0 && (
-              <p className="text-muted-foreground">Nenhum medicamento adicionado ainda.</p>
-            )}
-            {currentPrescriptionMedications.map((med, index) => (
-              <PrescriptionMedicationForm
-                key={med.id}
-                medication={med}
-                index={index}
-                onSave={handleSaveMedication}
-                onDelete={handleDeleteMedication}
-                onToggleCollapse={handleToggleMedicationCollapse}
-              />
-            ))}
-            <Button onClick={handleAddMedication} className="w-full bg-gradient-to-r from-blue-500 to-indigo-500 text-white hover:from-blue-600 hover:to-indigo-600 font-semibold transition-all duration-200 shadow-md hover:shadow-lg">
-              <FaPlus className="mr-2 h-4 w-4" /> Adicionar Medicamento
-            </Button>
-          </CardContent>
-        </Card>
-
-        <Card className="bg-white/90 backdrop-blur-sm border border-gray-200 dark:border-gray-700 rounded-2xl shadow-[0_1px_3px_rgba(0,0,0,0.05)]">
-          <CardHeader>
-            <CardTitle>Observações Gerais da Receita</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <Textarea
-              id="prescriptionGeneralObservations"
-              placeholder="Instruções especiais, restrições alimentares, ou outras observações para a receita..."
-              rows={5}
-              value={currentPrescriptionGeneralObservations}
-              onChange={(e) => setCurrentPrescriptionGeneralObservations(e.target.value)}
-              className="bg-white rounded-lg border-gray-200 dark:border-gray-600 focus:ring-2 focus:ring-blue-400 placeholder-[#9CA3AF] dark:placeholder-gray-500 transition-all duration-200"
-            />
-          </CardContent>
-        </Card>
+            </CardContent>
+          </Card>
+        </div>
       </div>
 
-      <div className="flex justify-end gap-2 mt-6">
+      <div className="flex justify-end gap-2 mt-6 p-4 bg-white/80 backdrop-blur-sm border-t border-gray-200 dark:bg-gray-950/80 dark:border-gray-800 sticky bottom-0 z-10">
         <Button variant="outline" onClick={() => navigate(`/clients/${clientId}/animals/${animalId}/record`)} className="bg-white border border-gray-300 text-gray-700 hover:bg-gray-50 rounded-md transition-all duration-200 shadow-sm hover:shadow-md dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200 dark:hover:bg-gray-600">
           <FaTimes className="mr-2 h-4 w-4" /> Cancelar
         </Button>

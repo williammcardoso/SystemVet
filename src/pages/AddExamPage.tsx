@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Link, useParams, useNavigate } from "react-router-dom";
-import { FaArrowLeft, FaTimes, FaSave } from "react-icons/fa"; // Importar ícones de react-icons
+import { FaArrowLeft, FaTimes, FaSave, FaCalendarAlt } from "react-icons/fa"; // Importar ícones de react-icons
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -99,211 +99,228 @@ const AddExamPage = () => {
   };
 
   return (
-    <div className="p-6">
-      <div className="flex items-center justify-between mb-6">
-        <h1 className="text-3xl font-bold">Adicionar Exame para Animal {animalId}</h1>
-        <Link to={`/clients/${clientId}/animals/${animalId}/record`}>
-          <Button variant="outline" className="rounded-md border-gray-300 text-gray-700 hover:bg-gray-100 hover:text-gray-900 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200 dark:hover:bg-gray-700 transition-colors duration-200">
-            <FaArrowLeft className="mr-2 h-4 w-4" /> Voltar para Prontuário
-          </Button>
-        </Link>
+    <div className="flex flex-col min-h-screen bg-gray-50 dark:bg-gray-950">
+      {/* Header da Página com Gradiente e Breadcrumb */}
+      <div className="bg-gradient-to-r from-gray-50 via-white to-gray-50 dark:from-gray-900 dark:via-gray-950 dark:to-gray-950 p-6 pb-4 border-b border-gray-200 dark:border-gray-800">
+        <div className="flex items-center justify-between mb-2">
+          <div className="flex items-center gap-4">
+            <div>
+              <h1 className="text-2xl font-semibold flex items-center gap-3 text-[#1E293B] dark:text-gray-100 group">
+                <FaCalendarAlt className="h-5 w-5 text-gray-500 dark:text-gray-400" /> Adicionar Exame
+              </h1>
+              <p className="text-sm text-[#6B7280] dark:text-gray-400 mt-1 mb-4">
+                Registre um novo exame para o animal.
+              </p>
+            </div>
+          </div>
+          <Link to={`/clients/${clientId}/animals/${animalId}/record`}>
+            <Button variant="outline" className="rounded-md border-gray-300 text-gray-700 hover:bg-gray-100 hover:text-gray-900 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200 dark:hover:bg-gray-700 transition-colors duration-200">
+              <FaArrowLeft className="mr-2 h-4 w-4" /> Voltar para Prontuário
+            </Button>
+          </Link>
+        </div>
+        <p className="text-sm text-gray-400 dark:text-gray-500">
+          Painel &gt; Clientes &gt; Animal &gt; Prontuário &gt; Adicionar Exame
+        </p>
       </div>
 
-      <Card className="bg-white/90 backdrop-blur-sm border border-gray-200 dark:border-gray-700 rounded-2xl shadow-[0_1px_3px_rgba(0,0,0,0.05)]">
-        <CardContent className="grid gap-4 py-4">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div className="space-y-2">
-              <Label htmlFor="examDate">Data</Label>
-              <Input
-                id="examDate"
-                type="date"
-                value={examDate}
-                onChange={(e) => setExamDate(e.target.value)}
-                className="bg-white rounded-lg border-gray-200 dark:border-gray-600 focus:ring-2 focus:ring-blue-400 placeholder-[#9CA3AF] dark:placeholder-gray-500 transition-all duration-200"
-              />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="examType">Tipo de Exame</Label>
-              <Select onValueChange={setExamType} value={examType}>
-                <SelectTrigger id="examType" className="bg-white rounded-lg border-gray-200 dark:border-gray-600 focus:ring-2 focus:ring-blue-400 placeholder-[#9CA3AF] dark:placeholder-gray-500 transition-all duration-200">
-                  <SelectValue placeholder="Selecione o tipo de exame" />
-                </SelectTrigger>
-                <SelectContent>
-                  {mockExamTypes.map((type) => (
-                    <SelectItem key={type.id} value={type.name}>
-                      {type.name}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="examVet">Veterinário</Label>
-              <Select onValueChange={setExamVet} value={examVet}>
-                <SelectTrigger id="examVet" className="bg-white rounded-lg border-gray-200 dark:border-gray-600 focus:ring-2 focus:ring-blue-400 placeholder-[#9CA3AF] dark:placeholder-gray-500 transition-all duration-200">
-                  <SelectValue placeholder="Selecione o veterinário" />
-                </SelectTrigger>
+      <div className="flex-1 p-6">
+        <Card className="bg-white/90 backdrop-blur-sm border border-gray-200 dark:border-gray-700 rounded-2xl shadow-[0_1px_3px_rgba(0,0,0,0.05)]">
+          <CardContent className="grid gap-4 py-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <Label htmlFor="examDate">Data</Label>
+                <Input
+                  id="examDate"
+                  type="date"
+                  value={examDate}
+                  onChange={(e) => setExamDate(e.target.value)}
+                  className="bg-white rounded-lg border-gray-200 dark:border-gray-600 focus:ring-2 focus:ring-blue-400 placeholder-[#9CA3AF] dark:placeholder-gray-500 transition-all duration-200"
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="examType">Tipo de Exame</Label>
+                <Select onValueChange={setExamType} value={examType}>
+                  <SelectTrigger id="examType" className="bg-white rounded-lg border-gray-200 dark:border-gray-600 focus:ring-2 focus:ring-blue-400 placeholder-[#9CA3AF] dark:placeholder-gray-500 transition-all duration-200">
+                    <SelectValue placeholder="Selecione o tipo de exame" />
+                  </SelectTrigger>
                   <SelectContent>
-                  {mockVets.map((vet) => (
-                    <SelectItem key={vet.id} value={vet.name}>
-                      {vet.name}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
+                    {mockExamTypes.map((type) => (
+                      <SelectItem key={type.id} value={type.name}>
+                        {type.name}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="examVet">Veterinário</Label>
+                <Select onValueChange={setExamVet} value={examVet}>
+                  <SelectTrigger id="examVet" className="bg-white rounded-lg border-gray-200 dark:border-gray-600 focus:ring-2 focus:ring-blue-400 placeholder-[#9CA3AF] dark:placeholder-gray-500 transition-all duration-200">
+                    <SelectValue placeholder="Selecione o veterinário" />
+                  </SelectTrigger>
+                    <SelectContent>
+                    {mockVets.map((vet) => (
+                      <SelectItem key={vet.id} value={vet.name}>
+                        {vet.name}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
             </div>
-          </div>
 
-          {examType === "Hemograma Completo" ? (
-            <>
-              <h3 className="text-lg font-semibold mt-4 mb-2">Eritrograma</h3>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-                <div className="space-y-2">
-                  <Label htmlFor="hemacias">Hemácias (m/mm3)</Label>
-                  <Input id="hemacias" type="number" placeholder="Ex: 5.5" value={hemacias} onChange={(e) => setHemacias(e.target.value)} className="bg-white rounded-lg border-gray-200 dark:border-gray-600 focus:ring-2 focus:ring-blue-400 placeholder-[#9CA3AF] dark:placeholder-gray-500 transition-all duration-200" />
+            {examType === "Hemograma Completo" ? (
+              <>
+                <h3 className="text-lg font-semibold mt-4 mb-2">Eritrograma</h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                  <div className="space-y-2">
+                    <Label htmlFor="hemacias">Hemácias (m/mm3)</Label>
+                    <Input id="hemacias" type="number" placeholder="Ex: 5.5" value={hemacias} onChange={(e) => setHemacias(e.target.value)} className="bg-white rounded-lg border-gray-200 dark:border-gray-600 focus:ring-2 focus:ring-blue-400 placeholder-[#9CA3AF] dark:placeholder-gray-500 transition-all duration-200" />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="volumeGlobular">Volume globular (%)</Label>
+                    <Input id="volumeGlobular" type="number" placeholder="Ex: 37" value={volumeGlobular} onChange={(e) => setVolumeGlobular(e.target.value)} className="bg-white rounded-lg border-gray-200 dark:border-gray-600 focus:ring-2 focus:ring-blue-400 placeholder-[#9CA3AF] dark:placeholder-gray-500 transition-all duration-200" />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="hemoglobina">Hemoglobina (g/dL)</Label>
+                    <Input id="hemoglobina" type="number" placeholder="Ex: 12.0" value={hemoglobina} onChange={(e) => setHemoglobina(e.target.value)} className="bg-white rounded-lg border-gray-200 dark:border-gray-600 focus:ring-2 focus:ring-blue-400 placeholder-[#9CA3AF] dark:placeholder-gray-500 transition-all duration-200" />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="vgm">VGM (fL)</Label>
+                    <Input id="vgm" type="number" placeholder="Ex: 60.0" value={vgm} onChange={(e) => setVGM(e.target.value)} className="bg-white rounded-lg border-gray-200 dark:border-gray-600 focus:ring-2 focus:ring-blue-400 placeholder-[#9CA3AF] dark:placeholder-gray-500 transition-all duration-200" />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="chgm">CHGM (%)</Label>
+                    <Input id="chgm" type="number" placeholder="Ex: 31" value={chgm} onChange={(e) => setCHGM(e.target.value)} className="bg-white rounded-lg border-gray-200 dark:border-gray-600 focus:ring-2 focus:ring-blue-400 placeholder-[#9CA3AF] dark:placeholder-gray-500 transition-all duration-200" />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="plaquetas">Plaquetas (m/mm3)</Label>
+                    <Input id="plaquetas" type="number" placeholder="Ex: 300" value={plaquetas} onChange={(e) => setPlaquetas(e.target.value)} className="bg-white rounded-lg border-gray-200 dark:border-gray-600 focus:ring-2 focus:ring-blue-400 placeholder-[#9CA3AF] dark:placeholder-gray-500 transition-all duration-200" />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="formasTotais">Formas totais (m/mm3)</Label>
+                    <Input id="formasTotais" type="number" placeholder="Ex: 6.0" value={formasTotais} onChange={(e) => setFormasTotais(e.target.value)} className="bg-white rounded-lg border-gray-200 dark:border-gray-600 focus:ring-2 focus:ring-blue-400 placeholder-[#9CA3AF] dark:placeholder-gray-500 transition-all duration-200" />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="hemaciasNucleadas">Hemácias nucleadas (g/dL)</Label>
+                    <Input id="hemaciasNucleadas" type="number" placeholder="Ex: 0" value={hemaciasNucleadas} onChange={(e) => setHemaciasNucleadas(e.target.value)} className="bg-white rounded-lg border-gray-200 dark:border-gray-600 focus:ring-2 focus:ring-blue-400 placeholder-[#9CA3AF] dark:placeholder-gray-500 transition-all duration-200" />
+                  </div>
                 </div>
-                <div className="space-y-2">
-                  <Label htmlFor="volumeGlobular">Volume globular (%)</Label>
-                  <Input id="volumeGlobular" type="number" placeholder="Ex: 37" value={volumeGlobular} onChange={(e) => setVolumeGlobular(e.target.value)} className="bg-white rounded-lg border-gray-200 dark:border-gray-600 focus:ring-2 focus:ring-blue-400 placeholder-[#9CA3AF] dark:placeholder-gray-500 transition-all duration-200" />
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="hemoglobina">Hemoglobina (g/dL)</Label>
-                  <Input id="hemoglobina" type="number" placeholder="Ex: 12.0" value={hemoglobina} onChange={(e) => setHemoglobina(e.target.value)} className="bg-white rounded-lg border-gray-200 dark:border-gray-600 focus:ring-2 focus:ring-blue-400 placeholder-[#9CA3AF] dark:placeholder-gray-500 transition-all duration-200" />
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="vgm">VGM (fL)</Label>
-                  <Input id="vgm" type="number" placeholder="Ex: 60.0" value={vgm} onChange={(e) => setVGM(e.target.value)} className="bg-white rounded-lg border-gray-200 dark:border-gray-600 focus:ring-2 focus:ring-blue-400 placeholder-[#9CA3AF] dark:placeholder-gray-500 transition-all duration-200" />
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="chgm">CHGM (%)</Label>
-                  <Input id="chgm" type="number" placeholder="Ex: 31" value={chgm} onChange={(e) => setCHGM(e.target.value)} className="bg-white rounded-lg border-gray-200 dark:border-gray-600 focus:ring-2 focus:ring-blue-400 placeholder-[#9CA3AF] dark:placeholder-gray-500 transition-all duration-200" />
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="plaquetas">Plaquetas (m/mm3)</Label>
-                  <Input id="plaquetas" type="number" placeholder="Ex: 300" value={plaquetas} onChange={(e) => setPlaquetas(e.target.value)} className="bg-white rounded-lg border-gray-200 dark:border-gray-600 focus:ring-2 focus:ring-blue-400 placeholder-[#9CA3AF] dark:placeholder-gray-500 transition-all duration-200" />
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="formasTotais">Formas totais (m/mm3)</Label>
-                  <Input id="formasTotais" type="number" placeholder="Ex: 6.0" value={formasTotais} onChange={(e) => setFormasTotais(e.target.value)} className="bg-white rounded-lg border-gray-200 dark:border-gray-600 focus:ring-2 focus:ring-blue-400 placeholder-[#9CA3AF] dark:placeholder-gray-500 transition-all duration-200" />
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="hemaciasNucleadas">Hemácias nucleadas (g/dL)</Label>
-                  <Input id="hemaciasNucleadas" type="number" placeholder="Ex: 0" value={hemaciasNucleadas} onChange={(e) => setHemaciasNucleadas(e.target.value)} className="bg-white rounded-lg border-gray-200 dark:border-gray-600 focus:ring-2 focus:ring-blue-400 placeholder-[#9CA3AF] dark:placeholder-gray-500 transition-all duration-200" />
-                </div>
-              </div>
 
-              <h3 className="text-lg font-semibold mt-4 mb-2">Leucograma</h3>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-                <div className="space-y-2">
-                  <Label htmlFor="leucocitos">Leucócitos (m/mm3)</Label>
-                  <Input id="leucocitos" type="number" placeholder="Ex: 6.0" value={leucocitos} onChange={(e) => setLeucocitos(e.target.value)} className="bg-white rounded-lg border-gray-200 dark:border-gray-600 focus:ring-2 focus:ring-blue-400 placeholder-[#9CA3AF] dark:placeholder-gray-500 transition-all duration-200" />
+                <h3 className="text-lg font-semibold mt-4 mb-2">Leucograma</h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                  <div className="space-y-2">
+                    <Label htmlFor="leucocitos">Leucócitos (m/mm3)</Label>
+                    <Input id="leucocitos" type="number" placeholder="Ex: 6.0" value={leucocitos} onChange={(e) => setLeucocitos(e.target.value)} className="bg-white rounded-lg border-gray-200 dark:border-gray-600 focus:ring-2 focus:ring-blue-400 placeholder-[#9CA3AF] dark:placeholder-gray-500 transition-all duration-200" />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="bastoes">Bastões (%)</Label>
+                    <Input id="bastoes" type="number" placeholder="Ex: 0" value={bastoes} onChange={(e) => setBastoes(e.target.value)} className="bg-white rounded-lg border-gray-200 dark:border-gray-600 focus:ring-2 focus:ring-blue-400 placeholder-[#9CA3AF] dark:placeholder-gray-500 transition-all duration-200" />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="segmentados">Segmentados (%)</Label>
+                    <Input id="segmentados" type="number" placeholder="Ex: 60" value={segmentados} onChange={(e) => setSegmentados(e.target.value)} className="bg-white rounded-lg border-gray-200 dark:border-gray-600 focus:ring-2 focus:ring-blue-400 placeholder-[#9CA3AF] dark:placeholder-gray-500 transition-all duration-200" />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="linfocitos">Linfócitos (%)</Label>
+                    <Input id="linfocitos" type="number" placeholder="Ex: 30" value={linfocitos} onChange={(e) => setLinfocitos(e.target.value)} className="bg-white rounded-lg border-gray-200 dark:border-gray-600 focus:ring-2 focus:ring-blue-400 placeholder-[#9CA3AF] dark:placeholder-gray-500 transition-all duration-200" />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="monocitos">Monócitos (%)</Label>
+                    <Input id="monocitos" type="number" placeholder="Ex: 3" value={monocitos} onChange={(e) => setMonocitos(e.target.value)} className="bg-white rounded-lg border-gray-200 dark:border-gray-600 focus:ring-2 focus:ring-blue-400 placeholder-[#9CA3AF] dark:placeholder-gray-500 transition-all duration-200" />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="eosinofilos">Eosinófilos (%)</Label>
+                    <Input id="eosinofilos" type="number" placeholder="Ex: 2" value={eosinofilos} onChange={(e) => setEosinofilos(e.target.value)} className="bg-white rounded-lg border-gray-200 dark:border-gray-600 focus:ring-2 focus:ring-blue-400 placeholder-[#9CA3AF] dark:placeholder-gray-500 transition-all duration-200" />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="basofilos">Basófilos (%)</Label>
+                    <Input id="basofilos" type="number" placeholder="Ex: 1" value={basofilos} onChange={(e) => setBasofilos(e.target.value)} className="bg-white rounded-lg border-gray-200 dark:border-gray-600 focus:ring-2 focus:ring-blue-400 placeholder-[#9CA3AF] dark:placeholder-gray-500 transition-all duration-200" />
+                  </div>
                 </div>
-                <div className="space-y-2">
-                  <Label htmlFor="bastoes">Bastões (%)</Label>
-                  <Input id="bastoes" type="number" placeholder="Ex: 0" value={bastoes} onChange={(e) => setBastoes(e.target.value)} className="bg-white rounded-lg border-gray-200 dark:border-gray-600 focus:ring-2 focus:ring-blue-400 placeholder-[#9CA3AF] dark:placeholder-gray-500 transition-all duration-200" />
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="segmentados">Segmentados (%)</Label>
-                  <Input id="segmentados" type="number" placeholder="Ex: 60" value={segmentados} onChange={(e) => setSegmentados(e.target.value)} className="bg-white rounded-lg border-gray-200 dark:border-gray-600 focus:ring-2 focus:ring-blue-400 placeholder-[#9CA3AF] dark:placeholder-gray-500 transition-all duration-200" />
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="linfocitos">Linfócitos (%)</Label>
-                  <Input id="linfocitos" type="number" placeholder="Ex: 30" value={linfocitos} onChange={(e) => setLinfocitos(e.target.value)} className="bg-white rounded-lg border-gray-200 dark:border-gray-600 focus:ring-2 focus:ring-blue-400 placeholder-[#9CA3AF] dark:placeholder-gray-500 transition-all duration-200" />
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="monocitos">Monócitos (%)</Label>
-                  <Input id="monocitos" type="number" placeholder="Ex: 3" value={monocitos} onChange={(e) => setMonocitos(e.target.value)} className="bg-white rounded-lg border-gray-200 dark:border-gray-600 focus:ring-2 focus:ring-blue-400 placeholder-[#9CA3AF] dark:placeholder-gray-500 transition-all duration-200" />
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="eosinofilos">Eosinófilos (%)</Label>
-                  <Input id="eosinofilos" type="number" placeholder="Ex: 2" value={eosinofilos} onChange={(e) => setEosinofilos(e.target.value)} className="bg-white rounded-lg border-gray-200 dark:border-gray-600 focus:ring-2 focus:ring-blue-400 placeholder-[#9CA3AF] dark:placeholder-gray-500 transition-all duration-200" />
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="basofilos">Basófilos (%)</Label>
-                  <Input id="basofilos" type="number" placeholder="Ex: 1" value={basofilos} onChange={(e) => setBasofilos(e.target.value)} className="bg-white rounded-lg border-gray-200 dark:border-gray-600 focus:ring-2 focus:ring-blue-400 placeholder-[#9CA3AF] dark:placeholder-gray-500 transition-all duration-200" />
-                </div>
+              </>
+            ) : (
+              <div className="space-y-2 col-span-full">
+                <Label htmlFor="examResult">Resultado</Label>
+                <Input
+                  id="examResult"
+                  placeholder="Resultado do exame"
+                  value={examResult}
+                  onChange={(e) => setExamResult(e.target.value)}
+                  className="bg-white rounded-lg border-gray-200 dark:border-gray-600 focus:ring-2 focus:ring-blue-400 placeholder-[#9CA3AF] dark:placeholder-gray-500 transition-all duration-200"
+                />
               </div>
-            </>
-          ) : (
+            )}
+
+            <div className="space-y-2 col-span-full mt-4">
+              <Label htmlFor="examObservations">Observações</Label>
+              <Textarea
+                id="examObservations"
+                placeholder="Observações gerais do exame"
+                value={examObservations}
+                onChange={(e) => setExamObservations(e.target.value)}
+                rows={3}
+                className="bg-white rounded-lg border-gray-200 dark:border-gray-600 focus:ring-2 focus:ring-blue-400 placeholder-[#9CA3AF] dark:placeholder-gray-500 transition-all duration-200"
+              />
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <Label htmlFor="operator">Operador</Label>
+                <Input
+                  id="operator"
+                  placeholder="Nome do operador"
+                  value={operator}
+                  onChange={(e) => setOperator(e.target.value)}
+                  className="bg-white rounded-lg border-gray-200 dark:border-gray-600 focus:ring-2 focus:ring-blue-400 placeholder-[#9CA3AF] dark:placeholder-gray-500 transition-all duration-200"
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="referenceDate">Data de Referência</Label>
+                <Input
+                  id="referenceDate"
+                  type="date"
+                  value={referenceDate}
+                  onChange={(e) => setReferenceDate(e.target.value)}
+                  className="bg-white rounded-lg border-gray-200 dark:border-gray-600 focus:ring-2 focus:ring-blue-400 placeholder-[#9CA3AF] dark:placeholder-gray-500 transition-all duration-200"
+                />
+              </div>
+            </div>
             <div className="space-y-2 col-span-full">
-              <Label htmlFor="examResult">Resultado</Label>
-              <Input
-                id="examResult"
-                placeholder="Resultado do exame"
-                value={examResult}
-                onChange={(e) => setExamResult(e.target.value)}
+              <Label htmlFor="referenceTables">Tabelas de referência</Label>
+              <Textarea
+                id="referenceTables"
+                placeholder="Tabelas de referência"
+                value={referenceTables}
+                onChange={(e) => setReferenceTables(e.target.value)}
+                rows={3}
                 className="bg-white rounded-lg border-gray-200 dark:border-gray-600 focus:ring-2 focus:ring-blue-400 placeholder-[#9CA3AF] dark:placeholder-gray-500 transition-all duration-200"
               />
             </div>
-          )}
+            <div className="space-y-2 col-span-full">
+              <Label htmlFor="conclusions">Conclusões</Label>
+              <Textarea
+                id="conclusions"
+                placeholder="Conclusões do exame"
+                value={conclusions}
+                onChange={(e) => setConclusions(e.target.value)}
+                rows={5}
+                className="bg-white rounded-lg border-gray-200 dark:border-gray-600 focus:ring-2 focus:ring-blue-400 placeholder-[#9CA3AF] dark:placeholder-gray-500 transition-all duration-200"
+              />
+            </div>
+          </CardContent>
+        </Card>
 
-          <div className="space-y-2 col-span-full mt-4">
-            <Label htmlFor="examObservations">Observações</Label>
-            <Textarea
-              id="examObservations"
-              placeholder="Observações gerais do exame"
-              value={examObservations}
-              onChange={(e) => setExamObservations(e.target.value)}
-              rows={3}
-              className="bg-white rounded-lg border-gray-200 dark:border-gray-600 focus:ring-2 focus:ring-blue-400 placeholder-[#9CA3AF] dark:placeholder-gray-500 transition-all duration-200"
-            />
-          </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div className="space-y-2">
-              <Label htmlFor="operator">Operador</Label>
-              <Input
-                id="operator"
-                placeholder="Nome do operador"
-                value={operator}
-                onChange={(e) => setOperator(e.target.value)}
-                className="bg-white rounded-lg border-gray-200 dark:border-gray-600 focus:ring-2 focus:ring-blue-400 placeholder-[#9CA3AF] dark:placeholder-gray-500 transition-all duration-200"
-              />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="referenceDate">Data de Referência</Label>
-              <Input
-                id="referenceDate"
-                type="date"
-                value={referenceDate}
-                onChange={(e) => setReferenceDate(e.target.value)}
-                className="bg-white rounded-lg border-gray-200 dark:border-gray-600 focus:ring-2 focus:ring-blue-400 placeholder-[#9CA3AF] dark:placeholder-gray-500 transition-all duration-200"
-              />
-            </div>
-          </div>
-          <div className="space-y-2 col-span-full">
-            <Label htmlFor="referenceTables">Tabelas de referência</Label>
-            <Textarea
-              id="referenceTables"
-              placeholder="Tabelas de referência"
-              value={referenceTables}
-              onChange={(e) => setReferenceTables(e.target.value)}
-              rows={3}
-              className="bg-white rounded-lg border-gray-200 dark:border-gray-600 focus:ring-2 focus:ring-blue-400 placeholder-[#9CA3AF] dark:placeholder-gray-500 transition-all duration-200"
-            />
-          </div>
-          <div className="space-y-2 col-span-full">
-            <Label htmlFor="conclusions">Conclusões</Label>
-            <Textarea
-              id="conclusions"
-              placeholder="Conclusões do exame"
-              value={conclusions}
-              onChange={(e) => setConclusions(e.target.value)}
-              rows={5}
-              className="bg-white rounded-lg border-gray-200 dark:border-gray-600 focus:ring-2 focus:ring-blue-400 placeholder-[#9CA3AF] dark:placeholder-gray-500 transition-all duration-200"
-            />
-          </div>
-        </CardContent>
-      </Card>
-
-      <div className="flex justify-end gap-2 mt-6">
-        <Link to={`/clients/${clientId}/animals/${animalId}/record`}>
-          <Button variant="outline" className="bg-white border border-gray-300 text-gray-700 hover:bg-gray-50 rounded-md transition-all duration-200 shadow-sm hover:shadow-md dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200 dark:hover:bg-gray-600">
-            <FaTimes className="mr-2 h-4 w-4" /> Cancelar
+        <div className="flex justify-end gap-2 mt-6">
+          <Link to={`/clients/${clientId}/animals/${animalId}/record`}>
+            <Button variant="outline" className="bg-white border border-gray-300 text-gray-700 hover:bg-gray-50 rounded-md transition-all duration-200 shadow-sm hover:shadow-md dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200 dark:hover:bg-gray-600">
+              <FaTimes className="mr-2 h-4 w-4" /> Cancelar
+            </Button>
+          </Link>
+          <Button onClick={handleSaveExam} className="bg-gradient-to-r from-blue-500 to-indigo-500 text-white hover:from-blue-600 hover:to-indigo-600 rounded-md font-semibold transition-all duration-200 shadow-md hover:shadow-lg">
+            <FaSave className="mr-2 h-4 w-4" /> Salvar Exame
           </Button>
-        </Link>
-        <Button onClick={handleSaveExam} className="bg-gradient-to-r from-blue-500 to-indigo-500 text-white hover:from-blue-600 hover:to-indigo-600 rounded-md font-semibold transition-all duration-200 shadow-md hover:shadow-lg">
-          <FaSave className="mr-2 h-4 w-4" /> Salvar Exame
-        </Button>
+        </div>
       </div>
     </div>
   );

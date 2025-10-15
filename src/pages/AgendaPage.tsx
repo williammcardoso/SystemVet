@@ -154,7 +154,7 @@ const AgendaPage = () => {
     }
 
     const client = mockClients.find(c => c.id === newAppointmentClientId);
-    const animal = client?.animals.find(a => a.id === newAppointmentAnimalId);
+    const animal = client?.animals.find(a => c.id === newAppointmentClientId)?.animals.find(a => a.id === newAppointmentAnimalId);
 
     if (!client || !animal) {
       toast.error("Cliente ou animal selecionado inválido.");
