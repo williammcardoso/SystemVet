@@ -3,28 +3,23 @@ import { Document, Page, View, Text, StyleSheet, Font } from "@react-pdf/rendere
 import { MedicationData } from "@/types/medication";
 import { mockCompanySettings, mockUserSettings } from "@/mockData/settings";
 
-// Registrando a fonte Roboto com pesos regular e bold usando caminhos de string literais
+// Removendo as importações diretas dos arquivos .ttf
+// import ExoRegular from '/fonts/Exo-Regular.ttf';
+// import ExoBold from '/fonts/Exo-Bold.ttf';
+
+// Registrando a fonte Exo com pesos regular e bold usando caminhos de string literais
 Font.register({
-  family: "Roboto",
+  family: "Exo",
   fonts: [
-    { src: '/fonts/Roboto-Regular.ttf', fontWeight: 400, format: 'truetype' },
-    { src: '/fonts/Roboto-Bold.ttf', fontWeight: 700, format: 'truetype' },
+    { src: '/fonts/Exo-Regular.ttf', fontWeight: 400, format: 'truetype' },
+    { src: '/fonts/Exo-Bold.ttf', fontWeight: 700, format: 'truetype' },
   ],
 });
-
-// Removendo o registro da fonte Exo para evitar o erro 'Unknown font format'.
-// Font.register({
-//   family: "Exo",
-//   fonts: [
-//     { src: '/fonts/Exo-Regular.ttf', fontWeight: 400, format: 'truetype' },
-//     { src: '/fonts/Exo-Bold.ttf', fontWeight: 700, format: 'truetype' },
-//   ],
-// });
 
 const styles = StyleSheet.create({
   page: {
     padding: 30,
-    fontFamily: "Roboto", // Mantém Roboto como a fonte principal do documento
+    fontFamily: "Exo", // Usando a fonte Exo
     fontSize: 10,
     color: "#333",
   },
@@ -57,7 +52,7 @@ const styles = StyleSheet.create({
   mainTitle: {
     fontSize: 20,
     textAlign: "center",
-    fontFamily: "Roboto", // Mantém Roboto para o título principal
+    fontFamily: "Exo", // Usando Exo para o título principal
     fontWeight: "bold",
     marginBottom: 20,
   },
@@ -179,7 +174,6 @@ const styles = StyleSheet.create({
     marginLeft: 20,
     marginTop: 3,
     fontStyle: "italic",
-    // Removendo fontFamily: "Exo" para usar a fonte padrão (Roboto)
   },
   generalObservationsSection: {
     marginTop: 25,
@@ -242,7 +236,7 @@ const styles = StyleSheet.create({
   controlledPrescriptionTitle: {
     fontSize: 22,
     textAlign: "center",
-    fontFamily: "Roboto", // Mantém Roboto para o título principal
+    fontFamily: "Exo",
     fontWeight: "bold",
     color: "#333",
     marginBottom: 15,
