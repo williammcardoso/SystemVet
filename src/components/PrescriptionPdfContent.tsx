@@ -83,8 +83,8 @@ const styles = StyleSheet.create({
     borderColor: "#ddd",
     borderRadius: 5,
     padding: 10,
-    marginBottom: 10,
-    marginTop: 0, // Ajustado para aproximar
+    marginBottom: 5, // Reduzido
+    marginTop: 0,
   },
   patientInfoControlledTitle: {
     fontSize: 11,
@@ -100,7 +100,7 @@ const styles = StyleSheet.create({
   groupTitle: {
     fontSize: 13,
     fontWeight: "bold",
-    marginTop: 15,
+    marginTop: 10, // Reduzido
     marginBottom: 8,
     textTransform: "uppercase",
     borderBottomWidth: 1,
@@ -109,7 +109,7 @@ const styles = StyleSheet.create({
   },
   medicationItem: {
     flexDirection: "column",
-    marginBottom: 15,
+    marginBottom: 10, // Reduzido
   },
   medicationHeaderLine: {
     flexDirection: "row",
@@ -225,7 +225,7 @@ const styles = StyleSheet.create({
   },
   // Estilos para o cabeçalho de receita controlada
   controlledPrescriptionHeader: {
-    marginBottom: 0,
+    marginBottom: 5, // Reduzido
     paddingBottom: 10,
     borderBottomWidth: 0,
     borderBottomColor: "#eee",
