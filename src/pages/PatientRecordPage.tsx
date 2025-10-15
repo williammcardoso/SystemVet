@@ -395,7 +395,7 @@ const PatientRecordPage = () => {
     if (newObservation.trim()) {
       const newEntry: ObservationEntry = {
         id: String(observations.length + 1),
-        date: new Date().toISOString().split('T')[0],
+        date: newObservation.trim(),
         observation: newObservation.trim(),
       };
       setObservations([...observations, newEntry]);
@@ -1192,9 +1192,6 @@ const PatientRecordPage = () => {
                       <Card key={rx.id} className="p-4 bg-background dark:bg-gray-800 shadow-sm border border-gray-200 dark:border-gray-700">
                         <div className="flex items-center justify-between mb-2">
                           <div className="flex items-center gap-2">
-                            <p className="text-lg font-semibold text-foreground">
-                              {rx.treatmentDescription || "Receita sem descrição"}
-                            </p>
                             <Badge className={cn(
                               "px-2 py-0.5 text-xs font-medium rounded-full",
                               rx.type === 'simple' && "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200",
@@ -1203,6 +1200,9 @@ const PatientRecordPage = () => {
                             )}>
                               {rx.type === 'simple' ? 'Receita Simples' : rx.type === 'controlled' ? 'Controlada' : 'Manipulada'}
                             </Badge>
+                            <p className="text-lg font-semibold text-foreground">
+                              {rx.treatmentDescription || "Receita sem descrição"}
+                            </p>
                           </div>
                           <div className="flex items-center gap-2">
                             <Button variant="ghost" size="icon" onClick={() => handlePrintSinglePrescription(rx)} className="rounded-md hover:bg-gray-100 hover:text-gray-900 dark:hover:bg-gray-700 dark:hover:text-gray-200 transition-colors duration-200">
