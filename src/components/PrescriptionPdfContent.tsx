@@ -241,7 +241,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'flex-start',
-    marginBottom: -7, // Ajustado para -7
+    marginBottom: -7,
   },
   issuerVetCard: {
     borderWidth: 1,
@@ -414,7 +414,7 @@ export const PrescriptionPdfContent = ({
   return (
     <Document>
       <Page size="A4" style={styles.page}>
-        <View style={styles.clinicHeader}>
+        <View style={styles.clinicHeader} fixed> {/* Tornando o cabeçalho da clínica fixo */}
           <View style={styles.clinicInfoLeft}>
             <View>
               <Text style={styles.clinicName}>{mockCompanySettings.companyName}</Text>
@@ -474,49 +474,51 @@ export const PrescriptionPdfContent = ({
           </View>
         )}
 
-        {Object.keys(groupedMedications).map((useType) => (
-          <View key={useType}>
-            <Text style={styles.groupTitle}>{useType}</Text>
-            {groupedMedications[useType].map((med, index) => (
-              <View key={med.id} style={styles.medicationItem}>
-                <View style={styles.medicationHeaderLine}>
-                  <Text style={styles.medicationNumber}>{index + 1})</Text>
-                  <Text style={styles.medicationNameConcentration}>
-                    {(() => {
-                      const name = (med.medicationName && med.medicationName.trim()) || '';
-                      const concentration = (med.concentration && med.concentration.trim()) || '';
-                      if (name.length > 0 && concentration.length > 0) { return `${name} ${concentration}`; }
-                      else if (name.length > 0) { return name; }
-                      else if (concentration.length > 0) { return concentration; }
-                      return 'Medicamento sem nome';
-                    })()}
-                  </Text>
-                  <View style={styles.lineSeparator}/>
-                  <View style={styles.badgeContainer}>
-                    {med.pharmacyType ? (<Text style={styles.pharmacyBadge}>{med.pharmacyType === "Farmácia Veterinária" ? "VET" : "HUMANA"}</Text>) : null}
-                    {med.totalQuantityDisplay ? (<Text style={styles.quantityBadge}>{med.totalQuantityDisplay}</Text>) : null}
+        <View style={{ flexGrow: 1 }}> {/* Wrapper para o conteúdo que deve paginar */}
+          {Object.keys(groupedMedications).map((useType) => (
+            <View key={useType}>
+              <Text style={styles.groupTitle}>{useType}</Text>
+              {groupedMedications[useType].map((med, index) => (
+                <View key={med.id} style={styles.medicationItem}>
+                  <View style={styles.medicationHeaderLine}>
+                    <Text style={styles.medicationNumber}>{index + 1})</Text>
+                    <Text style={styles.medicationNameConcentration}>
+                      {(() => {
+                        const name = (med.medicationName && med.medicationName.trim()) || '';
+                        const concentration = (med.concentration && med.concentration.trim()) || '';
+                        if (name.length > 0 && concentration.length > 0) { return `${name} ${concentration}`; }
+                        else if (name.length > 0) { return name; }
+                        else if (concentration.length > 0) { return concentration; }
+                        return 'Medicamento sem nome';
+                      })()}
+                    </Text>
+                    <View style={styles.lineSeparator}/>
+                    <View style={styles.badgeContainer}>
+                      {med.pharmacyType ? (<Text style={styles.pharmacyBadge}>{med.pharmacyType === "Farmácia Veterinária" ? "VET" : "HUMANA"}</Text>) : null}
+                      {med.totalQuantityDisplay ? (<Text style={styles.quantityBadge}>{med.totalQuantityDisplay}</Text>) : null}
+                    </View>
                   </View>
-                </View>
-                <Text style={styles.medicationInstructions}>
-                  {med.generatedInstructions || 'Sem instruções de uso.'}
-                </Text>
-                {med.generalObservations && med.generalObservations.trim().length > 0 ? (
-                  <Text style={styles.medicationObservations}>
-                    <Text style={{ fontFamily: "Exo", fontWeight: "bold" }}>Obs.:</Text>
-                    <Text style={{ fontFamily: "Exo", fontWeight: "normal" }}> {med.generalObservations}</Text>
+                  <Text style={styles.medicationInstructions}>
+                    {med.generatedInstructions || 'Sem instruções de uso.'}
                   </Text>
-                ) : null}
-              </View>
-            ))}
-          </View>
-        ))}
+                  {med.generalObservations && med.generalObservations.trim().length > 0 ? (
+                    <Text style={styles.medicationObservations}>
+                      <Text style={{ fontFamily: "Exo", fontWeight: "bold" }}>Obs.:</Text>
+                      <Text style={{ fontFamily: "Exo", fontWeight: "normal" }}> {med.generalObservations}</Text>
+                    </Text>
+                  ) : null}
+                </View>
+              ))}
+            </View>
+          ))}
 
-        {generalObservations ? (
-          <View style={styles.generalObservationsSection}>
-            <Text style={styles.generalObservationsTitle}>Observações Gerais da Receita</Text>
-            <Text style={styles.generalObservationsText}>{generalObservations}</Text>
-          </View>
-        ) : null}
+          {generalObservations ? (
+            <View style={styles.generalObservationsSection}>
+              <Text style={styles.generalObservationsTitle}>Observações Gerais da Receita</Text>
+              <Text style={styles.generalObservationsText}>{generalObservations}</Text>
+            </View>
+          ) : null}
+        </View>
 
         {/* NOVO BLOCO: Data e Assinatura do Comprador (para Receitas Controladas, fixo na parte inferior) */}
         {prescriptionType === 'controlled' && (
