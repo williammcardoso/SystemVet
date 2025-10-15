@@ -99,7 +99,7 @@ const styles = StyleSheet.create({
     color: "#333",
   },
   groupTitle: {
-    fontSize: 13,
+    fontSize: 12, // Reduzido
     fontWeight: "bold",
     marginTop: 10,
     marginBottom: 8,
@@ -110,7 +110,7 @@ const styles = StyleSheet.create({
   },
   medicationItem: {
     flexDirection: "column",
-    marginBottom: 10,
+    marginBottom: 8, // Reduzido
   },
   medicationHeaderLine: {
     flexDirection: "row",
@@ -119,12 +119,12 @@ const styles = StyleSheet.create({
     marginBottom: 5,
   },
   medicationNumber: {
-    fontSize: 11,
+    fontSize: 10, // Reduzido
     marginRight: 5,
     width: 15,
   },
   medicationNameConcentration: {
-    fontSize: 11,
+    fontSize: 10, // Reduzido
     fontWeight: "bold",
     flexShrink: 1,
   },
@@ -141,9 +141,9 @@ const styles = StyleSheet.create({
     flexShrink: 0,
   },
   pharmacyBadge: {
-    fontSize: 8,
-    paddingHorizontal: 6,
-    paddingVertical: 3,
+    fontSize: 7, // Reduzido
+    paddingHorizontal: 5, // Reduzido
+    paddingVertical: 2, // Reduzido
     borderRadius: 8,
     backgroundColor: "#f0f0f0",
     color: "#555",
@@ -151,9 +151,9 @@ const styles = StyleSheet.create({
     borderColor: "#ccc",
   },
   quantityBadge: {
-    fontSize: 9,
-    paddingHorizontal: 8,
-    paddingVertical: 4,
+    fontSize: 8, // Reduzido
+    paddingHorizontal: 7, // Reduzido
+    paddingVertical: 3, // Reduzido
     borderRadius: 8,
     backgroundColor: "#e0e0ff",
     color: "#333",
@@ -161,13 +161,13 @@ const styles = StyleSheet.create({
     borderColor: "#aaa",
   },
   medicationInstructions: {
-    fontSize: 10,
+    fontSize: 9, // Reduzido
     color: "#444",
     marginLeft: 20,
-    lineHeight: 1.4,
+    lineHeight: 1.3, // Reduzido
   },
   medicationObservations: {
-    fontSize: 9,
+    fontSize: 8, // Reduzido
     color: "#777",
     marginLeft: 20,
     marginTop: 3,
@@ -175,19 +175,19 @@ const styles = StyleSheet.create({
     fontFamily: "Exo",
   },
   generalObservationsSection: {
-    marginTop: 25,
-    paddingTop: 10,
+    marginTop: 15, // Reduzido
+    paddingTop: 8, // Reduzido
     borderTopWidth: 1,
     borderTopColor: "#eee",
   },
   generalObservationsTitle: {
-    fontSize: 13,
+    fontSize: 12, // Reduzido
     fontWeight: "bold",
     marginBottom: 8,
   },
   generalObservationsText: {
-    fontSize: 10,
-    lineHeight: 1.5,
+    fontSize: 9, // Reduzido
+    lineHeight: 1.4, // Reduzido
   },
   vetSignatureBlock: {
     textAlign: 'center',
@@ -474,7 +474,7 @@ export const PrescriptionPdfContent = ({
           </View>
         )}
 
-        <View> {/* Removido flexGrow: 1 para forçar o conteúdo a caber em uma página */}
+        <View> {/* Este View não tem flexGrow: 1 para evitar paginação automática */}
           {Object.keys(groupedMedications).map((useType) => (
             <View key={useType}>
               <Text style={styles.groupTitle}>{useType}</Text>
