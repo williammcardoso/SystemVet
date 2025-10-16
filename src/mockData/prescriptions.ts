@@ -255,4 +255,37 @@ export let mockPrescriptions: PrescriptionEntry[] = [
       generalObservations: "Evitar exposição solar após a aplicação. Uso externo apenas.",
     },
   },
+  {
+    id: "rx-manipulated-custom",
+    date: new Date().toISOString().split('T')[0],
+    medicationName: "Fórmula Manipulada Personalizada",
+    treatmentDescription: "Tratamento com componentes e posologia customizados.",
+    instructions: "Observações gerais para a receita manipulada personalizada.",
+    type: 'manipulated',
+    manipulatedPrescription: {
+      formulaComponents: [
+        { id: "comp-custom-1", name: "Componente X", dosageQuantity: "10", dosageUnit: "mg" },
+      ],
+      vehicleExcipient: { type: "Outro", customType: "Gel Transdérmico", quantity: "50", unit: "g" },
+      posology: {
+        type: 'automatic',
+        data: {
+          dosage: "2",
+          measure: "Outro", customMeasure: "Pumps",
+          frequencyValue: "Outro", customFrequencyValue: "3",
+          frequencyUnit: "Outro", customFrequencyUnit: "Vezes ao Dia",
+          durationValue: "Outro", customDurationValue: "2",
+          durationUnit: "Outro", customDurationUnit: "Semanas",
+          finalDescription: "Dar 2 Pumps(s) a cada 3 Vezes ao Dia, durante 2 Semanas.",
+        },
+      },
+      productDetails: {
+        productType: "Manipulado",
+        quantity: "1 unidade",
+        pharmacy: "Farmácia de Manipulação",
+        route: "Outra", customRoute: "Transdérmica",
+      },
+      generalObservations: "Manter refrigerado. Aplicar em área limpa e seca.",
+    },
+  },
 ];

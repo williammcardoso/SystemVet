@@ -27,13 +27,13 @@ interface PrescriptionManipulatedFormProps {
 }
 
 const mockVehicleTypes = ["Bastão", "Cápsula", "Comprimido", "Creme", "Drágea", "Gel", "Gotas", "Líquido", "Pó", "Dose", "Outro"];
-const mockVehicleUnits = ["%", "Grama (g)", "Micrograma (mcg)", "Miligrama (mg)", "Mililitro (mL)", "UFC", "UFC/g", "UFC/kg", "Unidade(s)"]; // Alterado para Unidade(s)
+const mockVehicleUnits = ["%", "Grama (g)", "Miligrama (mg)", "Mililitro (mL)", "Micrograma (mcg)", "UFC", "UFC/g", "UFC/kg", "Unidade(s)"];
 
 const mockPosologyMeasures = ["Comprimido", "Cápsula", "Líquido (ml)", "Gotas", "Aplicação", "Spray", "Pomada", "Outro"];
-const mockPosologyFrequencies = ["1", "2", "3", "4", "6", "8", "12", "24"]; // Valores numéricos
-const mockPosologyFrequencyUnits = ["Hora(s)", "Dia(s)"];
-const mockPosologyDurations = ["1", "3", "5", "7", "10", "14", "21", "30"]; // Valores numéricos
-const mockPosologyDurationUnits = ["Dia(s)", "Mês(es)"];
+const mockPosologyFrequencies = ["1", "2", "3", "4", "6", "8", "12", "24", "Outro"]; // Valores numéricos
+const mockPosologyFrequencyUnits = ["Hora(s)", "Dia(s)", "Outro"];
+const mockPosologyDurations = ["1", "3", "5", "7", "10", "14", "21", "30", "Outro"]; // Valores numéricos
+const mockPosologyDurationUnits = ["Dia(s)", "Mês(es)", "Outro"];
 
 const mockProductRoutes = ["Oral", "Tópica", "Injetável", "Oftálmica", "Auricular", "Outra"];
 
@@ -63,7 +63,10 @@ const PrescriptionManipulatedForm: React.FC<PrescriptionManipulatedFormProps> = 
   const [vehicleExcipient, setVehicleExcipient] = useState<ManipulatedVehicleExcipient>(
     initialData?.vehicleExcipient || { type: "", quantity: "", unit: "" }
   );
-  const [customVehicleType, setCustomVehicleType] = useState<string>(initialData?.vehicleExcipient?.type === "Outro" ? initialData.vehicleExcipient.type : "");
+  const [customVehicleType, setCustomVehicleType] = useState<string>(
+    initialData?.vehicleExcipient?.type === "Outro" ? initialData.vehicleExcipient.customType || "" : ""
+  );
+
   const [posologyType, setPosologyType] = useState<'automatic' | 'freeText'>(
     initialData?.posology.type || 'automatic'
   );
@@ -72,11 +75,30 @@ const PrescriptionManipulatedForm: React.FC<PrescriptionManipulatedFormProps> = 
       dosage: "", measure: "", frequencyValue: "", frequencyUnit: "", durationValue: "", durationUnit: "", finalDescription: ""
     })
   );
+  const [customPosologyMeasure, setCustomPosologyMeasure] = useState<string>(
+    initialData?.posology.type === 'automatic' && initialData.posology.data.measure === "Outro" ? initialData.posology.data.customMeasure || "" : ""
+  );
+  const [customPosologyFrequencyValue, setCustomPosologyFrequencyValue] = useState<string>(
+    initialData?.posology.type === 'automatic' && initialData.posology.data.frequencyValue === "Outro" ? initialData.posology.data.customFrequencyValue || "" : ""
+  );
+  const [customPosologyFrequencyUnit, setCustomPosologyFrequencyUnit] = useState<string>(
+    initialData?.posology.type === 'automatic' && initialData.posology.data.frequencyUnit === "Outro" ? initialData.posology.data.customFrequencyUnit || "" : ""
+  );
+  const [customPosologyDurationValue, setCustomPosologyDurationValue] = useState<string>(
+    initialData?.posology.type === 'automatic' && initialData.posology.data.durationValue === "Outro" ? initialData.posology.data.customDurationValue || "" : ""
+  );
+  const [customPosologyDurationUnit, setCustomPosologyDurationUnit] = useState<string>(
+    initialData?.posology.type === 'automatic' && initialData.posology.data.durationUnit === "Outro" ? initialData.posology.data.customDurationUnit || "" : ""
+  );
+
   const [posologyFreeText, setPosologyFreeText] = useState<ManipulatedPosologyFreeText>(
     (initialData?.posology.type === 'freeText' ? initialData.posology.data : { finalDescription: "" })
   );
   const [productDetails, setProductDetails] = useState<ManipulatedProductDetails>(
     initialData?.productDetails || { productType: "", quantity: "", pharmacy: "", route: "" }
+  );
+  const [customProductRoute, setCustomProductRoute] = useState<string>(
+    initialData?.productDetails?.route === "Outra" ? initialData.productDetails.customRoute || "" : ""
   );
   const [generalObservations, setGeneralObservations] = useState<string>(initialData?.generalObservations || "");
 
@@ -84,23 +106,84 @@ const PrescriptionManipulatedForm: React.FC<PrescriptionManipulatedFormProps> = 
   useEffect(() => {
     if (vehicleExcipient.type !== "Outro") {
       setCustomVehicleType("");
-    } else if (initialData?.vehicleExcipient?.type === "Outro") {
-      setCustomVehicleType(initialData.vehicleExcipient.type);
+    } else if (initialData?.vehicleExcipient?.type === "Outro" && initialData.vehicleExcipient.customType) {
+      setCustomVehicleType(initialData.vehicleExcipient.customType);
     }
   }, [vehicleExcipient.type, initialData]);
+
+  // Sincronizar customPosologyMeasure quando posologyAutomatic.measure muda
+  useEffect(() => {
+    if (posologyAutomatic.measure !== "Outro") {
+      setCustomPosologyMeasure("");
+    } else if (initialData?.posology.type === 'automatic' && initialData.posology.data.measure === "Outro" && initialData.posology.data.customMeasure) {
+      setCustomPosologyMeasure(initialData.posology.data.customMeasure);
+    }
+  }, [posologyAutomatic.measure, initialData]);
+
+  // Sincronizar customPosologyFrequencyValue quando posologyAutomatic.frequencyValue muda
+  useEffect(() => {
+    if (posologyAutomatic.frequencyValue !== "Outro") {
+      setCustomPosologyFrequencyValue("");
+    } else if (initialData?.posology.type === 'automatic' && initialData.posology.data.frequencyValue === "Outro" && initialData.posology.data.customFrequencyValue) {
+      setCustomPosologyFrequencyValue(initialData.posology.data.customFrequencyValue);
+    }
+  }, [posologyAutomatic.frequencyValue, initialData]);
+
+  // Sincronizar customPosologyFrequencyUnit quando posologyAutomatic.frequencyUnit muda
+  useEffect(() => {
+    if (posologyAutomatic.frequencyUnit !== "Outro") {
+      setCustomPosologyFrequencyUnit("");
+    } else if (initialData?.posology.type === 'automatic' && initialData.posology.data.frequencyUnit === "Outro" && initialData.posology.data.customFrequencyUnit) {
+      setCustomPosologyFrequencyUnit(initialData.posology.data.customFrequencyUnit);
+    }
+  }, [posologyAutomatic.frequencyUnit, initialData]);
+
+  // Sincronizar customPosologyDurationValue quando posologyAutomatic.durationValue muda
+  useEffect(() => {
+    if (posologyAutomatic.durationValue !== "Outro") {
+      setCustomPosologyDurationValue("");
+    } else if (initialData?.posology.type === 'automatic' && initialData.posology.data.durationValue === "Outro" && initialData.posology.data.customDurationValue) {
+      setCustomPosologyDurationValue(initialData.posology.data.customDurationValue);
+    }
+  }, [posologyAutomatic.durationValue, initialData]);
+
+  // Sincronizar customPosologyDurationUnit quando posologyAutomatic.durationUnit muda
+  useEffect(() => {
+    if (posologyAutomatic.durationUnit !== "Outro") {
+      setCustomPosologyDurationUnit("");
+    } else if (initialData?.posology.type === 'automatic' && initialData.posology.data.durationUnit === "Outro" && initialData.posology.data.customDurationUnit) {
+      setCustomPosologyDurationUnit(initialData.posology.data.customDurationUnit);
+    }
+  }, [posologyAutomatic.durationUnit, initialData]);
+
+  // Sincronizar customProductRoute quando productDetails.route muda
+  useEffect(() => {
+    if (productDetails.route !== "Outra") {
+      setCustomProductRoute("");
+    } else if (initialData?.productDetails?.route === "Outra" && initialData.productDetails.customRoute) {
+      setCustomProductRoute(initialData.productDetails.customRoute);
+    }
+  }, [productDetails.route, initialData]);
 
 
   // Auto-generate final description for automatic posology
   useEffect(() => {
     const { dosage, measure, frequencyValue, frequencyUnit, durationValue, durationUnit } = posologyAutomatic;
+
+    const finalMeasure = measure === "Outro" ? customPosologyMeasure.trim() : measure.trim();
+    const finalFrequencyValue = frequencyValue === "Outro" ? customPosologyFrequencyValue.trim() : frequencyValue.trim();
+    const finalFrequencyUnit = frequencyUnit === "Outro" ? customPosologyFrequencyUnit.trim() : frequencyUnit.trim();
+    const finalDurationValue = durationValue === "Outro" ? customPosologyDurationValue.trim() : durationValue.trim();
+    const finalDurationUnit = durationUnit === "Outro" ? customPosologyDurationUnit.trim() : durationUnit.trim();
+
     let description = "";
 
     const doseText = dosage.trim();
-    const measureText = measure.trim().toLowerCase();
-    const freqVal = frequencyValue.trim();
-    const freqUnit = frequencyUnit.trim().toLowerCase();
-    const durVal = durationValue.trim();
-    const durUnit = durationUnit.trim().toLowerCase();
+    const measureText = finalMeasure.toLowerCase();
+    const freqVal = finalFrequencyValue;
+    const freqUnit = finalFrequencyUnit.toLowerCase();
+    const durVal = finalDurationValue;
+    const durUnit = finalDurationUnit.toLowerCase();
 
     if (doseText && measureText && freqVal && freqUnit && durVal && durUnit) {
       description = `Dar ${doseText} ${measureText}(s) a cada ${freqVal} ${freqUnit}, durante ${durVal} ${durUnit}.`;
@@ -112,7 +195,11 @@ const PrescriptionManipulatedForm: React.FC<PrescriptionManipulatedFormProps> = 
       description = `Dar ${doseText}.`;
     }
     setPosologyAutomatic(prev => ({ ...prev, finalDescription: description }));
-  }, [posologyAutomatic.dosage, posologyAutomatic.measure, posologyAutomatic.frequencyValue, posologyAutomatic.frequencyUnit, posologyAutomatic.durationValue, posologyAutomatic.durationUnit]);
+  }, [
+    posologyAutomatic.dosage, posologyAutomatic.measure, customPosologyMeasure,
+    posologyAutomatic.frequencyValue, customPosologyFrequencyValue, posologyAutomatic.frequencyUnit, customPosologyFrequencyUnit,
+    posologyAutomatic.durationValue, customPosologyDurationValue, posologyAutomatic.durationUnit, customPosologyDurationUnit
+  ]);
 
 
   const handleAddComponent = () => {
@@ -145,16 +232,25 @@ const PrescriptionManipulatedForm: React.FC<PrescriptionManipulatedFormProps> = 
       return;
     }
 
-    if (posologyType === 'automatic' && (!posologyAutomatic.dosage.trim() || !posologyAutomatic.measure.trim() || !posologyAutomatic.frequencyValue.trim() || !posologyAutomatic.frequencyUnit.trim() || !posologyAutomatic.durationValue.trim() || !posologyAutomatic.durationUnit.trim())) {
-      toast.error("Por favor, preencha todos os campos obrigatórios da posologia automática.");
-      return;
+    if (posologyType === 'automatic') {
+      const finalMeasure = posologyAutomatic.measure === "Outro" ? customPosologyMeasure.trim() : posologyAutomatic.measure.trim();
+      const finalFrequencyValue = posologyAutomatic.frequencyValue === "Outro" ? customPosologyFrequencyValue.trim() : posologyAutomatic.frequencyValue.trim();
+      const finalFrequencyUnit = posologyAutomatic.frequencyUnit === "Outro" ? customPosologyFrequencyUnit.trim() : posologyAutomatic.frequencyUnit.trim();
+      const finalDurationValue = posologyAutomatic.durationValue === "Outro" ? customPosologyDurationValue.trim() : posologyAutomatic.durationValue.trim();
+      const finalDurationUnit = posologyAutomatic.durationUnit === "Outro" ? customPosologyDurationUnit.trim() : posologyAutomatic.durationUnit.trim();
+
+      if (!posologyAutomatic.dosage.trim() || !finalMeasure || !finalFrequencyValue || !finalFrequencyUnit || !finalDurationValue || !finalDurationUnit) {
+        toast.error("Por favor, preencha todos os campos obrigatórios da posologia automática.");
+        return;
+      }
     }
     if (posologyType === 'freeText' && !posologyFreeText.finalDescription.trim()) {
       toast.error("Por favor, preencha a descrição final da posologia em texto livre.");
       return;
     }
-    // Validação para o campo 'Via' que é o único restante em productDetails
-    if (!productDetails.route.trim()) {
+    
+    const finalProductRoute = productDetails.route === "Outra" ? customProductRoute.trim() : productDetails.route.trim();
+    if (!finalProductRoute) {
       toast.error("Por favor, preencha o campo 'Via' dos detalhes do produto.");
       return;
     }
@@ -162,21 +258,42 @@ const PrescriptionManipulatedForm: React.FC<PrescriptionManipulatedFormProps> = 
     const dataToSave: ManipulatedPrescriptionData = {
       formulaComponents,
       vehicleExcipient: {
-        type: finalVehicleType,
+        type: vehicleExcipient.type,
+        customType: vehicleExcipient.type === "Outro" ? customVehicleType.trim() : undefined,
         quantity: vehicleExcipient.quantity,
         unit: vehicleExcipient.unit,
       },
-      posology: posologyType === 'automatic' ? { type: 'automatic', data: posologyAutomatic } : { type: 'freeText', data: posologyFreeText },
+      posology: posologyType === 'automatic' ? {
+        type: 'automatic',
+        data: {
+          ...posologyAutomatic,
+          customMeasure: posologyAutomatic.measure === "Outro" ? customPosologyMeasure.trim() : undefined,
+          customFrequencyValue: posologyAutomatic.frequencyValue === "Outro" ? customPosologyFrequencyValue.trim() : undefined,
+          customFrequencyUnit: posologyAutomatic.frequencyUnit === "Outro" ? customPosologyFrequencyUnit.trim() : undefined,
+          customDurationValue: posologyAutomatic.durationValue === "Outro" ? customPosologyDurationValue.trim() : undefined,
+          customDurationUnit: posologyAutomatic.durationUnit === "Outro" ? customPosologyDurationUnit.trim() : undefined,
+        }
+      } : { type: 'freeText', data: posologyFreeText },
       productDetails: {
         productType: "Manipulado", // Definido como fixo, pois é uma receita manipulada
         quantity: "1 unidade", // Definido como fixo, pois não há campo para isso
         pharmacy: "Farmácia de Manipulação", // Definido como fixo
         route: productDetails.route,
+        customRoute: productDetails.route === "Outra" ? customProductRoute.trim() : undefined,
       },
       generalObservations,
     };
     onSave(dataToSave);
   };
+
+  const displayVehicleType = vehicleExcipient.type === "Outro" ? customVehicleType : vehicleExcipient.type;
+  const displayPosologyMeasure = posologyAutomatic.measure === "Outro" ? customPosologyMeasure : posologyAutomatic.measure;
+  const displayPosologyFrequencyValue = posologyAutomatic.frequencyValue === "Outro" ? customPosologyFrequencyValue : posologyAutomatic.frequencyValue;
+  const displayPosologyFrequencyUnit = posologyAutomatic.frequencyUnit === "Outro" ? customPosologyFrequencyUnit : posologyAutomatic.frequencyUnit;
+  const displayPosologyDurationValue = posologyAutomatic.durationValue === "Outro" ? customPosologyDurationValue : posologyAutomatic.durationValue;
+  const displayPosologyDurationUnit = posologyAutomatic.durationUnit === "Outro" ? customPosologyDurationUnit : posologyAutomatic.durationUnit;
+  const displayProductRoute = productDetails.route === "Outra" ? customProductRoute : productDetails.route;
+
 
   return (
     <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
@@ -302,6 +419,14 @@ const PrescriptionManipulatedForm: React.FC<PrescriptionManipulatedFormProps> = 
                         ))}
                       </SelectContent>
                     </Select>
+                    {posologyAutomatic.measure === "Outro" && (
+                      <Input
+                        placeholder="Digite a medida personalizada"
+                        value={customPosologyMeasure}
+                        onChange={(e) => setCustomPosologyMeasure(e.target.value)}
+                        className="mt-2 bg-white rounded-lg border-gray-200 dark:border-gray-600 focus:ring-2 focus:ring-blue-400 placeholder-[#9CA3AF] dark:placeholder-gray-500 transition-all duration-200"
+                      />
+                    )}
                   </div>
                   <div className="space-y-2 col-span-full md:col-span-1 lg:col-span-2"> {/* Ajustado para ocupar mais espaço */}
                     <Label htmlFor="posology-frequency-value">Frequência*</Label>
@@ -331,6 +456,22 @@ const PrescriptionManipulatedForm: React.FC<PrescriptionManipulatedFormProps> = 
                         </SelectContent>
                       </Select>
                     </div>
+                    {posologyAutomatic.frequencyValue === "Outro" && (
+                      <Input
+                        placeholder="Digite o valor da frequência personalizada"
+                        value={customPosologyFrequencyValue}
+                        onChange={(e) => setCustomPosologyFrequencyValue(e.target.value)}
+                        className="mt-2 bg-white rounded-lg border-gray-200 dark:border-gray-600 focus:ring-2 focus:ring-blue-400 placeholder-[#9CA3AF] dark:placeholder-gray-500 transition-all duration-200"
+                      />
+                    )}
+                    {posologyAutomatic.frequencyUnit === "Outro" && (
+                      <Input
+                        placeholder="Digite a unidade da frequência personalizada"
+                        value={customPosologyFrequencyUnit}
+                        onChange={(e) => setCustomPosologyFrequencyUnit(e.target.value)}
+                        className="mt-2 bg-white rounded-lg border-gray-200 dark:border-gray-600 focus:ring-2 focus:ring-blue-400 placeholder-[#9CA3AF] dark:placeholder-gray-500 transition-all duration-200"
+                      />
+                    )}
                   </div>
                   <div className="space-y-2 col-span-full md:col-span-1 lg:col-span-2"> {/* Ajustado para ocupar mais espaço */}
                     <Label htmlFor="posology-duration-value">Duração*</Label>
@@ -360,6 +501,22 @@ const PrescriptionManipulatedForm: React.FC<PrescriptionManipulatedFormProps> = 
                         </SelectContent>
                       </Select>
                     </div>
+                    {posologyAutomatic.durationValue === "Outro" && (
+                      <Input
+                        placeholder="Digite o valor da duração personalizada"
+                        value={customPosologyDurationValue}
+                        onChange={(e) => setCustomPosologyDurationValue(e.target.value)}
+                        className="mt-2 bg-white rounded-lg border-gray-200 dark:border-gray-600 focus:ring-2 focus:ring-blue-400 placeholder-[#9CA3AF] dark:placeholder-gray-500 transition-all duration-200"
+                      />
+                    )}
+                    {posologyAutomatic.durationUnit === "Outro" && (
+                      <Input
+                        placeholder="Digite a unidade da duração personalizada"
+                        value={customPosologyDurationUnit}
+                        onChange={(e) => setCustomPosologyDurationUnit(e.target.value)}
+                        className="mt-2 bg-white rounded-lg border-gray-200 dark:border-gray-600 focus:ring-2 focus:ring-blue-400 placeholder-[#9CA3AF] dark:placeholder-gray-500 transition-all duration-200"
+                      />
+                    )}
                   </div>
                 </div>
                 <div className="bg-blue-50 border border-blue-200 text-blue-800 p-3 rounded-md text-sm mt-4 dark:bg-blue-950 dark:border-blue-700 dark:text-blue-200">
@@ -406,6 +563,14 @@ const PrescriptionManipulatedForm: React.FC<PrescriptionManipulatedFormProps> = 
                   ))}
                 </SelectContent>
               </Select>
+              {productDetails.route === "Outra" && (
+                <Input
+                  placeholder="Digite a via personalizada"
+                  value={customProductRoute}
+                  onChange={(e) => setCustomProductRoute(e.target.value)}
+                  className="mt-2 bg-white rounded-lg border-gray-200 dark:border-gray-600 focus:ring-2 focus:ring-blue-400 placeholder-[#9CA3AF] dark:placeholder-gray-500 transition-all duration-200"
+                />
+              )}
             </div>
             {/* Campos removidos: Tipo de Produto, Quantidade, Farmácia */}
           </CardContent>
@@ -443,9 +608,9 @@ const PrescriptionManipulatedForm: React.FC<PrescriptionManipulatedFormProps> = 
             <CardTitle className="text-lg font-semibold text-[#374151] dark:text-gray-100">Prévia da Fórmula</CardTitle>
           </CardHeader>
           <CardContent className="text-sm text-muted-foreground space-y-4">
-            {productDetails.route && (
+            {displayProductRoute && (
               <div className="pb-2 border-b border-gray-300 dark:border-gray-600">
-                <p className="font-bold text-base text-foreground">VIA {productDetails.route.toUpperCase()}</p>
+                <p className="font-bold text-base text-foreground">VIA {displayProductRoute.toUpperCase()}</p>
               </div>
             )}
 
@@ -462,7 +627,7 @@ const PrescriptionManipulatedForm: React.FC<PrescriptionManipulatedFormProps> = 
                   ))}
                   {vehicleExcipient.type && vehicleExcipient.quantity && vehicleExcipient.unit && (
                     <div className="flex items-end">
-                      <span className="flex-shrink-0">• {(vehicleExcipient.type === "Outro" && customVehicleType) ? customVehicleType : vehicleExcipient.type} q.s.p.</span>
+                      <span className="flex-shrink-0">• {displayVehicleType} q.s.p.</span>
                       <span className="flex-grow border-b border-dotted border-gray-400 dark:border-gray-500 mx-1 h-3"></span>
                       <span className="flex-shrink-0">{vehicleExcipient.quantity} {getShortUnitAbbreviation(vehicleExcipient.unit)}</span>
                     </div>

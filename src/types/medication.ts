@@ -29,6 +29,7 @@ export interface ManipulatedFormulaComponent {
 
 export interface ManipulatedVehicleExcipient {
   type: string; // Ex: Comprimido, Cápsula, Líquido
+  customType?: string; // Novo campo para o tipo personalizado
   quantity: string; // Ex: "30"
   unit: string; // Ex: %, Grama (g), Micrograma (mcg)
 }
@@ -36,10 +37,15 @@ export interface ManipulatedVehicleExcipient {
 export interface ManipulatedPosologyAutomatic {
   dosage: string;
   measure: string; // Ex: Comprimido, Cápsula
+  customMeasure?: string; // Novo campo para a medida personalizada
   frequencyValue: string; // Ex: "1"
+  customFrequencyValue?: string; // Novo campo para o valor da frequência personalizada
   frequencyUnit: string; // Ex: "Dia"
+  customFrequencyUnit?: string; // Novo campo para a unidade da frequência personalizada
   durationValue: string; // Ex: "5"
+  customDurationValue?: string; // Novo campo para o valor da duração personalizada
   durationUnit: string; // Ex: "Dia"
+  customDurationUnit?: string; // Novo campo para a unidade da duração personalizada
   finalDescription: string; // Auto-gerada
 }
 
@@ -54,6 +60,7 @@ export interface ManipulatedProductDetails {
   quantity: string; // Ex: "1 unidade"
   pharmacy: string; // Ex: "Veterinária"
   route: string; // Ex: "Oral"
+  customRoute?: string; // Novo campo para a via personalizada
 }
 
 export interface ManipulatedPrescriptionData {
