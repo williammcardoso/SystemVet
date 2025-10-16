@@ -15,6 +15,6 @@ export default defineConfig(() => ({
     },
   },
   optimizeDeps: {
-    exclude: ["lucide-react"], // Excluir lucide-react da otimização de dependências
+    exclude: ["lucide-react", "react-icons"], // Excluir lucide-react e react-icons da otimização de dependências
   },
 }));
