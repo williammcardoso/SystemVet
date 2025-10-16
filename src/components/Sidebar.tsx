@@ -8,8 +8,9 @@ import {
 } from "@/components/ui/accordion";
 import { cn } from "@/lib/utils";
 import {
-  FaTachometerAlt, FaUsers, FaCalendarAlt, FaShoppingCart, FaFolder, FaPaw, FaPalette, FaDollarSign, FaBox, FaCog, FaSignOutAlt, FaMoneyBillWave
+  FaTachometerAlt, FaUsers, FaCalendarAlt, FaShoppingCart, FaFolder, FaPaw, FaPalette, FaDollarSign, FaBox, FaCog, FaSignOutAlt, FaMoneyBillWave, FaMoneyCheckAlt, FaSearchDollar, FaBoxOpen, FaCreditCard, FaTrophy, FaBalanceScale, FaFileInvoiceDollar, FaFileInvoice, FaTruck
 } from "react-icons/fa"; // Importar ícones de react-icons
+import { FaMoneyBillTransfer } from "react-icons/fa6"; // Importar ícone específico do Fa6
 import SystemVetLogo from "./SystemVetLogo"; // Importar o novo componente de logo
 
 interface NavItem {
@@ -39,19 +40,19 @@ const navItems: NavItem[] = [
     title: "Vendas",
     icon: FaShoppingCart,
     subItems: [
-      { title: "Ponto de venda", href: "/sales/pos" },
-      { title: "Minhas vendas", href: "/sales/my-sales" },
-      { title: "Movimentos de caixa", href: "/sales/cash-movements" },
-      { title: "Consulta vendas", href: "/sales/consult-sales" },
-      { title: "Pacotes vendidos", href: "/sales/sold-packages" },
-      { title: "Recebimentos", href: "/sales/receipts" },
-      { title: "Lista de preços", href: "/sales/price-list" },
-      { title: "Ranking de clientes", href: "/sales/client-ranking" },
-      { title: "Saldo dos clientes", href: "/sales/client-balance" },
-      { title: "Formas de recebimento", href: "/sales/payment-methods" },
-      { title: "Modelo de orçamento", href: "/sales/budget-model" },
-      { title: "Modelo de demonstrativo", href: "/sales/statement-model" },
-      { title: "Configuração", href: "/sales/configuration" },
+      { title: "Ponto de venda", href: "/sales/pos", icon: FaDollarSign },
+      { title: "Minhas vendas", href: "/sales/my-sales", icon: FaShoppingCart },
+      { title: "Movimentos de caixa", href: "/sales/cash-movements", icon: FaMoneyBillWave },
+      { title: "Consulta vendas", href: "/sales/consult-sales", icon: FaSearchDollar },
+      { title: "Pacotes vendidos", href: "/sales/sold-packages", icon: FaBoxOpen },
+      { title: "Recebimentos", href: "/sales/receipts", icon: FaMoneyCheckAlt },
+      { title: "Lista de preços", href: "/sales/price-list", icon: FaTags },
+      { title: "Ranking de clientes", href: "/sales/client-ranking", icon: FaTrophy },
+      { title: "Saldo dos clientes", href: "/sales/client-balance", icon: FaBalanceScale },
+      { title: "Formas de recebimento", href: "/sales/payment-methods", icon: FaCreditCard },
+      { title: "Modelo de orçamento", href: "/sales/budget-model", icon: FaFileInvoiceDollar },
+      { title: "Modelo de demonstrativo", href: "/sales/statement-model", icon: FaFileInvoice },
+      { title: "Configuração", href: "/sales/configuration", icon: FaCog },
     ],
   },
   {
@@ -92,15 +93,15 @@ const navItems: NavItem[] = [
     href: "/financial", // Link principal para a nova página de visão geral
     icon: FaMoneyBillWave, // Ícone para o módulo financeiro
     subItems: [
-      { title: "Lançamentos", href: "/financial/transactions" },
-      { title: "Conciliação de cartões", href: "/financial/card-reconciliation" },
-      { title: "Contas a pagar", href: "/financial/accounts-payable" },
-      { title: "Demonstrativo", href: "/financial/statement" },
-      { title: "Fluxo de caixa", href: "/financial/cash-flow" },
-      { title: "Contas e cartões", href: "/financial/accounts-cards" },
-      { title: "Categorias", href: "/financial/categories" },
-      { title: "Fornecedores", href: "/financial/suppliers" },
-      { title: "Formas de pagamento", href: "/financial/payment-methods" },
+      { title: "Lançamentos", href: "/financial/transactions", icon: FaMoneyBillTransfer },
+      { title: "Conciliação de cartões", href: "/financial/card-reconciliation", icon: FaCreditCard },
+      { title: "Contas a pagar", href: "/financial/accounts-payable", icon: FaMoneyBillAlt },
+      { title: "Demonstrativo", href: "/financial/statement", icon: FaFileInvoice },
+      { title: "Fluxo de caixa", href: "/financial/cash-flow", icon: FaChartBar },
+      { title: "Contas e cartões", href: "/financial/accounts-cards", icon: FaWallet },
+      { title: "Categorias", href: "/financial/categories", icon: FaTags },
+      { title: "Fornecedores", href: "/financial/suppliers", icon: FaTruck },
+      { title: "Formas de pagamento", href: "/financial/payment-methods", icon: FaCreditCard },
     ],
   },
   {

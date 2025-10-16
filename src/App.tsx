@@ -18,9 +18,36 @@ import CoatTypesPage from "./pages/registrations/CoatTypesPage";
 import CompanySettingsPage from "./pages/settings/CompanySettingsPage";
 import UserSettingsPage from "./pages/settings/UserSettingsPage";
 import AgendaPage from "./pages/AgendaPage";
-import FinancialPage from "./pages/FinancialPage"; // Importar a nova página financeira
+import FinancialPage from "./pages/FinancialPage";
 import NotFound from "./pages/NotFound";
 import { ThemeProvider } from "./components/ThemeProvider";
+
+// Sales Pages
+import SalesPage from "./pages/sales/SalesPage";
+import POSPage from "./pages/sales/POSPage";
+import CashMovementsPage from "./pages/sales/CashMovementsPage";
+import ConsultSalesPage from "./pages/sales/ConsultSalesPage";
+import SoldPackagesPage from "./pages/sales/SoldPackagesPage";
+import ReceiptsPage from "./pages/sales/ReceiptsPage";
+import PriceListPage from "./pages/sales/PriceListPage";
+import ClientRankingPage from "./pages/sales/ClientRankingPage";
+import ClientBalancePage from "./pages/sales/ClientBalancePage";
+import PaymentMethodsPage from "./pages/sales/PaymentMethodsPage";
+import BudgetModelPage from "./pages/sales/BudgetModelPage";
+import StatementModelPage from "./pages/sales/StatementModelPage";
+import SalesConfigurationPage from "./pages/sales/SalesConfigurationPage";
+
+// Financial Sub-pages
+import TransactionsPage from "./pages/financial/TransactionsPage";
+import CardReconciliationPage from "./pages/financial/CardReconciliationPage";
+import AccountsPayablePage from "./pages/financial/AccountsPayablePage";
+import StatementFinancialPage from "./pages/financial/StatementPage"; // Renomeado para evitar conflito
+import CashFlowPage from "./pages/financial/CashFlowPage";
+import AccountsCardsPage from "./pages/financial/AccountsCardsPage";
+import CategoriesPage from "./pages/financial/CategoriesPage";
+import SuppliersPage from "./pages/financial/SuppliersPage";
+import FinancialPaymentMethodsPage from "./pages/financial/PaymentMethodsPage"; // Renomeado para evitar conflito
+
 
 const queryClient = new QueryClient();
 
@@ -48,7 +75,34 @@ const App = () => (
               <Route path="/settings/company" element={<CompanySettingsPage />} />
               <Route path="/settings/user" element={<UserSettingsPage />} />
               <Route path="/agenda" element={<AgendaPage />} />
-              <Route path="/financial" element={<FinancialPage />} /> {/* Nova rota para o Financeiro */}
+              
+              {/* Rotas do Módulo de Vendas */}
+              <Route path="/sales/pos" element={<POSPage />} />
+              <Route path="/sales/my-sales" element={<SalesPage />} />
+              <Route path="/sales/cash-movements" element={<CashMovementsPage />} />
+              <Route path="/sales/consult-sales" element={<ConsultSalesPage />} />
+              <Route path="/sales/sold-packages" element={<SoldPackagesPage />} />
+              <Route path="/sales/receipts" element={<ReceiptsPage />} />
+              <Route path="/sales/price-list" element={<PriceListPage />} />
+              <Route path="/sales/client-ranking" element={<ClientRankingPage />} />
+              <Route path="/sales/client-balance" element={<ClientBalancePage />} />
+              <Route path="/sales/payment-methods" element={<PaymentMethodsPage />} />
+              <Route path="/sales/budget-model" element={<BudgetModelPage />} />
+              <Route path="/sales/statement-model" element={<StatementModelPage />} />
+              <Route path="/sales/configuration" element={<SalesConfigurationPage />} />
+
+              {/* Rotas do Módulo Financeiro */}
+              <Route path="/financial" element={<FinancialPage />} />
+              <Route path="/financial/transactions" element={<TransactionsPage />} />
+              <Route path="/financial/card-reconciliation" element={<CardReconciliationPage />} />
+              <Route path="/financial/accounts-payable" element={<AccountsPayablePage />} />
+              <Route path="/financial/statement" element={<StatementFinancialPage />} />
+              <Route path="/financial/cash-flow" element={<CashFlowPage />} />
+              <Route path="/financial/accounts-cards" element={<AccountsCardsPage />} />
+              <Route path="/financial/categories" element={<CategoriesPage />} />
+              <Route path="/financial/suppliers" element={<SuppliersPage />} />
+              <Route path="/financial/payment-methods" element={<FinancialPaymentMethodsPage />} />
+
               {/* ADICIONE TODAS AS ROTAS PERSONALIZADAS ACIMA DA ROTA CATCH-ALL "*" */}
               <Route path="*" element={<NotFound />} />
             </Routes>

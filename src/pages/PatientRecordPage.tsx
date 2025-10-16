@@ -181,10 +181,10 @@ const mockAppointments = [
   { id: "app2", date: "2024-03-10", type: "Vacinação Anual", vet: "Dra. Costa", notes: "Vacina V8 aplicada." },
 ];
 
-const mockSales = [
-  { id: "sale1", date: "2023-10-26", item: "Ração Premium 1kg", quantity: 1, total: 50.00 },
-  { id: "sale2", date: "2024-03-10", item: "Brinquedo para Cachorro", quantity: 1, total: 25.00 },
-];
+// const mockSales = [ // Removido, agora usaremos mockFinancialTransactions
+//   { id: "sale1", date: "2023-10-26", item: "Ração Premium 1kg", quantity: 1, total: 50.00 },
+//   { id: "sale2", date: "2024-03-10", item: "Brinquedo para Cachorro", quantity: 1, total: 25.00 },
+// ];
 
 const mockVaccines = [
   { id: "vac1", date: "2024-03-10", type: "V8", nextDue: "2025-03-10", vet: "Dra. Costa" },
@@ -360,6 +360,11 @@ const PatientRecordPage = () => {
   // Filtrar transações financeiras relacionadas a este animal
   const animalFinancialTransactions = mockFinancialTransactions.filter(
     (t) => t.relatedAnimalId === animalId
+  );
+
+  // Filtrar transações de vendas relacionadas a este animal
+  const animalSalesTransactions = mockFinancialTransactions.filter(
+    (t) => t.relatedAnimalId === animalId && t.type === 'income' && t.category === 'Venda de Produtos' // Assumindo categoria 'Venda de Produtos' para vendas
   );
 
 
@@ -975,30 +980,30 @@ const PatientRecordPage = () => {
                 </Button>
               </CardHeader>
               <CardContent className="pt-0">
-                {mockSales.length > 0 ? (
+                {animalSalesTransactions.length > 0 ? (
                   <div className="space-y-4">
-                    {mockSales.map((sale) => (
+                    {animalSalesTransactions.map((sale) => (
                       <Card key={sale.id} className="p-4 bg-background dark:bg-gray-800 shadow-sm border border-gray-200 dark:border-gray-700">
                         <div className="flex items-center justify-between mb-2">
                           <div className="flex items-center gap-2">
                             <Badge className="px-2 py-0.5 text-xs font-medium rounded-full bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200">
-                              {sale.item}
+                              {sale.category}
                             </Badge>
                             <p className="text-lg font-semibold text-foreground">
-                              R$ {sale.total.toFixed(2).replace('.', ',')}
+                              {sale.description}
                             </p>
                           </div>
-                          <Button variant="ghost" size="icon" className="rounded-md hover:bg-gray-100 hover:text-gray-900 dark:hover:bg-gray-700 dark:hover:text-gray-200 transition-colors duration-200">
-                            <FaEye className="h-4 w-4" />
-                          </Button>
+                          <p className="text-lg font-bold text-green-600 dark:text-green-400">
+                            R$ {sale.amount.toFixed(2).replace('.', ',')}
+                          </p>
                         </div>
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-2 text-sm text-muted-foreground">
                           <div className="flex items-center gap-1">
                             <FaCalendarAlt className="h-3 w-3" /> {formatDate(sale.date)}
                           </div>
-                          <div className="flex items-center gap-1">
+                          {/* <div className="flex items-center gap-1">
                             <FaBox className="h-3 w-3" /> Quantidade: {sale.quantity}
-                          </div>
+                          </div> */}
                         </div>
                       </Card>
                     ))}
