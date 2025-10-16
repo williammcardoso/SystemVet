@@ -8,7 +8,7 @@ import {
 } from "@/components/ui/accordion";
 import { cn } from "@/lib/utils";
 import {
-  FaTachometerAlt, FaUsers, FaCalendarAlt, FaShoppingCart, FaFolder, FaPaw, FaPalette, FaDollarSign, FaBox, FaCog, FaSignOutAlt, FaMoneyBillWave, FaMoneyCheckAlt, FaSearchDollar, FaBoxOpen, FaCreditCard, FaTrophy, FaBalanceScale, FaFileInvoiceDollar, FaFileInvoice, FaTruck, FaMoneyBillTransfer
+  FaTachometerAlt, FaUsers, FaCalendarAlt, FaShoppingCart, FaFolder, FaPaw, FaPalette, FaDollarSign, FaBox, FaCog, FaSignOutAlt, FaMoneyBillWave, FaMoneyCheckAlt, FaSearchDollar, FaBoxOpen, FaCreditCard, FaTrophy, FaBalanceScale, FaFileInvoiceDollar, FaFileInvoice, FaTruck, FaExchangeAlt // Corrigido para FaExchangeAlt
 } from "react-icons/fa"; // Importar ícones de react-icons
 import SystemVetLogo from "./SystemVetLogo"; // Importar o novo componente de logo
 
@@ -92,7 +92,7 @@ const navItems: NavItem[] = [
     href: "/financial", // Link principal para a nova página de visão geral
     icon: FaMoneyBillWave, // Ícone para o módulo financeiro
     subItems: [
-      { title: "Lançamentos", href: "/financial/transactions", icon: FaMoneyBillTransfer },
+      { title: "Lançamentos", href: "/financial/transactions", icon: FaExchangeAlt }, // Ícone atualizado
       { title: "Conciliação de cartões", href: "/financial/card-reconciliation", icon: FaCreditCard },
       { title: "Contas a pagar", href: "/financial/accounts-payable", icon: FaMoneyBillAlt },
       { title: "Demonstrativo", href: "/financial/statement", icon: FaFileInvoice },
@@ -100,7 +100,7 @@ const navItems: NavItem[] = [
       { title: "Contas e cartões", href: "/financial/accounts-cards", icon: FaWallet },
       { title: "Categorias", href: "/financial/categories", icon: FaTags },
       { title: "Fornecedores", href: "/financial/suppliers", icon: FaTruck },
-      { title: "Formas de pagamento", href: "/financial/payment-methods", icon: FaCreditCard },
+      { title: "Formas de pagamento", href: "/financial/payment-methods", icon: FaCreditCard }, // Ícone atualizado
     ],
   },
   {

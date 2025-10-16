@@ -1,6 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { FaArrowLeft, FaMoneyBillTransfer } from "react-icons/fa"; // Corrigido para 'react-icons/fa'
+import { FaArrowLeft, FaExchangeAlt } from "react-icons/fa"; // Corrigido para FaExchangeAlt
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
@@ -12,7 +12,7 @@ const TransactionsPage = () => {
           <div className="flex items-center gap-4">
             <div>
               <h1 className="text-2xl font-semibold flex items-center gap-3 text-[#1E293B] dark:text-gray-100 group">
-                <FaMoneyBillTransfer className="h-5 w-5 text-gray-500 dark:text-gray-400" /> Lançamentos Financeiros
+                <FaExchangeAlt className="h-5 w-5 text-gray-500 dark:text-gray-400" /> Lançamentos Financeiros
               </h1>
               <p className="text-sm text-[#6B7280] dark:text-gray-400 mt-1 mb-4">
                 Gerencie todas as transações financeiras da clínica.
