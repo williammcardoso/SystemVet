@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -60,6 +60,8 @@ const PrescriptionManipulatedForm: React.FC<PrescriptionManipulatedFormProps> = 
   const [formulaComponents, setFormulaComponents] = useState<ManipulatedFormulaComponent[]>(
     initialData?.formulaComponents || [{ id: `comp-${Date.now()}`, name: "", dosageQuantity: "", dosageUnit: "" }]
   );
+  const [lastAddedComponentId, setLastAddedComponentId] = useState<string | null>(null); // Estado para focar o último componente adicionado
+
   const [vehicleExcipient, setVehicleExcipient] = useState<ManipulatedVehicleExcipient>(
     initialData?.vehicleExcipient || { type: "", quantity: "", unit: "" }
   );
@@ -101,6 +103,68 @@ const PrescriptionManipulatedForm: React.FC<PrescriptionManipulatedFormProps> = 
     initialData?.productDetails?.route === "Outra" ? initialData.productDetails.customRoute || "" : ""
   );
   const [generalObservations, setGeneralObservations] = useState<string>(initialData?.generalObservations || "");
+
+  // Refs para os campos de input personalizados
+  const customVehicleTypeInputRef = useRef<HTMLInputElement>(null);
+  const customPosologyMeasureInputRef = useRef<HTMLInputElement>(null);
+  const customPosologyFrequencyValueInputRef = useRef<HTMLInputElement>(null);
+  const customPosologyFrequencyUnitInputRef = useRef<HTMLInputElement>(null);
+  const customPosologyDurationValueInputRef = useRef<HTMLInputElement>(null);
+  const customPosologyDurationUnitInputRef = useRef<HTMLInputElement>(null);
+  const customProductRouteInputRef = useRef<HTMLInputElement>(null);
+
+  // Efeito para focar o último componente adicionado
+  useEffect(() => {
+    if (lastAddedComponentId) {
+      // O foco real é acionado no componente filho via `shouldFocus` prop.
+      // Limpamos o estado aqui para que o foco só ocorra uma vez por adição.
+      setLastAddedComponentId(null);
+    }
+  }, [formulaComponents, lastAddedComponentId]);
+
+  // Efeitos para focar os campos personalizados quando "Outro" é selecionado
+  useEffect(() => {
+    if (vehicleExcipient.type === "Outro" && customVehicleTypeInputRef.current) {
+      customVehicleTypeInputRef.current.focus();
+    }
+  }, [vehicleExcipient.type]);
+
+  useEffect(() => {
+    if (posologyAutomatic.measure === "Outro" && customPosologyMeasureInputRef.current) {
+      customPosologyMeasureInputRef.current.focus();
+    }
+  }, [posologyAutomatic.measure]);
+
+  useEffect(() => {
+    if (posologyAutomatic.frequencyValue === "Outro" && customPosologyFrequencyValueInputRef.current) {
+      customPosologyFrequencyValueInputRef.current.focus();
+    }
+  }, [posologyAutomatic.frequencyValue]);
+
+  useEffect(() => {
+    if (posologyAutomatic.frequencyUnit === "Outro" && customPosologyFrequencyUnitInputRef.current) {
+      customPosologyFrequencyUnitInputRef.current.focus();
+    }
+  }, [posologyAutomatic.frequencyUnit]);
+
+  useEffect(() => {
+    if (posologyAutomatic.durationValue === "Outro" && customPosologyDurationValueInputRef.current) {
+      customPosologyDurationValueInputRef.current.focus();
+    }
+  }, [posologyAutomatic.durationValue]);
+
+  useEffect(() => {
+    if (posologyAutomatic.durationUnit === "Outro" && customPosologyDurationUnitInputRef.current) {
+      customPosologyDurationUnitInputRef.current.focus();
+    }
+  }, [posologyAutomatic.durationUnit]);
+
+  useEffect(() => {
+    if (productDetails.route === "Outra" && customProductRouteInputRef.current) {
+      customProductRouteInputRef.current.focus();
+    }
+  }, [productDetails.route]);
+
 
   // Sincronizar customVehicleType quando vehicleExcipient.type muda
   useEffect(() => {
@@ -203,10 +267,12 @@ const PrescriptionManipulatedForm: React.FC<PrescriptionManipulatedFormProps> = 
 
 
   const handleAddComponent = () => {
+    const newId = `comp-${Date.now()}`;
     setFormulaComponents((prev) => [
       ...prev,
-      { id: `comp-${Date.now()}`, name: "", dosageQuantity: "", dosageUnit: "" },
+      { id: newId, name: "", dosageQuantity: "", dosageUnit: "" },
     ]);
+    setLastAddedComponentId(newId); // Define o ID do novo componente para focar
   };
 
   const handleUpdateComponent = (id: string, updatedComponent: Partial<ManipulatedFormulaComponent>) => {
@@ -313,6 +379,7 @@ const PrescriptionManipulatedForm: React.FC<PrescriptionManipulatedFormProps> = 
                 index={index}
                 onUpdate={handleUpdateComponent}
                 onDelete={handleDeleteComponent}
+                shouldFocus={comp.id === lastAddedComponentId} // Passa a prop para o componente filho
               />
             ))}
             <Button onClick={handleAddComponent} variant="outline" className="w-full rounded-md bg-white border border-gray-300 text-gray-700 hover:bg-gray-50 transition-colors duration-200 shadow-sm hover:shadow-md dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200 dark:hover:bg-gray-600">
@@ -345,6 +412,7 @@ const PrescriptionManipulatedForm: React.FC<PrescriptionManipulatedFormProps> = 
               </Select>
               {vehicleExcipient.type === "Outro" && (
                 <Input
+                  ref={customVehicleTypeInputRef} // Aplicar o ref aqui
                   placeholder="Digite o tipo personalizado"
                   value={customVehicleType}
                   onChange={(e) => setCustomVehicleType(e.target.value)}
@@ -421,6 +489,7 @@ const PrescriptionManipulatedForm: React.FC<PrescriptionManipulatedFormProps> = 
                     </Select>
                     {posologyAutomatic.measure === "Outro" && (
                       <Input
+                        ref={customPosologyMeasureInputRef} // Aplicar o ref aqui
                         placeholder="Digite a medida personalizada"
                         value={customPosologyMeasure}
                         onChange={(e) => setCustomPosologyMeasure(e.target.value)}
@@ -458,6 +527,7 @@ const PrescriptionManipulatedForm: React.FC<PrescriptionManipulatedFormProps> = 
                     </div>
                     {posologyAutomatic.frequencyValue === "Outro" && (
                       <Input
+                        ref={customPosologyFrequencyValueInputRef} // Aplicar o ref aqui
                         placeholder="Digite o valor da frequência personalizada"
                         value={customPosologyFrequencyValue}
                         onChange={(e) => setCustomPosologyFrequencyValue(e.target.value)}
@@ -466,6 +536,7 @@ const PrescriptionManipulatedForm: React.FC<PrescriptionManipulatedFormProps> = 
                     )}
                     {posologyAutomatic.frequencyUnit === "Outro" && (
                       <Input
+                        ref={customPosologyFrequencyUnitInputRef} // Aplicar o ref aqui
                         placeholder="Digite a unidade da frequência personalizada"
                         value={customPosologyFrequencyUnit}
                         onChange={(e) => setCustomPosologyFrequencyUnit(e.target.value)}
@@ -503,6 +574,7 @@ const PrescriptionManipulatedForm: React.FC<PrescriptionManipulatedFormProps> = 
                     </div>
                     {posologyAutomatic.durationValue === "Outro" && (
                       <Input
+                        ref={customPosologyDurationValueInputRef} // Aplicar o ref aqui
                         placeholder="Digite o valor da duração personalizada"
                         value={customPosologyDurationValue}
                         onChange={(e) => setCustomPosologyDurationValue(e.target.value)}
@@ -511,6 +583,7 @@ const PrescriptionManipulatedForm: React.FC<PrescriptionManipulatedFormProps> = 
                     )}
                     {posologyAutomatic.durationUnit === "Outro" && (
                       <Input
+                        ref={customPosologyDurationUnitInputRef} // Aplicar o ref aqui
                         placeholder="Digite a unidade da duração personalizada"
                         value={customPosologyDurationUnit}
                         onChange={(e) => setCustomPosologyDurationUnit(e.target.value)}
@@ -565,6 +638,7 @@ const PrescriptionManipulatedForm: React.FC<PrescriptionManipulatedFormProps> = 
               </Select>
               {productDetails.route === "Outra" && (
                 <Input
+                  ref={customProductRouteInputRef} // Aplicar o ref aqui
                   placeholder="Digite a via personalizada"
                   value={customProductRoute}
                   onChange={(e) => setCustomProductRoute(e.target.value)}

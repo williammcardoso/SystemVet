@@ -31,7 +31,7 @@ export interface ManipulatedVehicleExcipient {
   type: string; // Ex: Comprimido, Cápsula, Líquido
   customType?: string; // Novo campo para o tipo personalizado
   quantity: string; // Ex: "30"
-  unit: string; // Ex: %, Grama (g), Micrograma (mcg)
+  unit: string; // Ex: %, Grama (g), Mililitro (mL), Micrograma (mcg)
 }
 
 export interface ManipulatedPosologyAutomatic {

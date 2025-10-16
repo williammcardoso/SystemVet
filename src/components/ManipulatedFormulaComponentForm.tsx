@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -13,6 +13,7 @@ interface ManipulatedFormulaComponentFormProps {
   index: number;
   onUpdate: (id: string, updatedComponent: Partial<ManipulatedFormulaComponent>) => void;
   onDelete: (id: string) => void;
+  shouldFocus?: boolean; // Nova prop para controlar o foco
 }
 
 const mockDosageUnits = ["Unidade", "Grama (g)", "Miligrama (mg)", "Mililitro (mL)", "Micrograma (mcg)"];
@@ -22,20 +23,31 @@ const ManipulatedFormulaComponentForm: React.FC<ManipulatedFormulaComponentFormP
   index,
   onUpdate,
   onDelete,
+  shouldFocus, // Desestruturar a nova prop
 }) => {
   const [name, setName] = useState(component.name);
   const [dosageQuantity, setDosageQuantity] = useState(component.dosageQuantity);
   const [dosageUnit, setDosageUnit] = useState(component.dosageUnit);
 
+  const nameInputRef = useRef<HTMLInputElement>(null); // Ref para o campo de nome
+
   useEffect(() => {
     onUpdate(component.id, { name, dosageQuantity, dosageUnit });
   }, [name, dosageQuantity, dosageUnit]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  // Efeito para focar o campo de nome quando shouldFocus for true
+  useEffect(() => {
+    if (shouldFocus && nameInputRef.current) {
+      nameInputRef.current.focus();
+    }
+  }, [shouldFocus]);
 
   return (
     <div className="flex items-end gap-4 border-b pb-4 mb-4 last:border-b-0 last:pb-0 last:mb-0">
       <div className="flex-1 space-y-2">
         <Label htmlFor={`component-name-${component.id}`}>Nome do Componente {index + 1}*</Label>
         <Input
+          ref={nameInputRef} // Aplicar o ref aqui
           id={`component-name-${component.id}`}
           placeholder="Digite o Nome do Componente"
           value={name}
