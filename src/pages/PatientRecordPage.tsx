@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Link, useParams, useNavigate } from "react-router-dom";
 import {
-  FaArrowLeft, FaUsers, FaPaw, FaPlus, FaEye, FaStethoscope, FaCalendarAlt, FaDollarSign, FaSyringe, FaWeightHanging, FaFileAlt, FaClipboardList, FaCommentAlt, FaHeart, FaMale, FaUser, FaPrint, FaDownload, FaTimes, FaSave, FaBalanceScale, FaFileMedical, FaExclamationTriangle, FaFlask
+  FaArrowLeft, FaUsers, FaPaw, FaPlus, FaEye, FaStethoscope, FaCalendarAlt, FaDollarSign, FaSyringe, FaWeightHanging, FaFileAlt, FaClipboardList, FaCommentAlt, FaHeart, FaMale, FaUser, FaPrint, FaDownload, FaTimes, FaSave, FaBalanceScale, FaFileMedical, FaExclamationTriangle, FaFlask, FaTag, FaBox, FaClock
 } from "react-icons/fa"; // Importar ícones de react-icons
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -667,31 +667,32 @@ const PatientRecordPage = () => {
               </CardHeader>
               <CardContent className="pt-0">
                 {mockAppointments.length > 0 ? (
-                  <div className="overflow-hidden">
-                    <Table>
-                      <TableHeader>
-                        <TableRow>
-                          <TableHead>Data</TableHead>
-                          <TableHead>Tipo</TableHead>
-                          <TableHead>Veterinário</TableHead>
-                          <TableHead>Observações</TableHead>
-                          <TableHead className="text-right">Ações</TableHead>
-                        </TableRow>
-                      </TableHeader>
-                      <TableBody>
-                        {mockAppointments.map((app, index) => (
-                          <TableRow key={app.id} className={cn(index % 2 === 1 && "bg-muted/50")}>
-                            <TableCell>{formatDate(app.date)}</TableCell>
-                            <TableCell>{app.type}</TableCell>
-                            <TableCell>{app.vet}</TableCell>
-                            <TableCell>{app.notes}</TableCell>
-                            <TableCell className="text-right">
-                              <FaEye className="h-4 w-4" />
-                            </TableCell>
-                          </TableRow>
-                        ))}
-                      </TableBody>
-                    </Table>
+                  <div className="space-y-4">
+                    {mockAppointments.map((app) => (
+                      <Card key={app.id} className="p-4 bg-background dark:bg-gray-800 shadow-sm border border-gray-200 dark:border-gray-700">
+                        <div className="flex items-center justify-between mb-2">
+                          <div className="flex items-center gap-2">
+                            <Badge className="px-2 py-0.5 text-xs font-medium rounded-full bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200">
+                              {app.type}
+                            </Badge>
+                            <p className="text-lg font-semibold text-foreground">
+                              {app.notes || "Sem observações"}
+                            </p>
+                          </div>
+                          <Button variant="ghost" size="icon" className="rounded-md hover:bg-gray-100 hover:text-gray-900 dark:hover:bg-gray-700 dark:hover:text-gray-200 transition-colors duration-200">
+                            <FaEye className="h-4 w-4" />
+                          </Button>
+                        </div>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-2 text-sm text-muted-foreground">
+                          <div className="flex items-center gap-1">
+                            <FaCalendarAlt className="h-3 w-3" /> {formatDate(app.date)}
+                          </div>
+                          <div className="flex items-center gap-1">
+                            <FaStethoscope className="h-3 w-3" /> {app.vet}
+                          </div>
+                        </div>
+                      </Card>
+                    ))}
                   </div>
                 ) : (
                   <p className="text-muted-foreground py-4">Nenhum atendimento registrado.</p>
@@ -714,31 +715,32 @@ const PatientRecordPage = () => {
               </CardHeader>
               <CardContent className="pt-0">
                 {examsList.length > 0 ? (
-                  <div className="overflow-hidden">
-                    <Table>
-                      <TableHeader>
-                        <TableRow>
-                          <TableHead>Data</TableHead>
-                          <TableHead>Tipo</TableHead>
-                          <TableHead>Resultado</TableHead>
-                          <TableHead>Veterinário</TableHead>
-                          <TableHead className="text-right">Ações</TableHead>
-                        </TableRow>
-                      </TableHeader>
-                      <TableBody>
-                        {examsList.map((exam, index) => (
-                          <TableRow key={exam.id} className={cn(index % 2 === 1 && "bg-muted/50")}>
-                            <TableCell>{formatDate(exam.date)}</TableCell>
-                            <TableCell>{exam.type}</TableCell>
-                            <TableCell>{exam.result}</TableCell>
-                            <TableCell>{exam.vet}</TableCell>
-                            <TableCell className="text-right">
-                              <FaEye className="h-4 w-4" />
-                            </TableCell>
-                          </TableRow>
-                        ))}
-                      </TableBody>
-                    </Table>
+                  <div className="space-y-4">
+                    {examsList.map((exam) => (
+                      <Card key={exam.id} className="p-4 bg-background dark:bg-gray-800 shadow-sm border border-gray-200 dark:border-gray-700">
+                        <div className="flex items-center justify-between mb-2">
+                          <div className="flex items-center gap-2">
+                            <Badge className="px-2 py-0.5 text-xs font-medium rounded-full bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-200">
+                              {exam.type}
+                            </Badge>
+                            <p className="text-lg font-semibold text-foreground">
+                              {exam.result}
+                            </p>
+                          </div>
+                          <Button variant="ghost" size="icon" className="rounded-md hover:bg-gray-100 hover:text-gray-900 dark:hover:bg-gray-700 dark:hover:text-gray-200 transition-colors duration-200">
+                            <FaEye className="h-4 w-4" />
+                          </Button>
+                        </div>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-2 text-sm text-muted-foreground">
+                          <div className="flex items-center gap-1">
+                            <FaCalendarAlt className="h-3 w-3" /> {formatDate(exam.date)}
+                          </div>
+                          <div className="flex items-center gap-1">
+                            <FaStethoscope className="h-3 w-3" /> {exam.vet}
+                          </div>
+                        </div>
+                      </Card>
+                    ))}
                   </div>
                 ) : (
                   <p className="text-muted-foreground py-4">Nenhum exame registrado.</p>
@@ -965,31 +967,32 @@ const PatientRecordPage = () => {
               </CardHeader>
               <CardContent className="pt-0">
                 {mockSales.length > 0 ? (
-                  <div className="overflow-hidden">
-                    <Table>
-                      <TableHeader>
-                        <TableRow>
-                          <TableHead>Data</TableHead>
-                          <TableHead>Item</TableHead>
-                          <TableHead>Quantidade</TableHead>
-                          <TableHead className="text-right">Total</TableHead>
-                          <TableHead className="text-right">Ações</TableHead>
-                        </TableRow>
-                      </TableHeader>
-                      <TableBody>
-                        {mockSales.map((sale, index) => (
-                          <TableRow key={sale.id} className={cn(index % 2 === 1 && "bg-muted/50")}>
-                            <TableCell>{formatDate(sale.date)}</TableCell>
-                            <TableCell>{sale.item}</TableCell>
-                            <TableCell>{sale.quantity}</TableCell>
-                            <TableCell className="text-right">R$ {sale.total.toFixed(2)}</TableCell>
-                            <TableCell className="text-right">
-                              <FaEye className="h-4 w-4" />
-                            </TableCell>
-                          </TableRow>
-                        ))}
-                      </TableBody>
-                    </Table>
+                  <div className="space-y-4">
+                    {mockSales.map((sale) => (
+                      <Card key={sale.id} className="p-4 bg-background dark:bg-gray-800 shadow-sm border border-gray-200 dark:border-gray-700">
+                        <div className="flex items-center justify-between mb-2">
+                          <div className="flex items-center gap-2">
+                            <Badge className="px-2 py-0.5 text-xs font-medium rounded-full bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200">
+                              {sale.item}
+                            </Badge>
+                            <p className="text-lg font-semibold text-foreground">
+                              R$ {sale.total.toFixed(2).replace('.', ',')}
+                            </p>
+                          </div>
+                          <Button variant="ghost" size="icon" className="rounded-md hover:bg-gray-100 hover:text-gray-900 dark:hover:bg-gray-700 dark:hover:text-gray-200 transition-colors duration-200">
+                            <FaEye className="h-4 w-4" />
+                          </Button>
+                        </div>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-2 text-sm text-muted-foreground">
+                          <div className="flex items-center gap-1">
+                            <FaCalendarAlt className="h-3 w-3" /> {formatDate(sale.date)}
+                          </div>
+                          <div className="flex items-center gap-1">
+                            <FaBox className="h-3 w-3" /> Quantidade: {sale.quantity}
+                          </div>
+                        </div>
+                      </Card>
+                    ))}
                   </div>
                 ) : (
                   <p className="text-muted-foreground py-4">Nenhuma venda registrada.</p>
@@ -1010,31 +1013,32 @@ const PatientRecordPage = () => {
               </CardHeader>
               <CardContent className="pt-0">
                 {mockVaccines.length > 0 ? (
-                  <div className="overflow-hidden">
-                    <Table>
-                      <TableHeader>
-                        <TableRow>
-                          <TableHead>Data</TableHead>
-                          <TableHead>Tipo</TableHead>
-                          <TableHead>Próxima Dose</TableHead>
-                          <TableHead>Veterinário</TableHead>
-                          <TableHead className="text-right">Ações</TableHead>
-                        </TableRow>
-                      </TableHeader>
-                      <TableBody>
-                        {mockVaccines.map((vaccine, index) => (
-                          <TableRow key={vaccine.id} className={cn(index % 2 === 1 && "bg-muted/50")}>
-                            <TableCell>{formatDate(vaccine.date)}</TableCell>
-                            <TableCell>{vaccine.type}</TableCell>
-                            <TableCell>{formatDate(vaccine.nextDue)}</TableCell>
-                            <TableCell>{vaccine.vet}</TableCell>
-                            <TableCell className="text-right">
-                              <FaEye className="h-4 w-4" />
-                            </TableCell>
-                          </TableRow>
-                        ))}
-                      </TableBody>
-                    </Table>
+                  <div className="space-y-4">
+                    {mockVaccines.map((vaccine) => (
+                      <Card key={vaccine.id} className="p-4 bg-background dark:bg-gray-800 shadow-sm border border-gray-200 dark:border-gray-700">
+                        <div className="flex items-center justify-between mb-2">
+                          <div className="flex items-center gap-2">
+                            <Badge className="px-2 py-0.5 text-xs font-medium rounded-full bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200">
+                              {vaccine.type}
+                            </Badge>
+                            <p className="text-lg font-semibold text-foreground">
+                              Próxima Dose: {formatDate(vaccine.nextDue)}
+                            </p>
+                          </div>
+                          <Button variant="ghost" size="icon" className="rounded-md hover:bg-gray-100 hover:text-gray-900 dark:hover:bg-gray-700 dark:hover:text-gray-200 transition-colors duration-200">
+                            <FaEye className="h-4 w-4" />
+                          </Button>
+                        </div>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-2 text-sm text-muted-foreground">
+                          <div className="flex items-center gap-1">
+                            <FaCalendarAlt className="h-3 w-3" /> {formatDate(vaccine.date)}
+                          </div>
+                          <div className="flex items-center gap-1">
+                            <FaStethoscope className="h-3 w-3" /> {vaccine.vet}
+                          </div>
+                        </div>
+                      </Card>
+                    ))}
                   </div>
                 ) : (
                   <p className="text-muted-foreground py-4">Nenhuma vacina registrada.</p>
@@ -1071,23 +1075,26 @@ const PatientRecordPage = () => {
               </CardHeader>
               <CardContent className="pt-0">
                 {weightHistory.length > 0 ? (
-                  <div className="overflow-hidden">
-                    <Table>
-                      <TableHeader>
-                        <TableRow>
-                          <TableHead>Data</TableHead>
-                          <TableHead className="text-right">Peso (kg)</TableHead>
-                        </TableRow>
-                      </TableHeader>
-                      <TableBody>
-                        {weightHistory.map((entry, index) => (
-                          <TableRow key={entry.id} className={cn(index % 2 === 1 && "bg-muted/50")}>
-                            <TableCell>{formatDate(entry.date)}</TableCell>
-                            <TableCell className="text-right">{entry.weight.toFixed(2)}</TableCell>
-                          </TableRow>
-                        ))}
-                      </TableBody>
-                    </Table>
+                  <div className="space-y-4">
+                    {weightHistory.map((entry) => (
+                      <Card key={entry.id} className="p-4 bg-background dark:bg-gray-800 shadow-sm border border-gray-200 dark:border-gray-700">
+                        <div className="flex items-center justify-between mb-2">
+                          <div className="flex items-center gap-2">
+                            <FaWeightHanging className="h-4 w-4 text-muted-foreground" />
+                            <p className="text-lg font-semibold text-foreground">
+                              {entry.weight.toFixed(2)} kg
+                            </p>
+                          </div>
+                          {/* Ações para peso, se houver */}
+                          <Button variant="ghost" size="icon" className="rounded-md hover:bg-gray-100 hover:text-gray-900 dark:hover:bg-gray-700 dark:hover:text-gray-200 transition-colors duration-200">
+                            <FaEye className="h-4 w-4" />
+                          </Button>
+                        </div>
+                        <div className="flex items-center gap-1 text-sm text-muted-foreground">
+                          <FaCalendarAlt className="h-3 w-3" /> {formatDate(entry.date)}
+                        </div>
+                      </Card>
+                    ))}
                   </div>
                 ) : (
                   <p className="text-muted-foreground py-4">Nenhum registro de peso.</p>
@@ -1123,29 +1130,27 @@ const PatientRecordPage = () => {
               </CardHeader>
               <CardContent className="pt-0">
                 {documents.length > 0 ? (
-                  <div className="overflow-hidden">
-                    <Table>
-                      <TableHeader>
-                        <TableRow>
-                          <TableHead>Data</TableHead>
-                          <TableHead>Nome</TableHead>
-                          <TableHead className="text-right">Ações</TableHead>
-                        </TableRow>
-                      </TableHeader>
-                      <TableBody>
-                        {documents.map((doc, index) => (
-                          <TableRow key={doc.id} className={cn(index % 2 === 1 && "bg-muted/50")}>
-                            <TableCell>{formatDate(doc.date)}</TableCell>
-                            <TableCell>{doc.name}</TableCell>
-                            <TableCell className="text-right">
-                              <a href={doc.fileUrl} target="_blank" rel="noopener noreferrer">
-                                <FaEye className="h-4 w-4" />
-                              </a>
-                            </TableCell>
-                          </TableRow>
-                        ))}
-                      </TableBody>
-                    </Table>
+                  <div className="space-y-4">
+                    {documents.map((doc) => (
+                      <Card key={doc.id} className="p-4 bg-background dark:bg-gray-800 shadow-sm border border-gray-200 dark:border-gray-700">
+                        <div className="flex items-center justify-between mb-2">
+                          <div className="flex items-center gap-2">
+                            <FaFileAlt className="h-4 w-4 text-muted-foreground" />
+                            <p className="text-lg font-semibold text-foreground">
+                              {doc.name}
+                            </p>
+                          </div>
+                          <a href={doc.fileUrl} target="_blank" rel="noopener noreferrer">
+                            <Button variant="ghost" size="icon" className="rounded-md hover:bg-gray-100 hover:text-gray-900 dark:hover:bg-gray-700 dark:hover:text-gray-200 transition-colors duration-200">
+                              <FaEye className="h-4 w-4" />
+                            </Button>
+                          </a>
+                        </div>
+                        <div className="flex items-center gap-1 text-sm text-muted-foreground">
+                          <FaCalendarAlt className="h-3 w-3" /> {formatDate(doc.date)}
+                        </div>
+                      </Card>
+                    ))}
                   </div>
                 ) : (
                   <p className="text-muted-foreground py-4">Nenhum documento registrado.</p>
@@ -1270,11 +1275,24 @@ const PatientRecordPage = () => {
                 </div>
                 {observations.length > 0 ? (
                   <div className="space-y-4">
-                    {observations.map((obs, index) => (
-                      <div key={obs.id} className={cn("border p-3 rounded-md bg-white dark:bg-gray-800", index % 2 === 1 ? "bg-muted/50 dark:bg-gray-700" : "bg-background dark:bg-gray-800")}>
-                        <p className="text-sm text-[#4B5563] dark:text-gray-400 font-medium mb-1">{formatDate(obs.date)}</p>
-                        <p className="text-foreground">{obs.observation}</p>
-                      </div>
+                    {observations.map((obs) => (
+                      <Card key={obs.id} className="p-4 bg-background dark:bg-gray-800 shadow-sm border border-gray-200 dark:border-gray-700">
+                        <div className="flex items-center justify-between mb-2">
+                          <div className="flex items-center gap-2">
+                            <FaCommentAlt className="h-4 w-4 text-muted-foreground" />
+                            <p className="text-lg font-semibold text-foreground">
+                              {obs.observation}
+                            </p>
+                          </div>
+                          {/* Ações para observação, se houver */}
+                          <Button variant="ghost" size="icon" className="rounded-md hover:bg-gray-100 hover:text-gray-900 dark:hover:bg-gray-700 dark:hover:text-gray-200 transition-colors duration-200">
+                            <FaEye className="h-4 w-4" />
+                          </Button>
+                        </div>
+                        <div className="flex items-center gap-1 text-sm text-muted-foreground">
+                          <FaCalendarAlt className="h-3 w-3" /> {formatDate(obs.date)}
+                        </div>
+                      </Card>
                     ))}
                   </div>
                 ) : (
