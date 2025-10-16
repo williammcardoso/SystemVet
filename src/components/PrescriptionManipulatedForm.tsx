@@ -125,43 +125,43 @@ const PrescriptionManipulatedForm: React.FC<PrescriptionManipulatedFormProps> = 
   // Efeitos para focar os campos personalizados quando "Outro" é selecionado
   useEffect(() => {
     if (vehicleExcipient.type === "Outro" && customVehicleTypeInputRef.current) {
-      customVehicleTypeInputRef.current.focus();
+      setTimeout(() => customVehicleTypeInputRef.current?.focus(), 0);
     }
   }, [vehicleExcipient.type]);
 
   useEffect(() => {
     if (posologyAutomatic.measure === "Outro" && customPosologyMeasureInputRef.current) {
-      customPosologyMeasureInputRef.current.focus();
+      setTimeout(() => customPosologyMeasureInputRef.current?.focus(), 0);
     }
   }, [posologyAutomatic.measure]);
 
   useEffect(() => {
     if (posologyAutomatic.frequencyValue === "Outro" && customPosologyFrequencyValueInputRef.current) {
-      customPosologyFrequencyValueInputRef.current.focus();
+      setTimeout(() => customPosologyFrequencyValueInputRef.current?.focus(), 0);
     }
   }, [posologyAutomatic.frequencyValue]);
 
   useEffect(() => {
     if (posologyAutomatic.frequencyUnit === "Outro" && customPosologyFrequencyUnitInputRef.current) {
-      customPosologyFrequencyUnitInputRef.current.focus();
+      setTimeout(() => customPosologyFrequencyUnitInputRef.current?.focus(), 0);
     }
   }, [posologyAutomatic.frequencyUnit]);
 
   useEffect(() => {
     if (posologyAutomatic.durationValue === "Outro" && customPosologyDurationValueInputRef.current) {
-      customPosologyDurationValueInputRef.current.focus();
+      setTimeout(() => customPosologyDurationValueInputRef.current?.focus(), 0);
     }
   }, [posologyAutomatic.durationValue]);
 
   useEffect(() => {
     if (posologyAutomatic.durationUnit === "Outro" && customPosologyDurationUnitInputRef.current) {
-      customPosologyDurationUnitInputRef.current.focus();
+      setTimeout(() => customPosologyDurationUnitInputRef.current?.focus(), 0);
     }
   }, [posologyAutomatic.durationUnit]);
 
   useEffect(() => {
     if (productDetails.route === "Outra" && customProductRouteInputRef.current) {
-      customProductRouteInputRef.current.focus();
+      setTimeout(() => customProductRouteInputRef.current?.focus(), 0);
     }
   }, [productDetails.route]);
 
