@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Link, useParams, useNavigate } from "react-router-dom";
 import {
-  FaArrowLeft, FaUsers, FaPaw, FaPlus, FaEye, FaStethoscope, FaCalendarAlt, FaDollarSign, FaSyringe, FaWeightHanging, FaFileAlt, FaClipboardList, FaCommentAlt, FaHeart, FaMale, FaUser, FaPrint, FaDownload, FaTimes, FaSave, FaBalanceScale, FaFileMedical, FaExclamationTriangle, FaFlask, FaTag, FaBox, FaClock
+  FaArrowLeft, FaUsers, FaPaw, FaPlus, FaEye, FaStethoscope, FaCalendarAlt, FaDollarSign, FaSyringe, FaWeightHanging, FaFileAlt, FaClipboardList, FaCommentAlt, FaHeart, FaMale, FaUser, FaPrint, FaDownload, FaTimes, FaSave, FaBalanceScale, FaFileMedical, FaExclamationTriangle, FaFlask, FaTag, FaBox, FaClock, FaMoneyBillWave, FaArrowUp, FaArrowDown
 } from "react-icons/fa"; // Importar ícones de react-icons
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -33,6 +33,7 @@ import {
 } from "@/components/ui/dropdown-menu"; // Importar DropdownMenu
 import { pdf } from "@react-pdf/renderer"; // Importar pdf para impressão
 import { PrescriptionPdfContent } from "@/components/PrescriptionPdfContent"; // Importar o componente de conteúdo do PDF
+import { FinancialTransaction, mockFinancialTransactions } from "@/mockData/financial"; // Importar mock data financeiro
 
 // Mock data (centralizado aqui para facilitar o exemplo, mas idealmente viria de um serviço)
 interface Animal {
@@ -356,6 +357,11 @@ const PatientRecordPage = () => {
   const [newReferenceTables, setNewReferenceTables] = useState<string>("");
   const [newConclusions, setNewConclusions] = useState<string>("");
 
+  // Filtrar transações financeiras relacionadas a este animal
+  const animalFinancialTransactions = mockFinancialTransactions.filter(
+    (t) => t.relatedAnimalId === animalId
+  );
+
 
   if (!client || !animal) {
     return (
@@ -628,7 +634,7 @@ const PatientRecordPage = () => {
         </div>
 
         <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full mt-6">
-          <TabsList className="grid w-full grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-8 h-auto flex-wrap bg-white/90 backdrop-blur-sm border border-gray-200 dark:border-gray-700 rounded-2xl shadow-[0_1px_3px_rgba(0,0,0,0.05)] p-2">
+          <TabsList className="grid w-full grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-9 h-auto flex-wrap bg-white/90 backdrop-blur-sm border border-gray-200 dark:border-gray-700 rounded-2xl shadow-[0_1px_3px_rgba(0,0,0,0.05)] p-2">
             <TabsTrigger value="appointments" className="rounded-xl data-[state=active]:bg-blue-500 data-[state=active]:text-white transition-colors duration-200 text-gray-700 dark:text-gray-300 data-[state=active]:dark:bg-blue-600">
               <FaStethoscope className="h-4 w-4 mr-2" /> Atendimento
             </TabsTrigger>
@@ -652,6 +658,9 @@ const PatientRecordPage = () => {
             </TabsTrigger>
             <TabsTrigger value="observations" className="rounded-xl data-[state=active]:bg-blue-500 data-[state=active]:text-white transition-colors duration-200 text-gray-700 dark:text-gray-300 data-[state=active]:dark:bg-blue-600">
               <FaCommentAlt className="h-4 w-4 mr-2" /> Observações
+            </TabsTrigger>
+            <TabsTrigger value="financial" className="rounded-xl data-[state=active]:bg-blue-500 data-[state=active]:text-white transition-colors duration-200 text-gray-700 dark:text-gray-300 data-[state=active]:dark:bg-blue-600">
+              <FaMoneyBillWave className="h-4 w-4 mr-2" /> Financeiro
             </TabsTrigger>
           </TabsList>
 
@@ -1297,6 +1306,60 @@ const PatientRecordPage = () => {
                   </div>
                 ) : (
                   <p className="text-muted-foreground py-4">Nenhuma observação registrada.</p>
+                )}
+              </CardContent>
+            </Card>
+          </TabsContent>
+
+          {/* Nova aba: Financeiro */}
+          <TabsContent value="financial" className="mt-4">
+            <Card className="bg-white/90 backdrop-blur-sm border border-gray-200 dark:border-gray-700 rounded-2xl shadow-[0_1px_3px_rgba(0,0,0,0.05)] hover:shadow-[0_4px_8px_rgba(0,0,0,0.08)] transition-all duration-300 border-t-4 border-pink-400 dark:bg-gray-800/90">
+              <CardHeader className="flex flex-row items-center justify-between pb-3">
+                <CardTitle className="flex items-center gap-2 text-lg font-semibold text-[#374151] dark:text-gray-100">
+                  <FaMoneyBillWave className="h-5 w-5 text-pink-500" /> Histórico Financeiro
+                </CardTitle>
+                <Button size="sm" className="rounded-md bg-gradient-to-r from-blue-500 to-indigo-500 text-white hover:from-blue-600 hover:to-indigo-600 font-semibold transition-all duration-200 shadow-md hover:shadow-lg">
+                  <FaPlus className="h-4 w-4 mr-2" /> Adicionar Lançamento
+                </Button>
+              </CardHeader>
+              <CardContent className="pt-0">
+                {animalFinancialTransactions.length > 0 ? (
+                  <div className="space-y-4">
+                    {animalFinancialTransactions.map((transaction) => (
+                      <Card key={transaction.id} className="p-4 bg-background dark:bg-gray-800 shadow-sm border border-gray-200 dark:border-gray-700">
+                        <div className="flex items-center justify-between mb-2">
+                          <div className="flex items-center gap-2">
+                            <Badge className={cn(
+                              "px-2 py-0.5 text-xs font-medium rounded-full",
+                              transaction.type === 'income' ? "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200" : "bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200"
+                            )}>
+                              {transaction.type === 'income' ? 'Receita' : 'Despesa'}
+                            </Badge>
+                            <p className="text-lg font-semibold text-foreground">
+                              {transaction.description}
+                            </p>
+                          </div>
+                          <div className={cn(
+                            "flex items-center gap-1 text-lg font-bold",
+                            transaction.type === 'income' ? "text-green-600 dark:text-green-400" : "text-red-600 dark:text-red-400"
+                          )}>
+                            {transaction.type === 'income' ? <FaArrowUp className="h-4 w-4" /> : <FaArrowDown className="h-4 w-4" />}
+                            R$ {transaction.amount.toFixed(2).replace('.', ',')}
+                          </div>
+                        </div>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-2 text-sm text-muted-foreground">
+                          <div className="flex items-center gap-1">
+                            <FaCalendarAlt className="h-3 w-3" /> {formatDate(transaction.date)}
+                          </div>
+                          <div className="flex items-center gap-1">
+                            <FaTag className="h-3 w-3" /> Categoria: {transaction.category}
+                          </div>
+                        </div>
+                      </Card>
+                    ))}
+                  </div>
+                ) : (
+                  <p className="text-muted-foreground py-4">Nenhum lançamento financeiro registrado para este animal.</p>
                 )}
               </CardContent>
             </Card>

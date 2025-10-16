@@ -17,7 +17,8 @@ import BreedsPage from "./pages/registrations/BreedsPage";
 import CoatTypesPage from "./pages/registrations/CoatTypesPage";
 import CompanySettingsPage from "./pages/settings/CompanySettingsPage";
 import UserSettingsPage from "./pages/settings/UserSettingsPage";
-import AgendaPage from "./pages/AgendaPage"; // Importar a nova página de Agenda
+import AgendaPage from "./pages/AgendaPage";
+import FinancialPage from "./pages/FinancialPage"; // Importar a nova página financeira
 import NotFound from "./pages/NotFound";
 import { ThemeProvider } from "./components/ThemeProvider";
 
@@ -46,7 +47,8 @@ const App = () => (
               <Route path="/registrations/coat-types" element={<CoatTypesPage />} />
               <Route path="/settings/company" element={<CompanySettingsPage />} />
               <Route path="/settings/user" element={<UserSettingsPage />} />
-              <Route path="/agenda" element={<AgendaPage />} /> {/* Nova rota para a Agenda */}
+              <Route path="/agenda" element={<AgendaPage />} />
+              <Route path="/financial" element={<FinancialPage />} /> {/* Nova rota para o Financeiro */}
               {/* ADICIONE TODAS AS ROTAS PERSONALIZADAS ACIMA DA ROTA CATCH-ALL "*" */}
               <Route path="*" element={<NotFound />} />
             </Routes>
