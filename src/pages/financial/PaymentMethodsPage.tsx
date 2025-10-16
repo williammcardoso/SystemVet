@@ -1,6 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { FaArrowLeft, FaMoneyBillTransfer } from "react-icons/fa6"; // Usando Fa6 para um ícone diferente
+import { FaArrowLeft, FaMoneyBillTransfer } from "react-icons/fa"; // Corrigido para 'react-icons/fa'
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 

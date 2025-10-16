@@ -8,9 +8,9 @@ import {
 } from "@/components/ui/accordion";
 import { cn } from "@/lib/utils";
 import {
-  FaTachometerAlt, FaUsers, FaCalendarAlt, FaShoppingCart, FaFolder, FaPaw, FaPalette, FaDollarSign, FaBox, FaCog, FaSignOutAlt, FaMoneyBillWave, FaMoneyCheckAlt, FaSearchDollar, FaBoxOpen, FaCreditCard, FaTrophy, FaBalanceScale, FaFileInvoiceDollar, FaFileInvoice, FaTruck
+  FaTachometerAlt, FaUsers, FaCalendarAlt, FaShoppingCart, FaFolder, FaPaw, FaPalette, FaDollarSign, FaBox, FaCog, FaSignOutAlt, FaMoneyBillWave, FaMoneyCheckAlt, FaSearchDollar, FaBoxOpen, FaCreditCard, FaTrophy, FaBalanceScale, FaFileInvoiceDollar, FaFileInvoice, FaTruck, FaMoneyBillTransfer // Corrigido para 'FaMoneyBillTransfer' de 'react-icons/fa'
 } from "react-icons/fa"; // Importar ícones de react-icons
-import { FaMoneyBillTransfer } from "react-icons/fa6"; // Importar ícone específico do Fa6
+// import { FaMoneyBillTransfer } from "react-icons/fa6"; // Removido import incorreto
 import SystemVetLogo from "./SystemVetLogo"; // Importar o novo componente de logo
 
 interface NavItem {
