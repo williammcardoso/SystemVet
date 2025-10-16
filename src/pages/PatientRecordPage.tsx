@@ -273,6 +273,21 @@ const PatientRecordPage = () => {
   const client = mockClients.find(c => c.id === clientId);
   const animal = client?.animals.find(a => a.id === animalId);
 
+  // State para a aba ativa, com valor inicial do localStorage ou 'appointments'
+  const [activeTab, setActiveTab] = useState<string>(() => {
+    if (typeof window !== 'undefined') {
+      return localStorage.getItem(`patientRecordActiveTab-${animalId}`) || 'appointments';
+    }
+    return 'appointments';
+  });
+
+  // Efeito para salvar a aba ativa no localStorage sempre que ela mudar
+  useEffect(() => {
+    if (typeof window !== 'undefined' && animalId) {
+      localStorage.setItem(`patientRecordActiveTab-${animalId}`, activeTab);
+    }
+  }, [activeTab, animalId]);
+
   // State para as novas abas
   const [weightHistory, setWeightHistory] = useState<WeightEntry[]>([
     { id: "w1", date: "2023-01-01", weight: 20.5 },
@@ -612,7 +627,7 @@ const PatientRecordPage = () => {
           </Card>
         </div>
 
-        <Tabs defaultValue="appointments" className="w-full mt-6">
+        <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full mt-6">
           <TabsList className="grid w-full grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-8 h-auto flex-wrap bg-white/90 backdrop-blur-sm border border-gray-200 dark:border-gray-700 rounded-2xl shadow-[0_1px_3px_rgba(0,0,0,0.05)] p-2">
             <TabsTrigger value="appointments" className="rounded-xl data-[state=active]:bg-blue-500 data-[state=active]:text-white transition-colors duration-200 text-gray-700 dark:text-gray-300 data-[state=active]:dark:bg-blue-600">
               <FaStethoscope className="h-4 w-4 mr-2" /> Atendimento
