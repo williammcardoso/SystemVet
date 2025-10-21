@@ -23,7 +23,102 @@ export interface BaseAppointmentDetails {
 }
 
 export interface ConsultationDetails extends BaseAppointmentDetails {
-  // Campos específicos de consulta clínica
+  // Anamnese
+  vacinacaoPaciente?: 'sim' | 'nao' | '';
+  vacinacaoPacienteObs?: string;
+  usoMedicacao?: 'sim' | 'nao' | '';
+  usoMedicacaoQuais?: string;
+  possibilidadeIntoxicacao?: 'sim' | 'nao' | '';
+  possibilidadeIntoxicacaoObs?: string;
+  alergiasPaciente?: 'sim' | 'nao' | '';
+  alergiasPacienteObs?: string;
+  historicoCirurgico?: 'sim' | 'nao' | '';
+  historicoCirurgicoQuais?: string;
+  alimentacaoTipo?: 'racaoSeca' | 'racaoUmida' | 'mista' | 'alimentacaoCaseira' | '';
+  alimentacaoObs?: string;
+  apetiteDegluticao?: string[]; // Array de opções selecionadas
+  apetiteDegluticaoObs?: string;
+  emeseRegurgitacao?: 'sim' | 'nao' | '';
+  emeseRegurgitacaoComplementoInicio?: string;
+  emeseRegurgitacaoComplementoQuantidade?: string;
+  emeseRegurgitacaoComplementoFrequencia?: string;
+  emeseRegurgitacaoComplementoAspecto?: string;
+  ingestaoAgua?: string[]; // Array de opções selecionadas
+  miccaoNormal?: 'sim' | 'nao' | '';
+  miccaoFrequencia?: string;
+  miccaoAspecto?: string;
+  miccaoAlteracoes?: string[]; // Array de opções selecionadas
+  fezesDefecacoes?: string[]; // Array de opções selecionadas
+  fezesDefecacoesComplemento?: string;
+  alteracoesRespiratorias?: 'sim' | 'nao' | '';
+  alteracoesRespiratoriasTipos?: string[]; // Array de opções selecionadas
+  tosse?: 'sim' | 'nao' | '';
+  tossePeriodo?: string;
+  tosseFrequencia?: string;
+  espirros?: 'sim' | 'nao' | '';
+  espirrosPeriodo?: string;
+  espirrosFrequencia?: string;
+  intoleranciaExercicio?: 'sim' | 'nao' | '';
+  intoleranciaExercicioTipos?: string[]; // Array de opções selecionadas
+  intoleranciaExercicioObs?: string;
+
+  // Exame Físico
+  exameFisicoRealizado?: 'sim' | 'nao' | '';
+  exameFisicoObs?: string;
+  usoContencao?: 'sim' | 'nao' | '';
+  usoContencaoQual?: string;
+  secrecaoNasal?: 'sim' | 'nao' | '';
+  secrecaoNasalComplementoInicio?: string;
+  secrecaoNasalComplementoAspectoQuantidade?: string;
+  secrecaoOcular?: 'sim' | 'nao' | '';
+  secrecaoOcularComplementoInicio?: string;
+  secrecaoOcularComplementoAspectoQuantidade?: string;
+  olhosEstado?: string; // Opção única selecionada
+  olhosObs?: string;
+  orelhasAlteracoes?: string[]; // Array de opções selecionadas
+  bocaAnexos?: 'sim' | 'nao' | '';
+  bocaAnexosDescricao?: string;
+  doencaPeriodontal?: 'sim' | 'nao' | '';
+  doencaPeriodontalGrau?: '1' | '2' | '3' | '4' | '';
+  peleAnexosAlteracoes?: string[]; // Array de opções selecionadas
+  peleAnexosDescricao?: string;
+  pescocoColuna?: 'sim' | 'nao' | '';
+  pescocoColunaDescricao?: string;
+  desconfortoAbdominal?: 'sim' | 'nao' | '';
+  desconfortoAbdominalRegiaoSensibilidade?: string;
+  desconfortoAbdominalNivelDor?: string;
+  aumentoVolumeAbdominal?: 'sim' | 'nao' | '';
+  aumentoVolumeAbdominalRegiao?: string;
+  mucosasEstado?: string[]; // Array de opções selecionadas
+  frequenciaRespiratoriaObsAusculta?: string;
+  sopro?: 'sim' | 'nao' | '';
+  padraoRespiratorio?: string[]; // Array de opções selecionadas
+  frequenciaCardiacaObsAusculta?: string;
+  linfonodosEstado?: 'normal' | 'infartado' | '';
+  linfonodosAlteracaoQualObs?: string;
+
+  // Diagnóstico e Tratamento (campos adicionais)
+  observacoesOcorrencias?: string;
+  examesSolicitados?: string;
+  suspeitaDiagnostica?: string;
+  diagnosticoDiferencial?: string;
+  procedimentoRealizadoConsulta?: string;
+
+  // Parâmetros de Atitude A (AVDN)
+  avdnMucosa?: string;
+  avdnTpc?: string;
+  avdnFc?: string;
+  avdnFr?: string;
+  avdnPadraoRespiratorio?: string;
+  avdnPulso?: string;
+  avdnPas?: string;
+  avdnManguito?: string;
+  avdnTemperatura?: number | '';
+  avdnSemDorAbdominal?: 'sim' | 'nao' | '';
+  avdnHidratacaoTurgorCutaneo?: string;
+
+  // Próximos Passos
+  proximosPassos?: string;
 }
 
 export interface VaccinationDetails {
