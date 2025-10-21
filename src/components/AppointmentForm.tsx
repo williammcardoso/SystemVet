@@ -13,10 +13,10 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"; // Importar Card
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
-  FaCalendarAlt, FaStethoscope, FaWeightHanging, FaThermometerHalf, FaNotesMedical, FaSyringe, FaCut, FaRedo, FaAmbulance, FaCheckCircle, FaPaperclip, FaSave, FaTimes, FaPrescriptionBottleAlt
-} from "react-icons/fa";
+  FaCalendarAlt, FaStethoscope, FaWeightHanging, FaThermometerHalf, FaNotesMedical, FaSyringe, FaCut, FaRedo, FaAmbulance, FaCheckCircle, FaPaperclip, FaSave, FaTimes, FaPrescriptionBottleAlt, FaPlus
+} from "react-icons/fa"; // Adicionado FaPlus
 import { toast } from "sonner";
 import { AppointmentEntry, ConsultationDetails, VaccinationDetails, SurgeryDetails, ReturnDetails, EmergencyDetails, CheckupDetails, BaseAppointmentDetails } from "@/types/appointment";
 import { mockUserSettings } from "@/mockData/settings";
@@ -580,7 +580,7 @@ const AppointmentForm: React.FC<AppointmentFormProps> = ({
             </div>
             <div className="space-y-2">
               <Label htmlFor="temperaturaCorporal">Temperatura Corporal (°C) *</Label>
-              <Input id="temperaturaCorporal" type="number" step="0.1" value={temperaturaCorporal} onChange={(e) => handleDetailChange('temperaturaCorporal', Number(e.target.value))} required />
+              <Input id="temperaturaCorporal" type="number" step="0.1" value={temperaturaCorporal} onChange={(e) => setTemperaturaCorporal(Number(e.target.value))} required />
             </div>
           </div>
           <div className="space-y-2 col-span-full">
