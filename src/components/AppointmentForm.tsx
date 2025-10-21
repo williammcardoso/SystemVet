@@ -17,7 +17,33 @@ import {
 } from "@/components/ui/accordion";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
-  FaCalendarAlt, FaStethoscope, FaWeightHanging, FaThermometerHalf, FaNotesMedical, FaSyringe, FaCut, FaRedo, FaAmbulance, FaCheckCircle, FaPaperclip, FaSave, FaTimes, FaPrescriptionBottleAlt, FaPlus, FaFileAlt, FaUserMd, FaHeartbeat, FaLungs, FaStomach, FaBone, FaBrain, FaEye, FaEar, FaTooth, FaHandPaper, FaTint, FaToilet, FaRunning, FaAllergies, FaHistory, FaPoison, FaUtensils, FaWater, FaBed, FaExclamationCircle, FaHeadSideMask, FaDog, FaCat, FaFish, FaBird, FaBug, FaSpider, FaSnake, FaHorse, FaCow, FaPig, FaSheep, FaGoat, FaRabbit, FaMouse, FaHamster, FaTurtle, FaFrog, FaFishFins, FaFeather, FaLeaf, FaSeedling, FaCarrot, FaApple, FaBoneSolid, FaBowlFood, FaGlassWater, FaDroplet, FaShower, FaToiletPaper, FaWalking, FaRunningSolid, FaAllergiesSolid, FaHistorySolid, FaPoisonSolid, FaUtensilsSolid, FaWaterSolid, FaBedSolid, FaExclamationCircleSolid, FaHeadSideMaskSolid, FaDogSolid, FaCatSolid, FaFishSolid, FaBirdSolid, FaBugSolid, FaSpiderSolid, FaSnakeSolid, FaHorseSolid, FaCowSolid, FaPigSolid, FaSheepSolid, FaGoatSolid, FaRabbitSolid, FaMouseSolid, FaHamsterSolid, FaTurtleSolid, FaFrogSolid, FaFishFinsSolid, FaFeatherSolid, FaLeafSolid, FaSeedlingSolid, FaCarrotSolid, FaAppleSolid, FaBone as FaBoneIcon, FaBowlFood as FaBowlFoodIcon, FaGlassWater as FaGlassWaterIcon, FaDroplet as FaDropletIcon, FaShower as FaShowerIcon, FaToiletPaper as FaToiletPaperIcon, FaWalking as FaWalkingIcon, FaRunning as FaRunningIcon, FaAllergies as FaAllergiesIcon, FaHistory as FaHistoryIcon, FaPoison as FaPoisonIcon, FaUtensils as FaUtensilsIcon, FaWater as FaWaterIcon, FaBed as FaBedIcon, FaExclamationCircle as FaExclamationCircleIcon, FaHeadSideMask as FaHeadSideMaskIcon, FaDog as FaDogIcon, FaCat as FaCatIcon, FaFish as FaFishIcon, FaBird as FaBirdIcon, FaBug as FaBugIcon, FaSpider as FaSpiderIcon, FaSnake as FaSnakeIcon, FaHorse as FaHorseIcon, FaCow as FaCowIcon, FaPig as FaPigIcon, FaSheep as FaSheepIcon, FaGoat as FaGoatIcon, FaRabbit as FaRabbitIcon, FaMouse as FaMouseIcon, FaHamster as FaHamsterIcon, FaTurtle as FaTurtleIcon, FaFrog as FaFrogIcon, FaFishFins as FaFishFinsIcon, FaFeather as FaFeatherIcon, FaLeaf as FaLeafIcon, FaSeedling as FaSeedlingIcon, FaCarrot as FaCarrotIcon, FaApple as FaAppleIcon
+  FaCalendarAlt,
+  FaStethoscope,
+  FaWeightHanging,
+  FaThermometerHalf,
+  FaNotesMedical,
+  FaSyringe,
+  FaCut,
+  FaRedo,
+  FaAmbulance,
+  FaCheckCircle,
+  FaPaperclip,
+  FaSave,
+  FaTimes,
+  FaPrescriptionBottleAlt,
+  FaPlus,
+  FaFileAlt,
+  FaUserMd,
+  FaHeartbeat,
+  FaLungs,
+  FaStomach,
+  FaBrain,
+  FaExclamationCircle,
+  FaRunning,
+  FaBone as FaBoneIcon, // Usado como FaBoneIcon
+  FaHistory as FaHistoryIcon, // Usado como FaHistoryIcon
+  FaUtensils as FaUtensilsIcon, // Usado como FaUtensilsIcon
+  FaHeadSideMask as FaHeadSideMaskIcon, // Usado como FaHeadSideMaskIcon
 } from "react-icons/fa";
 import { toast } from "sonner";
 import { AppointmentEntry, ConsultationDetails, VaccinationDetails, SurgeryDetails, ReturnDetails, EmergencyDetails, CheckupDetails, BaseAppointmentDetails } from "@/types/appointment";
