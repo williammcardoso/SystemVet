@@ -13,6 +13,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"; // Importar Card
 import {
   FaCalendarAlt, FaStethoscope, FaWeightHanging, FaThermometerHalf, FaNotesMedical, FaSyringe, FaCut, FaRedo, FaAmbulance, FaCheckCircle, FaPaperclip, FaSave, FaTimes, FaPrescriptionBottleAlt
 } from "react-icons/fa";
@@ -579,7 +580,7 @@ const AppointmentForm: React.FC<AppointmentFormProps> = ({
             </div>
             <div className="space-y-2">
               <Label htmlFor="temperaturaCorporal">Temperatura Corporal (°C) *</Label>
-              <Input id="temperaturaCorporal" type="number" step="0.1" value={temperaturaCorporal} onChange={(e) => setTemperaturaCorporal(Number(e.target.value))} required />
+              <Input id="temperaturaCorporal" type="number" step="0.1" value={temperaturaCorporal} onChange={(e) => handleDetailChange('temperaturaCorporal', Number(e.target.value))} required />
             </div>
           </div>
           <div className="space-y-2 col-span-full">
