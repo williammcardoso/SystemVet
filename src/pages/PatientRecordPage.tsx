@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Link, useParams, useNavigate, useSearchParams } from "react-router-dom";
 import {
-  FaArrowLeft, FaUsers, FaPaw, FaPlus, FaEye, FaStethoscope, FaCalendarAlt, FaDollarSign, FaSyringe, FaWeightHanging, FaFileAlt, FaClipboardList, FaCommentAlt, FaHeart, FaMale, FaUser, FaPrint, FaDownload, FaTimes, FaSave, FaBalanceScale, FaFileMedical, FaExclamationTriangle, FaFlask, FaTag, FaBox, FaClock, FaMoneyBillWave, FaArrowUp, FaArrowDown, FaTrashAlt
+  FaArrowLeft, FaUsers, FaPaw, FaPlus, FaEye, FaStethoscope, FaCalendarAlt, FaDollarSign, FaSyringe, FaWeightHanging, FaFileAlt, FaClipboardList, FaCommentAlt, FaHeart, FaMale, FaUser, FaPrint, FaDownload, FaTimes, FaSave, FaBalanceScale, FaFileMedical, FaExclamationTriangle, FaFlask, FaTag, FaBox, FaClock, FaMoneyBillWave, FaArrowUp, FaArrowDown, FaTrashAlt, FaPrescriptionBottleAlt
 } from "react-icons/fa"; // Importar ícones de react-icons
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -34,6 +34,8 @@ import {
 import { pdf } from "@react-pdf/renderer"; // Importar pdf para impressão
 import { PrescriptionPdfContent } from "@/components/PrescriptionPdfContent"; // Importar o componente de conteúdo do PDF
 import { FinancialTransaction, mockFinancialTransactions } from "@/mockData/financial"; // Importar mock data financeiro
+import { AppointmentEntry } from "@/types/appointment"; // Importar a nova interface de atendimento
+import AppointmentForm from "@/components/AppointmentForm"; // Importar o novo formulário de atendimento
 
 // Mock data (centralizado aqui para facilitar o exemplo, mas idealmente viria de um serviço)
 interface Animal {
@@ -175,61 +177,76 @@ const mockClients: Client[] = [
   },
 ];
 
-// Interface para Atendimentos
-interface AppointmentEntry {
-  id: string;
-  date: string;
-  type: string;
-  vet: string;
-  notes: string;
-  animalId: string; // Adicionado para filtrar por animal
-}
-
-// Mock data para atendimentos (agora com animalId)
+// Mock data para atendimentos (agora com a nova interface AppointmentEntry)
 const initialMockAppointments: AppointmentEntry[] = [
-  { id: "app1", animalId: "a1", date: "2023-10-26", type: "Consulta de Rotina", vet: "Dr. Silva", notes: "Animal saudável." },
-  { id: "app2", animalId: "a1", date: "2024-03-10", type: "Vacinação Anual", vet: "Dra. Costa", notes: "Vacina V8 aplicada." },
-  { id: "app3", animalId: "a3", date: "2024-01-15", type: "Exame de Rotina", vet: "Dr. Souza", notes: "Check-up geral." },
+  {
+    id: "app1",
+    animalId: "a1",
+    date: "2023-10-26",
+    type: "Consulta",
+    vet: "Dr. William Cardoso",
+    pesoAtual: 25.0,
+    temperaturaCorporal: 38.5,
+    observacoesGerais: "Animal saudável, check-up de rotina.",
+    details: {
+      queixaPrincipal: "Check-up anual",
+      historicoClinico: "Sem intercorrências recentes.",
+      alimentacao: "Ração seca premium",
+      vacinacaoVermifugacaoAtualizadas: "sim",
+      ambiente: "interno",
+      contatoOutrosAnimais: "nao",
+      mucosas: "róseas, úmidas",
+      frequenciaCardiaca: 100,
+      frequenciaRespiratoria: 20,
+      diagnosticoDefinitivo: "Saudável",
+      condutaTratamento: "Manter rotina, próxima vacina em 6 meses.",
+      retornoRecomendadoEmDias: 180,
+    },
+    attachments: [],
+  },
+  {
+    id: "app2",
+    animalId: "a1",
+    date: "2024-03-10",
+    type: "Vacina",
+    vet: "Dra. Ana Paula",
+    pesoAtual: 25.5,
+    temperaturaCorporal: 38.0,
+    observacoesGerais: "Aplicação da vacina V8.",
+    details: {
+      tipoVacina: "Polivalente",
+      nomeComercial: "Duramune Max 5/4L",
+      lote: "ABC123XYZ",
+      fabricante: "Boehringer Ingelheim",
+      dataFabricacao: "2023-01-01",
+      dataValidade: "2025-01-01",
+      doseAplicada: 1.0,
+      viaAdministracao: "SC",
+      localAplicacao: "Escapular Direita",
+      reacaoAdversaObservada: "Nenhuma",
+      profissionalAplicou: "Dra. Ana Paula",
+    },
+    attachments: [],
+  },
+  {
+    id: "app3",
+    animalId: "a3",
+    date: "2024-01-15",
+    type: "Emergência",
+    vet: "Dr. Carlos Eduardo",
+    pesoAtual: 18.0,
+    temperaturaCorporal: 39.5,
+    observacoesGerais: "Animal chegou com dispneia e tosse.",
+    details: {
+      horaChegada: "14:30",
+      condicaoGeral: "dispneia",
+      manobrasSuporteRealizadas: "Oxigenoterapia, fluidoterapia.",
+      medicamentosAdministrados: "Furosemida, Dexametasona.",
+      encaminhamento: "internacao",
+    },
+    attachments: [],
+  },
 ];
-
-// Mock data para tipos de atendimento
-const mockAppointmentTypes = [
-  { id: "1", name: "Consulta de Rotina" },
-  { id: "2", name: "Vacinação" },
-  { id: "3", name: "Cirurgia" },
-  { id: "4", name: "Exame" },
-  { id: "5", name: "Retorno" },
-  { id: "6", name: "Outro" },
-];
-
-// const mockSales = [ // Removido, agora usaremos mockFinancialTransactions
-//   { id: "sale1", date: "2023-10-26", item: "Ração Premium 1kg", quantity: 1, total: 50.00 },
-//   { id: "sale2", date: "2024-03-10", item: "Brinquedo para Cachorro", quantity: 1, total: 25.00 },
-// ];
-
-const mockVaccines = [
-  { id: "vac1", date: "2024-03-10", type: "V8", nextDue: "2025-03-10", vet: "Dra. Costa" },
-];
-
-// Mock data para as novas abas
-interface WeightEntry {
-  id: string;
-  date: string;
-  weight: number;
-}
-
-interface DocumentEntry {
-  id: string;
-  date: string;
-  name: string;
-  fileUrl: string;
-}
-
-interface ObservationEntry {
-  id: string;
-  date: string;
-  observation: string;
-}
 
 // Mock data para tipos de exame e veterinários
 const mockExamTypes = [
@@ -276,6 +293,31 @@ interface ExamEntry {
   conclusions?: string;
 }
 
+// Mock data para as novas abas
+interface WeightEntry {
+  id: string;
+  date: string;
+  weight: number;
+}
+
+interface DocumentEntry {
+  id: string;
+  date: string;
+  name: string;
+  fileUrl: string;
+}
+
+interface ObservationEntry {
+  id: string;
+  date: string;
+  observation: string;
+}
+
+const mockVaccines = [
+  { id: "vac1", date: "2024-03-10", type: "V8", nextDue: "2025-03-10", vet: "Dra. Costa" },
+];
+
+
 // Helper function to calculate age
 const calculateAge = (birthday: string) => {
   const birthDate = new Date(birthday);
@@ -314,12 +356,8 @@ const PatientRecordPage = () => {
   const [animalAppointments, setAnimalAppointments] = useState<AppointmentEntry[]>(
     initialMockAppointments.filter(app => app.animalId === animalId)
   );
-  const [isAppointmentDialogOpen, setIsAppointmentDialogOpen] = useState(false);
-  const [editingAppointment, setEditingAppointment] = useState<AppointmentEntry | null>(null);
-  const [newAppointmentDate, setNewAppointmentDate] = useState<string>(new Date().toISOString().split('T')[0]);
-  const [newAppointmentType, setNewAppointmentType] = useState<string | undefined>(undefined);
-  const [newAppointmentVet, setNewAppointmentVet] = useState<string | undefined>(undefined);
-  const [newAppointmentNotes, setNewAppointmentNotes] = useState("");
+  const [isAppointmentFormOpen, setIsAppointmentFormOpen] = useState(false); // Alterado para isAppointmentFormOpen
+  const [editingAppointment, setEditingAppointment] = useState<AppointmentEntry | undefined>(undefined); // Alterado para undefined
 
 
   // State para as novas abas
@@ -570,61 +608,39 @@ const PatientRecordPage = () => {
     toast.success("Receita enviada para impressão!");
   };
 
-  // Handlers para Atendimentos
+  // Handlers para Atendimentos (atualizados para o novo AppointmentForm)
   const handleAddAppointmentClick = () => {
-    setEditingAppointment(null);
-    setNewAppointmentDate(new Date().toISOString().split('T')[0]);
-    setNewAppointmentType(undefined);
-    setNewAppointmentVet(undefined);
-    setNewAppointmentNotes("");
-    setIsAppointmentDialogOpen(true);
+    setEditingAppointment(undefined);
+    setIsAppointmentFormOpen(true);
   };
 
   const handleEditAppointmentClick = (appointment: AppointmentEntry) => {
     setEditingAppointment(appointment);
-    setNewAppointmentDate(appointment.date);
-    setNewAppointmentType(appointment.type);
-    setNewAppointmentVet(appointment.vet);
-    setNewAppointmentNotes(appointment.notes);
-    setIsAppointmentDialogOpen(true);
+    setIsAppointmentFormOpen(true);
   };
 
-  const handleSaveAppointment = () => {
-    if (!newAppointmentDate || !newAppointmentType || !newAppointmentVet || !newAppointmentNotes.trim()) {
-      toast.error("Por favor, preencha todos os campos obrigatórios do atendimento.");
-      return;
-    }
-
+  const handleSaveAppointment = (newAppointment: AppointmentEntry) => {
     if (editingAppointment) {
       setAnimalAppointments((prev) =>
         prev.map((app) =>
-          app.id === editingAppointment.id
-            ? {
-                ...app,
-                date: newAppointmentDate,
-                type: newAppointmentType,
-                vet: newAppointmentVet,
-                notes: newAppointmentNotes.trim(),
-              }
+          app.id === newAppointment.id
+            ? newAppointment
             : app
         ).sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
       );
       toast.success("Atendimento atualizado com sucesso!");
     } else {
-      const newApp: AppointmentEntry = {
-        id: `app-${Date.now()}`,
-        animalId: animalId!,
-        date: newAppointmentDate,
-        type: newAppointmentType,
-        vet: newAppointmentVet,
-        notes: newAppointmentNotes.trim(),
-      };
       setAnimalAppointments((prev) =>
-        [...prev, newApp].sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
+        [...prev, newAppointment].sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
       );
       toast.success("Atendimento adicionado com sucesso!");
     }
-    setIsAppointmentDialogOpen(false);
+    setIsAppointmentFormOpen(false);
+  };
+
+  const handleCancelAppointmentForm = () => {
+    setIsAppointmentFormOpen(false);
+    setEditingAppointment(undefined);
   };
 
   const handleDeleteAppointment = (id: string) => {
@@ -785,7 +801,7 @@ const PatientRecordPage = () => {
                               {app.type}
                             </Badge>
                             <p className="text-lg font-semibold text-foreground">
-                              {app.notes || "Sem observações"}
+                              {app.observacoesGerais || "Sem observações"}
                             </p>
                           </div>
                           <div className="flex gap-2">
@@ -813,9 +829,9 @@ const PatientRecordPage = () => {
                 )}
               </CardContent>
             </Card>
-            {/* Dialog para Adicionar/Editar Atendimento */}
-            <Dialog open={isAppointmentDialogOpen} onOpenChange={setIsAppointmentDialogOpen}>
-              <DialogContent className="sm:max-w-[500px] bg-white/90 backdrop-blur-sm border border-gray-200 dark:border-gray-700 rounded-2xl shadow-[0_1px_3px_rgba(0,0,0,0.05)] dark:bg-gray-800/90">
+            {/* Dialog para Adicionar/Editar Atendimento (agora usando AppointmentForm) */}
+            <Dialog open={isAppointmentFormOpen} onOpenChange={setIsAppointmentFormOpen}>
+              <DialogContent className="sm:max-w-[900px] max-h-[90vh] overflow-y-auto bg-white/90 backdrop-blur-sm border border-gray-200 dark:border-gray-700 rounded-2xl shadow-[0_1px_3px_rgba(0,0,0,0.05)] dark:bg-gray-800/90">
                 <DialogHeader>
                   <DialogTitle className="text-lg font-semibold text-[#374151] dark:text-gray-100">
                     {editingAppointment ? "Editar Atendimento" : "Novo Atendimento"}
@@ -824,67 +840,14 @@ const PatientRecordPage = () => {
                     Preencha os detalhes do atendimento.
                   </DialogDescription>
                 </DialogHeader>
-                <div className="grid gap-4 py-4">
-                  <div className="space-y-2">
-                    <Label htmlFor="appointmentDate" className="text-[#4B5563] dark:text-gray-400 font-medium">Data</Label>
-                    <Input
-                      id="appointmentDate"
-                      type="date"
-                      value={newAppointmentDate}
-                      onChange={(e) => setNewAppointmentDate(e.target.value)}
-                      className="bg-white rounded-lg border-gray-200 dark:border-gray-600 focus:ring-2 focus:ring-blue-400 placeholder-[#9CA3AF] dark:placeholder-gray-500 transition-all duration-200"
-                    />
-                  </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="appointmentType" className="text-[#4B5563] dark:text-gray-400 font-medium">Tipo de Atendimento</Label>
-                    <Select onValueChange={setNewAppointmentType} value={newAppointmentType}>
-                      <SelectTrigger id="appointmentType" className="bg-white rounded-lg border-gray-200 dark:border-gray-600 focus:ring-2 focus:ring-blue-400 placeholder-[#9CA3AF] dark:placeholder-gray-500 transition-all duration-200">
-                        <SelectValue placeholder="Selecione o tipo de atendimento" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        {mockAppointmentTypes.map((type) => (
-                          <SelectItem key={type.id} value={type.name}>
-                            {type.name}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                  </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="appointmentVet" className="text-[#4B5563] dark:text-gray-400 font-medium">Veterinário</Label>
-                    <Select onValueChange={setNewAppointmentVet} value={newAppointmentVet}>
-                      <SelectTrigger id="appointmentVet" className="bg-white rounded-lg border-gray-200 dark:border-gray-600 focus:ring-2 focus:ring-blue-400 placeholder-[#9CA3AF] dark:placeholder-gray-500 transition-all duration-200">
-                        <SelectValue placeholder="Selecione o veterinário" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        {mockVets.map((vet) => (
-                          <SelectItem key={vet.id} value={vet.name}>
-                            {vet.name}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                  </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="appointmentNotes" className="text-[#4B5563] dark:text-gray-400 font-medium">Observações</Label>
-                    <Textarea
-                      id="appointmentNotes"
-                      placeholder="Notas adicionais sobre o atendimento..."
-                      value={newAppointmentNotes}
-                      onChange={(e) => setNewAppointmentNotes(e.target.value)}
-                      className="bg-white rounded-lg border-gray-200 dark:border-gray-600 focus:ring-2 focus:ring-blue-400 placeholder-[#9CA3AF] dark:placeholder-gray-500 transition-all duration-200"
-                      rows={3}
-                    />
-                  </div>
-                </div>
-                <DialogFooter>
-                  <Button variant="outline" onClick={() => setIsAppointmentDialogOpen(false)} className="bg-white border border-gray-300 text-gray-700 hover:bg-gray-50 rounded-md transition-all duration-200 shadow-sm hover:shadow-md dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200 dark:hover:bg-gray-600">
-                    <FaTimes className="mr-2 h-4 w-4" /> Cancelar
-                  </Button>
-                  <Button onClick={handleSaveAppointment} className="bg-gradient-to-r from-blue-500 to-indigo-500 text-white hover:from-blue-600 hover:to-indigo-600 rounded-md font-semibold transition-all duration-200 shadow-md hover:shadow-lg">
-                    <FaSave className="mr-2 h-4 w-4" /> Salvar Atendimento
-                  </Button>
-                </DialogFooter>
+                <AppointmentForm
+                  animalId={animalId!}
+                  clientId={clientId!}
+                  initialData={editingAppointment}
+                  onSave={handleSaveAppointment}
+                  onCancel={handleCancelAppointmentForm}
+                  mockAppointments={animalAppointments}
+                />
               </DialogContent>
             </Dialog>
           </TabsContent>
