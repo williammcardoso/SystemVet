@@ -188,7 +188,7 @@ const getDynamicStyles = (isCompactSimplePrescription: boolean, prescriptionType
     flexShrink: 0,
   },
   pharmacyBadge: {
-    fontSize: isCompactSimplePrescription ? 7 : 9, // Aumentado para 9
+    fontSize: 7, // Revertido para 7
     paddingHorizontal: isCompactSimplePrescription ? 5 : 6,
     paddingVertical: isCompactSimplePrescription ? 2 : 3,
     borderRadius: 8,
@@ -200,7 +200,7 @@ const getDynamicStyles = (isCompactSimplePrescription: boolean, prescriptionType
     alignItems: 'center', // Centraliza verticalmente
   },
   quantityBadge: {
-    fontSize: isCompactSimplePrescription ? 8 : 10, // Aumentado para 10
+    fontSize: 8, // Revertido para 8
     paddingHorizontal: isCompactSimplePrescription ? 7 : 8,
     paddingVertical: isCompactSimplePrescription ? 3 : 4,
     borderRadius: 8,
