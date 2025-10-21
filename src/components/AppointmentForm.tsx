@@ -17,7 +17,7 @@ import {
 } from "@/components/ui/accordion";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
-  FaCalendarAlt, FaStethoscope, FaWeightHanging, FaThermometerHalf, FaNotesMedical, FaSyringe, FaCut, FaRedo, FaAmbulance, FaCheckCircle, FaPaperclip, FaSave, FaTimes, FaPrescriptionBottleAlt, FaPlus, FaFileAlt, FaUserMd, FaHeartbeat, FaLungs, FaStomach, FaBone, FaBrain, FaEye, FaEar, FaTooth, FaHandPaper, FaTint, FaToilet, FaRunning, FaAllergies, FaHistory, FaPoison, FaUtensils, FaWater, FaBed, FaExclamationCircle
+  FaCalendarAlt, FaStethoscope, FaWeightHanging, FaThermometerHalf, FaNotesMedical, FaSyringe, FaCut, FaRedo, FaAmbulance, FaCheckCircle, FaPaperclip, FaSave, FaTimes, FaPrescriptionBottleAlt, FaPlus, FaFileAlt, FaUserMd, FaHeartbeat, FaLungs, FaStomach, FaBone, FaBrain, FaEye, FaEar, FaTooth, FaHandPaper, FaTint, FaToilet, FaRunning, FaAllergies, FaHistory, FaPoison, FaUtensils, FaWater, FaBed, FaExclamationCircle, FaHeadSideMask, FaDog, FaCat, FaFish, FaBird, FaBug, FaSpider, FaSnake, FaHorse, FaCow, FaPig, FaSheep, FaGoat, FaRabbit, FaMouse, FaHamster, FaTurtle, FaFrog, FaFishFins, FaFeather, FaLeaf, FaSeedling, FaCarrot, FaApple, FaBoneSolid, FaBowlFood, FaGlassWater, FaDroplet, FaShower, FaToiletPaper, FaWalking, FaRunningSolid, FaAllergiesSolid, FaHistorySolid, FaPoisonSolid, FaUtensilsSolid, FaWaterSolid, FaBedSolid, FaExclamationCircleSolid, FaHeadSideMaskSolid, FaDogSolid, FaCatSolid, FaFishSolid, FaBirdSolid, FaBugSolid, FaSpiderSolid, FaSnakeSolid, FaHorseSolid, FaCowSolid, FaPigSolid, FaSheepSolid, FaGoatSolid, FaRabbitSolid, FaMouseSolid, FaHamsterSolid, FaTurtleSolid, FaFrogSolid, FaFishFinsSolid, FaFeatherSolid, FaLeafSolid, FaSeedlingSolid, FaCarrotSolid, FaAppleSolid, FaBone as FaBoneIcon, FaBowlFood as FaBowlFoodIcon, FaGlassWater as FaGlassWaterIcon, FaDroplet as FaDropletIcon, FaShower as FaShowerIcon, FaToiletPaper as FaToiletPaperIcon, FaWalking as FaWalkingIcon, FaRunning as FaRunningIcon, FaAllergies as FaAllergiesIcon, FaHistory as FaHistoryIcon, FaPoison as FaPoisonIcon, FaUtensils as FaUtensilsIcon, FaWater as FaWaterIcon, FaBed as FaBedIcon, FaExclamationCircle as FaExclamationCircleIcon, FaHeadSideMask as FaHeadSideMaskIcon, FaDog as FaDogIcon, FaCat as FaCatIcon, FaFish as FaFishIcon, FaBird as FaBirdIcon, FaBug as FaBugIcon, FaSpider as FaSpiderIcon, FaSnake as FaSnakeIcon, FaHorse as FaHorseIcon, FaCow as FaCowIcon, FaPig as FaPigIcon, FaSheep as FaSheepIcon, FaGoat as FaGoatIcon, FaRabbit as FaRabbitIcon, FaMouse as FaMouseIcon, FaHamster as FaHamsterIcon, FaTurtle as FaTurtleIcon, FaFrog as FaFrogIcon, FaFishFins as FaFishFinsIcon, FaFeather as FaFeatherIcon, FaLeaf as FaLeafIcon, FaSeedling as FaSeedlingIcon, FaCarrot as FaCarrotIcon, FaApple as FaAppleIcon
 } from "react-icons/fa";
 import { toast } from "sonner";
 import { AppointmentEntry, ConsultationDetails, VaccinationDetails, SurgeryDetails, ReturnDetails, EmergencyDetails, CheckupDetails, BaseAppointmentDetails } from "@/types/appointment";
@@ -291,332 +291,362 @@ const AppointmentForm: React.FC<AppointmentFormProps> = ({
                   <FaUserMd className="h-5 w-5 text-blue-500" /> Anamnese
                 </AccordionTrigger>
                 <AccordionContent className="p-4 border-t border-gray-200 dark:border-gray-700">
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-                    <div className="space-y-2 col-span-full">
+                  <div className="space-y-6">
+                    <div className="space-y-2">
                       <Label htmlFor="queixaPrincipal">Queixa Principal</Label>
-                      <Input id="queixaPrincipal" value={consultationDetails.queixaPrincipal || ''} onChange={(e) => handleDetailChange('queixaPrincipal', e.target.value)} />
+                      <Textarea id="queixaPrincipal" value={consultationDetails.queixaPrincipal || ''} onChange={(e) => handleDetailChange('queixaPrincipal', e.target.value)} rows={3} placeholder="Descreva a queixa principal do tutor..." />
                     </div>
 
-                    {/* Vacinação do Paciente */}
-                    <div className="space-y-2">
-                      <Label>Vacinação do Paciente</Label>
-                      <RadioGroup onValueChange={(value: 'sim' | 'nao') => handleDetailChange('vacinacaoPaciente', value)} value={consultationDetails.vacinacaoPaciente || ''} className="flex space-x-4">
-                        <div className="flex items-center space-x-2">
-                          <RadioGroupItem value="sim" id="vacinacao-sim" />
-                          <Label htmlFor="vacinacao-sim">Sim</Label>
-                        </div>
-                        <div className="flex items-center space-x-2">
-                          <RadioGroupItem value="nao" id="vacinacao-nao" />
-                          <Label htmlFor="vacinacao-nao">Não</Label>
-                        </div>
-                      </RadioGroup>
-                      {consultationDetails.vacinacaoPaciente === 'sim' && (
-                        <Textarea placeholder="Observações sobre a vacinação" value={consultationDetails.vacinacaoPacienteObs || ''} onChange={(e) => handleDetailChange('vacinacaoPacienteObs', e.target.value)} rows={1} />
-                      )}
-                    </div>
-
-                    {/* Uso de Medicação */}
-                    <div className="space-y-2">
-                      <Label>Uso de Medicação</Label>
-                      <RadioGroup onValueChange={(value: 'sim' | 'nao') => handleDetailChange('usoMedicacao', value)} value={consultationDetails.usoMedicacao || ''} className="flex space-x-4">
-                        <div className="flex items-center space-x-2">
-                          <RadioGroupItem value="sim" id="medicacao-sim" />
-                          <Label htmlFor="medicacao-sim">Sim</Label>
-                        </div>
-                        <div className="flex items-center space-x-2">
-                          <RadioGroupItem value="nao" id="medicacao-nao" />
-                          <Label htmlFor="medicacao-nao">Não</Label>
-                        </div>
-                      </RadioGroup>
-                      {consultationDetails.usoMedicacao === 'sim' && (
-                        <Textarea placeholder="Quais medicações?" value={consultationDetails.usoMedicacaoQuais || ''} onChange={(e) => handleDetailChange('usoMedicacaoQuais', e.target.value)} rows={1} />
-                      )}
-                    </div>
-
-                    {/* Possibilidade de Intoxicação */}
-                    <div className="space-y-2">
-                      <Label>Possibilidade de Intoxicação</Label>
-                      <RadioGroup onValueChange={(value: 'sim' | 'nao') => handleDetailChange('possibilidadeIntoxicacao', value)} value={consultationDetails.possibilidadeIntoxicacao || ''} className="flex space-x-4">
-                        <div className="flex items-center space-x-2">
-                          <RadioGroupItem value="sim" id="intoxicacao-sim" />
-                          <Label htmlFor="intoxicacao-sim">Sim</Label>
-                        </div>
-                        <div className="flex items-center space-x-2">
-                          <RadioGroupItem value="nao" id="intoxicacao-nao" />
-                          <Label htmlFor="intoxicacao-nao">Não</Label>
-                        </div>
-                      </RadioGroup>
-                      {consultationDetails.possibilidadeIntoxicacao === 'sim' && (
-                        <Textarea placeholder="Observações sobre a intoxicação" value={consultationDetails.possibilidadeIntoxicacaoObs || ''} onChange={(e) => handleDetailChange('possibilidadeIntoxicacaoObs', e.target.value)} rows={1} />
-                      )}
-                    </div>
-
-                    {/* Alergias do Paciente */}
-                    <div className="space-y-2">
-                      <Label>Alergias do Paciente</Label>
-                      <RadioGroup onValueChange={(value: 'sim' | 'nao') => handleDetailChange('alergiasPaciente', value)} value={consultationDetails.alergiasPaciente || ''} className="flex space-x-4">
-                        <div className="flex items-center space-x-2">
-                          <RadioGroupItem value="sim" id="alergias-sim" />
-                          <Label htmlFor="alergias-sim">Sim</Label>
-                        </div>
-                        <div className="flex items-center space-x-2">
-                          <RadioGroupItem value="nao" id="alergias-nao" />
-                          <Label htmlFor="alergias-nao">Não</Label>
-                        </div>
-                      </RadioGroup>
-                      {consultationDetails.alergiasPaciente === 'sim' && (
-                        <Textarea placeholder="Observações sobre as alergias" value={consultationDetails.alergiasPacienteObs || ''} onChange={(e) => handleDetailChange('alergiasPacienteObs', e.target.value)} rows={1} />
-                      )}
-                    </div>
-
-                    {/* Histórico Cirúrgico */}
-                    <div className="space-y-2">
-                      <Label>Histórico Cirúrgico</Label>
-                      <RadioGroup onValueChange={(value: 'sim' | 'nao') => handleDetailChange('historicoCirurgico', value)} value={consultationDetails.historicoCirurgico || ''} className="flex space-x-4">
-                        <div className="flex items-center space-x-2">
-                          <RadioGroupItem value="sim" id="cirurgico-sim" />
-                          <Label htmlFor="cirurgico-sim">Sim</Label>
-                        </div>
-                        <div className="flex items-center space-x-2">
-                          <RadioGroupItem value="nao" id="cirurgico-nao" />
-                          <Label htmlFor="cirurgico-nao">Não</Label>
-                        </div>
-                      </RadioGroup>
-                      {consultationDetails.historicoCirurgico === 'sim' && (
-                        <Textarea placeholder="Quais cirurgias?" value={consultationDetails.historicoCirurgicoQuais || ''} onChange={(e) => handleDetailChange('historicoCirurgicoQuais', e.target.value)} rows={1} />
-                      )}
-                    </div>
-
-                    {/* Alimentação */}
-                    <div className="space-y-2 col-span-full">
-                      <Label htmlFor="alimentacaoTipo">Alimentação</Label>
-                      <Select onValueChange={(value: 'racaoSeca' | 'racaoUmida' | 'mista' | 'alimentacaoCaseira') => handleDetailChange('alimentacaoTipo', value)} value={consultationDetails.alimentacaoTipo || ''}>
-                        <SelectTrigger><SelectValue placeholder="Selecione o tipo de alimentação" /></SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="racaoSeca">Ração seca</SelectItem>
-                          <SelectItem value="racaoUmida">Ração úmida</SelectItem>
-                          <SelectItem value="mista">Mista</SelectItem>
-                          <SelectItem value="alimentacaoCaseira">Alimentação caseira</SelectItem>
-                        </SelectContent>
-                      </Select>
-                      {consultationDetails.alimentacaoTipo === 'alimentacaoCaseira' && (
-                        <Textarea placeholder="Observações sobre a alimentação caseira" value={consultationDetails.alimentacaoObs || ''} onChange={(e) => handleDetailChange('alimentacaoObs', e.target.value)} rows={1} />
-                      )}
-                    </div>
-
-                    {/* Estado de Apetite e Deglutição */}
-                    <div className="space-y-2 col-span-full">
-                      <Label>Estado de Apetite e Deglutição</Label>
-                      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2">
-                        {mockApetiteDegluticaoOptions.map(option => (
-                          <div key={option.value} className="flex items-center space-x-2">
-                            <Checkbox
-                              id={`apetite-${option.value}`}
-                              checked={consultationDetails.apetiteDegluticao?.includes(option.value)}
-                              onCheckedChange={(checked: boolean) => handleMultiSelectChange('apetiteDegluticao', option.value, checked)}
-                            />
-                            <Label htmlFor={`apetite-${option.value}`}>{option.label}</Label>
-                          </div>
-                        ))}
-                      </div>
-                      <Textarea placeholder="Observações sobre apetite e deglutição" value={consultationDetails.apetiteDegluticaoObs || ''} onChange={(e) => handleDetailChange('apetiteDegluticaoObs', e.target.value)} rows={1} />
-                    </div>
-
-                    {/* Êmese e Regurgitação */}
-                    <div className="space-y-2 col-span-full">
-                      <Label>Êmese e Regurgitação</Label>
-                      <RadioGroup onValueChange={(value: 'sim' | 'nao') => handleDetailChange('emeseRegurgitacao', value)} value={consultationDetails.emeseRegurgitacao || ''} className="flex space-x-4">
-                        <div className="flex items-center space-x-2">
-                          <RadioGroupItem value="sim" id="emese-sim" />
-                          <Label htmlFor="emese-sim">Sim</Label>
-                        </div>
-                        <div className="flex items-center space-x-2">
-                          <RadioGroupItem value="nao" id="emese-nao" />
-                          <Label htmlFor="emese-nao">Não</Label>
-                        </div>
-                      </RadioGroup>
-                      {consultationDetails.emeseRegurgitacao === 'sim' && (
-                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-2 mt-2">
-                          <Input placeholder="Início" value={consultationDetails.emeseRegurgitacaoComplementoInicio || ''} onChange={(e) => handleDetailChange('emeseRegurgitacaoComplementoInicio', e.target.value)} />
-                          <Input placeholder="Quantidade" value={consultationDetails.emeseRegurgitacaoComplementoQuantidade || ''} onChange={(e) => handleDetailChange('emeseRegurgitacaoComplementoQuantidade', e.target.value)} />
-                          <Input placeholder="Frequência" value={consultationDetails.emeseRegurgitacaoComplementoFrequencia || ''} onChange={(e) => handleDetailChange('emeseRegurgitacaoComplementoFrequencia', e.target.value)} />
-                          <Input placeholder="Aspecto" value={consultationDetails.emeseRegurgitacaoComplementoAspecto || ''} onChange={(e) => handleDetailChange('emeseRegurgitacaoComplementoAspecto', e.target.value)} />
-                        </div>
-                      )}
-                    </div>
-
-                    {/* Ingestão de Água */}
-                    <div className="space-y-2 col-span-full">
-                      <Label>Ingestão de Água</Label>
-                      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2">
-                        {mockIngestaoAguaOptions.map(option => (
-                          <div key={option.value} className="flex items-center space-x-2">
-                            <Checkbox
-                              id={`agua-${option.value}`}
-                              checked={consultationDetails.ingestaoAgua?.includes(option.value)}
-                              onCheckedChange={(checked: boolean) => handleMultiSelectChange('ingestaoAgua', option.value, checked)}
-                            />
-                            <Label htmlFor={`agua-${option.value}`}>{option.label}</Label>
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-
-                    {/* Micção */}
-                    <div className="space-y-2 col-span-full">
-                      <Label>Micção</Label>
-                      <RadioGroup onValueChange={(value: 'sim' | 'nao') => handleDetailChange('miccaoNormal', value)} value={consultationDetails.miccaoNormal || ''} className="flex space-x-4">
-                        <div className="flex items-center space-x-2">
-                          <RadioGroupItem value="sim" id="miccao-normal-sim" />
-                          <Label htmlFor="miccao-normal-sim">Normal</Label>
-                        </div>
-                        <div className="flex items-center space-x-2">
-                          <RadioGroupItem value="nao" id="miccao-normal-nao" />
-                          <Label htmlFor="miccao-normal-nao">Alterada</Label>
-                        </div>
-                      </RadioGroup>
-                      {consultationDetails.miccaoNormal === 'sim' && (
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-2 mt-2">
-                          <Input placeholder="Frequência" value={consultationDetails.miccaoFrequencia || ''} onChange={(e) => handleDetailChange('miccaoFrequencia', e.target.value)} />
-                          <Input placeholder="Aspecto" value={consultationDetails.miccaoAspecto || ''} onChange={(e) => handleDetailChange('miccaoAspecto', e.target.value)} />
-                        </div>
-                      )}
-                      {consultationDetails.miccaoNormal === 'nao' && (
-                        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2 mt-2">
-                          {mockMiccaoAlteracoesOptions.map(option => (
-                            <div key={option.value} className="flex items-center space-x-2">
-                              <Checkbox
-                                id={`miccao-${option.value}`}
-                                checked={consultationDetails.miccaoAlteracoes?.includes(option.value)}
-                                onCheckedChange={(checked: boolean) => handleMultiSelectChange('miccaoAlteracoes', option.value, checked)}
-                              />
-                              <Label htmlFor={`miccao-${option.value}`}>{option.label}</Label>
-                            </div>
-                          ))}
-                        </div>
-                      )}
-                    </div>
-
-                    {/* Fezes e Defecações */}
-                    <div className="space-y-2 col-span-full">
-                      <Label>Fezes e Defecações</Label>
-                      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2">
-                        {mockFezesDefecacoesOptions.map(option => (
-                          <div key={option.value} className="flex items-center space-x-2">
-                            <Checkbox
-                              id={`fezes-${option.value}`}
-                              checked={consultationDetails.fezesDefecacoes?.includes(option.value)}
-                              onCheckedChange={(checked: boolean) => handleMultiSelectChange('fezesDefecacoes', option.value, checked)}
-                            />
-                            <Label htmlFor={`fezes-${option.value}`}>{option.label}</Label>
-                          </div>
-                        ))}
-                      </div>
-                      <Textarea placeholder="Complemento sobre fezes e defecações" value={consultationDetails.fezesDefecacoesComplemento || ''} onChange={(e) => handleDetailChange('fezesDefecacoesComplemento', e.target.value)} rows={1} />
-                    </div>
-
-                    {/* Alterações Respiratórias */}
-                    <div className="space-y-2 col-span-full">
-                      <Label>Alterações Respiratórias</Label>
-                      <RadioGroup onValueChange={(value: 'sim' | 'nao') => handleDetailChange('alteracoesRespiratorias', value)} value={consultationDetails.alteracoesRespiratorias || ''} className="flex space-x-4">
-                        <div className="flex items-center space-x-2">
-                          <RadioGroupItem value="sim" id="resp-sim" />
-                          <Label htmlFor="resp-sim">Sim</Label>
-                        </div>
-                        <div className="flex items-center space-x-2">
-                          <RadioGroupItem value="nao" id="resp-nao" />
-                          <Label htmlFor="resp-nao">Não</Label>
-                        </div>
-                      </RadioGroup>
-                      {consultationDetails.alteracoesRespiratorias === 'sim' && (
-                        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2 mt-2">
-                          {mockAlteracoesRespiratoriasTipos.map(option => (
-                            <div key={option.value} className="flex items-center space-x-2">
-                              <Checkbox
-                                id={`resp-tipo-${option.value}`}
-                                checked={consultationDetails.alteracoesRespiratoriasTipos?.includes(option.value)}
-                                onCheckedChange={(checked: boolean) => handleMultiSelectChange('alteracoesRespiratoriasTipos', option.value, checked)}
-                              />
-                              <Label htmlFor={`resp-tipo-${option.value}`}>{option.label}</Label>
-                            </div>
-                          ))}
-                        </div>
-                      )}
-                    </div>
-
-                    {/* Tosse */}
-                    <div className="space-y-2">
-                      <Label>Tosse</Label>
-                      <RadioGroup onValueChange={(value: 'sim' | 'nao') => handleDetailChange('tosse', value)} value={consultationDetails.tosse || ''} className="flex space-x-4">
-                        <div className="flex items-center space-x-2">
-                          <RadioGroupItem value="sim" id="tosse-sim" />
-                          <Label htmlFor="tosse-sim">Sim</Label>
-                        </div>
-                        <div className="flex items-center space-x-2">
-                          <RadioGroupItem value="nao" id="tosse-nao" />
-                          <Label htmlFor="tosse-nao">Não</Label>
-                        </div>
-                      </RadioGroup>
-                      {consultationDetails.tosse === 'sim' && (
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-2 mt-2">
-                          <Input placeholder="Período" value={consultationDetails.tossePeriodo || ''} onChange={(e) => handleDetailChange('tossePeriodo', e.target.value)} />
-                          <Input placeholder="Frequência" value={consultationDetails.tosseFrequencia || ''} onChange={(e) => handleDetailChange('tosseFrequencia', e.target.value)} />
-                        </div>
-                      )}
-                    </div>
-
-                    {/* Espirros */}
-                    <div className="space-y-2">
-                      <Label>Espirros</Label>
-                      <RadioGroup onValueChange={(value: 'sim' | 'nao') => handleDetailChange('espirros', value)} value={consultationDetails.espirros || ''} className="flex space-x-4">
-                        <div className="flex items-center space-x-2">
-                          <RadioGroupItem value="sim" id="espirros-sim" />
-                          <Label htmlFor="espirros-sim">Sim</Label>
-                        </div>
-                        <div className="flex items-center space-x-2">
-                          <RadioGroupItem value="nao" id="espirros-nao" />
-                          <Label htmlFor="espirros-nao">Não</Label>
-                        </div>
-                      </RadioGroup>
-                      {consultationDetails.espirros === 'sim' && (
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-2 mt-2">
-                          <Input placeholder="Período" value={consultationDetails.espirrosPeriodo || ''} onChange={(e) => handleDetailChange('espirrosPeriodo', e.target.value)} />
-                          <Input placeholder="Frequência" value={consultationDetails.espirrosFrequencia || ''} onChange={(e) => handleDetailChange('espirrosFrequencia', e.target.value)} />
-                        </div>
-                      )}
-                    </div>
-
-                    {/* Intolerância ao Exercício */}
-                    <div className="space-y-2 col-span-full">
-                      <Label>Intolerância ao Exercício</Label>
-                      <RadioGroup onValueChange={(value: 'sim' | 'nao') => handleDetailChange('intoleranciaExercicio', value)} value={consultationDetails.intoleranciaExercicio || ''} className="flex space-x-4">
-                        <div className="flex items-center space-x-2">
-                          <RadioGroupItem value="sim" id="intolerancia-sim" />
-                          <Label htmlFor="intolerancia-sim">Sim</Label>
-                        </div>
-                        <div className="flex items-center space-x-2">
-                          <RadioGroupItem value="nao" id="intolerancia-nao" />
-                          <Label htmlFor="intolerancia-nao">Não</Label>
-                        </div>
-                      </RadioGroup>
-                      {consultationDetails.intoleranciaExercicio === 'sim' && (
-                        <>
-                          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2 mt-2">
-                            {mockIntoleranciaExercicioTipos.map(option => (
-                              <div key={option.value} className="flex items-center space-x-2">
-                                <Checkbox
-                                  id={`intolerancia-tipo-${option.value}`}
-                                  checked={consultationDetails.intoleranciaExercicioTipos?.includes(option.value)}
-                                  onCheckedChange={(checked: boolean) => handleMultiSelectChange('intoleranciaExercicioTipos', option.value, checked)}
-                                />
-                                <Label htmlFor={`intolerancia-tipo-${option.value}`}>{option.label}</Label>
+                    <Accordion type="multiple" defaultValue={["historicoGeral", "alimentacaoHidratacao", "sistemaDigestorio", "sistemaRespiratorio"]}>
+                      <AccordionItem value="historicoGeral">
+                        <AccordionTrigger className="text-sm font-semibold text-[#374151] dark:text-gray-100 flex items-center gap-2">
+                          <FaHistoryIcon className="h-4 w-4 text-gray-500" /> Histórico Geral
+                        </AccordionTrigger>
+                        <AccordionContent className="p-4 border-t border-gray-200 dark:border-gray-700 grid grid-cols-1 md:grid-cols-2 gap-4">
+                          {/* Vacinação do Paciente */}
+                          <div className="space-y-2">
+                            <Label>Vacinação do Paciente</Label>
+                            <RadioGroup onValueChange={(value: 'sim' | 'nao') => handleDetailChange('vacinacaoPaciente', value)} value={consultationDetails.vacinacaoPaciente || ''} className="flex space-x-4">
+                              <div className="flex items-center space-x-2">
+                                <RadioGroupItem value="sim" id="vacinacao-sim" />
+                                <Label htmlFor="vacinacao-sim">Sim</Label>
                               </div>
-                            ))}
+                              <div className="flex items-center space-x-2">
+                                <RadioGroupItem value="nao" id="vacinacao-nao" />
+                                <Label htmlFor="vacinacao-nao">Não</Label>
+                              </div>
+                            </RadioGroup>
+                            {consultationDetails.vacinacaoPaciente === 'sim' && (
+                              <Textarea placeholder="Observações sobre a vacinação" value={consultationDetails.vacinacaoPacienteObs || ''} onChange={(e) => handleDetailChange('vacinacaoPacienteObs', e.target.value)} rows={1} />
+                            )}
                           </div>
-                          <Textarea placeholder="Observações sobre a intolerância ao exercício" value={consultationDetails.intoleranciaExercicioObs || ''} onChange={(e) => handleDetailChange('intoleranciaExercicioObs', e.target.value)} rows={1} />
-                        </>
-                      )}
-                    </div>
+
+                          {/* Uso de Medicação */}
+                          <div className="space-y-2">
+                            <Label>Uso de Medicação</Label>
+                            <RadioGroup onValueChange={(value: 'sim' | 'nao') => handleDetailChange('usoMedicacao', value)} value={consultationDetails.usoMedicacao || ''} className="flex space-x-4">
+                              <div className="flex items-center space-x-2">
+                                <RadioGroupItem value="sim" id="medicacao-sim" />
+                                <Label htmlFor="medicacao-sim">Sim</Label>
+                              </div>
+                              <div className="flex items-center space-x-2">
+                                <RadioGroupItem value="nao" id="medicacao-nao" />
+                                <Label htmlFor="medicacao-nao">Não</Label>
+                              </div>
+                            </RadioGroup>
+                            {consultationDetails.usoMedicacao === 'sim' && (
+                              <Textarea placeholder="Quais medicações?" value={consultationDetails.usoMedicacaoQuais || ''} onChange={(e) => handleDetailChange('usoMedicacaoQuais', e.target.value)} rows={1} />
+                            )}
+                          </div>
+
+                          {/* Possibilidade de Intoxicação */}
+                          <div className="space-y-2">
+                            <Label>Possibilidade de Intoxicação</Label>
+                            <RadioGroup onValueChange={(value: 'sim' | 'nao') => handleDetailChange('possibilidadeIntoxicacao', value)} value={consultationDetails.possibilidadeIntoxicacao || ''} className="flex space-x-4">
+                              <div className="flex items-center space-x-2">
+                                <RadioGroupItem value="sim" id="intoxicacao-sim" />
+                                <Label htmlFor="intoxicacao-sim">Sim</Label>
+                              </div>
+                              <div className="flex items-center space-x-2">
+                                <RadioGroupItem value="nao" id="intoxicacao-nao" />
+                                <Label htmlFor="intoxicacao-nao">Não</Label>
+                              </div>
+                            </RadioGroup>
+                            {consultationDetails.possibilidadeIntoxicacao === 'sim' && (
+                              <Textarea placeholder="Observações sobre a intoxicação" value={consultationDetails.possibilidadeIntoxicacaoObs || ''} onChange={(e) => handleDetailChange('possibilidadeIntoxicacaoObs', e.target.value)} rows={1} />
+                            )}
+                          </div>
+
+                          {/* Alergias do Paciente */}
+                          <div className="space-y-2">
+                            <Label>Alergias do Paciente</Label>
+                            <RadioGroup onValueChange={(value: 'sim' | 'nao') => handleDetailChange('alergiasPaciente', value)} value={consultationDetails.alergiasPaciente || ''} className="flex space-x-4">
+                              <div className="flex items-center space-x-2">
+                                <RadioGroupItem value="sim" id="alergias-sim" />
+                                <Label htmlFor="alergias-sim">Sim</Label>
+                              </div>
+                              <div className="flex items-center space-x-2">
+                                <RadioGroupItem value="nao" id="alergias-nao" />
+                                <Label htmlFor="alergias-nao">Não</Label>
+                              </div>
+                            </RadioGroup>
+                            {consultationDetails.alergiasPaciente === 'sim' && (
+                              <Textarea placeholder="Observações sobre as alergias" value={consultationDetails.alergiasPacienteObs || ''} onChange={(e) => handleDetailChange('alergiasPacienteObs', e.target.value)} rows={1} />
+                            )}
+                          </div>
+
+                          {/* Histórico Cirúrgico */}
+                          <div className="space-y-2">
+                            <Label>Histórico Cirúrgico</Label>
+                            <RadioGroup onValueChange={(value: 'sim' | 'nao') => handleDetailChange('historicoCirurgico', value)} value={consultationDetails.historicoCirurgico || ''} className="flex space-x-4">
+                              <div className="flex items-center space-x-2">
+                                <RadioGroupItem value="sim" id="cirurgico-sim" />
+                                <Label htmlFor="cirurgico-sim">Sim</Label>
+                              </div>
+                              <div className="flex items-center space-x-2">
+                                <RadioGroupItem value="nao" id="cirurgico-nao" />
+                                <Label htmlFor="cirurgico-nao">Não</Label>
+                              </div>
+                            </RadioGroup>
+                            {consultationDetails.historicoCirurgico === 'sim' && (
+                              <Textarea placeholder="Quais cirurgias?" value={consultationDetails.historicoCirurgicoQuais || ''} onChange={(e) => handleDetailChange('historicoCirurgicoQuais', e.target.value)} rows={1} />
+                            )}
+                          </div>
+                        </AccordionContent>
+                      </AccordionItem>
+
+                      <AccordionItem value="alimentacaoHidratacao">
+                        <AccordionTrigger className="text-sm font-semibold text-[#374151] dark:text-gray-100 flex items-center gap-2">
+                          <FaUtensilsIcon className="h-4 w-4 text-gray-500" /> Alimentação e Hidratação
+                        </AccordionTrigger>
+                        <AccordionContent className="p-4 border-t border-gray-200 dark:border-gray-700 grid grid-cols-1 md:grid-cols-2 gap-4">
+                          {/* Alimentação */}
+                          <div className="space-y-2 col-span-full">
+                            <Label htmlFor="alimentacaoTipo">Alimentação</Label>
+                            <Select onValueChange={(value: 'racaoSeca' | 'racaoUmida' | 'mista' | 'alimentacaoCaseira') => handleDetailChange('alimentacaoTipo', value)} value={consultationDetails.alimentacaoTipo || ''}>
+                              <SelectTrigger><SelectValue placeholder="Selecione o tipo de alimentação" /></SelectTrigger>
+                              <SelectContent>
+                                <SelectItem value="racaoSeca">Ração seca</SelectItem>
+                                <SelectItem value="racaoUmida">Ração úmida</SelectItem>
+                                <SelectItem value="mista">Mista</SelectItem>
+                                <SelectItem value="alimentacaoCaseira">Alimentação caseira</SelectItem>
+                              </SelectContent>
+                            </Select>
+                            {consultationDetails.alimentacaoTipo === 'alimentacaoCaseira' && (
+                              <Textarea placeholder="Observações sobre a alimentação caseira" value={consultationDetails.alimentacaoObs || ''} onChange={(e) => handleDetailChange('alimentacaoObs', e.target.value)} rows={1} />
+                            )}
+                          </div>
+
+                          {/* Estado de Apetite e Deglutição */}
+                          <div className="space-y-2 col-span-full">
+                            <Label>Estado de Apetite e Deglutição</Label>
+                            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2">
+                              {mockApetiteDegluticaoOptions.map(option => (
+                                <div key={option.value} className="flex items-center space-x-2">
+                                  <Checkbox
+                                    id={`apetite-${option.value}`}
+                                    checked={consultationDetails.apetiteDegluticao?.includes(option.value)}
+                                    onCheckedChange={(checked: boolean) => handleMultiSelectChange('apetiteDegluticao', option.value, checked)}
+                                  />
+                                  <Label htmlFor={`apetite-${option.value}`}>{option.label}</Label>
+                                </div>
+                              ))}
+                            </div>
+                            <Textarea placeholder="Observações sobre apetite e deglutição" value={consultationDetails.apetiteDegluticaoObs || ''} onChange={(e) => handleDetailChange('apetiteDegluticaoObs', e.target.value)} rows={1} />
+                          </div>
+
+                          {/* Ingestão de Água */}
+                          <div className="space-y-2 col-span-full">
+                            <Label>Ingestão de Água</Label>
+                            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2">
+                              {mockIngestaoAguaOptions.map(option => (
+                                <div key={option.value} className="flex items-center space-x-2">
+                                  <Checkbox
+                                    id={`agua-${option.value}`}
+                                    checked={consultationDetails.ingestaoAgua?.includes(option.value)}
+                                    onCheckedChange={(checked: boolean) => handleMultiSelectChange('ingestaoAgua', option.value, checked)}
+                                  />
+                                  <Label htmlFor={`agua-${option.value}`}>{option.label}</Label>
+                                </div>
+                              ))}
+                            </div>
+                          </div>
+                        </AccordionContent>
+                      </AccordionItem>
+
+                      <AccordionItem value="sistemaDigestorio">
+                        <AccordionTrigger className="text-sm font-semibold text-[#374151] dark:text-gray-100 flex items-center gap-2">
+                          <FaStomach className="h-4 w-4 text-gray-500" /> Sistema Digestório
+                        </AccordionTrigger>
+                        <AccordionContent className="p-4 border-t border-gray-200 dark:border-gray-700 grid grid-cols-1 md:grid-cols-2 gap-4">
+                          {/* Êmese e Regurgitação */}
+                          <div className="space-y-2 col-span-full">
+                            <Label>Êmese e Regurgitação</Label>
+                            <RadioGroup onValueChange={(value: 'sim' | 'nao') => handleDetailChange('emeseRegurgitacao', value)} value={consultationDetails.emeseRegurgitacao || ''} className="flex space-x-4">
+                              <div className="flex items-center space-x-2">
+                                <RadioGroupItem value="sim" id="emese-sim" />
+                                <Label htmlFor="emese-sim">Sim</Label>
+                              </div>
+                              <div className="flex items-center space-x-2">
+                                <RadioGroupItem value="nao" id="emese-nao" />
+                                <Label htmlFor="emese-nao">Não</Label>
+                              </div>
+                            </RadioGroup>
+                            {consultationDetails.emeseRegurgitacao === 'sim' && (
+                              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-2 mt-2">
+                                <Input placeholder="Início" value={consultationDetails.emeseRegurgitacaoComplementoInicio || ''} onChange={(e) => handleDetailChange('emeseRegurgitacaoComplementoInicio', e.target.value)} />
+                                <Input placeholder="Quantidade" value={consultationDetails.emeseRegurgitacaoComplementoQuantidade || ''} onChange={(e) => handleDetailChange('emeseRegurgitacaoComplementoQuantidade', e.target.value)} />
+                                <Input placeholder="Frequência" value={consultationDetails.emeseRegurgitacaoComplementoFrequencia || ''} onChange={(e) => handleDetailChange('emeseRegurgitacaoComplementoFrequencia', e.target.value)} />
+                                <Input placeholder="Aspecto" value={consultationDetails.emeseRegurgitacaoComplementoAspecto || ''} onChange={(e) => handleDetailChange('emeseRegurgitacaoComplementoAspecto', e.target.value)} />
+                              </div>
+                            )}
+                          </div>
+
+                          {/* Micção */}
+                          <div className="space-y-2 col-span-full">
+                            <Label>Micção</Label>
+                            <RadioGroup onValueChange={(value: 'sim' | 'nao') => handleDetailChange('miccaoNormal', value)} value={consultationDetails.miccaoNormal || ''} className="flex space-x-4">
+                              <div className="flex items-center space-x-2">
+                                <RadioGroupItem value="sim" id="miccao-normal-sim" />
+                                <Label htmlFor="miccao-normal-sim">Normal</Label>
+                              </div>
+                              <div className="flex items-center space-x-2">
+                                <RadioGroupItem value="nao" id="miccao-normal-nao" />
+                                <Label htmlFor="miccao-normal-nao">Alterada</Label>
+                              </div>
+                            </RadioGroup>
+                            {consultationDetails.miccaoNormal === 'sim' && (
+                              <div className="grid grid-cols-1 md:grid-cols-2 gap-2 mt-2">
+                                <Input placeholder="Frequência" value={consultationDetails.miccaoFrequencia || ''} onChange={(e) => handleDetailChange('miccaoFrequencia', e.target.value)} />
+                                <Input placeholder="Aspecto" value={consultationDetails.miccaoAspecto || ''} onChange={(e) => handleDetailChange('miccaoAspecto', e.target.value)} />
+                              </div>
+                            )}
+                            {consultationDetails.miccaoNormal === 'nao' && (
+                              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2 mt-2">
+                                {mockMiccaoAlteracoesOptions.map(option => (
+                                  <div key={option.value} className="flex items-center space-x-2">
+                                    <Checkbox
+                                      id={`miccao-${option.value}`}
+                                      checked={consultationDetails.miccaoAlteracoes?.includes(option.value)}
+                                      onCheckedChange={(checked: boolean) => handleMultiSelectChange('miccaoAlteracoes', option.value, checked)}
+                                    />
+                                    <Label htmlFor={`miccao-${option.value}`}>{option.label}</Label>
+                                  </div>
+                                ))}
+                              </div>
+                            )}
+                          </div>
+
+                          {/* Fezes e Defecações */}
+                          <div className="space-y-2 col-span-full">
+                            <Label>Fezes e Defecações</Label>
+                            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2">
+                              {mockFezesDefecacoesOptions.map(option => (
+                                <div key={option.value} className="flex items-center space-x-2">
+                                  <Checkbox
+                                    id={`fezes-${option.value}`}
+                                    checked={consultationDetails.fezesDefecacoes?.includes(option.value)}
+                                    onCheckedChange={(checked: boolean) => handleMultiSelectChange('fezesDefecacoes', option.value, checked)}
+                                  />
+                                  <Label htmlFor={`fezes-${option.value}`}>{option.label}</Label>
+                                </div>
+                              ))}
+                            </div>
+                            <Textarea placeholder="Complemento sobre fezes e defecações" value={consultationDetails.fezesDefecacoesComplemento || ''} onChange={(e) => handleDetailChange('fezesDefecacoesComplemento', e.target.value)} rows={1} />
+                          </div>
+                        </AccordionContent>
+                      </AccordionItem>
+
+                      <AccordionItem value="sistemaRespiratorio">
+                        <AccordionTrigger className="text-sm font-semibold text-[#374151] dark:text-gray-100 flex items-center gap-2">
+                          <FaLungs className="h-4 w-4 text-gray-500" /> Sistema Respiratório
+                        </AccordionTrigger>
+                        <AccordionContent className="p-4 border-t border-gray-200 dark:border-gray-700 grid grid-cols-1 md:grid-cols-2 gap-4">
+                          {/* Alterações Respiratórias */}
+                          <div className="space-y-2 col-span-full">
+                            <Label>Alterações Respiratórias</Label>
+                            <RadioGroup onValueChange={(value: 'sim' | 'nao') => handleDetailChange('alteracoesRespiratorias', value)} value={consultationDetails.alteracoesRespiratorias || ''} className="flex space-x-4">
+                              <div className="flex items-center space-x-2">
+                                <RadioGroupItem value="sim" id="resp-sim" />
+                                <Label htmlFor="resp-sim">Sim</Label>
+                              </div>
+                              <div className="flex items-center space-x-2">
+                                <RadioGroupItem value="nao" id="resp-nao" />
+                                <Label htmlFor="resp-nao">Não</Label>
+                              </div>
+                            </RadioGroup>
+                            {consultationDetails.alteracoesRespiratorias === 'sim' && (
+                              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2 mt-2">
+                                {mockAlteracoesRespiratoriasTipos.map(option => (
+                                  <div key={option.value} className="flex items-center space-x-2">
+                                    <Checkbox
+                                      id={`resp-tipo-${option.value}`}
+                                      checked={consultationDetails.alteracoesRespiratoriasTipos?.includes(option.value)}
+                                      onCheckedChange={(checked: boolean) => handleMultiSelectChange('alteracoesRespiratoriasTipos', option.value, checked)}
+                                    />
+                                    <Label htmlFor={`resp-tipo-${option.value}`}>{option.label}</Label>
+                                  </div>
+                                ))}
+                              </div>
+                            )}
+                          </div>
+
+                          {/* Tosse */}
+                          <div className="space-y-2">
+                            <Label>Tosse</Label>
+                            <RadioGroup onValueChange={(value: 'sim' | 'nao') => handleDetailChange('tosse', value)} value={consultationDetails.tosse || ''} className="flex space-x-4">
+                              <div className="flex items-center space-x-2">
+                                <RadioGroupItem value="sim" id="tosse-sim" />
+                                <Label htmlFor="tosse-sim">Sim</Label>
+                              </div>
+                              <div className="flex items-center space-x-2">
+                                <RadioGroupItem value="nao" id="tosse-nao" />
+                                <Label htmlFor="tosse-nao">Não</Label>
+                              </div>
+                            </RadioGroup>
+                            {consultationDetails.tosse === 'sim' && (
+                              <div className="grid grid-cols-1 md:grid-cols-2 gap-2 mt-2">
+                                <Input placeholder="Período" value={consultationDetails.tossePeriodo || ''} onChange={(e) => handleDetailChange('tossePeriodo', e.target.value)} />
+                                <Input placeholder="Frequência" value={consultationDetails.tosseFrequencia || ''} onChange={(e) => handleDetailChange('tosseFrequencia', e.target.value)} />
+                              </div>
+                            )}
+                          </div>
+
+                          {/* Espirros */}
+                          <div className="space-y-2">
+                            <Label>Espirros</Label>
+                            <RadioGroup onValueChange={(value: 'sim' | 'nao') => handleDetailChange('espirros', value)} value={consultationDetails.espirros || ''} className="flex space-x-4">
+                              <div className="flex items-center space-x-2">
+                                <RadioGroupItem value="sim" id="espirros-sim" />
+                                <Label htmlFor="espirros-sim">Sim</Label>
+                              </div>
+                              <div className="flex items-center space-x-2">
+                                <RadioGroupItem value="nao" id="espirros-nao" />
+                                <Label htmlFor="espirros-nao">Não</Label>
+                              </div>
+                            </RadioGroup>
+                            {consultationDetails.espirros === 'sim' && (
+                              <div className="grid grid-cols-1 md:grid-cols-2 gap-2 mt-2">
+                                <Input placeholder="Período" value={consultationDetails.espirrosPeriodo || ''} onChange={(e) => handleDetailChange('espirrosPeriodo', e.target.value)} />
+                                <Input placeholder="Frequência" value={consultationDetails.espirrosFrequencia || ''} onChange={(e) => handleDetailChange('espirrosFrequencia', e.target.value)} />
+                              </div>
+                            )}
+                          </div>
+
+                          {/* Intolerância ao Exercício */}
+                          <div className="space-y-2 col-span-full">
+                            <Label>Intolerância ao Exercício</Label>
+                            <RadioGroup onValueChange={(value: 'sim' | 'nao') => handleDetailChange('intoleranciaExercicio', value)} value={consultationDetails.intoleranciaExercicio || ''} className="flex space-x-4">
+                              <div className="flex items-center space-x-2">
+                                <RadioGroupItem value="sim" id="intolerancia-sim" />
+                                <Label htmlFor="intolerancia-sim">Sim</Label>
+                              </div>
+                              <div className="flex items-center space-x-2">
+                                <RadioGroupItem value="nao" id="intolerancia-nao" />
+                                <Label htmlFor="intolerancia-nao">Não</Label>
+                              </div>
+                            </RadioGroup>
+                            {consultationDetails.intoleranciaExercicio === 'sim' && (
+                              <>
+                                <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2 mt-2">
+                                  {mockIntoleranciaExercicioTipos.map(option => (
+                                    <div key={option.value} className="flex items-center space-x-2">
+                                      <Checkbox
+                                        id={`intolerancia-tipo-${option.value}`}
+                                        checked={consultationDetails.intoleranciaExercicioTipos?.includes(option.value)}
+                                        onCheckedChange={(checked: boolean) => handleMultiSelectChange('intoleranciaExercicioTipos', option.value, checked)}
+                                      />
+                                      <Label htmlFor={`intolerancia-tipo-${option.value}`}>{option.label}</Label>
+                                    </div>
+                                  ))}
+                                </div>
+                                <Textarea placeholder="Observações sobre a intolerância ao exercício" value={consultationDetails.intoleranciaExercicioObs || ''} onChange={(e) => handleDetailChange('intoleranciaExercicioObs', e.target.value)} rows={1} />
+                              </>
+                            )}
+                          </div>
+                        </AccordionContent>
+                      </AccordionItem>
+                    </Accordion>
                   </div>
                 </AccordionContent>
               </AccordionItem>
@@ -627,316 +657,341 @@ const AppointmentForm: React.FC<AppointmentFormProps> = ({
                   <FaHeartbeat className="h-5 w-5 text-green-500" /> Exame Físico
                 </AccordionTrigger>
                 <AccordionContent className="p-4 border-t border-gray-200 dark:border-gray-700">
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-                    {/* Exame Físico Realizado */}
-                    <div className="space-y-2 col-span-full">
-                      <Label>Exame Físico Realizado</Label>
-                      <RadioGroup onValueChange={(value: 'sim' | 'nao') => handleDetailChange('exameFisicoRealizado', value)} value={consultationDetails.exameFisicoRealizado || ''} className="flex space-x-4">
-                        <div className="flex items-center space-x-2">
-                          <RadioGroupItem value="sim" id="exame-fisico-sim" />
-                          <Label htmlFor="exame-fisico-sim">Sim</Label>
-                        </div>
-                        <div className="flex items-center space-x-2">
-                          <RadioGroupItem value="nao" id="exame-fisico-nao" />
-                          <Label htmlFor="exame-fisico-nao">Não</Label>
-                        </div>
-                      </RadioGroup>
-                      {consultationDetails.exameFisicoRealizado === 'sim' && (
-                        <Textarea placeholder="Observações gerais do exame físico" value={consultationDetails.exameFisicoObs || ''} onChange={(e) => handleDetailChange('exameFisicoObs', e.target.value)} rows={1} />
-                      )}
-                    </div>
-
-                    {/* Contenção */}
-                    <div className="space-y-2">
-                      <Label>Foi necessário uso de alguma forma de contenção?</Label>
-                      <RadioGroup onValueChange={(value: 'sim' | 'nao') => handleDetailChange('usoContencao', value)} value={consultationDetails.usoContencao || ''} className="flex space-x-4">
-                        <div className="flex items-center space-x-2">
-                          <RadioGroupItem value="sim" id="contencao-sim" />
-                          <Label htmlFor="contencao-sim">Sim</Label>
-                        </div>
-                        <div className="flex items-center space-x-2">
-                          <RadioGroupItem value="nao" id="contencao-nao" />
-                          <Label htmlFor="contencao-nao">Não</Label>
-                        </div>
-                      </RadioGroup>
-                      {consultationDetails.usoContencao === 'sim' && (
-                        <Input placeholder="Qual contenção?" value={consultationDetails.usoContencaoQual || ''} onChange={(e) => handleDetailChange('usoContencaoQual', e.target.value)} />
-                      )}
-                    </div>
-
-                    {/* Secreção Nasal */}
-                    <div className="space-y-2">
-                      <Label>Secreção Nasal</Label>
-                      <RadioGroup onValueChange={(value: 'sim' | 'nao') => handleDetailChange('secrecaoNasal', value)} value={consultationDetails.secrecaoNasal || ''} className="flex space-x-4">
-                        <div className="flex items-center space-x-2">
-                          <RadioGroupItem value="sim" id="nasal-sim" />
-                          <Label htmlFor="nasal-sim">Sim</Label>
-                        </div>
-                        <div className="flex items-center space-x-2">
-                          <RadioGroupItem value="nao" id="nasal-nao" />
-                          <Label htmlFor="nasal-nao">Não</Label>
-                        </div>
-                      </RadioGroup>
-                      {consultationDetails.secrecaoNasal === 'sim' && (
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-2 mt-2">
-                          <Input placeholder="Início" value={consultationDetails.secrecaoNasalComplementoInicio || ''} onChange={(e) => handleDetailChange('secrecaoNasalComplementoInicio', e.target.value)} />
-                          <Input placeholder="Aspecto e Quantidade" value={consultationDetails.secrecaoNasalComplementoAspectoQuantidade || ''} onChange={(e) => handleDetailChange('secrecaoNasalComplementoAspectoQuantidade', e.target.value)} />
-                        </div>
-                      )}
-                    </div>
-
-                    {/* Secreção Ocular */}
-                    <div className="space-y-2">
-                      <Label>Secreção Ocular</Label>
-                      <RadioGroup onValueChange={(value: 'sim' | 'nao') => handleDetailChange('secrecaoOcular', value)} value={consultationDetails.secrecaoOcular || ''} className="flex space-x-4">
-                        <div className="flex items-center space-x-2">
-                          <RadioGroupItem value="sim" id="ocular-sim" />
-                          <Label htmlFor="ocular-sim">Sim</Label>
-                        </div>
-                        <div className="flex items-center space-x-2">
-                          <RadioGroupItem value="nao" id="ocular-nao" />
-                          <Label htmlFor="ocular-nao">Não</Label>
-                        </div>
-                      </RadioGroup>
-                      {consultationDetails.secrecaoOcular === 'sim' && (
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-2 mt-2">
-                          <Input placeholder="Início" value={consultationDetails.secrecaoOcularComplementoInicio || ''} onChange={(e) => handleDetailChange('secrecaoOcularComplementoInicio', e.target.value)} />
-                          <Input placeholder="Aspecto e Quantidade" value={consultationDetails.secrecaoOcularComplementoAspectoQuantidade || ''} onChange={(e) => handleDetailChange('secrecaoOcularComplementoAspectoQuantidade', e.target.value)} />
-                        </div>
-                      )}
-                    </div>
-
-                    {/* Olhos */}
-                    <div className="space-y-2">
-                      <Label htmlFor="olhosEstado">Olhos</Label>
-                      <Select onValueChange={(value: string) => handleDetailChange('olhosEstado', value)} value={consultationDetails.olhosEstado || ''}>
-                        <SelectTrigger><SelectValue placeholder="Selecione o estado dos olhos" /></SelectTrigger>
-                        <SelectContent>
-                          {mockOlhosEstadoOptions.map(option => <SelectItem key={option.value} value={option.value}>{option.label}</SelectItem>)}
-                        </SelectContent>
-                      </Select>
-                      <Textarea placeholder="Observações sobre os olhos" value={consultationDetails.olhosObs || ''} onChange={(e) => handleDetailChange('olhosObs', e.target.value)} rows={1} />
-                    </div>
-
-                    {/* Orelhas */}
-                    <div className="space-y-2">
-                      <Label>Orelhas</Label>
-                      <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
-                        {mockOrelhasAlteracoesOptions.map(option => (
-                          <div key={option.value} className="flex items-center space-x-2">
-                            <Checkbox
-                              id={`orelhas-${option.value}`}
-                              checked={consultationDetails.orelhasAlteracoes?.includes(option.value)}
-                              onCheckedChange={(checked: boolean) => handleMultiSelectChange('orelhasAlteracoes', option.value, checked)}
-                            />
-                            <Label htmlFor={`orelhas-${option.value}`}>{option.label}</Label>
+                  <div className="space-y-6">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      {/* Exame Físico Realizado */}
+                      <div className="space-y-2 col-span-full">
+                        <Label>Exame Físico Realizado</Label>
+                        <RadioGroup onValueChange={(value: 'sim' | 'nao') => handleDetailChange('exameFisicoRealizado', value)} value={consultationDetails.exameFisicoRealizado || ''} className="flex space-x-4">
+                          <div className="flex items-center space-x-2">
+                            <RadioGroupItem value="sim" id="exame-fisico-sim" />
+                            <Label htmlFor="exame-fisico-sim">Sim</Label>
                           </div>
-                        ))}
+                          <div className="flex items-center space-x-2">
+                            <RadioGroupItem value="nao" id="exame-fisico-nao" />
+                            <Label htmlFor="exame-fisico-nao">Não</Label>
+                          </div>
+                        </RadioGroup>
+                        {consultationDetails.exameFisicoRealizado === 'sim' && (
+                          <Textarea placeholder="Observações gerais do exame físico" value={consultationDetails.exameFisicoObs || ''} onChange={(e) => handleDetailChange('exameFisicoObs', e.target.value)} rows={1} />
+                        )}
+                      </div>
+
+                      {/* Contenção */}
+                      <div className="space-y-2">
+                        <Label>Foi necessário uso de alguma forma de contenção?</Label>
+                        <RadioGroup onValueChange={(value: 'sim' | 'nao') => handleDetailChange('usoContencao', value)} value={consultationDetails.usoContencao || ''} className="flex space-x-4">
+                          <div className="flex items-center space-x-2">
+                            <RadioGroupItem value="sim" id="contencao-sim" />
+                            <Label htmlFor="contencao-sim">Sim</Label>
+                          </div>
+                          <div className="flex items-center space-x-2">
+                            <RadioGroupItem value="nao" id="contencao-nao" />
+                            <Label htmlFor="contencao-nao">Não</Label>
+                          </div>
+                        </RadioGroup>
+                        {consultationDetails.usoContencao === 'sim' && (
+                          <Input placeholder="Qual contenção?" value={consultationDetails.usoContencaoQual || ''} onChange={(e) => handleDetailChange('usoContencaoQual', e.target.value)} />
+                        )}
                       </div>
                     </div>
 
-                    {/* Boca e Anexos */}
-                    <div className="space-y-2">
-                      <Label>Boca e Anexos</Label>
-                      <RadioGroup onValueChange={(value: 'sim' | 'nao') => handleDetailChange('bocaAnexos', value)} value={consultationDetails.bocaAnexos || ''} className="flex space-x-4">
-                        <div className="flex items-center space-x-2">
-                          <RadioGroupItem value="sim" id="boca-sim" />
-                          <Label htmlFor="boca-sim">Sim</Label>
-                        </div>
-                        <div className="flex items-center space-x-2">
-                          <RadioGroupItem value="nao" id="boca-nao" />
-                          <Label htmlFor="boca-nao">Não</Label>
-                        </div>
-                      </RadioGroup>
-                      {consultationDetails.bocaAnexos === 'sim' && (
-                        <Textarea placeholder="Descreva" value={consultationDetails.bocaAnexosDescricao || ''} onChange={(e) => handleDetailChange('bocaAnexosDescricao', e.target.value)} rows={1} />
-                      )}
-                    </div>
-
-                    {/* Doença Periodontal */}
-                    <div className="space-y-2">
-                      <Label>Doença Periodontal</Label>
-                      <RadioGroup onValueChange={(value: 'sim' | 'nao') => handleDetailChange('doencaPeriodontal', value)} value={consultationDetails.doencaPeriodontal || ''} className="flex space-x-4">
-                        <div className="flex items-center space-x-2">
-                          <RadioGroupItem value="sim" id="periodontal-sim" />
-                          <Label htmlFor="periodontal-sim">Sim</Label>
-                        </div>
-                        <div className="flex items-center space-x-2">
-                          <RadioGroupItem value="nao" id="periodontal-nao" />
-                          <Label htmlFor="periodontal-nao">Não</Label>
-                        </div>
-                      </RadioGroup>
-                      {consultationDetails.doencaPeriodontal === 'sim' && (
-                        <Select onValueChange={(value: '1' | '2' | '3' | '4') => handleDetailChange('doencaPeriodontalGrau', value)} value={consultationDetails.doencaPeriodontalGrau || ''}>
-                          <SelectTrigger><SelectValue placeholder="Grau" /></SelectTrigger>
-                          <SelectContent>
-                            {mockDoencaPeriodontalGrau.map(option => <SelectItem key={option.value} value={option.value}>{option.label}</SelectItem>)}
-                          </SelectContent>
-                        </Select>
-                      )}
-                    </div>
-
-                    {/* Pele e Anexos */}
-                    <div className="space-y-2 col-span-full">
-                      <Label>Pele e Anexos</Label>
-                      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2">
-                        {mockPeleAnexosAlteracoesOptions.map(option => (
-                          <div key={option.value} className="flex items-center space-x-2">
-                            <Checkbox
-                              id={`pele-${option.value}`}
-                              checked={consultationDetails.peleAnexosAlteracoes?.includes(option.value)}
-                              onCheckedChange={(checked: boolean) => handleMultiSelectChange('peleAnexosAlteracoes', option.value, checked)}
-                            />
-                            <Label htmlFor={`pele-${option.value}`}>{option.label}</Label>
+                    <Accordion type="multiple" defaultValue={["cabecaPescoco", "toraxAbdomen", "linfonodosPele"]}>
+                      <AccordionItem value="cabecaPescoco">
+                        <AccordionTrigger className="text-sm font-semibold text-[#374151] dark:text-gray-100 flex items-center gap-2">
+                          <FaHeadSideMaskIcon className="h-4 w-4 text-gray-500" /> Cabeça e Pescoço
+                        </AccordionTrigger>
+                        <AccordionContent className="p-4 border-t border-gray-200 dark:border-gray-700 grid grid-cols-1 md:grid-cols-2 gap-4">
+                          {/* Secreção Nasal */}
+                          <div className="space-y-2">
+                            <Label>Secreção Nasal</Label>
+                            <RadioGroup onValueChange={(value: 'sim' | 'nao') => handleDetailChange('secrecaoNasal', value)} value={consultationDetails.secrecaoNasal || ''} className="flex space-x-4">
+                              <div className="flex items-center space-x-2">
+                                <RadioGroupItem value="sim" id="nasal-sim" />
+                                <Label htmlFor="nasal-sim">Sim</Label>
+                              </div>
+                              <div className="flex items-center space-x-2">
+                                <RadioGroupItem value="nao" id="nasal-nao" />
+                                <Label htmlFor="nasal-nao">Não</Label>
+                              </div>
+                            </RadioGroup>
+                            {consultationDetails.secrecaoNasal === 'sim' && (
+                              <div className="grid grid-cols-1 md:grid-cols-2 gap-2 mt-2">
+                                <Input placeholder="Início" value={consultationDetails.secrecaoNasalComplementoInicio || ''} onChange={(e) => handleDetailChange('secrecaoNasalComplementoInicio', e.target.value)} />
+                                <Input placeholder="Aspecto e Quantidade" value={consultationDetails.secrecaoNasalComplementoAspectoQuantidade || ''} onChange={(e) => handleDetailChange('secrecaoNasalComplementoAspectoQuantidade', e.target.value)} />
+                              </div>
+                            )}
                           </div>
-                        ))}
-                      </div>
-                      <Textarea placeholder="Descreva, se necessário, com fotos nos anexos." value={consultationDetails.peleAnexosDescricao || ''} onChange={(e) => handleDetailChange('peleAnexosDescricao', e.target.value)} rows={1} />
-                    </div>
 
-                    {/* Pescoço e Coluna */}
-                    <div className="space-y-2">
-                      <Label>Pescoço e Coluna</Label>
-                      <RadioGroup onValueChange={(value: 'sim' | 'nao') => handleDetailChange('pescocoColuna', value)} value={consultationDetails.pescocoColuna || ''} className="flex space-x-4">
-                        <div className="flex items-center space-x-2">
-                          <RadioGroupItem value="sim" id="pescoco-sim" />
-                          <Label htmlFor="pescoco-sim">Sim</Label>
-                        </div>
-                        <div className="flex items-center space-x-2">
-                          <RadioGroupItem value="nao" id="pescoco-nao" />
-                          <Label htmlFor="pescoco-nao">Não</Label>
-                        </div>
-                      </RadioGroup>
-                      {consultationDetails.pescocoColuna === 'sim' && (
-                        <Textarea placeholder="Descreva" value={consultationDetails.pescocoColunaDescricao || ''} onChange={(e) => handleDetailChange('pescocoColunaDescricao', e.target.value)} rows={1} />
-                      )}
-                    </div>
-
-                    {/* Abdômen: Desconforto Abdominal */}
-                    <div className="space-y-2">
-                      <Label>Desconforto Abdominal</Label>
-                      <RadioGroup onValueChange={(value: 'sim' | 'nao') => handleDetailChange('desconfortoAbdominal', value)} value={consultationDetails.desconfortoAbdominal || ''} className="flex space-x-4">
-                        <div className="flex items-center space-x-2">
-                          <RadioGroupItem value="sim" id="desconforto-sim" />
-                          <Label htmlFor="desconforto-sim">Sim</Label>
-                        </div>
-                        <div className="flex items-center space-x-2">
-                          <RadioGroupItem value="nao" id="desconforto-nao" />
-                          <Label htmlFor="desconforto-nao">Não</Label>
-                        </div>
-                      </RadioGroup>
-                      {consultationDetails.desconfortoAbdominal === 'sim' && (
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-2 mt-2">
-                          <Input placeholder="Região de sensibilidade" value={consultationDetails.desconfortoAbdominalRegiaoSensibilidade || ''} onChange={(e) => handleDetailChange('desconfortoAbdominalRegiaoSensibilidade', e.target.value)} />
-                          <Input placeholder="Nível de dor" value={consultationDetails.desconfortoAbdominalNivelDor || ''} onChange={(e) => handleDetailChange('desconfortoAbdominalNivelDor', e.target.value)} />
-                        </div>
-                      )}
-                    </div>
-
-                    {/* Aumento de Volume Abdominal */}
-                    <div className="space-y-2">
-                      <Label>Aumento de Volume Abdominal</Label>
-                      <RadioGroup onValueChange={(value: 'sim' | 'nao') => handleDetailChange('aumentoVolumeAbdominal', value)} value={consultationDetails.aumentoVolumeAbdominal || ''} className="flex space-x-4">
-                        <div className="flex items-center space-x-2">
-                          <RadioGroupItem value="sim" id="volume-sim" />
-                          <Label htmlFor="volume-sim">Sim</Label>
-                        </div>
-                        <div className="flex items-center space-x-2">
-                          <RadioGroupItem value="nao" id="volume-nao" />
-                          <Label htmlFor="volume-nao">Não</Label>
-                        </div>
-                      </RadioGroup>
-                      {consultationDetails.aumentoVolumeAbdominal === 'sim' && (
-                        <Input placeholder="Região do aumento de volume" value={consultationDetails.aumentoVolumeAbdominalRegiao || ''} onChange={(e) => handleDetailChange('aumentoVolumeAbdominalRegiao', e.target.value)} />
-                      )}
-                    </div>
-
-                    {/* Mucosas */}
-                    <div className="space-y-2 col-span-full">
-                      <Label>Mucosas</Label>
-                      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2">
-                        {mockMucosasEstadoOptions.map(option => (
-                          <div key={option.value} className="flex items-center space-x-2">
-                            <Checkbox
-                              id={`mucosas-${option.value}`}
-                              checked={consultationDetails.mucosasEstado?.includes(option.value)}
-                              onCheckedChange={(checked: boolean) => handleMultiSelectChange('mucosasEstado', option.value, checked)}
-                            />
-                            <Label htmlFor={`mucosas-${option.value}`}>{option.label}</Label>
+                          {/* Secreção Ocular */}
+                          <div className="space-y-2">
+                            <Label>Secreção Ocular</Label>
+                            <RadioGroup onValueChange={(value: 'sim' | 'nao') => handleDetailChange('secrecaoOcular', value)} value={consultationDetails.secrecaoOcular || ''} className="flex space-x-4">
+                              <div className="flex items-center space-x-2">
+                                <RadioGroupItem value="sim" id="ocular-sim" />
+                                <Label htmlFor="ocular-sim">Sim</Label>
+                              </div>
+                              <div className="flex items-center space-x-2">
+                                <RadioGroupItem value="nao" id="ocular-nao" />
+                                <Label htmlFor="ocular-nao">Não</Label>
+                              </div>
+                            </RadioGroup>
+                            {consultationDetails.secrecaoOcular === 'sim' && (
+                              <div className="grid grid-cols-1 md:grid-cols-2 gap-2 mt-2">
+                                <Input placeholder="Início" value={consultationDetails.secrecaoOcularComplementoInicio || ''} onChange={(e) => handleDetailChange('secrecaoOcularComplementoInicio', e.target.value)} />
+                                <Input placeholder="Aspecto e Quantidade" value={consultationDetails.secrecaoOcularComplementoAspectoQuantidade || ''} onChange={(e) => handleDetailChange('secrecaoOcularComplementoAspectoQuantidade', e.target.value)} />
+                              </div>
+                            )}
                           </div>
-                        ))}
-                      </div>
-                    </div>
 
-                    {/* Frequência Respiratória */}
-                    <div className="space-y-2">
-                      <Label htmlFor="frequenciaRespiratoria">Frequência Respiratória (Mrm)</Label>
-                      <Input id="frequenciaRespiratoria" type="number" value={consultationDetails.frequenciaRespiratoria || ''} onChange={(e) => handleDetailChange('frequenciaRespiratoria', Number(e.target.value))} />
-                      <Textarea placeholder="Obs. Na Ausculta" value={consultationDetails.frequenciaRespiratoriaObsAusculta || ''} onChange={(e) => handleDetailChange('frequenciaRespiratoriaObsAusculta', e.target.value)} rows={1} />
-                    </div>
-
-                    {/* Sopro */}
-                    <div className="space-y-2">
-                      <Label>Sopro</Label>
-                      <RadioGroup onValueChange={(value: 'sim' | 'nao') => handleDetailChange('sopro', value)} value={consultationDetails.sopro || ''} className="flex space-x-4">
-                        <div className="flex items-center space-x-2">
-                          <RadioGroupItem value="sim" id="sopro-sim" />
-                          <Label htmlFor="sopro-sim">Sim</Label>
-                        </div>
-                        <div className="flex items-center space-x-2">
-                          <RadioGroupItem value="nao" id="sopro-nao" />
-                          <Label htmlFor="sopro-nao">Não</Label>
-                        </div>
-                      </RadioGroup>
-                    </div>
-
-                    {/* Padrão Respiratório */}
-                    <div className="space-y-2 col-span-full">
-                      <Label>Padrão Respiratório</Label>
-                      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2">
-                        {mockPadraoRespiratorioOptions.map(option => (
-                          <div key={option.value} className="flex items-center space-x-2">
-                            <Checkbox
-                              id={`padrao-resp-${option.value}`}
-                              checked={consultationDetails.padraoRespiratorio?.includes(option.value)}
-                              onCheckedChange={(checked: boolean) => handleMultiSelectChange('padraoRespiratorio', option.value, checked)}
-                            />
-                            <Label htmlFor={`padrao-resp-${option.value}`}>{option.label}</Label>
+                          {/* Olhos */}
+                          <div className="space-y-2">
+                            <Label htmlFor="olhosEstado">Olhos</Label>
+                            <Select onValueChange={(value: string) => handleDetailChange('olhosEstado', value)} value={consultationDetails.olhosEstado || ''}>
+                              <SelectTrigger><SelectValue placeholder="Selecione o estado dos olhos" /></SelectTrigger>
+                              <SelectContent>
+                                {mockOlhosEstadoOptions.map(option => <SelectItem key={option.value} value={option.value}>{option.label}</SelectItem>)}
+                              </SelectContent>
+                            </Select>
+                            <Textarea placeholder="Observações sobre os olhos" value={consultationDetails.olhosObs || ''} onChange={(e) => handleDetailChange('olhosObs', e.target.value)} rows={1} />
                           </div>
-                        ))}
-                      </div>
-                    </div>
 
-                    {/* Frequência Cardíaca */}
-                    <div className="space-y-2">
-                      <Label htmlFor="frequenciaCardiaca">Frequência Cardíaca (Bpm)</Label>
-                      <Input id="frequenciaCardiaca" type="number" value={consultationDetails.frequenciaCardiaca || ''} onChange={(e) => handleDetailChange('frequenciaCardiaca', Number(e.target.value))} />
-                      <Textarea placeholder="Obs. Na Ausculta" value={consultationDetails.frequenciaCardiacaObsAusculta || ''} onChange={(e) => handleDetailChange('frequenciaCardiacaObsAusculta', e.target.value)} rows={1} />
-                    </div>
+                          {/* Orelhas */}
+                          <div className="space-y-2">
+                            <Label>Orelhas</Label>
+                            <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
+                              {mockOrelhasAlteracoesOptions.map(option => (
+                                <div key={option.value} className="flex items-center space-x-2">
+                                  <Checkbox
+                                    id={`orelhas-${option.value}`}
+                                    checked={consultationDetails.orelhasAlteracoes?.includes(option.value)}
+                                    onCheckedChange={(checked: boolean) => handleMultiSelectChange('orelhasAlteracoes', option.value, checked)}
+                                  />
+                                  <Label htmlFor={`orelhas-${option.value}`}>{option.label}</Label>
+                                </div>
+                              ))}
+                            </div>
+                          </div>
 
-                    {/* Temperatura Retal */}
-                    <div className="space-y-2">
-                      <Label htmlFor="temperaturaCorporal">Temperatura Retal (°C)</Label>
-                      <Input id="temperaturaCorporal" type="number" step="0.1" value={consultationDetails.temperaturaCorporal || ''} onChange={(e) => handleDetailChange('temperaturaCorporal', Number(e.target.value))} />
-                    </div>
+                          {/* Boca e Anexos */}
+                          <div className="space-y-2">
+                            <Label>Boca e Anexos</Label>
+                            <RadioGroup onValueChange={(value: 'sim' | 'nao') => handleDetailChange('bocaAnexos', value)} value={consultationDetails.bocaAnexos || ''} className="flex space-x-4">
+                              <div className="flex items-center space-x-2">
+                                <RadioGroupItem value="sim" id="boca-sim" />
+                                <Label htmlFor="boca-sim">Sim</Label>
+                              </div>
+                              <div className="flex items-center space-x-2">
+                                <RadioGroupItem value="nao" id="boca-nao" />
+                                <Label htmlFor="boca-nao">Não</Label>
+                              </div>
+                            </RadioGroup>
+                            {consultationDetails.bocaAnexos === 'sim' && (
+                              <Textarea placeholder="Descreva" value={consultationDetails.bocaAnexosDescricao || ''} onChange={(e) => handleDetailChange('bocaAnexosDescricao', e.target.value)} rows={1} />
+                            )}
+                          </div>
 
-                    {/* Linfonodos */}
-                    <div className="space-y-2 col-span-full">
-                      <Label>Linfonodos</Label>
-                      <RadioGroup onValueChange={(value: 'normal' | 'infartado') => handleDetailChange('linfonodosEstado', value)} value={consultationDetails.linfonodosEstado || ''} className="flex space-x-4">
-                        <div className="flex items-center space-x-2">
-                          <RadioGroupItem value="normal" id="linfonodos-normal" />
-                          <Label htmlFor="linfonodos-normal">Normal</Label>
-                        </div>
-                        <div className="flex items-center space-x-2">
-                          <RadioGroupItem value="infartado" id="linfonodos-infartado" />
-                          <Label htmlFor="linfonodos-infartado">Infartado</Label>
-                        </div>
-                      </RadioGroup>
-                      {consultationDetails.linfonodosEstado === 'infartado' && (
-                        <Textarea placeholder="Qual linfonodo(s) apresentou alteração? Observações:" value={consultationDetails.linfonodosAlteracaoQualObs || ''} onChange={(e) => handleDetailChange('linfonodosAlteracaoQualObs', e.target.value)} rows={1} />
-                      )}
-                    </div>
+                          {/* Doença Periodontal */}
+                          <div className="space-y-2">
+                            <Label>Doença Periodontal</Label>
+                            <RadioGroup onValueChange={(value: 'sim' | 'nao') => handleDetailChange('doencaPeriodontal', value)} value={consultationDetails.doencaPeriodontal || ''} className="flex space-x-4">
+                              <div className="flex items-center space-x-2">
+                                <RadioGroupItem value="sim" id="periodontal-sim" />
+                                <Label htmlFor="periodontal-sim">Sim</Label>
+                              </div>
+                              <div className="flex items-center space-x-2">
+                                <RadioGroupItem value="nao" id="periodontal-nao" />
+                                <Label htmlFor="periodontal-nao">Não</Label>
+                              </div>
+                            </RadioGroup>
+                            {consultationDetails.doencaPeriodontal === 'sim' && (
+                              <Select onValueChange={(value: '1' | '2' | '3' | '4') => handleDetailChange('doencaPeriodontalGrau', value)} value={consultationDetails.doencaPeriodontalGrau || ''}>
+                                <SelectTrigger><SelectValue placeholder="Grau" /></SelectTrigger>
+                                <SelectContent>
+                                  {mockDoencaPeriodontalGrau.map(option => <SelectItem key={option.value} value={option.value}>{option.label}</SelectItem>)}
+                                </SelectContent>
+                              </Select>
+                            )}
+                          </div>
+
+                          {/* Pescoço e Coluna */}
+                          <div className="space-y-2 col-span-full">
+                            <Label>Pescoço e Coluna</Label>
+                            <RadioGroup onValueChange={(value: 'sim' | 'nao') => handleDetailChange('pescocoColuna', value)} value={consultationDetails.pescocoColuna || ''} className="flex space-x-4">
+                              <div className="flex items-center space-x-2">
+                                <RadioGroupItem value="sim" id="pescoco-sim" />
+                                <Label htmlFor="pescoco-sim">Sim</Label>
+                              </div>
+                              <div className="flex items-center space-x-2">
+                                <RadioGroupItem value="nao" id="pescoco-nao" />
+                                <Label htmlFor="pescoco-nao">Não</Label>
+                              </div>
+                            </RadioGroup>
+                            {consultationDetails.pescocoColuna === 'sim' && (
+                              <Textarea placeholder="Descreva" value={consultationDetails.pescocoColunaDescricao || ''} onChange={(e) => handleDetailChange('pescocoColunaDescricao', e.target.value)} rows={1} />
+                            )}
+                          </div>
+                        </AccordionContent>
+                      </AccordionItem>
+
+                      <AccordionItem value="toraxAbdomen">
+                        <AccordionTrigger className="text-sm font-semibold text-[#374151] dark:text-gray-100 flex items-center gap-2">
+                          <FaStomach className="h-4 w-4 text-gray-500" /> Tórax e Abdômen
+                        </AccordionTrigger>
+                        <AccordionContent className="p-4 border-t border-gray-200 dark:border-gray-700 grid grid-cols-1 md:grid-cols-2 gap-4">
+                          {/* Abdômen: Desconforto Abdominal */}
+                          <div className="space-y-2">
+                            <Label>Desconforto Abdominal</Label>
+                            <RadioGroup onValueChange={(value: 'sim' | 'nao') => handleDetailChange('desconfortoAbdominal', value)} value={consultationDetails.desconfortoAbdominal || ''} className="flex space-x-4">
+                              <div className="flex items-center space-x-2">
+                                <RadioGroupItem value="sim" id="desconforto-sim" />
+                                <Label htmlFor="desconforto-sim">Sim</Label>
+                              </div>
+                              <div className="flex items-center space-x-2">
+                                <RadioGroupItem value="nao" id="desconforto-nao" />
+                                <Label htmlFor="desconforto-nao">Não</Label>
+                              </div>
+                            </RadioGroup>
+                            {consultationDetails.desconfortoAbdominal === 'sim' && (
+                              <div className="grid grid-cols-1 md:grid-cols-2 gap-2 mt-2">
+                                <Input placeholder="Região de sensibilidade" value={consultationDetails.desconfortoAbdominalRegiaoSensibilidade || ''} onChange={(e) => handleDetailChange('desconfortoAbdominalRegiaoSensibilidade', e.target.value)} />
+                                <Input placeholder="Nível de dor" value={consultationDetails.desconfortoAbdominalNivelDor || ''} onChange={(e) => handleDetailChange('desconfortoAbdominalNivelDor', e.target.value)} />
+                              </div>
+                            )}
+                          </div>
+
+                          {/* Aumento de Volume Abdominal */}
+                          <div className="space-y-2">
+                            <Label>Aumento de Volume Abdominal</Label>
+                            <RadioGroup onValueChange={(value: 'sim' | 'nao') => handleDetailChange('aumentoVolumeAbdominal', value)} value={consultationDetails.aumentoVolumeAbdominal || ''} className="flex space-x-4">
+                              <div className="flex items-center space-x-2">
+                                <RadioGroupItem value="sim" id="volume-sim" />
+                                <Label htmlFor="volume-sim">Sim</Label>
+                              </div>
+                              <div className="flex items-center space-x-2">
+                                <RadioGroupItem value="nao" id="volume-nao" />
+                                <Label htmlFor="volume-nao">Não</Label>
+                              </div>
+                            </RadioGroup>
+                            {consultationDetails.aumentoVolumeAbdominal === 'sim' && (
+                              <Input placeholder="Região do aumento de volume" value={consultationDetails.aumentoVolumeAbdominalRegiao || ''} onChange={(e) => handleDetailChange('aumentoVolumeAbdominalRegiao', e.target.value)} />
+                            )}
+                          </div>
+
+                          {/* Mucosas */}
+                          <div className="space-y-2 col-span-full">
+                            <Label>Mucosas</Label>
+                            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2">
+                              {mockMucosasEstadoOptions.map(option => (
+                                <div key={option.value} className="flex items-center space-x-2">
+                                  <Checkbox
+                                    id={`mucosas-${option.value}`}
+                                    checked={consultationDetails.mucosasEstado?.includes(option.value)}
+                                    onCheckedChange={(checked: boolean) => handleMultiSelectChange('mucosasEstado', option.value, checked)}
+                                  />
+                                  <Label htmlFor={`mucosas-${option.value}`}>{option.label}</Label>
+                                </div>
+                              ))}
+                            </div>
+                          </div>
+
+                          {/* Frequência Respiratória */}
+                          <div className="space-y-2">
+                            <Label htmlFor="frequenciaRespiratoria">Frequência Respiratória (Mrm)</Label>
+                            <Input id="frequenciaRespiratoria" type="number" value={consultationDetails.frequenciaRespiratoria || ''} onChange={(e) => handleDetailChange('frequenciaRespiratoria', Number(e.target.value))} />
+                            <Textarea placeholder="Obs. Na Ausculta" value={consultationDetails.frequenciaRespiratoriaObsAusculta || ''} onChange={(e) => handleDetailChange('frequenciaRespiratoriaObsAusculta', e.target.value)} rows={1} />
+                          </div>
+
+                          {/* Sopro */}
+                          <div className="space-y-2">
+                            <Label>Sopro</Label>
+                            <RadioGroup onValueChange={(value: 'sim' | 'nao') => handleDetailChange('sopro', value)} value={consultationDetails.sopro || ''} className="flex space-x-4">
+                              <div className="flex items-center space-x-2">
+                                <RadioGroupItem value="sim" id="sopro-sim" />
+                                <Label htmlFor="sopro-sim">Sim</Label>
+                              </div>
+                              <div className="flex items-center space-x-2">
+                                <RadioGroupItem value="nao" id="sopro-nao" />
+                                <Label htmlFor="sopro-nao">Não</Label>
+                              </div>
+                            </RadioGroup>
+                          </div>
+
+                          {/* Padrão Respiratório */}
+                          <div className="space-y-2 col-span-full">
+                            <Label>Padrão Respiratório</Label>
+                            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2">
+                              {mockPadraoRespiratorioOptions.map(option => (
+                                <div key={option.value} className="flex items-center space-x-2">
+                                  <Checkbox
+                                    id={`padrao-resp-${option.value}`}
+                                    checked={consultationDetails.padraoRespiratorio?.includes(option.value)}
+                                    onCheckedChange={(checked: boolean) => handleMultiSelectChange('padraoRespiratorio', option.value, checked)}
+                                  />
+                                  <Label htmlFor={`padrao-resp-${option.value}`}>{option.label}</Label>
+                                </div>
+                              ))}
+                            </div>
+                          </div>
+
+                          {/* Frequência Cardíaca */}
+                          <div className="space-y-2">
+                            <Label htmlFor="frequenciaCardiaca">Frequência Cardíaca (Bpm)</Label>
+                            <Input id="frequenciaCardiaca" type="number" value={consultationDetails.frequenciaCardiaca || ''} onChange={(e) => handleDetailChange('frequenciaCardiaca', Number(e.target.value))} />
+                            <Textarea placeholder="Obs. Na Ausculta" value={consultationDetails.frequenciaCardiacaObsAusculta || ''} onChange={(e) => handleDetailChange('frequenciaCardiacaObsAusculta', e.target.value)} rows={1} />
+                          </div>
+
+                          {/* Temperatura Retal */}
+                          <div className="space-y-2">
+                            <Label htmlFor="temperaturaCorporal">Temperatura Retal (°C)</Label>
+                            <Input id="temperaturaCorporal" type="number" step="0.1" value={consultationDetails.temperaturaCorporal || ''} onChange={(e) => handleDetailChange('temperaturaCorporal', Number(e.target.value))} />
+                          </div>
+                        </AccordionContent>
+                      </AccordionItem>
+
+                      <AccordionItem value="linfonodosPele">
+                        <AccordionTrigger className="text-sm font-semibold text-[#374151] dark:text-gray-100 flex items-center gap-2">
+                          <FaBoneIcon className="h-4 w-4 text-gray-500" /> Linfonodos e Pele
+                        </AccordionTrigger>
+                        <AccordionContent className="p-4 border-t border-gray-200 dark:border-gray-700 grid grid-cols-1 md:grid-cols-2 gap-4">
+                          {/* Linfonodos */}
+                          <div className="space-y-2 col-span-full">
+                            <Label>Linfonodos</Label>
+                            <RadioGroup onValueChange={(value: 'normal' | 'infartado') => handleDetailChange('linfonodosEstado', value)} value={consultationDetails.linfonodosEstado || ''} className="flex space-x-4">
+                              <div className="flex items-center space-x-2">
+                                <RadioGroupItem value="normal" id="linfonodos-normal" />
+                                <Label htmlFor="linfonodos-normal">Normal</Label>
+                              </div>
+                              <div className="flex items-center space-x-2">
+                                <RadioGroupItem value="infartado" id="linfonodos-infartado" />
+                                <Label htmlFor="linfonodos-infartado">Infartado</Label>
+                              </div>
+                            </RadioGroup>
+                            {consultationDetails.linfonodosEstado === 'infartado' && (
+                              <Textarea placeholder="Qual linfonodo(s) apresentou alteração? Observações:" value={consultationDetails.linfonodosAlteracaoQualObs || ''} onChange={(e) => handleDetailChange('linfonodosAlteracaoQualObs', e.target.value)} rows={1} />
+                            )}
+                          </div>
+
+                          {/* Pele e Anexos */}
+                          <div className="space-y-2 col-span-full">
+                            <Label>Pele e Anexos</Label>
+                            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2">
+                              {mockPeleAnexosAlteracoesOptions.map(option => (
+                                <div key={option.value} className="flex items-center space-x-2">
+                                  <Checkbox
+                                    id={`pele-${option.value}`}
+                                    checked={consultationDetails.peleAnexosAlteracoes?.includes(option.value)}
+                                    onCheckedChange={(checked: boolean) => handleMultiSelectChange('peleAnexosAlteracoes', option.value, checked)}
+                                  />
+                                  <Label htmlFor={`pele-${option.value}`}>{option.label}</Label>
+                                </div>
+                              ))}
+                            </div>
+                            <Textarea placeholder="Descreva, se necessário, com fotos nos anexos." value={consultationDetails.peleAnexosDescricao || ''} onChange={(e) => handleDetailChange('peleAnexosDescricao', e.target.value)} rows={1} />
+                          </div>
+                        </AccordionContent>
+                      </AccordionItem>
+                    </Accordion>
                   </div>
                 </AccordionContent>
               </AccordionItem>
