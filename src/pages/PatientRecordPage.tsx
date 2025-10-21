@@ -35,7 +35,7 @@ import { pdf } from "@react-pdf/renderer"; // Importar pdf para impressão
 import { PrescriptionPdfContent } from "@/components/PrescriptionPdfContent"; // Importar o componente de conteúdo do PDF
 import { FinancialTransaction, mockFinancialTransactions } from "@/mockData/financial"; // Importar mock data financeiro
 import { AppointmentEntry } from "@/types/appointment"; // Importar a nova interface de atendimento
-import AppointmentForm from "@/components/AppointmentForm"; // Importar o novo formulário de atendimento
+// import AppointmentForm from "@/components/AppointmentForm"; // REMOVIDO: AppointmentForm agora está em AddAppointmentPage
 
 // Mock data (centralizado aqui para facilitar o exemplo, mas idealmente viria de um serviço)
 interface Animal {
@@ -356,8 +356,9 @@ const PatientRecordPage = () => {
   const [animalAppointments, setAnimalAppointments] = useState<AppointmentEntry[]>(
     initialMockAppointments.filter(app => app.animalId === animalId)
   );
-  const [isAppointmentFormOpen, setIsAppointmentFormOpen] = useState(false); // Alterado para isAppointmentFormOpen
-  const [editingAppointment, setEditingAppointment] = useState<AppointmentEntry | undefined>(undefined); // Alterado para undefined
+  // REMOVIDO: isAppointmentFormOpen e editingAppointment não são mais necessários aqui
+  // const [isAppointmentFormOpen, setIsAppointmentFormOpen] = useState(false);
+  // const [editingAppointment, setEditingAppointment] = useState<AppointmentEntry | undefined>(undefined);
 
 
   // State para as novas abas
@@ -608,39 +609,13 @@ const PatientRecordPage = () => {
     toast.success("Receita enviada para impressão!");
   };
 
-  // Handlers para Atendimentos (atualizados para o novo AppointmentForm)
+  // Handlers para Atendimentos (atualizados para a nova página)
   const handleAddAppointmentClick = () => {
-    setEditingAppointment(undefined);
-    setIsAppointmentFormOpen(true);
+    navigate(`/clients/${clientId}/animals/${animalId}/add-appointment`);
   };
 
   const handleEditAppointmentClick = (appointment: AppointmentEntry) => {
-    setEditingAppointment(appointment);
-    setIsAppointmentFormOpen(true);
-  };
-
-  const handleSaveAppointment = (newAppointment: AppointmentEntry) => {
-    if (editingAppointment) {
-      setAnimalAppointments((prev) =>
-        prev.map((app) =>
-          app.id === newAppointment.id
-            ? newAppointment
-            : app
-        ).sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
-      );
-      toast.success("Atendimento atualizado com sucesso!");
-    } else {
-      setAnimalAppointments((prev) =>
-        [...prev, newAppointment].sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
-      );
-      toast.success("Atendimento adicionado com sucesso!");
-    }
-    setIsAppointmentFormOpen(false);
-  };
-
-  const handleCancelAppointmentForm = () => {
-    setIsAppointmentFormOpen(false);
-    setEditingAppointment(undefined);
+    navigate(`/clients/${clientId}/animals/${animalId}/edit-appointment/${appointment.id}`);
   };
 
   const handleDeleteAppointment = (id: string) => {
@@ -829,8 +804,8 @@ const PatientRecordPage = () => {
                 )}
               </CardContent>
             </Card>
-            {/* Dialog para Adicionar/Editar Atendimento (agora usando AppointmentForm) */}
-            <Dialog open={isAppointmentFormOpen} onOpenChange={setIsAppointmentFormOpen}>
+            {/* REMOVIDO: Dialog para Adicionar/Editar Atendimento */}
+            {/* <Dialog open={isAppointmentFormOpen} onOpenChange={setIsAppointmentFormOpen}>
               <DialogContent className="sm:max-w-[900px] max-h-[90vh] overflow-y-auto bg-white/90 backdrop-blur-sm border border-gray-200 dark:border-gray-700 rounded-2xl shadow-[0_1px_3px_rgba(0,0,0,0.05)] dark:bg-gray-800/90">
                 <DialogHeader>
                   <DialogTitle className="text-lg font-semibold text-[#374151] dark:text-gray-100">
@@ -849,7 +824,7 @@ const PatientRecordPage = () => {
                   mockAppointments={animalAppointments}
                 />
               </DialogContent>
-            </Dialog>
+            </Dialog> */}
           </TabsContent>
 
           <TabsContent value="exams" className="mt-4">

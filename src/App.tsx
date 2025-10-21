@@ -12,6 +12,7 @@ import ClientDetailPage from "./pages/ClientDetailPage";
 import PatientRecordPage from "./pages/PatientRecordPage";
 import AddExamPage from "./pages/AddExamPage";
 import AddPrescriptionPage from "./pages/AddPrescriptionPage";
+import AddAppointmentPage from "./pages/AddAppointmentPage"; // Importar a nova página de atendimento
 import SpeciesPage from "./pages/registrations/SpeciesPage";
 import BreedsPage from "./pages/registrations/BreedsPage";
 import CoatTypesPage from "./pages/registrations/CoatTypesPage";
@@ -69,6 +70,9 @@ const App = () => (
               <Route path="/clients/:clientId/animals/:animalId/add-exam" element={<AddExamPage />} />
               <Route path="/clients/:clientId/animals/:animalId/add-prescription" element={<AddPrescriptionPage />} />
               <Route path="/clients/:clientId/animals/:animalId/edit-prescription/:prescriptionId" element={<AddPrescriptionPage />} />
+              {/* Novas rotas para adicionar/editar atendimento */}
+              <Route path="/clients/:clientId/animals/:animalId/add-appointment" element={<AddAppointmentPage />} />
+              <Route path="/clients/:clientId/animals/:animalId/edit-appointment/:appointmentId" element={<AddAppointmentPage />} />
               <Route path="/registrations/species" element={<SpeciesPage />} />
               <Route path="/registrations/breeds" element={<BreedsPage />} />
               <Route path="/registrations/coat-types" element={<CoatTypesPage />} />
