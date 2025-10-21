@@ -170,7 +170,7 @@ const getDynamicStyles = (isCompactSimplePrescription: boolean, prescriptionType
     width: 15,
   },
   medicationNameConcentration: {
-    fontSize: isCompactSimplePrescription ? 8 : 9,
+    fontSize: isCompactSimplePrescription ? 8 : 11, // Aumentado para 11
     fontWeight: "bold",
     flexShrink: 1,
   },
@@ -188,7 +188,7 @@ const getDynamicStyles = (isCompactSimplePrescription: boolean, prescriptionType
     flexShrink: 0,
   },
   pharmacyBadge: {
-    fontSize: isCompactSimplePrescription ? 7 : 8,
+    fontSize: isCompactSimplePrescription ? 7 : 9, // Aumentado para 9
     paddingHorizontal: isCompactSimplePrescription ? 5 : 6,
     paddingVertical: isCompactSimplePrescription ? 2 : 3,
     borderRadius: 8,
@@ -196,9 +196,11 @@ const getDynamicStyles = (isCompactSimplePrescription: boolean, prescriptionType
     color: "#555",
     borderWidth: 1,
     borderColor: "#ccc",
+    justifyContent: 'center', // Centraliza horizontalmente
+    alignItems: 'center', // Centraliza verticalmente
   },
   quantityBadge: {
-    fontSize: isCompactSimplePrescription ? 8 : 9,
+    fontSize: isCompactSimplePrescription ? 8 : 10, // Aumentado para 10
     paddingHorizontal: isCompactSimplePrescription ? 7 : 8,
     paddingVertical: isCompactSimplePrescription ? 3 : 4,
     borderRadius: 8,
@@ -206,15 +208,17 @@ const getDynamicStyles = (isCompactSimplePrescription: boolean, prescriptionType
     color: "#333",
     borderWidth: 1,
     borderColor: "#aaa",
+    justifyContent: 'center', // Centraliza horizontalmente
+    alignItems: 'center', // Centraliza verticalmente
   },
   medicationInstructions: {
-    fontSize: isCompactSimplePrescription ? 8 : 9,
+    fontSize: isCompactSimplePrescription ? 8 : 10, // Aumentado para 10
     color: "#444",
     marginLeft: 20,
     lineHeight: isCompactSimplePrescription ? 1.3 : 1.4,
   },
   medicationObservations: {
-    fontSize: isCompactSimplePrescription ? 7 : 8,
+    fontSize: isCompactSimplePrescription ? 7 : 9, // Aumentado para 9
     color: "#777",
     marginLeft: 20,
     marginTop: 3,
