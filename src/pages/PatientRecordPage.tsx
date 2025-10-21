@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Link, useParams, useNavigate } from "react-router-dom";
+import { Link, useParams, useNavigate, useSearchParams } from "react-router-dom";
 import {
   FaArrowLeft, FaUsers, FaPaw, FaPlus, FaEye, FaStethoscope, FaCalendarAlt, FaDollarSign, FaSyringe, FaWeightHanging, FaFileAlt, FaClipboardList, FaCommentAlt, FaHeart, FaMale, FaUser, FaPrint, FaDownload, FaTimes, FaSave, FaBalanceScale, FaFileMedical, FaExclamationTriangle, FaFlask, FaTag, FaBox, FaClock, FaMoneyBillWave, FaArrowUp, FaArrowDown
 } from "react-icons/fa"; // Importar ícones de react-icons
@@ -175,10 +175,31 @@ const mockClients: Client[] = [
   },
 ];
 
-// Mock data para atendimentos, exames, vendas, vacinas
-const mockAppointments = [
-  { id: "app1", date: "2023-10-26", type: "Consulta de Rotina", vet: "Dr. Silva", notes: "Animal saudável." },
-  { id: "app2", date: "2024-03-10", type: "Vacinação Anual", vet: "Dra. Costa", notes: "Vacina V8 aplicada." },
+// Interface para Atendimentos
+interface AppointmentEntry {
+  id: string;
+  date: string;
+  type: string;
+  vet: string;
+  notes: string;
+  animalId: string; // Adicionado para filtrar por animal
+}
+
+// Mock data para atendimentos (agora com animalId)
+const initialMockAppointments: AppointmentEntry[] = [
+  { id: "app1", animalId: "a1", date: "2023-10-26", type: "Consulta de Rotina", vet: "Dr. Silva", notes: "Animal saudável." },
+  { id: "app2", animalId: "a1", date: "2024-03-10", type: "Vacinação Anual", vet: "Dra. Costa", notes: "Vacina V8 aplicada." },
+  { id: "app3", animalId: "a3", date: "2024-01-15", type: "Exame de Rotina", vet: "Dr. Souza", notes: "Check-up geral." },
+];
+
+// Mock data para tipos de atendimento
+const mockAppointmentTypes = [
+  { id: "1", name: "Consulta de Rotina" },
+  { id: "2", name: "Vacinação" },
+  { id: "3", name: "Cirurgia" },
+  { id: "4", name: "Exame" },
+  { id: "5", name: "Retorno" },
+  { id: "6", name: "Outro" },
 ];
 
 // const mockSales = [ // Removido, agora usaremos mockFinancialTransactions
@@ -288,6 +309,18 @@ const PatientRecordPage = () => {
       localStorage.setItem(`patientRecordActiveTab-${animalId}`, activeTab);
     }
   }, [activeTab, animalId]);
+
+  // State para os atendimentos do animal
+  const [animalAppointments, setAnimalAppointments] = useState<AppointmentEntry[]>(
+    initialMockAppointments.filter(app => app.animalId === animalId)
+  );
+  const [isAppointmentDialogOpen, setIsAppointmentDialogOpen] = useState(false);
+  const [editingAppointment, setEditingAppointment] = useState<AppointmentEntry | null>(null);
+  const [newAppointmentDate, setNewAppointmentDate] = useState<string>(new Date().toISOString().split('T')[0]);
+  const [newAppointmentType, setNewAppointmentType] = useState<string | undefined>(undefined);
+  const [newAppointmentVet, setNewAppointmentVet] = useState<string | undefined>(undefined);
+  const [newAppointmentNotes, setNewAppointmentNotes] = useState("");
+
 
   // State para as novas abas
   const [weightHistory, setWeightHistory] = useState<WeightEntry[]>([
@@ -537,6 +570,68 @@ const PatientRecordPage = () => {
     toast.success("Receita enviada para impressão!");
   };
 
+  // Handlers para Atendimentos
+  const handleAddAppointmentClick = () => {
+    setEditingAppointment(null);
+    setNewAppointmentDate(new Date().toISOString().split('T')[0]);
+    setNewAppointmentType(undefined);
+    setNewAppointmentVet(undefined);
+    setNewAppointmentNotes("");
+    setIsAppointmentDialogOpen(true);
+  };
+
+  const handleEditAppointmentClick = (appointment: AppointmentEntry) => {
+    setEditingAppointment(appointment);
+    setNewAppointmentDate(appointment.date);
+    setNewAppointmentType(appointment.type);
+    setNewAppointmentVet(appointment.vet);
+    setNewAppointmentNotes(appointment.notes);
+    setIsAppointmentDialogOpen(true);
+  };
+
+  const handleSaveAppointment = () => {
+    if (!newAppointmentDate || !newAppointmentType || !newAppointmentVet || !newAppointmentNotes.trim()) {
+      toast.error("Por favor, preencha todos os campos obrigatórios do atendimento.");
+      return;
+    }
+
+    if (editingAppointment) {
+      setAnimalAppointments((prev) =>
+        prev.map((app) =>
+          app.id === editingAppointment.id
+            ? {
+                ...app,
+                date: newAppointmentDate,
+                type: newAppointmentType,
+                vet: newAppointmentVet,
+                notes: newAppointmentNotes.trim(),
+              }
+            : app
+        ).sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
+      );
+      toast.success("Atendimento atualizado com sucesso!");
+    } else {
+      const newApp: AppointmentEntry = {
+        id: `app-${Date.now()}`,
+        animalId: animalId!,
+        date: newAppointmentDate,
+        type: newAppointmentType,
+        vet: newAppointmentVet,
+        notes: newAppointmentNotes.trim(),
+      };
+      setAnimalAppointments((prev) =>
+        [...prev, newApp].sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
+      );
+      toast.success("Atendimento adicionado com sucesso!");
+    }
+    setIsAppointmentDialogOpen(false);
+  };
+
+  const handleDeleteAppointment = (id: string) => {
+    setAnimalAppointments((prev) => prev.filter((app) => app.id !== id));
+    toast.info("Atendimento excluído.");
+  };
+
 
   return (
     <div className="flex flex-col min-h-screen bg-gray-50 dark:bg-gray-950">
@@ -675,14 +770,14 @@ const PatientRecordPage = () => {
                 <CardTitle className="flex items-center gap-2 text-lg font-semibold text-[#374151] dark:text-gray-100">
                   <FaStethoscope className="h-5 w-5 text-blue-500" /> Histórico de Atendimentos
                 </CardTitle>
-                <Button size="sm" className="rounded-md bg-gradient-to-r from-blue-500 to-indigo-500 text-white hover:from-blue-600 hover:to-indigo-600 font-semibold transition-all duration-200 shadow-md hover:shadow-lg">
+                <Button size="sm" onClick={handleAddAppointmentClick} className="rounded-md bg-gradient-to-r from-blue-500 to-indigo-500 text-white hover:from-blue-600 hover:to-indigo-600 font-semibold transition-all duration-200 shadow-md hover:shadow-lg">
                   <FaPlus className="h-4 w-4 mr-2" /> Adicionar Atendimento
                 </Button>
               </CardHeader>
               <CardContent className="pt-0">
-                {mockAppointments.length > 0 ? (
+                {animalAppointments.length > 0 ? (
                   <div className="space-y-4">
-                    {mockAppointments.map((app) => (
+                    {animalAppointments.map((app) => (
                       <Card key={app.id} className="p-4 bg-background dark:bg-gray-800 shadow-sm border border-gray-200 dark:border-gray-700">
                         <div className="flex items-center justify-between mb-2">
                           <div className="flex items-center gap-2">
@@ -693,9 +788,14 @@ const PatientRecordPage = () => {
                               {app.notes || "Sem observações"}
                             </p>
                           </div>
-                          <Button variant="ghost" size="icon" className="rounded-md hover:bg-gray-100 hover:text-gray-900 dark:hover:bg-gray-700 dark:hover:text-gray-200 transition-colors duration-200">
-                            <FaEye className="h-4 w-4" />
-                          </Button>
+                          <div className="flex gap-2">
+                            <Button variant="ghost" size="icon" onClick={() => handleEditAppointmentClick(app)} className="rounded-md hover:bg-gray-100 hover:text-gray-900 dark:hover:bg-gray-700 dark:hover:text-gray-200 transition-colors duration-200">
+                              <FaEye className="h-4 w-4" />
+                            </Button>
+                            <Button variant="ghost" size="icon" onClick={() => handleDeleteAppointment(app.id)} className="rounded-md hover:bg-gray-100 hover:text-gray-900 dark:hover:bg-gray-700 dark:hover:text-gray-200 transition-colors duration-200">
+                              <FaTrashAlt className="h-4 w-4 text-red-500" />
+                            </Button>
+                          </div>
                         </div>
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-2 text-sm text-muted-foreground">
                           <div className="flex items-center gap-1">
@@ -713,6 +813,80 @@ const PatientRecordPage = () => {
                 )}
               </CardContent>
             </Card>
+            {/* Dialog para Adicionar/Editar Atendimento */}
+            <Dialog open={isAppointmentDialogOpen} onOpenChange={setIsAppointmentDialogOpen}>
+              <DialogContent className="sm:max-w-[500px] bg-white/90 backdrop-blur-sm border border-gray-200 dark:border-gray-700 rounded-2xl shadow-[0_1px_3px_rgba(0,0,0,0.05)] dark:bg-gray-800/90">
+                <DialogHeader>
+                  <DialogTitle className="text-lg font-semibold text-[#374151] dark:text-gray-100">
+                    {editingAppointment ? "Editar Atendimento" : "Novo Atendimento"}
+                  </DialogTitle>
+                  <DialogDescription className="text-sm text-[#6B7280] dark:text-gray-400">
+                    Preencha os detalhes do atendimento.
+                  </DialogDescription>
+                </DialogHeader>
+                <div className="grid gap-4 py-4">
+                  <div className="space-y-2">
+                    <Label htmlFor="appointmentDate" className="text-[#4B5563] dark:text-gray-400 font-medium">Data</Label>
+                    <Input
+                      id="appointmentDate"
+                      type="date"
+                      value={newAppointmentDate}
+                      onChange={(e) => setNewAppointmentDate(e.target.value)}
+                      className="bg-white rounded-lg border-gray-200 dark:border-gray-600 focus:ring-2 focus:ring-blue-400 placeholder-[#9CA3AF] dark:placeholder-gray-500 transition-all duration-200"
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="appointmentType" className="text-[#4B5563] dark:text-gray-400 font-medium">Tipo de Atendimento</Label>
+                    <Select onValueChange={setNewAppointmentType} value={newAppointmentType}>
+                      <SelectTrigger id="appointmentType" className="bg-white rounded-lg border-gray-200 dark:border-gray-600 focus:ring-2 focus:ring-blue-400 placeholder-[#9CA3AF] dark:placeholder-gray-500 transition-all duration-200">
+                        <SelectValue placeholder="Selecione o tipo de atendimento" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {mockAppointmentTypes.map((type) => (
+                          <SelectItem key={type.id} value={type.name}>
+                            {type.name}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="appointmentVet" className="text-[#4B5563] dark:text-gray-400 font-medium">Veterinário</Label>
+                    <Select onValueChange={setNewAppointmentVet} value={newAppointmentVet}>
+                      <SelectTrigger id="appointmentVet" className="bg-white rounded-lg border-gray-200 dark:border-gray-600 focus:ring-2 focus:ring-blue-400 placeholder-[#9CA3AF] dark:placeholder-gray-500 transition-all duration-200">
+                        <SelectValue placeholder="Selecione o veterinário" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {mockVets.map((vet) => (
+                          <SelectItem key={vet.id} value={vet.name}>
+                            {vet.name}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="appointmentNotes" className="text-[#4B5563] dark:text-gray-400 font-medium">Observações</Label>
+                    <Textarea
+                      id="appointmentNotes"
+                      placeholder="Notas adicionais sobre o atendimento..."
+                      value={newAppointmentNotes}
+                      onChange={(e) => setNewAppointmentNotes(e.target.value)}
+                      className="bg-white rounded-lg border-gray-200 dark:border-gray-600 focus:ring-2 focus:ring-blue-400 placeholder-[#9CA3AF] dark:placeholder-gray-500 transition-all duration-200"
+                      rows={3}
+                    />
+                  </div>
+                </div>
+                <DialogFooter>
+                  <Button variant="outline" onClick={() => setIsAppointmentDialogOpen(false)} className="bg-white border border-gray-300 text-gray-700 hover:bg-gray-50 rounded-md transition-all duration-200 shadow-sm hover:shadow-md dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200 dark:hover:bg-gray-600">
+                    <FaTimes className="mr-2 h-4 w-4" /> Cancelar
+                  </Button>
+                  <Button onClick={handleSaveAppointment} className="bg-gradient-to-r from-blue-500 to-indigo-500 text-white hover:from-blue-600 hover:to-indigo-600 rounded-md font-semibold transition-all duration-200 shadow-md hover:shadow-lg">
+                    <FaSave className="mr-2 h-4 w-4" /> Salvar Atendimento
+                  </Button>
+                </DialogFooter>
+              </DialogContent>
+            </Dialog>
           </TabsContent>
 
           <TabsContent value="exams" className="mt-4">
