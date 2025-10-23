@@ -36,14 +36,14 @@ import {
   FaUserMd,
   FaHeartbeat,
   FaLungs,
-  FaStomach,
+  FaHamburger, // Substituído FaStomach por FaHamburger
   FaBrain,
   FaExclamationCircle,
   FaRunning,
-  FaBone as FaBoneIcon, // Usado como FaBoneIcon
-  FaHistory as FaHistoryIcon, // Usado como FaHistoryIcon
-  FaUtensils as FaUtensilsIcon, // Usado como FaUtensilsIcon
-  FaHeadSideMask as FaHeadSideMaskIcon, // Usado como FaHeadSideMaskIcon
+  FaBone as FaBoneIcon,
+  FaHistory as FaHistoryIcon,
+  FaUtensils as FaUtensilsIcon,
+  FaHeadSideMask as FaHeadSideMaskIcon,
 } from "react-icons/fa";
 import { toast } from "sonner";
 import { AppointmentEntry, ConsultationDetails, VaccinationDetails, SurgeryDetails, ReturnDetails, EmergencyDetails, CheckupDetails, BaseAppointmentDetails } from "@/types/appointment";
@@ -482,7 +482,7 @@ const AppointmentForm: React.FC<AppointmentFormProps> = ({
 
                       <AccordionItem value="sistemaDigestorio">
                         <AccordionTrigger className="text-sm font-semibold text-[#374151] dark:text-gray-100 flex items-center gap-2">
-                          <FaStomach className="h-4 w-4 text-gray-500" /> Sistema Digestório
+                          <FaHamburger className="h-4 w-4 text-gray-500" /> Sistema Digestório
                         </AccordionTrigger>
                         <AccordionContent className="p-4 border-t border-gray-200 dark:border-gray-700 grid grid-cols-1 md:grid-cols-2 gap-4">
                           {/* Êmese e Regurgitação */}
@@ -862,7 +862,7 @@ const AppointmentForm: React.FC<AppointmentFormProps> = ({
 
                       <AccordionItem value="toraxAbdomen">
                         <AccordionTrigger className="text-sm font-semibold text-[#374151] dark:text-gray-100 flex items-center gap-2">
-                          <FaStomach className="h-4 w-4 text-gray-500" /> Tórax e Abdômen
+                          <FaHamburger className="h-4 w-4 text-gray-500" /> Tórax e Abdômen
                         </AccordionTrigger>
                         <AccordionContent className="p-4 border-t border-gray-200 dark:border-gray-700 grid grid-cols-1 md:grid-cols-2 gap-4">
                           {/* Abdômen: Desconforto Abdominal */}
