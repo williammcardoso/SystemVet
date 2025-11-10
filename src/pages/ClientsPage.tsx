@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { FaUsers, FaCog, FaSearch, FaFilter, FaSyncAlt, FaPlus, FaEye } from "react-icons/fa";
+import { FaUsers, FaCog, FaSearch, FaFilter, FaSyncAlt, FaPlus, FaEye, FaTimes } from "react-icons/fa"; // Adicionado FaTimes
 import { Link } from "react-router-dom";
 import { cn } from "@/lib/utils";
 import { Card } from "@/components/ui/card";
