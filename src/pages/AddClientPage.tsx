@@ -37,7 +37,7 @@ const applyRgMask = (value: string) => {
 
 interface DynamicContact {
   id: string;
-  type: 'phone' | 'email';
+  label: string; // Novo campo para o nome do contato (ex: Mãe, Vizinho)
   value: string;
 }
 
@@ -55,9 +55,11 @@ const AddClientPage = () => {
   const [acceptWhatsapp, setAcceptWhatsapp] = useState("yes");
   const [acceptSMS, setAcceptSMS] = useState("yes");
 
-  // Contato de email fixo
+  // Contatos fixos
   const [mainEmailContact, setMainEmailContact] = useState("");
-  // Contatos dinâmicos (para telefones, por exemplo)
+  const [mainPhoneContact, setMainPhoneContact] = useState(""); // Novo campo para telefone principal
+
+  // Contatos dinâmicos (para telefones adicionais)
   const [dynamicContacts, setDynamicContacts] = useState<DynamicContact[]>([]);
 
   // Endereço com busca de CEP
@@ -86,6 +88,15 @@ const AddClientPage = () => {
       value = applyCnpjMask(value);
     }
     setIdentificationNumber(value);
+  };
+
+  const handleIdentificationBlur = () => {
+    const rawValue = identificationNumber.replace(/\D/g, "");
+    if (clientType === "physical" && rawValue.length !== 11) {
+      toast.error("CPF inválido. Por favor, verifique o número.");
+    } else if (clientType === "legal" && rawValue.length !== 14) {
+      toast.error("CNPJ inválido. Por favor, verifique o número.");
+    }
   };
 
   const handleSecondaryIdentificationChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -138,11 +149,11 @@ const AddClientPage = () => {
   };
 
   const handleAddDynamicContact = () => {
-    setDynamicContacts(prev => [...prev, { id: `contact-${Date.now()}`, type: 'phone', value: '' }]);
+    setDynamicContacts(prev => [...prev, { id: `contact-${Date.now()}`, label: '', value: '' }]);
   };
 
-  const handleUpdateDynamicContact = (id: string, value: string) => {
-    setDynamicContacts(prev => prev.map(contact => contact.id === id ? { ...contact, value } : contact));
+  const handleUpdateDynamicContact = (id: string, field: keyof DynamicContact, value: string) => {
+    setDynamicContacts(prev => prev.map(contact => contact.id === id ? { ...contact, [field]: value } : contact));
   };
 
   const handleRemoveDynamicContact = (id: string) => {
@@ -150,13 +161,26 @@ const AddClientPage = () => {
   };
 
   const handleSaveClient = () => {
-    // Validação básica para CPF/CNPJ
-    if (clientType === "physical" && identificationNumber.replace(/\D/g, "").length !== 11) {
+    // Validação de campos obrigatórios
+    if (!fullName.trim()) {
+      toast.error("O campo 'Nome completo' é obrigatório.");
+      return;
+    }
+    const rawIdentification = identificationNumber.replace(/\D/g, "");
+    if (clientType === "physical" && rawIdentification.length !== 11) {
       toast.error("CPF inválido. Por favor, verifique o número.");
       return;
     }
-    if (clientType === "legal" && identificationNumber.replace(/\D/g, "").length !== 14) {
+    if (clientType === "legal" && rawIdentification.length !== 14) {
       toast.error("CNPJ inválido. Por favor, verifique o número.");
+      return;
+    }
+    if (!mainEmailContact.trim()) {
+      toast.error("O campo 'Email Principal' é obrigatório.");
+      return;
+    }
+    if (!mainPhoneContact.trim()) {
+      toast.error("O campo 'Telefone Principal' é obrigatório.");
       return;
     }
 
@@ -250,6 +274,7 @@ const AddClientPage = () => {
                   placeholder={clientType === "physical" ? "999.999.999-99" : "99.999.999/9999-99"}
                   value={identificationNumber}
                   onChange={handleIdentificationChange}
+                  onBlur={handleIdentificationBlur}
                   maxLength={clientType === "physical" ? 14 : 18}
                   className="bg-white rounded-lg border-gray-200 dark:border-gray-600 focus:ring-2 focus:ring-blue-400 placeholder-[#9CA3AF] dark:placeholder-gray-500 transition-all duration-200"
                 />
@@ -313,21 +338,37 @@ const AddClientPage = () => {
 
             <div className="mt-6">
               <h2 className="text-xl font-semibold mb-4">Contatos</h2>
-              <div className="space-y-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="space-y-2">
                   <Label htmlFor="mainEmailContact">Email Principal*</Label>
                   <Input id="mainEmailContact" type="email" placeholder="email@exemplo.com" value={mainEmailContact} onChange={(e) => setMainEmailContact(e.target.value)} className="bg-white rounded-lg border-gray-200 dark:border-gray-600 focus:ring-2 focus:ring-blue-400 placeholder-[#9CA3AF] dark:placeholder-gray-500 transition-all duration-200" />
                 </div>
+                <div className="space-y-2">
+                  <Label htmlFor="mainPhoneContact">Telefone Principal*</Label>
+                  <Input id="mainPhoneContact" type="tel" placeholder="(XX) XXXXX-XXXX" value={mainPhoneContact} onChange={(e) => setMainPhoneContact(e.target.value)} className="bg-white rounded-lg border-gray-200 dark:border-gray-600 focus:ring-2 focus:ring-blue-400 placeholder-[#9CA3AF] dark:placeholder-gray-500 transition-all duration-200" />
+                </div>
+              </div>
+              <div className="space-y-4 mt-4">
                 {dynamicContacts.map((contact, index) => (
                   <div key={contact.id} className="flex items-end gap-2">
                     <div className="flex-1 space-y-2">
-                      <Label htmlFor={`dynamic-contact-${contact.id}`}>Telefone {index + 1}</Label>
+                      <Label htmlFor={`dynamic-contact-label-${contact.id}`}>Nome do Contato {index + 1}</Label>
                       <Input
-                        id={`dynamic-contact-${contact.id}`}
+                        id={`dynamic-contact-label-${contact.id}`}
+                        placeholder="Ex: Mãe, Trabalho"
+                        value={contact.label}
+                        onChange={(e) => handleUpdateDynamicContact(contact.id, 'label', e.target.value)}
+                        className="bg-white rounded-lg border-gray-200 dark:border-gray-600 focus:ring-2 focus:ring-blue-400 placeholder-[#9CA3AF] dark:placeholder-gray-500 transition-all duration-200"
+                      />
+                    </div>
+                    <div className="flex-1 space-y-2">
+                      <Label htmlFor={`dynamic-contact-value-${contact.id}`}>Telefone</Label>
+                      <Input
+                        id={`dynamic-contact-value-${contact.id}`}
                         type="tel"
                         placeholder="(XX) XXXXX-XXXX"
                         value={contact.value}
-                        onChange={(e) => handleUpdateDynamicContact(contact.id, e.target.value)}
+                        onChange={(e) => handleUpdateDynamicContact(contact.id, 'value', e.target.value)}
                         className="bg-white rounded-lg border-gray-200 dark:border-gray-600 focus:ring-2 focus:ring-blue-400 placeholder-[#9CA3AF] dark:placeholder-gray-500 transition-all duration-200"
                       />
                     </div>
@@ -337,7 +378,7 @@ const AddClientPage = () => {
                   </div>
                 ))}
                 <Button type="button" variant="outline" onClick={handleAddDynamicContact} className="w-full bg-white border border-gray-300 text-gray-700 hover:bg-gray-50 rounded-md transition-all duration-200 shadow-sm hover:shadow-md dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200 dark:hover:bg-gray-600">
-                  <FaPlus className="mr-2 h-4 w-4" /> Adicionar Telefone
+                  <FaPlus className="mr-2 h-4 w-4" /> Adicionar Outro Telefone
                 </Button>
               </div>
             </div>
