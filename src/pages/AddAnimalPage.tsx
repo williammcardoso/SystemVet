@@ -5,113 +5,10 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Textarea } from "@/components/ui/textarea";
 import { FaArrowLeft, FaPlus, FaTimes, FaSave, FaPaw } from "react-icons/fa"; // Importar ícones de react-icons
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
-
-// Mock data for clients (tutors) - consistente com ClientsPage
-interface Animal {
-  id: string;
-  name: string;
-  species: string;
-  breed: string;
-  gender: string;
-  birthday: string;
-  coatColor: string;
-  weight: number;
-  microchip: string;
-  notes: string;
-}
-
-interface Client {
-  id: string;
-  name: string;
-  animals: Animal[];
-}
-
-const mockClients: Client[] = [
-  {
-    id: "1",
-    name: "William",
-    animals: [
-      {
-        id: "a1",
-        name: "Totó",
-        species: "Cachorro",
-        breed: "Labrador",
-        gender: "Macho",
-        birthday: "2020-01-15",
-        coatColor: "Dourado",
-        weight: 25.0,
-        microchip: "123456789",
-        notes: "Animal muito dócil e brincalhão.",
-      },
-      {
-        id: "a2",
-        name: "Bolinha",
-        species: "Cachorro",
-        breed: "Poodle",
-        gender: "Fêmea",
-        birthday: "2021-05-20",
-        coatColor: "Branco",
-        weight: 5.0,
-        microchip: "987654321",
-        notes: "Adora passear no parque.",
-      },
-    ],
-  },
-  {
-    id: "2",
-    name: "Maria",
-    animals: [
-      {
-        id: "a3",
-        name: "Fido",
-        species: "Cachorro",
-        breed: "Vira-lata",
-        gender: "Macho",
-        birthday: "2019-03-10",
-        coatColor: "Caramelo",
-        weight: 18.0,
-        microchip: "",
-        notes: "Resgatado, um pouco tímido.",
-      },
-      {
-        id: "a4",
-        name: "Miau",
-        species: "Gato",
-        breed: "Siamês",
-        gender: "Fêmea",
-        birthday: "2022-07-01",
-        coatColor: "Creme",
-        weight: 3.5,
-        microchip: "112233445",
-        notes: "Gosta de dormir no sol.",
-      },
-    ],
-  },
-  {
-    id: "3",
-    name: "João",
-    animals: [
-      {
-        id: "a5",
-        name: "Rex",
-        species: "Cachorro",
-        breed: "Pastor Alemão",
-        gender: "Macho",
-        birthday: "2018-11-22",
-        coatColor: "Preto e Marrom",
-        weight: 30.0,
-        microchip: "556677889",
-        notes: "Animal de guarda, muito leal.",
-      },
-    ],
-  },
-  {
-    id: "4",
-    name: "Ana",
-    animals: [],
-  },
-];
+import { Link, useNavigate } from "react-router-dom";
+import { toast } from "sonner";
+import { mockClients, addMockAnimalToClient } from "@/mockData/clients"; // Importar o mock de clientes centralizado e a função para adicionar animal
+import { Animal, Client } from "@/types/client"; // Importar as interfaces Animal e Client
 
 // Mock data for species (from SpeciesPage.tsx)
 const mockSpecies = [
@@ -138,10 +35,51 @@ const mockCoatTypes = [
 ];
 
 const AddAnimalPage = () => {
+  const navigate = useNavigate();
+
+  const [selectedTutorId, setSelectedTutorId] = useState<string | undefined>(undefined);
+  const [animalName, setAnimalName] = useState("");
   const [selectedSpecies, setSelectedSpecies] = useState<string | undefined>(undefined);
+  const [selectedBreed, setSelectedBreed] = useState<string | undefined>(undefined);
+  const [gender, setGender] = useState<Animal['gender'] | undefined>(undefined);
+  const [birthday, setBirthday] = useState("");
+  const [coatColor, setCoatColor] = useState<string | undefined>(undefined);
+  const [weight, setWeight] = useState<number | ''>('');
+  const [microchip, setMicrochip] = useState("");
+  const [notes, setNotes] = useState("");
+
   const filteredBreeds = selectedSpecies
     ? mockBreeds.filter(breed => breed.speciesId === selectedSpecies)
-    : mockBreeds;
+    : [];
+
+  const handleSaveAnimal = () => {
+    if (!selectedTutorId || !animalName.trim() || !selectedSpecies || !gender || !birthday || weight === '') {
+      toast.error("Por favor, preencha todos os campos obrigatórios.");
+      return;
+    }
+
+    const newAnimal: Omit<Animal, 'id'> = {
+      name: animalName.trim(),
+      species: mockSpecies.find(s => s.id === selectedSpecies)?.name || '',
+      breed: mockBreeds.find(b => b.id === selectedBreed)?.name || '',
+      gender: gender,
+      birthday: birthday,
+      coatColor: mockCoatTypes.find(c => c.id === coatColor)?.name || '',
+      weight: Number(weight),
+      microchip: microchip.trim(),
+      notes: notes.trim(),
+      status: 'Ativo', // Default status
+    };
+
+    const addedAnimal = addMockAnimalToClient(selectedTutorId, newAnimal);
+
+    if (addedAnimal) {
+      toast.success(`Animal ${addedAnimal.name} adicionado com sucesso ao cliente!`);
+      navigate(`/clients/${selectedTutorId}`); // Navegar para a página de detalhes do cliente
+    } else {
+      toast.error("Erro ao adicionar animal. Cliente não encontrado.");
+    }
+  };
 
   return (
     <div className="flex flex-col min-h-screen bg-gray-50 dark:bg-gray-950">
@@ -173,7 +111,7 @@ const AddAnimalPage = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 p-6 bg-white/90 backdrop-blur-sm border border-gray-200 dark:border-gray-700 rounded-2xl shadow-[0_1px_3px_rgba(0,0,0,0.05)]">
           <div className="space-y-2">
             <Label htmlFor="tutor">Tutor/Responsável*</Label>
-            <Select>
+            <Select onValueChange={setSelectedTutorId} value={selectedTutorId}>
               <SelectTrigger id="tutor" className="bg-white rounded-lg border-gray-200 dark:border-gray-600 focus:ring-2 focus:ring-blue-400 placeholder-[#9CA3AF] dark:placeholder-gray-500 transition-all duration-200">
                 <SelectValue placeholder="Selecione o tutor..." />
               </SelectTrigger>
@@ -188,11 +126,11 @@ const AddAnimalPage = () => {
           </div>
           <div className="space-y-2">
             <Label htmlFor="animalName">Nome do Animal*</Label>
-            <Input id="animalName" placeholder="Nome do animal" className="bg-white rounded-lg border-gray-200 dark:border-gray-600 focus:ring-2 focus:ring-blue-400 placeholder-[#9CA3AF] dark:placeholder-gray-500 transition-all duration-200" />
+            <Input id="animalName" placeholder="Nome do animal" value={animalName} onChange={(e) => setAnimalName(e.target.value)} className="bg-white rounded-lg border-gray-200 dark:border-gray-600 focus:ring-2 focus:ring-blue-400 placeholder-[#9CA3AF] dark:placeholder-gray-500 transition-all duration-200" />
           </div>
           <div className="space-y-2">
             <Label htmlFor="species">Espécie*</Label>
-            <Select onValueChange={setSelectedSpecies}>
+            <Select onValueChange={setSelectedSpecies} value={selectedSpecies}>
               <SelectTrigger id="species" className="bg-white rounded-lg border-gray-200 dark:border-gray-600 focus:ring-2 focus:ring-blue-400 placeholder-[#9CA3AF] dark:placeholder-gray-500 transition-all duration-200">
                 <SelectValue placeholder="Selecione..." />
               </SelectTrigger>
@@ -207,7 +145,7 @@ const AddAnimalPage = () => {
           </div>
           <div className="space-y-2">
             <Label htmlFor="breed">Raça</Label>
-            <Select disabled={!selectedSpecies}>
+            <Select disabled={!selectedSpecies} onValueChange={setSelectedBreed} value={selectedBreed}>
               <SelectTrigger id="breed" className="bg-white rounded-lg border-gray-200 dark:border-gray-600 focus:ring-2 focus:ring-blue-400 placeholder-[#9CA3AF] dark:placeholder-gray-500 transition-all duration-200">
                 <SelectValue placeholder="Selecione..." />
               </SelectTrigger>
@@ -221,24 +159,25 @@ const AddAnimalPage = () => {
             </Select>
           </div>
           <div className="space-y-2">
-            <Label htmlFor="gender">Sexo</Label>
-            <Select>
+            <Label htmlFor="gender">Sexo*</Label>
+            <Select onValueChange={(value: Animal['gender']) => setGender(value)} value={gender}>
               <SelectTrigger id="gender" className="bg-white rounded-lg border-gray-200 dark:border-gray-600 focus:ring-2 focus:ring-blue-400 placeholder-[#9CA3AF] dark:placeholder-gray-500 transition-all duration-200">
                 <SelectValue placeholder="Selecione..." />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="male">Macho</SelectItem>
-                <SelectItem value="female">Fêmea</SelectItem>
+                <SelectItem value="Macho">Macho</SelectItem>
+                <SelectItem value="Fêmea">Fêmea</SelectItem>
+                <SelectItem value="Outro">Outro</SelectItem>
               </SelectContent>
             </Select>
           </div>
           <div className="space-y-2">
-            <Label htmlFor="birthday">Data de Nascimento</Label>
-            <Input id="birthday" type="date" className="bg-white rounded-lg border-gray-200 dark:border-gray-600 focus:ring-2 focus:ring-blue-400 placeholder-[#9CA3AF] dark:placeholder-gray-500 transition-all duration-200" />
+            <Label htmlFor="birthday">Data de Nascimento*</Label>
+            <Input id="birthday" type="date" value={birthday} onChange={(e) => setBirthday(e.target.value)} className="bg-white rounded-lg border-gray-200 dark:border-gray-600 focus:ring-2 focus:ring-blue-400 placeholder-[#9CA3AF] dark:placeholder-gray-500 transition-all duration-200" />
           </div>
           <div className="space-y-2">
             <Label htmlFor="coatColor">Cor da Pelagem</Label>
-            <Select>
+            <Select onValueChange={setCoatColor} value={coatColor}>
               <SelectTrigger id="coatColor" className="bg-white rounded-lg border-gray-200 dark:border-gray-600 focus:ring-2 focus:ring-blue-400 placeholder-[#9CA3AF] dark:placeholder-gray-500 transition-all duration-200">
                 <SelectValue placeholder="Selecione..." />
               </SelectTrigger>
@@ -252,25 +191,25 @@ const AddAnimalPage = () => {
             </Select>
           </div>
           <div className="space-y-2">
-            <Label htmlFor="weight">Peso (kg)</Label>
-            <Input id="weight" type="number" placeholder="Ex: 5.5" className="bg-white rounded-lg border-gray-200 dark:border-gray-600 focus:ring-2 focus:ring-blue-400 placeholder-[#9CA3AF] dark:placeholder-gray-500 transition-all duration-200" />
+            <Label htmlFor="weight">Peso (kg)*</Label>
+            <Input id="weight" type="number" placeholder="Ex: 5.5" value={weight} onChange={(e) => setWeight(Number(e.target.value))} className="bg-white rounded-lg border-gray-200 dark:border-gray-600 focus:ring-2 focus:ring-blue-400 placeholder-[#9CA3AF] dark:placeholder-gray-500 transition-all duration-200" />
           </div>
           <div className="space-y-2">
             <Label htmlFor="microchip">Microchip</Label>
-            <Input id="microchip" placeholder="Número do microchip" className="bg-white rounded-lg border-gray-200 dark:border-gray-600 focus:ring-2 focus:ring-blue-400 placeholder-[#9CA3AF] dark:placeholder-gray-500 transition-all duration-200" />
+            <Input id="microchip" placeholder="Número do microchip" value={microchip} onChange={(e) => setMicrochip(e.target.value)} className="bg-white rounded-lg border-gray-200 dark:border-gray-600 focus:ring-2 focus:ring-blue-400 placeholder-[#9CA3AF] dark:placeholder-gray-500 transition-all duration-200" />
           </div>
         </div>
 
         <div className="mt-6 space-y-2 p-6 bg-white/90 backdrop-blur-sm border border-gray-200 dark:border-gray-700 rounded-2xl shadow-[0_1px_3px_rgba(0,0,0,0.05)]">
           <Label htmlFor="animalNotes">Observações</Label>
-          <Textarea id="animalNotes" placeholder="Adicione observações sobre o animal..." rows={5} className="bg-white rounded-lg border-gray-200 dark:border-gray-600 focus:ring-2 focus:ring-blue-400 placeholder-[#9CA3AF] dark:placeholder-gray-500 transition-all duration-200" />
+          <Textarea id="animalNotes" placeholder="Adicione observações sobre o animal..." rows={5} value={notes} onChange={(e) => setNotes(e.target.value)} className="bg-white rounded-lg border-gray-200 dark:border-gray-600 focus:ring-2 focus:ring-blue-400 placeholder-[#9CA3AF] dark:placeholder-gray-500 transition-all duration-200" />
         </div>
 
         <div className="flex justify-end gap-2 mt-6">
-          <Button variant="outline" className="bg-white border border-gray-300 text-gray-700 hover:bg-gray-50 rounded-md transition-all duration-200 shadow-sm hover:shadow-md dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200 dark:hover:bg-gray-600">
+          <Button variant="outline" onClick={() => navigate("/clients")} className="bg-white border border-gray-300 text-gray-700 hover:bg-gray-50 rounded-md transition-all duration-200 shadow-sm hover:shadow-md dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200 dark:hover:bg-gray-600">
             <FaTimes className="mr-2 h-4 w-4" /> Cancelar
           </Button>
-          <Button className="bg-gradient-to-r from-blue-500 to-indigo-500 text-white hover:from-blue-600 hover:to-indigo-600 rounded-md font-semibold transition-all duration-200 shadow-md hover:shadow-lg">
+          <Button onClick={handleSaveAnimal} className="bg-gradient-to-r from-blue-500 to-indigo-500 text-white hover:from-blue-600 hover:to-indigo-600 rounded-md font-semibold transition-all duration-200 shadow-md hover:shadow-lg">
             <FaSave className="mr-2 h-4 w-4" /> Salvar
           </Button>
         </div>

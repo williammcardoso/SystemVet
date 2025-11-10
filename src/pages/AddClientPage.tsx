@@ -6,8 +6,10 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Textarea } from "@/components/ui/textarea";
 import { FaArrowLeft, FaPlus, FaTimes, FaSave, FaUsers, FaTrashAlt } from "react-icons/fa";
 import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { toast } from "sonner"; // Importar toast para mensagens
+import { addMockClient } from "@/mockData/clients"; // Importar a função para adicionar cliente
+import { Client, DynamicContact } from "@/types/client"; // Importar a interface Client
 
 // Helper functions for masks
 const applyCpfMask = (value: string) => {
@@ -49,25 +51,22 @@ const applyPhoneMask = (value: string) => {
   return value;
 };
 
-interface DynamicContact {
-  id: string;
-  label: string; // Novo campo para o nome do contato (ex: Mãe, Vizinho)
-  value: string;
-}
 
 const AddClientPage = () => {
+  const navigate = useNavigate();
+
   // Estados para os campos do formulário
-  const [clientType, setClientType] = useState("physical");
+  const [clientType, setClientType] = useState<Client['clientType']>("physical");
   const [fullName, setFullName] = useState("");
-  const [nationality, setNationality] = useState("brazilian");
+  const [nationality, setNationality] = useState<Client['nationality']>("brazilian");
   const [gender, setGender] = useState<string | undefined>(undefined);
   const [identificationNumber, setIdentificationNumber] = useState(""); // CPF ou CNPJ
   const [secondaryIdentification, setSecondaryIdentification] = useState(""); // RG ou IE
   const [birthday, setBirthday] = useState("");
   const [profession, setProfession] = useState("");
-  const [acceptEmail, setAcceptEmail] = useState("yes");
-  const [acceptWhatsapp, setAcceptWhatsapp] = useState("yes");
-  const [acceptSMS, setAcceptSMS] = useState("yes");
+  const [acceptEmail, setAcceptEmail] = useState<Client['acceptEmail']>("yes");
+  const [acceptWhatsapp, setAcceptWhatsapp] = useState<Client['acceptWhatsapp']>("yes");
+  const [acceptSMS, setAcceptSMS] = useState<Client['acceptSMS']>("yes");
 
   // Contatos fixos
   const [mainEmailContact, setMainEmailContact] = useState("");
@@ -208,11 +207,36 @@ const AddClientPage = () => {
       return;
     }
 
-    // Aqui você implementaria a lógica para salvar o cliente
-    // Por enquanto, apenas exibiremos um toast de sucesso
+    const newClient: Omit<Client, 'id' | 'animals'> = {
+      name: fullName.trim(),
+      clientType,
+      nationality,
+      gender: gender || '',
+      identificationNumber,
+      secondaryIdentification,
+      birthday,
+      profession,
+      acceptEmail,
+      acceptWhatsapp,
+      acceptSMS,
+      mainEmailContact,
+      mainPhoneContact,
+      dynamicContacts,
+      address: {
+        cep,
+        street,
+        number,
+        complement,
+        neighborhood,
+        city,
+        state: state || '',
+      },
+      notes,
+    };
+
+    addMockClient(newClient);
     toast.success("Cliente salvo com sucesso!");
-    // Navegar de volta para a lista de clientes ou para a página de detalhes do cliente
-    // navigate("/clients");
+    navigate("/clients"); // Navegar de volta para a lista de clientes
   };
 
   return (
@@ -252,7 +276,7 @@ const AddClientPage = () => {
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
               <div className="space-y-2">
                 <Label htmlFor="type">Tipo (Pessoa física/jurídica)*</Label>
-                <Select defaultValue="physical" onValueChange={setClientType} value={clientType}>
+                <Select defaultValue="physical" onValueChange={(value: Client['clientType']) => setClientType(value)} value={clientType}>
                   <SelectTrigger id="type" className="bg-white rounded-lg border-gray-200 dark:border-gray-600 focus:ring-2 focus:ring-blue-400 placeholder-[#9CA3AF] dark:placeholder-gray-500 transition-all duration-200">
                     <SelectValue placeholder="Selecione..." />
                   </SelectTrigger>
@@ -268,7 +292,7 @@ const AddClientPage = () => {
               </div>
               <div className="space-y-2">
                 <Label htmlFor="nationality">Nacionalidade*</Label>
-                <Select defaultValue="brazilian" onValueChange={setNationality} value={nationality}>
+                <Select defaultValue="brazilian" onValueChange={(value: Client['nationality']) => setNationality(value)} value={nationality}>
                   <SelectTrigger id="nationality" className="bg-white rounded-lg border-gray-200 dark:border-gray-600 focus:ring-2 focus:ring-blue-400 placeholder-[#9CA3AF] dark:placeholder-gray-500 transition-all duration-200">
                     <SelectValue placeholder="Selecione..." />
                   </SelectTrigger>
@@ -324,7 +348,7 @@ const AddClientPage = () => {
               </div>
               <div className="space-y-2">
                 <Label htmlFor="acceptEmail">Aceita Email?</Label>
-                <Select defaultValue="yes" onValueChange={setAcceptEmail} value={acceptEmail}>
+                <Select defaultValue="yes" onValueChange={(value: Client['acceptEmail']) => setAcceptEmail(value)} value={acceptEmail}>
                   <SelectTrigger id="acceptEmail" className="bg-white rounded-lg border-gray-200 dark:border-gray-600 focus:ring-2 focus:ring-blue-400 placeholder-[#9CA3AF] dark:placeholder-gray-500 transition-all duration-200">
                     <SelectValue placeholder="Selecione..." />
                   </SelectTrigger>
@@ -336,7 +360,7 @@ const AddClientPage = () => {
               </div>
               <div className="space-y-2">
                 <Label htmlFor="acceptWhatsapp">Aceita WhatsApp?</Label>
-                <Select defaultValue="yes" onValueChange={setAcceptWhatsapp} value={acceptWhatsapp}>
+                <Select defaultValue="yes" onValueChange={(value: Client['acceptWhatsapp']) => setAcceptWhatsapp(value)} value={acceptWhatsapp}>
                   <SelectTrigger id="acceptWhatsapp" className="bg-white rounded-lg border-gray-200 dark:border-gray-600 focus:ring-2 focus:ring-blue-400 placeholder-[#9CA3AF] dark:placeholder-gray-500 transition-all duration-200">
                     <SelectValue placeholder="Selecione..." />
                   </SelectTrigger>
@@ -348,7 +372,7 @@ const AddClientPage = () => {
               </div>
               <div className="space-y-2">
                 <Label htmlFor="acceptSMS">Aceita SMS?</Label>
-                <Select defaultValue="yes" onValueChange={setAcceptSMS} value={acceptSMS}>
+                <Select defaultValue="yes" onValueChange={(value: Client['acceptSMS']) => setAcceptSMS(value)} value={acceptSMS}>
                   <SelectTrigger id="acceptSMS" className="bg-white rounded-lg border-gray-200 dark:border-gray-600 focus:ring-2 focus:ring-blue-400 placeholder-[#9CA3AF] dark:placeholder-gray-500 transition-all duration-200">
                     <SelectValue placeholder="Selecione..." />
                   </SelectTrigger>
@@ -409,7 +433,7 @@ const AddClientPage = () => {
             </div>
 
             <div className="flex justify-end gap-2 mt-6">
-              <Button variant="outline" onClick={() => { /* handle cancel logic */ }} className="bg-white border border-gray-300 text-gray-700 hover:bg-gray-50 rounded-md transition-all duration-200 shadow-sm hover:shadow-md dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200 dark:hover:bg-gray-600">
+              <Button variant="outline" onClick={() => navigate("/clients")} className="bg-white border border-gray-300 text-gray-700 hover:bg-gray-50 rounded-md transition-all duration-200 shadow-sm hover:shadow-md dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200 dark:hover:bg-gray-600">
                 <FaTimes className="mr-2 h-4 w-4" /> Cancelar
               </Button>
               <Button onClick={handleSaveClient} className="bg-gradient-to-r from-blue-500 to-indigo-500 text-white hover:from-blue-600 hover:to-indigo-600 rounded-md font-semibold transition-all duration-200 shadow-md hover:shadow-lg">
@@ -482,7 +506,7 @@ const AddClientPage = () => {
               </div>
             </div>
             <div className="flex justify-end gap-2 mt-6">
-              <Button variant="outline" onClick={() => { /* handle cancel logic */ }} className="bg-white border border-gray-300 text-gray-700 hover:bg-gray-50 rounded-md transition-all duration-200 shadow-sm hover:shadow-md dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200 dark:hover:bg-gray-600">
+              <Button variant="outline" onClick={() => navigate("/clients")} className="bg-white border border-gray-300 text-gray-700 hover:bg-gray-50 rounded-md transition-all duration-200 shadow-sm hover:shadow-md dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200 dark:hover:bg-gray-600">
                 <FaTimes className="mr-2 h-4 w-4" /> Cancelar
               </Button>
               <Button onClick={handleSaveClient} className="bg-gradient-to-r from-blue-500 to-indigo-500 text-white hover:from-blue-600 hover:to-indigo-600 rounded-md font-semibold transition-all duration-200 shadow-md hover:shadow-lg">
@@ -496,7 +520,7 @@ const AddClientPage = () => {
               <Textarea id="notes" placeholder="Adicione observações adicionais sobre o responsável..." rows={5} value={notes} onChange={(e) => setNotes(e.target.value)} className="bg-white rounded-lg border-gray-200 dark:border-gray-600 focus:ring-2 focus:ring-blue-400 placeholder-[#9CA3AF] dark:placeholder-gray-500 transition-all duration-200" />
             </div>
             <div className="flex justify-end gap-2 mt-6">
-              <Button variant="outline" onClick={() => { /* handle cancel logic */ }} className="bg-white border border-gray-300 text-gray-700 hover:bg-gray-50 rounded-md transition-all duration-200 shadow-sm hover:shadow-md dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200 dark:hover:bg-gray-600">
+              <Button variant="outline" onClick={() => navigate("/clients")} className="bg-white border border-gray-300 text-gray-700 hover:bg-gray-50 rounded-md transition-all duration-200 shadow-sm hover:shadow-md dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200 dark:hover:bg-gray-600">
                 <FaTimes className="mr-2 h-4 w-4" /> Cancelar
               </Button>
               <Button onClick={handleSaveClient} className="bg-gradient-to-r from-blue-500 to-indigo-500 text-white hover:from-blue-600 hover:to-indigo-600 rounded-md font-semibold transition-all duration-200 shadow-md hover:shadow-lg">

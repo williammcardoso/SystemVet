@@ -35,147 +35,8 @@ import { pdf } from "@react-pdf/renderer"; // Importar pdf para impressão
 import { PrescriptionPdfContent } from "@/components/PrescriptionPdfContent"; // Importar o componente de conteúdo do PDF
 import { FinancialTransaction, mockFinancialTransactions } from "@/mockData/financial"; // Importar mock data financeiro
 import { AppointmentEntry } from "@/types/appointment"; // Importar a nova interface de atendimento
-// import AppointmentForm from "@/components/AppointmentForm"; // REMOVIDO: AppointmentForm agora está em AddAppointmentPage
-
-// Mock data (centralizado aqui para facilitar o exemplo, mas idealmente viria de um serviço)
-interface Animal {
-  id: string;
-  name: string;
-  species: string;
-  breed: string;
-  gender: "Macho" | "Fêmea" | "Outro";
-  birthday: string;
-  coatColor: string;
-  weight: number;
-  microchip: string;
-  notes: string;
-  status: 'Ativo' | 'Inativo';
-  lastConsultationDate?: string;
-  totalProcedures?: number;
-  totalValue?: number;
-}
-
-interface Client {
-  id: string;
-  name: string;
-  phone: string;
-  address: string; // Adicionado endereço para o tutor
-  animals: Animal[];
-}
-
-const mockClients: Client[] = [
-  {
-    id: "1",
-    name: "William",
-    phone: "(19) 99363-1981",
-    address: "Rua Exemplo, 123, Cidade - Estado",
-    animals: [
-      {
-        id: "a1",
-        name: "Totó",
-        species: "Cachorro",
-        breed: "Labrador",
-        gender: "Macho",
-        birthday: "2020-01-15",
-        coatColor: "Dourado",
-        weight: 25.0,
-        microchip: "123456789",
-        notes: "Animal muito dócil e brincalhão.",
-        status: 'Ativo',
-        lastConsultationDate: "2024-07-20",
-        totalProcedures: 5,
-        totalValue: 435.00,
-      },
-      {
-        id: "a2",
-        name: "Bolinha",
-        species: "Cachorro",
-        breed: "Poodle",
-        gender: "Fêmea",
-        birthday: "2021-05-20",
-        coatColor: "Branco",
-        weight: 5.0,
-        microchip: "987654321",
-        notes: "Adora passear no parque.",
-        status: 'Ativo',
-        lastConsultationDate: "2024-06-10",
-        totalProcedures: 2,
-        totalValue: 150.00,
-      },
-    ],
-  },
-  {
-    id: "2",
-    name: "Maria",
-    phone: "(11) 98765-4321",
-    address: "Avenida Teste, 456, Outra Cidade - Outro Estado",
-    animals: [
-      {
-        id: "a3",
-        name: "Fido",
-        species: "Cachorro",
-        breed: "Vira-lata",
-        gender: "Macho",
-        birthday: "2019-03-10",
-        coatColor: "Caramelo",
-        weight: 18.0,
-        microchip: "",
-        notes: "Resgatado, um pouco tímido.",
-        status: 'Ativo',
-        lastConsultationDate: "2024-05-01",
-        totalProcedures: 3,
-        totalValue: 280.00,
-      },
-      {
-        id: "a4",
-        name: "Miau",
-        species: "Gato",
-        breed: "Siamês",
-        gender: "Fêmea",
-        birthday: "2022-07-01",
-        coatColor: "Creme",
-        weight: 3.5,
-        microchip: "112233445",
-        notes: "Gosta de dormir no sol.",
-        status: 'Inativo',
-        lastConsultationDate: "2023-12-15",
-        totalProcedures: 1,
-        totalValue: 80.00,
-      },
-    ],
-  },
-  {
-    id: "3",
-    name: "João",
-    phone: "(21) 91234-5678",
-    address: "Rua da Paz, 789, Vila Feliz - RJ",
-    animals: [
-      {
-        id: "a5",
-        name: "Rex",
-        species: "Cachorro",
-        breed: "Pastor Alemão",
-        gender: "Macho",
-        birthday: "2018-11-22",
-        coatColor: "Preto e Marrom",
-        weight: 30.0,
-        microchip: "556677889",
-        notes: "Animal de guarda, muito leal.",
-        status: 'Ativo',
-        lastConsultationDate: "2024-04-05",
-        totalProcedures: 7,
-        totalValue: 600.00,
-      },
-    ],
-  },
-  {
-    id: "4",
-    name: "Ana",
-    phone: "(31) 99876-5432",
-    address: "Rua das Flores, 10, Bairro Jardim - MG",
-    animals: [],
-  },
-];
+import { mockClients } from "@/mockData/clients"; // Importar o mock de clientes centralizado
+import { Client, Animal } from "@/types/client"; // Importar as interfaces Client e Animal
 
 // Mock data para atendimentos (agora com a nova interface AppointmentEntry)
 const initialMockAppointments: AppointmentEntry[] = [
@@ -589,7 +450,7 @@ const PatientRecordPage = () => {
         animalId: animal.id,
         animalSpecies: animal.species,
         tutorName: client.name,
-        tutorAddress: client.address,
+        tutorAddress: client.address.street + ", " + client.address.number + " - " + client.address.city + " - " + client.address.state,
         medications: rx.medications || [], // Passar array vazio se for manipulada
         generalObservations: rx.instructions,
         showElectronicSignatureText: false,
@@ -643,7 +504,7 @@ const PatientRecordPage = () => {
             <Button variant="outline" className="rounded-md border-gray-300 text-gray-700 hover:bg-gray-100 hover:text-gray-900 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200 dark:hover:bg-gray-700 transition-colors duration-200">
               <FaPrint className="mr-2 h-4 w-4" /> Imprimir
             </Button>
-            <Button variant="outline" className="rounded-md border-gray-300 text-gray-700 hover:bg-gray-100 hover:text-gray-900 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200 dark:hover:bg-gray-700 transition-colors duration-200">
+            <Button variant="outline" className="rounded-md border-gray-300 text-gray-700 hover:bg-gray-50 transition-colors duration-200 shadow-sm hover:shadow-md dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200 dark:hover:bg-gray-600">
               <FaDownload className="mr-2 h-4 w-4" /> Exportar PDF
             </Button>
             <Link to={`/clients/${client.id}`}>
@@ -712,7 +573,7 @@ const PatientRecordPage = () => {
                 <div>
                   <p className="text-sm font-semibold text-[#374151] dark:text-gray-100 mb-1">Tutor Responsável</p>
                   <p className="text-sm text-[#4B5563] dark:text-gray-400">Nome: <span className="font-normal text-foreground">{client.name}</span></p>
-                  <p className="text-sm text-[#4B5563] dark:text-gray-400">Telefone: <span className="font-normal text-foreground">{client.phone}</span></p>
+                  <p className="text-sm text-[#4B5563] dark:text-gray-400">Telefone: <span className="font-normal text-foreground">{client.mainPhoneContact}</span></p>
                 </div>
                 <div className="bg-muted/50 dark:bg-muted/30 p-3 rounded-md border border-muted dark:border-gray-700">
                   <p className="text-sm font-semibold text-[#374151] dark:text-gray-100 mb-1">Resumo Financeiro</p>

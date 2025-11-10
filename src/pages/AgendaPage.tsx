@@ -23,38 +23,8 @@ import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { cn } from "@/lib/utils";
 import { toast } from "sonner";
-
-// Mock Data para Clientes e Animais (simplificado para a agenda)
-interface AnimalOption {
-  id: string;
-  name: string;
-  clientId: string;
-}
-
-interface ClientOption {
-  id: string;
-  name: string;
-  animals: AnimalOption[];
-}
-
-const mockClients: ClientOption[] = [
-  {
-    id: "1",
-    name: "William",
-    animals: [
-      { id: "a1", name: "Totó", clientId: "1" },
-      { id: "a2", name: "Bolinha", clientId: "1" },
-    ],
-  },
-  {
-    id: "2",
-    name: "Maria",
-    animals: [
-      { id: "a3", name: "Fido", clientId: "2" },
-      { id: "a4", name: "Miau", clientId: "2" },
-    ],
-  },
-];
+import { mockClients } from "@/mockData/clients"; // Importar o mock de clientes centralizado
+import { Client, Animal } from "@/types/client"; // Importar as interfaces Client e Animal
 
 // Interface para Agendamento
 interface Appointment {
@@ -154,7 +124,7 @@ const AgendaPage = () => {
     }
 
     const client = mockClients.find(c => c.id === newAppointmentClientId);
-    const animal = client?.animals.find(a => c.id === newAppointmentClientId)?.animals.find(a => a.id === newAppointmentAnimalId);
+    const animal = client?.animals.find(a => a.id === newAppointmentAnimalId);
 
     if (!client || !animal) {
       toast.error("Cliente ou animal selecionado inválido.");

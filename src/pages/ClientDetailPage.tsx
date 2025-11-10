@@ -5,112 +5,8 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { cn } from "@/lib/utils"; // Importar cn
-
-// Mock data (centralizado aqui para facilitar o exemplo, mas idealmente viria de um serviço)
-interface Animal {
-  id: string;
-  name: string;
-  species: string;
-  breed: string;
-  gender: string;
-  birthday: string;
-  coatColor: string;
-  weight: number;
-  microchip: string;
-  notes: string;
-}
-
-interface Client {
-  id: string;
-  name: string;
-  animals: Animal[];
-}
-
-const mockClients: Client[] = [
-  {
-    id: "1",
-    name: "William",
-    animals: [
-      {
-        id: "a1",
-        name: "Totó",
-        species: "Cachorro",
-        breed: "Labrador",
-        gender: "Macho",
-        birthday: "2020-01-15",
-        coatColor: "Dourado",
-        weight: 25.0,
-        microchip: "123456789",
-        notes: "Animal muito dócil e brincalhão.",
-      },
-      {
-        id: "a2",
-        name: "Bolinha",
-        species: "Cachorro",
-        breed: "Poodle",
-        gender: "Fêmea",
-        birthday: "2021-05-20",
-        coatColor: "Branco",
-        weight: 5.0,
-        microchip: "987654321",
-        notes: "Adora passear no parque.",
-      },
-    ],
-  },
-  {
-    id: "2",
-    name: "Maria",
-    animals: [
-      {
-        id: "a3",
-        name: "Fido",
-        species: "Cachorro",
-        breed: "Vira-lata",
-        gender: "Macho",
-        birthday: "2019-03-10",
-        coatColor: "Caramelo",
-        weight: 18.0,
-        microchip: "",
-        notes: "Resgatado, um pouco tímido.",
-      },
-      {
-        id: "a4",
-        name: "Miau",
-        species: "Gato",
-        breed: "Siamês",
-        gender: "Fêmea",
-        birthday: "2022-07-01",
-        coatColor: "Creme",
-        weight: 3.5,
-        microchip: "112233445",
-        notes: "Gosta de dormir no sol.",
-      },
-    ],
-  },
-  {
-    id: "3",
-    name: "João",
-    animals: [
-      {
-        id: "a5",
-        name: "Rex",
-        species: "Cachorro",
-        breed: "Pastor Alemão",
-        gender: "Macho",
-        birthday: "2018-11-22",
-        coatColor: "Preto e Marrom",
-        weight: 30.0,
-        microchip: "556677889",
-        notes: "Animal de guarda, muito leal.",
-      },
-    ],
-  },
-  {
-    id: "4",
-    name: "Ana",
-    animals: [],
-  },
-];
+import { mockClients } from "@/mockData/clients"; // Importar o mock de clientes centralizado
+import { Client, Animal } from "@/types/client"; // Importar as interfaces Client e Animal
 
 const ClientDetailPage = () => {
   const { clientId } = useParams<{ clientId: string }>();
@@ -171,6 +67,8 @@ const ClientDetailPage = () => {
             </CardHeader>
             <CardContent className="grid gap-y-3 pt-0">
               <p className="text-[#4B5563] dark:text-gray-400 font-medium">Nome: <span className="font-normal text-foreground">{client.name}</span></p>
+              <p className="text-[#4B5563] dark:text-gray-400 font-medium">Email: <span className="font-normal text-foreground">{client.mainEmailContact}</span></p>
+              <p className="text-[#4B5563] dark:text-gray-400 font-medium">Telefone: <span className="font-normal text-foreground">{client.mainPhoneContact}</span></p>
               {/* Adicione mais detalhes do cliente aqui se disponíveis */}
             </CardContent>
           </Card>
