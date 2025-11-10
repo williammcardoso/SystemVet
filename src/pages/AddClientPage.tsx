@@ -35,6 +35,20 @@ const applyRgMask = (value: string) => {
   return value;
 };
 
+const applyPhoneMask = (value: string) => {
+  value = value.replace(/\D/g, ""); // Remove non-digits
+  if (value.length > 10) { // (XX) 9XXXX-XXXX
+    value = value.replace(/^(\d\d)(\d{5})(\d{4}).*/, "($1) $2-$3");
+  } else if (value.length > 6) { // (XX) XXXX-XXXX
+    value = value.replace(/^(\d\d)(\d{4})(\d{0,4}).*/, "($1) $2-$3");
+  } else if (value.length > 2) { // (XX) XXXX
+    value = value.replace(/^(\d\d)(\d{0,5}).*/, "($1) $2");
+  } else if (value.length > 0) { // (XX
+    value = value.replace(/^(\d*)/, "($1");
+  }
+  return value;
+};
+
 interface DynamicContact {
   id: string;
   label: string; // Novo campo para o nome do contato (ex: Mãe, Vizinho)
@@ -111,6 +125,16 @@ const AddClientPage = () => {
     setSecondaryIdentification(value);
   };
 
+  const handleMainPhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = applyPhoneMask(e.target.value);
+    setMainPhoneContact(value);
+  };
+
+  const handleDynamicPhoneChange = (id: string, value: string) => {
+    const maskedValue = applyPhoneMask(value);
+    setDynamicContacts(prev => prev.map(contact => contact.id === id ? { ...contact, value: maskedValue } : contact));
+  };
+
   const handleCepChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     let value = e.target.value.replace(/\D/g, ""); // Remove non-digits
     if (value.length > 5) {
@@ -179,7 +203,7 @@ const AddClientPage = () => {
       toast.error("O campo 'Email Principal' é obrigatório.");
       return;
     }
-    if (!mainPhoneContact.trim()) {
+    if (!mainPhoneContact.replace(/\D/g, "").trim()) { // Validar telefone principal sem máscara
       toast.error("O campo 'Telefone Principal' é obrigatório.");
       return;
     }
@@ -345,7 +369,7 @@ const AddClientPage = () => {
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="mainPhoneContact">Telefone Principal*</Label>
-                  <Input id="mainPhoneContact" type="tel" placeholder="(XX) XXXXX-XXXX" value={mainPhoneContact} onChange={(e) => setMainPhoneContact(e.target.value)} className="bg-white rounded-lg border-gray-200 dark:border-gray-600 focus:ring-2 focus:ring-blue-400 placeholder-[#9CA3AF] dark:placeholder-gray-500 transition-all duration-200" />
+                  <Input id="mainPhoneContact" type="tel" placeholder="(XX) XXXXX-XXXX" value={mainPhoneContact} onChange={handleMainPhoneChange} maxLength={15} className="bg-white rounded-lg border-gray-200 dark:border-gray-600 focus:ring-2 focus:ring-blue-400 placeholder-[#9CA3AF] dark:placeholder-gray-500 transition-all duration-200" />
                 </div>
               </div>
               <div className="space-y-4 mt-4">
@@ -368,7 +392,8 @@ const AddClientPage = () => {
                         type="tel"
                         placeholder="(XX) XXXXX-XXXX"
                         value={contact.value}
-                        onChange={(e) => handleUpdateDynamicContact(contact.id, 'value', e.target.value)}
+                        onChange={(e) => handleDynamicPhoneChange(contact.id, e.target.value)}
+                        maxLength={15}
                         className="bg-white rounded-lg border-gray-200 dark:border-gray-600 focus:ring-2 focus:ring-blue-400 placeholder-[#9CA3AF] dark:placeholder-gray-500 transition-all duration-200"
                       />
                     </div>
