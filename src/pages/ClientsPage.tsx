@@ -1,11 +1,21 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { FaUsers, FaCog, FaSearch, FaFilter, FaSyncAlt, FaPlus, FaEye } from "react-icons/fa"; // Importar ícones de react-icons
+import { FaUsers, FaCog, FaSearch, FaFilter, FaSyncAlt, FaPlus, FaEye } from "react-icons/fa";
 import { Link } from "react-router-dom";
-import { cn } from "@/lib/utils"; // Importar cn
-import { Card } from "@/components/ui/card"; // Importar Card
+import { cn } from "@/lib/utils";
+import { Card } from "@/components/ui/card";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+  DialogFooter,
+} from "@/components/ui/dialog";
+import { Label } from "@/components/ui/label";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 // Mock data (centralizado aqui para facilitar o exemplo, mas idealmente viria de um serviço)
 interface Animal {
@@ -113,30 +123,81 @@ const mockClients: Client[] = [
   },
 ];
 
+// Mock data for species (from SpeciesPage.tsx)
+const mockSpecies = [
+  { id: "1", name: "Cachorro" },
+  { id: "2", name: "Gato" },
+  { id: "3", name: "Pássaro" },
+  { id: "4", name: "Roedor" },
+];
 
 const ClientsPage = () => {
   const [responsibleSearch, setResponsibleSearch] = useState("");
   const [animalSearch, setAnimalSearch] = useState("");
   const [filteredClients, setFilteredClients] = useState<Client[]>(mockClients);
+  const [isFilterDialogOpen, setIsFilterDialogOpen] = useState(false);
+  const [filterSpecies, setFilterSpecies] = useState<string | undefined>(undefined);
+  const [filterGender, setFilterGender] = useState<string | undefined>(undefined);
 
-  const handleSearch = () => {
+  // Função de filtragem principal
+  const applyFilters = () => {
     const lowerCaseResponsibleSearch = responsibleSearch.toLowerCase();
     const lowerCaseAnimalSearch = animalSearch.toLowerCase();
 
     const results = mockClients.filter(client => {
-      const matchesResponsible = client.name.toLowerCase().includes(lowerCaseResponsibleSearch);
-      const matchesAnimal = client.animals.some(animal =>
-        animal.name.toLowerCase().includes(lowerCaseAnimalSearch)
-      );
-      return matchesResponsible && (animalSearch === "" || matchesAnimal);
+      const matchesResponsible = responsibleSearch.length === 0 || client.name.toLowerCase().includes(lowerCaseResponsibleSearch);
+
+      const matchesAnimal = client.animals.some(animal => {
+        const animalNameMatches = animalSearch.length === 0 || animal.name.toLowerCase().includes(lowerCaseAnimalSearch);
+        const animalSpeciesMatches = !filterSpecies || animal.species === filterSpecies;
+        const animalGenderMatches = !filterGender || animal.gender === filterGender;
+        return animalNameMatches && animalSpeciesMatches && animalGenderMatches;
+      });
+
+      // Se não houver busca por animal, mas houver filtros de animal, aplicar os filtros aos animais do cliente.
+      // Se o cliente não tiver animais, ele só será incluído se não houver busca por animal ou filtros de animal.
+      if (animalSearch.length === 0 && (filterSpecies || filterGender)) {
+        return matchesResponsible && client.animals.some(animal => {
+          const animalSpeciesMatches = !filterSpecies || animal.species === filterSpecies;
+          const animalGenderMatches = !filterGender || animal.gender === filterGender;
+          return animalSpeciesMatches && animalGenderMatches;
+        });
+      }
+
+      return matchesResponsible && (animalSearch.length === 0 && !filterSpecies && !filterGender ? true : matchesAnimal);
     });
     setFilteredClients(results);
   };
 
+  // Efeito para aplicar filtros sempre que os estados de busca ou filtro mudarem
+  useEffect(() => {
+    applyFilters();
+  }, [responsibleSearch, animalSearch, filterSpecies, filterGender]); // eslint-disable-line react-hooks/exhaustive-deps
+
   const handleReset = () => {
     setResponsibleSearch("");
     setAnimalSearch("");
-    setFilteredClients(mockClients);
+    setFilterSpecies(undefined);
+    setFilterGender(undefined);
+    // applyFilters() será chamado pelo useEffect
+  };
+
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter") {
+      applyFilters();
+    }
+  };
+
+  const handleApplyFilterDialog = () => {
+    applyFilters();
+    setIsFilterDialogOpen(false);
+  };
+
+  const handleClearFilterDialog = () => {
+    setFilterSpecies(undefined);
+    setFilterGender(undefined);
+    // applyFilters() será chamado pelo useEffect
+    setIsFilterDialogOpen(false);
   };
 
   return (
@@ -174,6 +235,7 @@ const ClientsPage = () => {
               className="pl-9 bg-white rounded-lg border-gray-200 dark:border-gray-600 focus:ring-2 focus:ring-blue-400 placeholder-[#9CA3AF] dark:placeholder-gray-500 transition-all duration-200"
               value={responsibleSearch}
               onChange={(e) => setResponsibleSearch(e.target.value)}
+              onKeyDown={handleKeyDown}
             />
           </div>
           <div className="relative flex-1 min-w-[150px] max-w-xs">
@@ -183,13 +245,15 @@ const ClientsPage = () => {
               className="pl-9 bg-white rounded-lg border-gray-200 dark:border-gray-600 focus:ring-2 focus:ring-blue-400 placeholder-[#9CA3AF] dark:placeholder-gray-500 transition-all duration-200"
               value={animalSearch}
               onChange={(e) => setAnimalSearch(e.target.value)}
+              onKeyDown={handleKeyDown}
             />
           </div>
-          <Button variant="secondary" size="icon" onClick={handleSearch} className="rounded-md bg-white border border-gray-300 text-gray-700 hover:bg-gray-50 transition-colors duration-200 shadow-sm hover:shadow-md dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200 dark:hover:bg-gray-600">
+          {/* O botão de busca explícita pode ser mantido ou removido se a busca em tempo real for suficiente */}
+          <Button variant="secondary" size="icon" onClick={applyFilters} className="rounded-md bg-white border border-gray-300 text-gray-700 hover:bg-gray-50 transition-colors duration-200 shadow-sm hover:shadow-md dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200 dark:hover:bg-gray-600">
             <FaSearch className="h-4 w-4" />
           </Button>
-          <Button variant="secondary" size="icon" className="rounded-md bg-white border border-gray-300 text-gray-700 hover:bg-gray-50 transition-colors duration-200 shadow-sm hover:shadow-md dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200 dark:hover:bg-gray-600">
-            <FaFilter className="h-4 w-4" /> {/* Placeholder for advanced filter */}
+          <Button variant="secondary" size="icon" onClick={() => setIsFilterDialogOpen(true)} className="rounded-md bg-white border border-gray-300 text-gray-700 hover:bg-gray-50 transition-colors duration-200 shadow-sm hover:shadow-md dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200 dark:hover:bg-gray-600">
+            <FaFilter className="h-4 w-4" />
           </Button>
           <Button variant="secondary" size="icon" onClick={handleReset} className="rounded-md bg-white border border-gray-300 text-gray-700 hover:bg-gray-50 transition-colors duration-200 shadow-sm hover:shadow-md dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200 dark:hover:bg-gray-600">
             <FaSyncAlt className="h-4 w-4" />
@@ -242,6 +306,58 @@ const ClientsPage = () => {
           </div>
         </Card>
       </div>
+
+      {/* Dialog de Filtro Avançado */}
+      <Dialog open={isFilterDialogOpen} onOpenChange={setIsFilterDialogOpen}>
+        <DialogContent className="sm:max-w-[425px] bg-white/90 backdrop-blur-sm border border-gray-200 dark:border-gray-700 rounded-2xl shadow-[0_1px_3px_rgba(0,0,0,0.05)] dark:bg-gray-800/90">
+          <DialogHeader>
+            <DialogTitle className="text-lg font-semibold text-[#374151] dark:text-gray-100">Filtros Avançados</DialogTitle>
+            <DialogDescription className="text-sm text-[#6B7280] dark:text-gray-400">
+              Selecione as opções para filtrar a lista de clientes.
+            </DialogDescription>
+          </DialogHeader>
+          <div className="grid gap-4 py-4">
+            <div className="space-y-2">
+              <Label htmlFor="filterSpecies">Espécie do Animal</Label>
+              <Select onValueChange={setFilterSpecies} value={filterSpecies}>
+                <SelectTrigger id="filterSpecies" className="bg-white rounded-lg border-gray-200 dark:border-gray-600 focus:ring-2 focus:ring-blue-400 placeholder-[#9CA3AF] dark:placeholder-gray-500 transition-all duration-200">
+                  <SelectValue placeholder="Todas as espécies" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">Todas as espécies</SelectItem>
+                  {mockSpecies.map((species) => (
+                    <SelectItem key={species.id} value={species.name}>
+                      {species.name}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="filterGender">Sexo do Animal</Label>
+              <Select onValueChange={setFilterGender} value={filterGender}>
+                <SelectTrigger id="filterGender" className="bg-white rounded-lg border-gray-200 dark:border-gray-600 focus:ring-2 focus:ring-blue-400 placeholder-[#9CA3AF] dark:placeholder-gray-500 transition-all duration-200">
+                  <SelectValue placeholder="Todos os sexos" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">Todos os sexos</SelectItem>
+                  <SelectItem value="Macho">Macho</SelectItem>
+                  <SelectItem value="Fêmea">Fêmea</SelectItem>
+                  <SelectItem value="Outro">Outro</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+          </div>
+          <DialogFooter>
+            <Button variant="outline" onClick={handleClearFilterDialog} className="bg-white border border-gray-300 text-gray-700 hover:bg-gray-50 rounded-md transition-all duration-200 shadow-sm hover:shadow-md dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200 dark:hover:bg-gray-600">
+              <FaTimes className="mr-2 h-4 w-4" /> Limpar Filtros
+            </Button>
+            <Button onClick={handleApplyFilterDialog} className="bg-gradient-to-r from-blue-500 to-indigo-500 text-white hover:from-blue-600 hover:to-indigo-600 rounded-md font-semibold transition-all duration-200 shadow-md hover:shadow-lg">
+              <FaFilter className="mr-2 h-4 w-4" /> Aplicar Filtros
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };
