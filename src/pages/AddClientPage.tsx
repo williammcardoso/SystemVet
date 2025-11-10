@@ -3,11 +3,87 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Textarea } from "@/components/ui/textarea"; // Importar Textarea
-import { FaArrowLeft, FaPlus, FaTimes, FaSave, FaUsers } from "react-icons/fa"; // Importar ícones de react-icons
+import { Textarea } from "@/components/ui/textarea";
+import { FaArrowLeft, FaPlus, FaTimes, FaSave, FaUsers } from "react-icons/fa";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
+import { toast } from "sonner"; // Importar toast para mensagens
 
 const AddClientPage = () => {
+  // Estados para os campos do formulário
+  const [clientType, setClientType] = useState("physical");
+  const [fullName, setFullName] = useState("");
+  const [nationality, setNationality] = useState("brazilian");
+  const [gender, setGender] = useState<string | undefined>(undefined);
+  const [cpf, setCpf] = useState("");
+  const [rg, setRg] = useState("");
+  const [birthday, setBirthday] = useState("");
+  const [profession, setProfession] = useState(""); // Alterado para string para input de texto
+  const [acceptEmail, setAcceptEmail] = useState("yes");
+  const [acceptWhatsapp, setAcceptWhatsapp] = useState("yes");
+  const [acceptSMS, setAcceptSMS] = useState("yes");
+
+  // Contatos simplificados
+  const [emailContact, setEmailContact] = useState("");
+  const [phoneContact, setPhoneContact] = useState("");
+
+  // Endereço com busca de CEP
+  const [cep, setCep] = useState("");
+  const [street, setStreet] = useState("");
+  const [number, setNumber] = useState("");
+  const [complement, setComplement] = useState("");
+  const [neighborhood, setNeighborhood] = useState("");
+  const [city, setCity] = useState("");
+  const [state, setState] = useState<string | undefined>(undefined);
+
+  // Extras
+  const [notes, setNotes] = useState("");
+
+  const handleCepChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    let value = e.target.value.replace(/\D/g, ""); // Remove non-digits
+    if (value.length > 5) {
+      value = value.replace(/^(\d{5})(\d)/, "$1-$2");
+    }
+    setCep(value);
+  };
+
+  const fetchAddressByCep = async () => {
+    if (cep.length === 9) { // Check for masked length
+      try {
+        const response = await fetch(`https://viacep.com.br/ws/${cep.replace('-', '')}/json/`);
+        const data = await response.json();
+        if (data.erro) {
+          toast.error("CEP não encontrado.");
+          setStreet("");
+          setNeighborhood("");
+          setCity("");
+          setState(undefined);
+        } else {
+          setStreet(data.logradouro);
+          setNeighborhood(data.bairro);
+          setCity(data.localidade);
+          setState(data.uf);
+          toast.success("Endereço preenchido automaticamente!");
+        }
+      } catch (error) {
+        console.error("Erro ao buscar CEP:", error);
+        toast.error("Erro ao buscar CEP. Tente novamente.");
+        setStreet("");
+        setNeighborhood("");
+        setCity("");
+        setState(undefined);
+      }
+    }
+  };
+
+  const handleSaveClient = () => {
+    // Aqui você implementaria a lógica para salvar o cliente
+    // Por enquanto, apenas exibiremos um toast de sucesso
+    toast.success("Cliente salvo com sucesso!");
+    // Navegar de volta para a lista de clientes ou para a página de detalhes do cliente
+    // navigate("/clients");
+  };
+
   return (
     <div className="flex flex-col min-h-screen bg-gray-50 dark:bg-gray-950">
       {/* Header da Página com Gradiente e Breadcrumb */}
@@ -45,7 +121,7 @@ const AddClientPage = () => {
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
               <div className="space-y-2">
                 <Label htmlFor="type">Tipo (Pessoa física/jurídica)*</Label>
-                <Select defaultValue="physical">
+                <Select defaultValue="physical" onValueChange={setClientType} value={clientType}>
                   <SelectTrigger id="type" className="bg-white rounded-lg border-gray-200 dark:border-gray-600 focus:ring-2 focus:ring-blue-400 placeholder-[#9CA3AF] dark:placeholder-gray-500 transition-all duration-200">
                     <SelectValue placeholder="Selecione..." />
                   </SelectTrigger>
@@ -57,11 +133,11 @@ const AddClientPage = () => {
               </div>
               <div className="space-y-2">
                 <Label htmlFor="fullName">Nome completo*</Label>
-                <Input id="fullName" placeholder="Nome completo" className="bg-white rounded-lg border-gray-200 dark:border-gray-600 focus:ring-2 focus:ring-blue-400 placeholder-[#9CA3AF] dark:placeholder-gray-500 transition-all duration-200" />
+                <Input id="fullName" placeholder="Nome completo" value={fullName} onChange={(e) => setFullName(e.target.value)} className="bg-white rounded-lg border-gray-200 dark:border-gray-600 focus:ring-2 focus:ring-blue-400 placeholder-[#9CA3AF] dark:placeholder-gray-500 transition-all duration-200" />
               </div>
               <div className="space-y-2">
                 <Label htmlFor="nationality">Nacionalidade*</Label>
-                <Select defaultValue="brazilian">
+                <Select defaultValue="brazilian" onValueChange={setNationality} value={nationality}>
                   <SelectTrigger id="nationality" className="bg-white rounded-lg border-gray-200 dark:border-gray-600 focus:ring-2 focus:ring-blue-400 placeholder-[#9CA3AF] dark:placeholder-gray-500 transition-all duration-200">
                     <SelectValue placeholder="Selecione..." />
                   </SelectTrigger>
@@ -73,7 +149,7 @@ const AddClientPage = () => {
               </div>
               <div className="space-y-2">
                 <Label htmlFor="gender">Sexo</Label>
-                <Select>
+                <Select onValueChange={setGender} value={gender}>
                   <SelectTrigger id="gender" className="bg-white rounded-lg border-gray-200 dark:border-gray-600 focus:ring-2 focus:ring-blue-400 placeholder-[#9CA3AF] dark:placeholder-gray-500 transition-all duration-200">
                     <SelectValue placeholder="Selecione..." />
                   </SelectTrigger>
@@ -86,45 +162,24 @@ const AddClientPage = () => {
               </div>
               <div className="space-y-2">
                 <Label htmlFor="cpf">CPF</Label>
-                <Input id="cpf" placeholder="CPF" className="bg-white rounded-lg border-gray-200 dark:border-gray-600 focus:ring-2 focus:ring-blue-400 placeholder-[#9CA3AF] dark:placeholder-gray-500 transition-all duration-200" />
+                <Input id="cpf" placeholder="CPF" value={cpf} onChange={(e) => setCpf(e.target.value)} className="bg-white rounded-lg border-gray-200 dark:border-gray-600 focus:ring-2 focus:ring-blue-400 placeholder-[#9CA3AF] dark:placeholder-gray-500 transition-all duration-200" />
               </div>
               <div className="space-y-2">
                 <Label htmlFor="rg">RG</Label>
-                <Input id="rg" placeholder="RG" className="bg-white rounded-lg border-gray-200 dark:border-gray-600 focus:ring-2 focus:ring-blue-400 placeholder-[#9CA3AF] dark:placeholder-gray-500 transition-all duration-200" />
+                <Input id="rg" placeholder="RG" value={rg} onChange={(e) => setRg(e.target.value)} className="bg-white rounded-lg border-gray-200 dark:border-gray-600 focus:ring-2 focus:ring-blue-400 placeholder-[#9CA3AF] dark:placeholder-gray-500 transition-all duration-200" />
               </div>
               <div className="space-y-2">
                 <Label htmlFor="birthday">Aniversário</Label>
-                <Input id="birthday" placeholder="dd/mm" className="bg-white rounded-lg border-gray-200 dark:border-gray-600 focus:ring-2 focus:ring-blue-400 placeholder-[#9CA3AF] dark:placeholder-gray-500 transition-all duration-200" />
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="howDidYouKnow">Como nos conheceu?</Label>
-                <Select>
-                  <SelectTrigger id="howDidYouKnow" className="bg-white rounded-lg border-gray-200 dark:border-gray-600 focus:ring-2 focus:ring-blue-400 placeholder-[#9CA3AF] dark:placeholder-gray-500 transition-all duration-200">
-                    <SelectValue placeholder="Selecione..." />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="internet">Internet</SelectItem>
-                    <SelectItem value="friend">Indicação de amigo</SelectItem>
-                    <SelectItem value="other">Outra</SelectItem>
-                  </SelectContent>
-                </Select>
+                <Input id="birthday" type="date" value={birthday} onChange={(e) => setBirthday(e.target.value)} className="bg-white rounded-lg border-gray-200 dark:border-gray-600 focus:ring-2 focus:ring-blue-400 placeholder-[#9CA3AF] dark:placeholder-gray-500 transition-all duration-200" />
               </div>
               <div className="space-y-2">
                 <Label htmlFor="profession">Profissão</Label>
-                <Select>
-                  <SelectTrigger id="profession" className="bg-white rounded-lg border-gray-200 dark:border-gray-600 focus:ring-2 focus:ring-blue-400 placeholder-[#9CA3AF] dark:placeholder-gray-500 transition-all duration-200">
-                    <SelectValue placeholder="Selecione..." />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="vet">Veterinário</SelectItem>
-                    <SelectItem value="student">Estudante</SelectItem>
-                    <SelectItem value="other">Outra</SelectItem>
-                  </SelectContent>
-                </Select>
+                <Input id="profession" placeholder="Profissão" value={profession} onChange={(e) => setProfession(e.target.value)} className="bg-white rounded-lg border-gray-200 dark:border-gray-600 focus:ring-2 focus:ring-blue-400 placeholder-[#9CA3AF] dark:placeholder-gray-500 transition-all duration-200" />
               </div>
+              {/* Removido "Como nos conheceu?" */}
               <div className="space-y-2">
                 <Label htmlFor="acceptEmail">Aceita Email?</Label>
-                <Select defaultValue="yes">
+                <Select defaultValue="yes" onValueChange={setAcceptEmail} value={acceptEmail}>
                   <SelectTrigger id="acceptEmail" className="bg-white rounded-lg border-gray-200 dark:border-gray-600 focus:ring-2 focus:ring-blue-400 placeholder-[#9CA3AF] dark:placeholder-gray-500 transition-all duration-200">
                     <SelectValue placeholder="Selecione..." />
                   </SelectTrigger>
@@ -136,7 +191,7 @@ const AddClientPage = () => {
               </div>
               <div className="space-y-2">
                 <Label htmlFor="acceptWhatsapp">Aceita WhatsApp?</Label>
-                <Select defaultValue="yes">
+                <Select defaultValue="yes" onValueChange={setAcceptWhatsapp} value={acceptWhatsapp}>
                   <SelectTrigger id="acceptWhatsapp" className="bg-white rounded-lg border-gray-200 dark:border-gray-600 focus:ring-2 focus:ring-blue-400 placeholder-[#9CA3AF] dark:placeholder-gray-500 transition-all duration-200">
                     <SelectValue placeholder="Selecione..." />
                   </SelectTrigger>
@@ -148,7 +203,7 @@ const AddClientPage = () => {
               </div>
               <div className="space-y-2">
                 <Label htmlFor="acceptSMS">Aceita SMS?</Label>
-                <Select defaultValue="yes">
+                <Select defaultValue="yes" onValueChange={setAcceptSMS} value={acceptSMS}>
                   <SelectTrigger id="acceptSMS" className="bg-white rounded-lg border-gray-200 dark:border-gray-600 focus:ring-2 focus:ring-blue-400 placeholder-[#9CA3AF] dark:placeholder-gray-500 transition-all duration-200">
                     <SelectValue placeholder="Selecione..." />
                   </SelectTrigger>
@@ -158,55 +213,28 @@ const AddClientPage = () => {
                   </SelectContent>
                 </Select>
               </div>
-              <div className="space-y-2">
-                <Label htmlFor="acceptCampaign">Aceita Campanha SMS?</Label>
-                <Select defaultValue="yes">
-                  <SelectTrigger id="acceptCampaign" className="bg-white rounded-lg border-gray-200 dark:border-gray-600 focus:ring-2 focus:ring-blue-400 placeholder-[#9CA3AF] dark:placeholder-gray-500 transition-all duration-200">
-                    <SelectValue placeholder="Selecione..." />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="yes">Sim</SelectItem>
-                    <SelectItem value="no">Não</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
+              {/* Removido "Aceita Campanha SMS?" */}
             </div>
 
             <div className="mt-6">
               <h2 className="text-xl font-semibold mb-4">Contatos</h2>
-              <div className="space-y-4">
-                <div className="flex items-center gap-2">
-                  <Select defaultValue="cell">
-                    <SelectTrigger className="w-[180px] bg-white rounded-lg border-gray-200 dark:border-gray-600 focus:ring-2 focus:ring-blue-400 placeholder-[#9CA3AF] dark:placeholder-gray-500 transition-all duration-200">
-                      <SelectValue placeholder="Tipo" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="cell">Celular</SelectItem>
-                      <SelectItem value="email">Email</SelectItem>
-                      <SelectItem value="residential">Telefone residencial</SelectItem>
-                    </SelectContent>
-                  </Select>
-                  <Input placeholder="Número/Email" className="flex-1 bg-white rounded-lg border-gray-200 dark:border-gray-600 focus:ring-2 focus:ring-blue-400 placeholder-[#9CA3AF] dark:placeholder-gray-500 transition-all duration-200" /> {/* Changed placeholder */}
-                  <Input placeholder="Observações" className="flex-1 bg-white rounded-lg border-gray-200 dark:border-gray-600 focus:ring-2 focus:ring-blue-400 placeholder-[#9CA3AF] dark:placeholder-gray-500 transition-all duration-200" />
-                  <Button variant="outline" size="icon" className="rounded-md border-gray-300 text-gray-700 hover:bg-gray-100 hover:text-gray-900 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200 dark:hover:bg-gray-700 transition-colors duration-200">
-                    <FaPlus className="h-4 w-4" />
-                  </Button>
-                  <Button variant="outline" size="icon" className="rounded-md border-gray-300 text-gray-700 hover:bg-gray-100 hover:text-gray-900 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200 dark:hover:bg-gray-700 transition-colors duration-200">
-                    <FaTimes className="h-4 w-4" />
-                  </Button>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <Label htmlFor="emailContact">Email Principal*</Label>
+                  <Input id="emailContact" type="email" placeholder="email@exemplo.com" value={emailContact} onChange={(e) => setEmailContact(e.target.value)} className="bg-white rounded-lg border-gray-200 dark:border-gray-600 focus:ring-2 focus:ring-blue-400 placeholder-[#9CA3AF] dark:placeholder-gray-500 transition-all duration-200" />
                 </div>
-                {/* More contact fields can be added dynamically */}
+                <div className="space-y-2">
+                  <Label htmlFor="phoneContact">Telefone Principal*</Label>
+                  <Input id="phoneContact" type="tel" placeholder="(XX) XXXXX-XXXX" value={phoneContact} onChange={(e) => setPhoneContact(e.target.value)} className="bg-white rounded-lg border-gray-200 dark:border-gray-600 focus:ring-2 focus:ring-blue-400 placeholder-[#9CA3AF] dark:placeholder-gray-500 transition-all duration-200" />
+                </div>
               </div>
-              <Button variant="outline" className="mt-4 rounded-md bg-white border border-gray-300 text-gray-700 hover:bg-gray-50 transition-colors duration-200 shadow-sm hover:shadow-md dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200 dark:hover:bg-gray-600">
-                <FaPlus className="mr-2 h-4 w-4" /> Adicionar
-              </Button>
             </div>
 
             <div className="flex justify-end gap-2 mt-6">
-              <Button variant="outline" className="bg-white border border-gray-300 text-gray-700 hover:bg-gray-50 rounded-md transition-all duration-200 shadow-sm hover:shadow-md dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200 dark:hover:bg-gray-600">
+              <Button variant="outline" onClick={() => { /* handle cancel logic */ }} className="bg-white border border-gray-300 text-gray-700 hover:bg-gray-50 rounded-md transition-all duration-200 shadow-sm hover:shadow-md dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200 dark:hover:bg-gray-600">
                 <FaTimes className="mr-2 h-4 w-4" /> Cancelar
               </Button>
-              <Button className="bg-gradient-to-r from-blue-500 to-indigo-500 text-white hover:from-blue-600 hover:to-indigo-600 rounded-md font-semibold transition-all duration-200 shadow-md hover:shadow-lg">
+              <Button onClick={handleSaveClient} className="bg-gradient-to-r from-blue-500 to-indigo-500 text-white hover:from-blue-600 hover:to-indigo-600 rounded-md font-semibold transition-all duration-200 shadow-md hover:shadow-lg">
                 <FaSave className="mr-2 h-4 w-4" /> Salvar
               </Button>
             </div>
@@ -215,31 +243,31 @@ const AddClientPage = () => {
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
               <div className="space-y-2">
                 <Label htmlFor="zipCode">CEP</Label>
-                <Input id="zipCode" placeholder="CEP" className="bg-white rounded-lg border-gray-200 dark:border-gray-600 focus:ring-2 focus:ring-blue-400 placeholder-[#9CA3AF] dark:placeholder-gray-500 transition-all duration-200" />
+                <Input id="zipCode" placeholder="99999-999" value={cep} onChange={handleCepChange} onBlur={fetchAddressByCep} maxLength={9} className="bg-white rounded-lg border-gray-200 dark:border-gray-600 focus:ring-2 focus:ring-blue-400 placeholder-[#9CA3AF] dark:placeholder-gray-500 transition-all duration-200" />
               </div>
               <div className="space-y-2">
                 <Label htmlFor="street">Endereço</Label>
-                <Input id="street" placeholder="Rua, Avenida, etc." className="bg-white rounded-lg border-gray-200 dark:border-gray-600 focus:ring-2 focus:ring-blue-400 placeholder-[#9CA3AF] dark:placeholder-gray-500 transition-all duration-200" />
+                <Input id="street" placeholder="Rua, Avenida, etc." value={street} onChange={(e) => setStreet(e.target.value)} className="bg-white rounded-lg border-gray-200 dark:border-gray-600 focus:ring-2 focus:ring-blue-400 placeholder-[#9CA3AF] dark:placeholder-gray-500 transition-all duration-200" />
               </div>
               <div className="space-y-2">
                 <Label htmlFor="number">Número</Label>
-                <Input id="number" placeholder="Número" className="bg-white rounded-lg border-gray-200 dark:border-gray-600 focus:ring-2 focus:ring-blue-400 placeholder-[#9CA3AF] dark:placeholder-gray-500 transition-all duration-200" />
+                <Input id="number" placeholder="Número" value={number} onChange={(e) => setNumber(e.target.value)} className="bg-white rounded-lg border-gray-200 dark:border-gray-600 focus:ring-2 focus:ring-blue-400 placeholder-[#9CA3AF] dark:placeholder-gray-500 transition-all duration-200" />
               </div>
               <div className="space-y-2">
                 <Label htmlFor="complement">Complemento</Label>
-                <Input id="complement" placeholder="Apartamento, Bloco, etc." className="bg-white rounded-lg border-gray-200 dark:border-gray-600 focus:ring-2 focus:ring-blue-400 placeholder-[#9CA3AF] dark:placeholder-gray-500 transition-all duration-200" />
+                <Input id="complement" placeholder="Apartamento, Bloco, etc." value={complement} onChange={(e) => setComplement(e.target.value)} className="bg-white rounded-lg border-gray-200 dark:border-gray-600 focus:ring-2 focus:ring-blue-400 placeholder-[#9CA3AF] dark:placeholder-gray-500 transition-all duration-200" />
               </div>
               <div className="space-y-2">
                 <Label htmlFor="neighborhood">Bairro</Label>
-                <Input id="neighborhood" placeholder="Bairro" className="bg-white rounded-lg border-gray-200 dark:border-gray-600 focus:ring-2 focus:ring-blue-400 placeholder-[#9CA3AF] dark:placeholder-gray-500 transition-all duration-200" />
+                <Input id="neighborhood" placeholder="Bairro" value={neighborhood} onChange={(e) => setNeighborhood(e.target.value)} className="bg-white rounded-lg border-gray-200 dark:border-gray-600 focus:ring-2 focus:ring-blue-400 placeholder-[#9CA3AF] dark:placeholder-gray-500 transition-all duration-200" />
               </div>
               <div className="space-y-2">
                 <Label htmlFor="city">Cidade</Label>
-                <Input id="city" placeholder="Cidade" className="bg-white rounded-lg border-gray-200 dark:border-gray-600 focus:ring-2 focus:ring-blue-400 placeholder-[#9CA3AF] dark:placeholder-gray-500 transition-all duration-200" />
+                <Input id="city" placeholder="Cidade" value={city} onChange={(e) => setCity(e.target.value)} className="bg-white rounded-lg border-gray-200 dark:border-gray-600 focus:ring-2 focus:ring-blue-400 placeholder-[#9CA3AF] dark:placeholder-gray-500 transition-all duration-200" />
               </div>
               <div className="space-y-2">
                 <Label htmlFor="state">Estado</Label>
-                <Select>
+                <Select onValueChange={setState} value={state}>
                   <SelectTrigger id="state" className="bg-white rounded-lg border-gray-200 dark:border-gray-600 focus:ring-2 focus:ring-blue-400 placeholder-[#9CA3AF] dark:placeholder-gray-500 transition-all duration-200">
                     <SelectValue placeholder="Selecione..." />
                   </SelectTrigger>
@@ -276,10 +304,10 @@ const AddClientPage = () => {
               </div>
             </div>
             <div className="flex justify-end gap-2 mt-6">
-              <Button variant="outline" className="bg-white border border-gray-300 text-gray-700 hover:bg-gray-50 rounded-md transition-all duration-200 shadow-sm hover:shadow-md dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200 dark:hover:bg-gray-600">
+              <Button variant="outline" onClick={() => { /* handle cancel logic */ }} className="bg-white border border-gray-300 text-gray-700 hover:bg-gray-50 rounded-md transition-all duration-200 shadow-sm hover:shadow-md dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200 dark:hover:bg-gray-600">
                 <FaTimes className="mr-2 h-4 w-4" /> Cancelar
               </Button>
-              <Button className="bg-gradient-to-r from-blue-500 to-indigo-500 text-white hover:from-blue-600 hover:to-indigo-600 rounded-md font-semibold transition-all duration-200 shadow-md hover:shadow-lg">
+              <Button onClick={handleSaveClient} className="bg-gradient-to-r from-blue-500 to-indigo-500 text-white hover:from-blue-600 hover:to-indigo-600 rounded-md font-semibold transition-all duration-200 shadow-md hover:shadow-lg">
                 <FaSave className="mr-2 h-4 w-4" /> Salvar
               </Button>
             </div>
@@ -287,13 +315,13 @@ const AddClientPage = () => {
           <TabsContent value="extras" className="mt-4 p-6 bg-white/90 backdrop-blur-sm border border-gray-200 dark:border-gray-700 rounded-2xl shadow-[0_1px_3px_rgba(0,0,0,0.05)]">
             <div className="space-y-2">
               <Label htmlFor="notes">Observações</Label>
-              <Textarea id="notes" placeholder="Adicione observações adicionais sobre o responsável..." rows={5} className="bg-white rounded-lg border-gray-200 dark:border-gray-600 focus:ring-2 focus:ring-blue-400 placeholder-[#9CA3AF] dark:placeholder-gray-500 transition-all duration-200" />
+              <Textarea id="notes" placeholder="Adicione observações adicionais sobre o responsável..." rows={5} value={notes} onChange={(e) => setNotes(e.target.value)} className="bg-white rounded-lg border-gray-200 dark:border-gray-600 focus:ring-2 focus:ring-blue-400 placeholder-[#9CA3AF] dark:placeholder-gray-500 transition-all duration-200" />
             </div>
             <div className="flex justify-end gap-2 mt-6">
-              <Button variant="outline" className="bg-white border border-gray-300 text-gray-700 hover:bg-gray-50 rounded-md transition-all duration-200 shadow-sm hover:shadow-md dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200 dark:hover:bg-gray-600">
+              <Button variant="outline" onClick={() => { /* handle cancel logic */ }} className="bg-white border border-gray-300 text-gray-700 hover:bg-gray-50 rounded-md transition-all duration-200 shadow-sm hover:shadow-md dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200 dark:hover:bg-gray-600">
                 <FaTimes className="mr-2 h-4 w-4" /> Cancelar
               </Button>
-              <Button className="bg-gradient-to-r from-blue-500 to-indigo-500 text-white hover:from-blue-600 hover:to-indigo-600 rounded-md font-semibold transition-all duration-200 shadow-md hover:shadow-lg">
+              <Button onClick={handleSaveClient} className="bg-gradient-to-r from-blue-500 to-indigo-500 text-white hover:from-blue-600 hover:to-indigo-600 rounded-md font-semibold transition-all duration-200 shadow-md hover:shadow-lg">
                 <FaSave className="mr-2 h-4 w-4" /> Salvar
               </Button>
             </div>
