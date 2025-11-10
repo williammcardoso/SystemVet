@@ -4,10 +4,42 @@ import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Textarea } from "@/components/ui/textarea";
-import { FaArrowLeft, FaPlus, FaTimes, FaSave, FaUsers } from "react-icons/fa";
-import React, { useState } from "react";
+import { FaArrowLeft, FaPlus, FaTimes, FaSave, FaUsers, FaTrashAlt } from "react-icons/fa";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { toast } from "sonner"; // Importar toast para mensagens
+
+// Helper functions for masks
+const applyCpfMask = (value: string) => {
+  value = value.replace(/\D/g, ""); // Remove non-digits
+  value = value.replace(/(\d{3})(\d)/, "$1.$2");
+  value = value.replace(/(\d{3})(\d)/, "$1.$2");
+  value = value.replace(/(\d{3})(\d{1,2})$/, "$1-$2");
+  return value;
+};
+
+const applyCnpjMask = (value: string) => {
+  value = value.replace(/\D/g, ""); // Remove non-digits
+  value = value.replace(/^(\d{2})(\d)/, "$1.$2");
+  value = value.replace(/^(\d{2})\.(\d{3})(\d)/, "$1.$2.$3");
+  value = value.replace(/\.(\d{3})(\d)/, ".$1/$2");
+  value = value.replace(/(\d{4})(\d)/, "$1-$2");
+  return value;
+};
+
+const applyRgMask = (value: string) => {
+  value = value.replace(/\D/g, ""); // Remove non-digits
+  value = value.replace(/(\d{2})(\d)/, "$1.$2");
+  value = value.replace(/(\d{3})(\d)/, "$1.$2");
+  value = value.replace(/(\d{3})(\d{1})$/, "$1-$2");
+  return value;
+};
+
+interface DynamicContact {
+  id: string;
+  type: 'phone' | 'email';
+  value: string;
+}
 
 const AddClientPage = () => {
   // Estados para os campos do formulário
@@ -15,17 +47,18 @@ const AddClientPage = () => {
   const [fullName, setFullName] = useState("");
   const [nationality, setNationality] = useState("brazilian");
   const [gender, setGender] = useState<string | undefined>(undefined);
-  const [cpf, setCpf] = useState("");
-  const [rg, setRg] = useState("");
+  const [identificationNumber, setIdentificationNumber] = useState(""); // CPF ou CNPJ
+  const [secondaryIdentification, setSecondaryIdentification] = useState(""); // RG ou IE
   const [birthday, setBirthday] = useState("");
-  const [profession, setProfession] = useState(""); // Alterado para string para input de texto
+  const [profession, setProfession] = useState("");
   const [acceptEmail, setAcceptEmail] = useState("yes");
   const [acceptWhatsapp, setAcceptWhatsapp] = useState("yes");
   const [acceptSMS, setAcceptSMS] = useState("yes");
 
-  // Contatos simplificados
-  const [emailContact, setEmailContact] = useState("");
-  const [phoneContact, setPhoneContact] = useState("");
+  // Contato de email fixo
+  const [mainEmailContact, setMainEmailContact] = useState("");
+  // Contatos dinâmicos (para telefones, por exemplo)
+  const [dynamicContacts, setDynamicContacts] = useState<DynamicContact[]>([]);
 
   // Endereço com busca de CEP
   const [cep, setCep] = useState("");
@@ -38,6 +71,34 @@ const AddClientPage = () => {
 
   // Extras
   const [notes, setNotes] = useState("");
+
+  // Resetar campos de identificação ao mudar o tipo de cliente
+  useEffect(() => {
+    setIdentificationNumber("");
+    setSecondaryIdentification("");
+  }, [clientType]);
+
+  const handleIdentificationChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    let value = e.target.value;
+    if (clientType === "physical") {
+      value = applyCpfMask(value);
+    } else {
+      value = applyCnpjMask(value);
+    }
+    setIdentificationNumber(value);
+  };
+
+  const handleSecondaryIdentificationChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    let value = e.target.value;
+    if (clientType === "physical") {
+      value = applyRgMask(value);
+    }
+    // Para IE, não aplicamos máscara complexa por enquanto, apenas removemos não-dígitos
+    else {
+      value = value.replace(/\D/g, "");
+    }
+    setSecondaryIdentification(value);
+  };
 
   const handleCepChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     let value = e.target.value.replace(/\D/g, ""); // Remove non-digits
@@ -76,7 +137,29 @@ const AddClientPage = () => {
     }
   };
 
+  const handleAddDynamicContact = () => {
+    setDynamicContacts(prev => [...prev, { id: `contact-${Date.now()}`, type: 'phone', value: '' }]);
+  };
+
+  const handleUpdateDynamicContact = (id: string, value: string) => {
+    setDynamicContacts(prev => prev.map(contact => contact.id === id ? { ...contact, value } : contact));
+  };
+
+  const handleRemoveDynamicContact = (id: string) => {
+    setDynamicContacts(prev => prev.filter(contact => contact.id !== id));
+  };
+
   const handleSaveClient = () => {
+    // Validação básica para CPF/CNPJ
+    if (clientType === "physical" && identificationNumber.replace(/\D/g, "").length !== 11) {
+      toast.error("CPF inválido. Por favor, verifique o número.");
+      return;
+    }
+    if (clientType === "legal" && identificationNumber.replace(/\D/g, "").length !== 14) {
+      toast.error("CNPJ inválido. Por favor, verifique o número.");
+      return;
+    }
+
     // Aqui você implementaria a lógica para salvar o cliente
     // Por enquanto, apenas exibiremos um toast de sucesso
     toast.success("Cliente salvo com sucesso!");
@@ -161,12 +244,26 @@ const AddClientPage = () => {
                 </Select>
               </div>
               <div className="space-y-2">
-                <Label htmlFor="cpf">CPF</Label>
-                <Input id="cpf" placeholder="CPF" value={cpf} onChange={(e) => setCpf(e.target.value)} className="bg-white rounded-lg border-gray-200 dark:border-gray-600 focus:ring-2 focus:ring-blue-400 placeholder-[#9CA3AF] dark:placeholder-gray-500 transition-all duration-200" />
+                <Label htmlFor="identificationNumber">{clientType === "physical" ? "CPF" : "CNPJ"}</Label>
+                <Input
+                  id="identificationNumber"
+                  placeholder={clientType === "physical" ? "999.999.999-99" : "99.999.999/9999-99"}
+                  value={identificationNumber}
+                  onChange={handleIdentificationChange}
+                  maxLength={clientType === "physical" ? 14 : 18}
+                  className="bg-white rounded-lg border-gray-200 dark:border-gray-600 focus:ring-2 focus:ring-blue-400 placeholder-[#9CA3AF] dark:placeholder-gray-500 transition-all duration-200"
+                />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="rg">RG</Label>
-                <Input id="rg" placeholder="RG" value={rg} onChange={(e) => setRg(e.target.value)} className="bg-white rounded-lg border-gray-200 dark:border-gray-600 focus:ring-2 focus:ring-blue-400 placeholder-[#9CA3AF] dark:placeholder-gray-500 transition-all duration-200" />
+                <Label htmlFor="secondaryIdentification">{clientType === "physical" ? "RG" : "Inscrição Estadual"}</Label>
+                <Input
+                  id="secondaryIdentification"
+                  placeholder={clientType === "physical" ? "99.999.999-X" : "Inscrição Estadual"}
+                  value={secondaryIdentification}
+                  onChange={handleSecondaryIdentificationChange}
+                  maxLength={clientType === "physical" ? 12 : undefined} // RG usually 12 chars with mask, IE varies
+                  className="bg-white rounded-lg border-gray-200 dark:border-gray-600 focus:ring-2 focus:ring-blue-400 placeholder-[#9CA3AF] dark:placeholder-gray-500 transition-all duration-200"
+                />
               </div>
               <div className="space-y-2">
                 <Label htmlFor="birthday">Aniversário</Label>
@@ -176,7 +273,6 @@ const AddClientPage = () => {
                 <Label htmlFor="profession">Profissão</Label>
                 <Input id="profession" placeholder="Profissão" value={profession} onChange={(e) => setProfession(e.target.value)} className="bg-white rounded-lg border-gray-200 dark:border-gray-600 focus:ring-2 focus:ring-blue-400 placeholder-[#9CA3AF] dark:placeholder-gray-500 transition-all duration-200" />
               </div>
-              {/* Removido "Como nos conheceu?" */}
               <div className="space-y-2">
                 <Label htmlFor="acceptEmail">Aceita Email?</Label>
                 <Select defaultValue="yes" onValueChange={setAcceptEmail} value={acceptEmail}>
@@ -213,20 +309,36 @@ const AddClientPage = () => {
                   </SelectContent>
                 </Select>
               </div>
-              {/* Removido "Aceita Campanha SMS?" */}
             </div>
 
             <div className="mt-6">
               <h2 className="text-xl font-semibold mb-4">Contatos</h2>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="space-y-4">
                 <div className="space-y-2">
-                  <Label htmlFor="emailContact">Email Principal*</Label>
-                  <Input id="emailContact" type="email" placeholder="email@exemplo.com" value={emailContact} onChange={(e) => setEmailContact(e.target.value)} className="bg-white rounded-lg border-gray-200 dark:border-gray-600 focus:ring-2 focus:ring-blue-400 placeholder-[#9CA3AF] dark:placeholder-gray-500 transition-all duration-200" />
+                  <Label htmlFor="mainEmailContact">Email Principal*</Label>
+                  <Input id="mainEmailContact" type="email" placeholder="email@exemplo.com" value={mainEmailContact} onChange={(e) => setMainEmailContact(e.target.value)} className="bg-white rounded-lg border-gray-200 dark:border-gray-600 focus:ring-2 focus:ring-blue-400 placeholder-[#9CA3AF] dark:placeholder-gray-500 transition-all duration-200" />
                 </div>
-                <div className="space-y-2">
-                  <Label htmlFor="phoneContact">Telefone Principal*</Label>
-                  <Input id="phoneContact" type="tel" placeholder="(XX) XXXXX-XXXX" value={phoneContact} onChange={(e) => setPhoneContact(e.target.value)} className="bg-white rounded-lg border-gray-200 dark:border-gray-600 focus:ring-2 focus:ring-blue-400 placeholder-[#9CA3AF] dark:placeholder-gray-500 transition-all duration-200" />
-                </div>
+                {dynamicContacts.map((contact, index) => (
+                  <div key={contact.id} className="flex items-end gap-2">
+                    <div className="flex-1 space-y-2">
+                      <Label htmlFor={`dynamic-contact-${contact.id}`}>Telefone {index + 1}</Label>
+                      <Input
+                        id={`dynamic-contact-${contact.id}`}
+                        type="tel"
+                        placeholder="(XX) XXXXX-XXXX"
+                        value={contact.value}
+                        onChange={(e) => handleUpdateDynamicContact(contact.id, e.target.value)}
+                        className="bg-white rounded-lg border-gray-200 dark:border-gray-600 focus:ring-2 focus:ring-blue-400 placeholder-[#9CA3AF] dark:placeholder-gray-500 transition-all duration-200"
+                      />
+                    </div>
+                    <Button variant="ghost" size="icon" onClick={() => handleRemoveDynamicContact(contact.id)} className="rounded-md hover:bg-gray-100 hover:text-gray-900 dark:hover:bg-gray-700 dark:hover:text-gray-200 transition-colors duration-200">
+                      <FaTrashAlt className="h-4 w-4 text-red-500" />
+                    </Button>
+                  </div>
+                ))}
+                <Button type="button" variant="outline" onClick={handleAddDynamicContact} className="w-full bg-white border border-gray-300 text-gray-700 hover:bg-gray-50 rounded-md transition-all duration-200 shadow-sm hover:shadow-md dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200 dark:hover:bg-gray-600">
+                  <FaPlus className="mr-2 h-4 w-4" /> Adicionar Telefone
+                </Button>
               </div>
             </div>
 
