@@ -78,7 +78,7 @@ const ClientDetailPage = () => {
               <CardTitle className="flex items-center gap-2 text-lg font-semibold text-[#374151] dark:text-gray-100">
                 <FaPaw className="h-5 w-5 text-purple-500" /> Animais de {client.name}
               </CardTitle>
-              <Link to="/animals/add"> {/* Link para adicionar animal, talvez com pré-seleção do tutor */}
+              <Link to={`/animals/add?clientId=${client.id}`}> {/* Passa o clientId como parâmetro */}
                 <Button size="sm" className="rounded-md bg-gradient-to-r from-blue-500 to-indigo-500 text-white hover:from-blue-600 hover:to-indigo-600 font-semibold transition-all duration-200 shadow-md hover:shadow-lg">
                   <FaPlus className="h-4 w-4 mr-2" /> Adicionar Animal
                 </Button>

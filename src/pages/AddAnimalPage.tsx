@@ -4,8 +4,8 @@ import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { FaArrowLeft, FaPlus, FaTimes, FaSave, FaPaw } from "react-icons/fa"; // Importar ícones de react-icons
-import React, { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { Link, useNavigate, useSearchParams } from "react-router-dom"; // Importar useSearchParams
 import { toast } from "sonner";
 import { mockClients, addMockAnimalToClient } from "@/mockData/clients"; // Importar o mock de clientes centralizado e a função para adicionar animal
 import { Animal, Client } from "@/types/client"; // Importar as interfaces Animal e Client
@@ -36,8 +36,10 @@ const mockCoatTypes = [
 
 const AddAnimalPage = () => {
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams(); // Hook para ler parâmetros da URL
+  const initialClientId = searchParams.get('clientId'); // Pega o clientId da URL
 
-  const [selectedTutorId, setSelectedTutorId] = useState<string | undefined>(undefined);
+  const [selectedTutorId, setSelectedTutorId] = useState<string | undefined>(initialClientId || undefined);
   const [animalName, setAnimalName] = useState("");
   const [selectedSpecies, setSelectedSpecies] = useState<string | undefined>(undefined);
   const [selectedBreed, setSelectedBreed] = useState<string | undefined>(undefined);
@@ -111,7 +113,7 @@ const AddAnimalPage = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 p-6 bg-white/90 backdrop-blur-sm border border-gray-200 dark:border-gray-700 rounded-2xl shadow-[0_1px_3px_rgba(0,0,0,0.05)]">
           <div className="space-y-2">
             <Label htmlFor="tutor">Tutor/Responsável*</Label>
-            <Select onValueChange={setSelectedTutorId} value={selectedTutorId}>
+            <Select onValueChange={setSelectedTutorId} value={selectedTutorId} disabled={!!initialClientId}>
               <SelectTrigger id="tutor" className="bg-white rounded-lg border-gray-200 dark:border-gray-600 focus:ring-2 focus:ring-blue-400 placeholder-[#9CA3AF] dark:placeholder-gray-500 transition-all duration-200">
                 <SelectValue placeholder="Selecione o tutor..." />
               </SelectTrigger>
