@@ -20,6 +20,13 @@ export interface BaseAppointmentDetails {
   diagnosticoDefinitivo?: string;
   condutaTratamento?: string;
   retornoRecomendadoEmDias?: number;
+  // Novos campos adicionados para o atendimento simples
+  observacoesOcorrencias?: string;
+  examesSolicitados?: string;
+  suspeitaDiagnostica?: string;
+  diagnosticoDiferencial?: string;
+  procedimentoRealizadoConsulta?: string;
+  proximosPassos?: string; // Movido para o simples
 }
 
 export interface ConsultationDetails extends BaseAppointmentDetails {
@@ -97,13 +104,6 @@ export interface ConsultationDetails extends BaseAppointmentDetails {
   linfonodosEstado?: 'normal' | 'infartado' | '';
   linfonodosAlteracaoQualObs?: string;
 
-  // Diagnóstico e Tratamento (campos adicionais)
-  observacoesOcorrencias?: string;
-  examesSolicitados?: string;
-  suspeitaDiagnostica?: string;
-  diagnosticoDiferencial?: string;
-  procedimentoRealizadoConsulta?: string;
-
   // Parâmetros de Atitude A (AVDN)
   avdnMucosa?: string;
   avdnTpc?: string;
@@ -116,9 +116,6 @@ export interface ConsultationDetails extends BaseAppointmentDetails {
   avdnTemperatura?: number | '';
   avdnSemDorAbdominal?: 'sim' | 'nao' | '';
   avdnHidratacaoTurgorCutaneo?: string;
-
-  // Próximos Passos
-  proximosPassos?: string;
 }
 
 export interface VaccinationDetails {

@@ -36,8 +36,8 @@ import {
   FaUserMd,
   FaHeartbeat,
   FaLungs,
-  FaHamburger, // Substituído FaStomach por FaHamburger
-  FaBrain,
+  FaHamburger,
+  FaBrain, // Removido FaBrain
   FaExclamationCircle,
   FaRunning,
   FaBone as FaBoneIcon,
@@ -310,7 +310,7 @@ const AppointmentForm: React.FC<AppointmentFormProps> = ({
         const consultationDetails = details as ConsultationDetails;
         return (
           <>
-            <Accordion type="multiple" defaultValue={["anamnese", "exameFisico", "diagnosticoTratamento", "parametrosAvdn", "proximosPassos"]} className="w-full">
+            <Accordion type="multiple" defaultValue={["anamnese", "exameFisico", "parametrosAvdn"]} className="w-full">
               {/* Anamnese Section */}
               <AccordionItem value="anamnese">
                 <AccordionTrigger className="text-base font-semibold text-[#374151] dark:text-gray-100 flex items-center gap-2">
@@ -1022,51 +1022,6 @@ const AppointmentForm: React.FC<AppointmentFormProps> = ({
                 </AccordionContent>
               </AccordionItem>
 
-              {/* Diagnóstico e Tratamento Section */}
-              <AccordionItem value="diagnosticoTratamento">
-                <AccordionTrigger className="text-base font-semibold text-[#374151] dark:text-gray-100 flex items-center gap-2">
-                  <FaBrain className="h-5 w-5 text-purple-500" /> Diagnóstico e Tratamento
-                </AccordionTrigger>
-                <AccordionContent className="grid grid-cols-1 md:grid-cols-2 gap-4 p-4 border-t border-gray-200 dark:border-gray-700">
-                  <div className="space-y-2 col-span-full">
-                    <Label htmlFor="observacoesOcorrencias">Observações e Ocorrências</Label>
-                    <Textarea id="observacoesOcorrencias" value={consultationDetails.observacoesOcorrencias || ''} onChange={(e) => handleDetailChange('observacoesOcorrencias', e.target.value)} rows={2} />
-                  </div>
-                  <div className="space-y-2 col-span-full">
-                    <Label htmlFor="examesSolicitados">Exames Solicitados</Label>
-                    <Textarea id="examesSolicitados" value={consultationDetails.examesSolicitados || ''} onChange={(e) => handleDetailChange('examesSolicitados', e.target.value)} rows={2} />
-                  </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="suspeitaDiagnostica">Suspeita Diagnóstica</Label>
-                    <Input id="suspeitaDiagnostica" value={consultationDetails.suspeitaDiagnostica || ''} onChange={(e) => handleDetailChange('suspeitaDiagnostica', e.target.value)} />
-                  </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="diagnosticoDiferencial">Diagnóstico Diferencial</Label>
-                    <Input id="diagnosticoDiferencial" value={consultationDetails.diagnosticoDiferencial || ''} onChange={(e) => handleDetailChange('diagnosticoDiferencial', e.target.value)} />
-                  </div>
-                  <div className="space-y-2 col-span-full">
-                    <Label htmlFor="procedimentoRealizadoConsulta">Procedimento Realizado Durante a Consulta</Label>
-                    <Textarea id="procedimentoRealizadoConsulta" value={consultationDetails.procedimentoRealizadoConsulta || ''} onChange={(e) => handleDetailChange('procedimentoRealizadoConsulta', e.target.value)} rows={2} />
-                  </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="diagnosticoPresuntivo">Diagnóstico Presuntivo</Label>
-                    <Input id="diagnosticoPresuntivo" value={consultationDetails.diagnosticoPresuntivo || ''} onChange={(e) => handleDetailChange('diagnosticoPresuntivo', e.target.value)} />
-                  </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="diagnosticoDefinitivo">Diagnóstico Definitivo</Label>
-                    <Input id="diagnosticoDefinitivo" value={consultationDetails.diagnosticoDefinitivo || ''} onChange={(e) => handleDetailChange('diagnosticoDefinitivo', e.target.value)} />
-                  </div>
-                  <div className="space-y-2 col-span-full">
-                    <Label htmlFor="condutaTratamento">Conduta / Tratamento Prescrito</Label>
-                    <Textarea id="condutaTratamento" value={consultationDetails.condutaTratamento || ''} onChange={(e) => handleDetailChange('condutaTratamento', e.target.value)} rows={3} />
-                  </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="retornoRecomendadoEmDias">Retorno recomendado em (dias)</Label>
-                    <Input id="retornoRecomendadoEmDias" type="number" value={consultationDetails.retornoRecomendadoEmDias || ''} onChange={(e) => handleDetailChange('retornoRecomendadoEmDias', Number(e.target.value))} />
-                  </div>
-                </AccordionContent>
-              </AccordionItem>
-
               {/* Parâmetros de Atitude A (AVDN) Section */}
               <AccordionItem value="parametrosAvdn">
                 <AccordionTrigger className="text-base font-semibold text-[#374151] dark:text-gray-100 flex items-center gap-2">
@@ -1125,19 +1080,6 @@ const AppointmentForm: React.FC<AppointmentFormProps> = ({
                   <div className="space-y-2 col-span-full">
                     <Label htmlFor="avdnHidratacaoTurgorCutaneo">Hidratação: Turgor cutâneo</Label>
                     <Input id="avdnHidratacaoTurgorCutaneo" value={consultationDetails.avdnHidratacaoTurgorCutaneo || ''} onChange={(e) => handleDetailChange('avdnHidratacaoTurgorCutaneo', e.target.value)} />
-                  </div>
-                </AccordionContent>
-              </AccordionItem>
-
-              {/* Próximos Passos Section */}
-              <AccordionItem value="proximosPassos">
-                <AccordionTrigger className="text-base font-semibold text-[#374151] dark:text-gray-100 flex items-center gap-2">
-                  <FaRunning className="h-5 w-5 text-cyan-500" /> Próximos Passos
-                </AccordionTrigger>
-                <AccordionContent className="p-4 border-t border-gray-200 dark:border-gray-700">
-                  <div className="space-y-2">
-                    <Label htmlFor="proximosPassos">Próximos Passos</Label>
-                    <Textarea id="proximosPassos" value={consultationDetails.proximosPassos || ''} onChange={(e) => handleDetailChange('proximosPassos', e.target.value)} rows={3} />
                   </div>
                 </AccordionContent>
               </AccordionItem>

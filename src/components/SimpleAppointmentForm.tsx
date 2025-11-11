@@ -6,11 +6,11 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { FaSave, FaTimes, FaStethoscope, FaWeightHanging, FaThermometerHalf, FaNotesMedical } from "react-icons/fa";
+import { FaSave, FaTimes, FaStethoscope, FaWeightHanging, FaThermometerHalf, FaNotesMedical, FaBrain, FaRunning } from "react-icons/fa"; // Adicionado FaBrain e FaRunning
 import { toast } from "sonner";
 import { AppointmentEntry, BaseAppointmentDetails } from "@/types/appointment";
 import { mockUserSettings } from "@/mockData/settings";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"; // Importação adicionada
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 interface SimpleAppointmentFormProps {
   animalId: string;
@@ -46,8 +46,20 @@ const SimpleAppointmentForm: React.FC<SimpleAppointmentFormProps> = ({
   const [pesoAtual, setPesoAtual] = useState<number | ''>(initialData?.pesoAtual || '');
   const [temperaturaCorporal, setTemperaturaCorporal] = useState<number | ''>(initialData?.temperaturaCorporal || '');
   const [observacoesGerais, setObservacoesGerais] = useState(initialData?.observacoesGerais || '');
+  
+  // Campos de Diagnóstico e Tratamento
   const [queixaPrincipal, setQueixaPrincipal] = useState<string>((initialData?.details as BaseAppointmentDetails)?.queixaPrincipal || '');
+  const [observacoesOcorrencias, setObservacoesOcorrencias] = useState<string>((initialData?.details as BaseAppointmentDetails)?.observacoesOcorrencias || '');
+  const [examesSolicitados, setExamesSolicitados] = useState<string>((initialData?.details as BaseAppointmentDetails)?.examesSolicitados || '');
+  const [suspeitaDiagnostica, setSuspeitaDiagnostica] = useState<string>((initialData?.details as BaseAppointmentDetails)?.suspeitaDiagnostica || '');
+  const [diagnosticoDiferencial, setDiagnosticoDiferencial] = useState<string>((initialData?.details as BaseAppointmentDetails)?.diagnosticoDiferencial || '');
+  const [procedimentoRealizadoConsulta, setProcedimentoRealizadoConsulta] = useState<string>((initialData?.details as BaseAppointmentDetails)?.procedimentoRealizadoConsulta || '');
+  const [diagnosticoPresuntivo, setDiagnosticoPresuntivo] = useState<string>((initialData?.details as BaseAppointmentDetails)?.diagnosticoPresuntivo || '');
+  const [diagnosticoDefinitivo, setDiagnosticoDefinitivo] = useState<string>((initialData?.details as BaseAppointmentDetails)?.diagnosticoDefinitivo || '');
   const [condutaTratamento, setCondutaTratamento] = useState<string>((initialData?.details as BaseAppointmentDetails)?.condutaTratamento || '');
+  const [retornoRecomendadoEmDias, setRetornoRecomendadoEmDias] = useState<number | ''>((initialData?.details as BaseAppointmentDetails)?.retornoRecomendadoEmDias || '');
+  const [proximosPassos, setProximosPassos] = useState<string>((initialData?.details as BaseAppointmentDetails)?.proximosPassos || '');
+
 
   const autoSaveTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
@@ -66,7 +78,12 @@ const SimpleAppointmentForm: React.FC<SimpleAppointmentFormProps> = ({
         clearTimeout(autoSaveTimeoutRef.current);
       }
     };
-  }, [date, type, vet, pesoAtual, temperaturaCorporal, observacoesGerais, queixaPrincipal, condutaTratamento]);
+  }, [
+    date, type, vet, pesoAtual, temperaturaCorporal, observacoesGerais,
+    queixaPrincipal, observacoesOcorrencias, examesSolicitados, suspeitaDiagnostica,
+    diagnosticoDiferencial, procedimentoRealizadoConsulta, diagnosticoPresuntivo,
+    diagnosticoDefinitivo, condutaTratamento, retornoRecomendadoEmDias, proximosPassos
+  ]);
 
   const handleSave = () => {
     if (!date || !type || !vet || pesoAtual === '' || temperaturaCorporal === '') {
@@ -85,10 +102,18 @@ const SimpleAppointmentForm: React.FC<SimpleAppointmentFormProps> = ({
       observacoesGerais,
       details: {
         queixaPrincipal,
+        observacoesOcorrencias,
+        examesSolicitados,
+        suspeitaDiagnostica,
+        diagnosticoDiferencial,
+        procedimentoRealizadoConsulta,
+        diagnosticoPresuntivo,
+        diagnosticoDefinitivo,
         condutaTratamento,
-        // Outros campos de BaseAppointmentDetails podem ser adicionados aqui se necessário
-      } as BaseAppointmentDetails, // Cast para BaseAppointmentDetails
-      attachments: initialData?.attachments || [], // Preservar anexos se houver
+        retornoRecomendadoEmDias: Number(retornoRecomendadoEmDias) || undefined,
+        proximosPassos,
+      } as BaseAppointmentDetails,
+      attachments: initialData?.attachments || [],
     };
     onSave(newAppointment);
   };
@@ -139,12 +164,59 @@ const SimpleAppointmentForm: React.FC<SimpleAppointmentFormProps> = ({
             <Textarea id="queixaPrincipal" value={queixaPrincipal} onChange={(e) => setQueixaPrincipal(e.target.value)} rows={2} placeholder="Descreva a queixa principal do tutor..." />
           </div>
           <div className="space-y-2 col-span-full">
-            <Label htmlFor="condutaTratamento">Conduta / Tratamento Prescrito</Label>
-            <Textarea id="condutaTratamento" value={condutaTratamento} onChange={(e) => setCondutaTratamento(e.target.value)} rows={3} placeholder="Descreva a conduta e o tratamento..." />
+            <Label htmlFor="observacoesGerais">Observações Gerais do Atendimento</Label>
+            <Textarea id="observacoesGerais" value={observacoesGerais} onChange={(e) => setObservacoesGerais(e.target.value)} rows={3} placeholder="Observações adicionais sobre o atendimento..." />
+          </div>
+        </CardContent>
+      </Card>
+
+      {/* Seção de Diagnóstico e Tratamento */}
+      <Card className="bg-white/90 backdrop-blur-sm border border-gray-200 dark:border-gray-700 rounded-2xl shadow-[0_1px_3px_rgba(0,0,0,0.05)]">
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2 text-lg font-semibold text-[#374151] dark:text-gray-100">
+            <FaBrain className="h-5 w-5 text-purple-500" /> Diagnóstico e Tratamento
+          </CardTitle>
+        </CardHeader>
+        <CardContent className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="space-y-2 col-span-full">
+            <Label htmlFor="observacoesOcorrencias">Observações e Ocorrências</Label>
+            <Textarea id="observacoesOcorrencias" value={observacoesOcorrencias} onChange={(e) => setObservacoesOcorrencias(e.target.value)} rows={2} />
           </div>
           <div className="space-y-2 col-span-full">
-            <Label htmlFor="observacoesGerais">Observações Gerais</Label>
-            <Textarea id="observacoesGerais" value={observacoesGerais} onChange={(e) => setObservacoesGerais(e.target.value)} rows={3} placeholder="Observações adicionais sobre o atendimento..." />
+            <Label htmlFor="examesSolicitados">Exames Solicitados</Label>
+            <Textarea id="examesSolicitados" value={examesSolicitados} onChange={(e) => setExamesSolicitados(e.target.value)} rows={2} />
+          </div>
+          <div className="space-y-2">
+            <Label htmlFor="suspeitaDiagnostica">Suspeita Diagnóstica</Label>
+            <Input id="suspeitaDiagnostica" value={suspeitaDiagnostica} onChange={(e) => setSuspeitaDiagnostica(e.target.value)} />
+          </div>
+          <div className="space-y-2">
+            <Label htmlFor="diagnosticoDiferencial">Diagnóstico Diferencial</Label>
+            <Input id="diagnosticoDiferencial" value={diagnosticoDiferencial} onChange={(e) => setDiagnosticoDiferencial(e.target.value)} />
+          </div>
+          <div className="space-y-2 col-span-full">
+            <Label htmlFor="procedimentoRealizadoConsulta">Procedimento Realizado Durante a Consulta</Label>
+            <Textarea id="procedimentoRealizadoConsulta" value={procedimentoRealizadoConsulta} onChange={(e) => setProcedimentoRealizadoConsulta(e.target.value)} rows={2} />
+          </div>
+          <div className="space-y-2">
+            <Label htmlFor="diagnosticoPresuntivo">Diagnóstico Presuntivo</Label>
+            <Input id="diagnosticoPresuntivo" value={diagnosticoPresuntivo} onChange={(e) => setDiagnosticoPresuntivo(e.target.value)} />
+          </div>
+          <div className="space-y-2">
+            <Label htmlFor="diagnosticoDefinitivo">Diagnóstico Definitivo</Label>
+            <Input id="diagnosticoDefinitivo" value={diagnosticoDefinitivo} onChange={(e) => setDiagnosticoDefinitivo(e.target.value)} />
+          </div>
+          <div className="space-y-2 col-span-full">
+            <Label htmlFor="condutaTratamento">Conduta / Tratamento Prescrito</Label>
+            <Textarea id="condutaTratamento" value={condutaTratamento} onChange={(e) => setCondutaTratamento(e.target.value)} rows={3} />
+          </div>
+          <div className="space-y-2">
+            <Label htmlFor="retornoRecomendadoEmDias">Retorno recomendado em (dias)</Label>
+            <Input id="retornoRecomendadoEmDias" type="number" value={retornoRecomendadoEmDias} onChange={(e) => setRetornoRecomendadoEmDias(Number(e.target.value))} />
+          </div>
+          <div className="space-y-2 col-span-full">
+            <Label htmlFor="proximosPassos">Próximos Passos</Label>
+            <Textarea id="proximosPassos" value={proximosPassos} onChange={(e) => setProximosPassos(e.target.value)} rows={3} />
           </div>
         </CardContent>
       </Card>
