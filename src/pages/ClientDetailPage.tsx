@@ -103,10 +103,25 @@ const ClientDetailPage = () => {
                 </CardTitle>
               </CardHeader>
               <CardContent className="grid grid-cols-1 md:grid-cols-2 gap-y-2 pt-0 text-sm text-muted-foreground">
-                <p className="flex items-center gap-2"><FaEnvelope className="h-4 w-4" /><span className="font-medium text-foreground">Email Principal:</span> {client.mainEmailContact}</p>
-                <p className="flex items-center gap-2"><FaPhone className="h-4 w-4" /><span className="font-medium text-foreground">Telefone Principal:</span> {client.mainPhoneContact}</p>
+                <div className="flex items-start gap-2">
+                  <FaEnvelope className="h-4 w-4 mt-1 flex-shrink-0" />
+                  <div>
+                    <span className="font-medium text-foreground">Email Principal:</span> {client.mainEmailContact}
+                  </div>
+                </div>
+                <div className="flex items-start gap-2">
+                  <FaPhone className="h-4 w-4 mt-1 flex-shrink-0" />
+                  <div>
+                    <span className="font-medium text-foreground">Telefone Principal:</span> {client.mainPhoneContact}
+                  </div>
+                </div>
                 {client.dynamicContacts && client.dynamicContacts.map((contact, index) => (
-                  <p key={index} className="flex items-center gap-2"><FaPhone className="h-4 w-4" /><span className="font-medium text-foreground">{contact.label || `Contato ${index + 1}`}:</span> {contact.value}</p>
+                  <div key={index} className="flex items-start gap-2">
+                    <FaPhone className="h-4 w-4 mt-1 flex-shrink-0" />
+                    <div>
+                      <span className="font-medium text-foreground">{contact.label || `Contato ${index + 1}`}:</span> {contact.value}
+                    </div>
+                  </div>
                 ))}
                 <p><span className="font-medium text-foreground">Aceita Email:</span> {client.acceptEmail === "yes" ? "Sim" : "Não"}</p>
                 <p><span className="font-medium text-foreground">Aceita WhatsApp:</span> {client.acceptWhatsapp === "yes" ? "Sim" : "Não"}</p>
