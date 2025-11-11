@@ -73,119 +73,122 @@ const ClientDetailPage = () => {
       </div>
 
       <div className="flex-1 p-6">
-        <div className="grid gap-6 py-4 max-w-5xl mx-auto">
-          {/* Informações Gerais */}
-          <Card className="bg-card shadow-sm border border-border rounded-md">
-            <CardHeader className="pb-3">
-              <CardTitle className="flex items-center gap-2 text-lg font-semibold text-foreground">
-                <FaUsers className="h-5 w-5 text-primary" /> Informações Gerais
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="grid grid-cols-1 md:grid-cols-2 gap-y-3 pt-0 text-sm text-muted-foreground">
-              <p><span className="font-medium text-foreground">Tipo:</span> {client.clientType === "physical" ? "Pessoa Física" : "Pessoa Jurídica"}</p>
-              <p><span className="font-medium text-foreground">Nacionalidade:</span> {client.nationality === "brazilian" ? "Brasileira" : client.nationality}</p>
-              {client.gender && <p><span className="font-medium text-foreground">Sexo:</span> {client.gender}</p>}
-              <p><span className="font-medium text-foreground">{client.clientType === "physical" ? "CPF" : "CNPJ"}:</span> {client.identificationNumber}</p>
-              <p><span className="font-medium text-foreground">{client.clientType === "physical" ? "RG" : "Inscrição Estadual"}:</span> {client.secondaryIdentification}</p>
-              {client.birthday && <p><span className="font-medium text-foreground">Aniversário:</span> {formatDate(client.birthday)}</p>}
-              {client.profession && <p><span className="font-medium text-foreground">Profissão:</span> {client.profession}</p>}
-            </CardContent>
-          </Card>
-
-          {/* Contatos */}
-          <Card className="bg-card shadow-sm border border-border rounded-md">
-            <CardHeader className="pb-3">
-              <CardTitle className="flex items-center gap-2 text-lg font-semibold text-foreground">
-                <FaPhone className="h-5 w-5 text-primary" /> Contatos
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="grid grid-cols-1 md:grid-cols-2 gap-y-3 pt-0 text-sm text-muted-foreground">
-              <p className="flex items-center gap-2"><FaEnvelope className="h-4 w-4" /><span className="font-medium text-foreground">Email Principal:</span> {client.mainEmailContact}</p>
-              <p className="flex items-center gap-2"><FaPhone className="h-4 w-4" /><span className="font-medium text-foreground">Telefone Principal:</span> {client.mainPhoneContact}</p>
-              {client.dynamicContacts && client.dynamicContacts.map((contact, index) => (
-                <p key={index} className="flex items-center gap-2"><FaPhone className="h-4 w-4" /><span className="font-medium text-foreground">{contact.label || `Contato ${index + 1}`}:</span> {contact.value}</p>
-              ))}
-              <p><span className="font-medium text-foreground">Aceita Email:</span> {client.acceptEmail === "yes" ? "Sim" : "Não"}</p>
-              <p><span className="font-medium text-foreground">Aceita WhatsApp:</span> {client.acceptWhatsapp === "yes" ? "Sim" : "Não"}</p>
-              <p><span className="font-medium text-foreground">Aceita SMS:</span> {client.acceptSMS === "yes" ? "Sim" : "Não"}</p>
-            </CardContent>
-          </Card>
-
-          {/* Endereço */}
-          <Card className="bg-card shadow-sm border border-border rounded-md">
-            <CardHeader className="pb-3">
-              <CardTitle className="flex items-center gap-2 text-lg font-semibold text-foreground">
-                <FaMapMarkerAlt className="h-5 w-5 text-primary" /> Endereço
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="grid grid-cols-1 md:grid-cols-2 gap-y-3 pt-0 text-sm text-muted-foreground">
-              <p><span className="font-medium text-foreground">CEP:</span> {client.address.cep}</p>
-              <p><span className="font-medium text-foreground">Rua:</span> {client.address.street}, {client.address.number}</p>
-              {client.address.complement && <p><span className="font-medium text-foreground">Complemento:</span> {client.address.complement}</p>}
-              <p><span className="font-medium text-foreground">Bairro:</span> {client.address.neighborhood}</p>
-              <p><span className="font-medium text-foreground">Cidade/Estado:</span> {client.address.city} - {client.address.state}</p>
-            </CardContent>
-          </Card>
-
-          {/* Outras Informações */}
-          {client.notes && (
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 py-4 max-w-5xl mx-auto">
+          {/* Coluna da Esquerda: Informações do Tutor */}
+          <div className="lg:col-span-2 space-y-4">
+            {/* Informações Gerais */}
             <Card className="bg-card shadow-sm border border-border rounded-md">
-              <CardHeader className="pb-3">
+              <CardHeader className="pb-2">
                 <CardTitle className="flex items-center gap-2 text-lg font-semibold text-foreground">
-                  <FaStickyNote className="h-5 w-5 text-primary" /> Observações
+                  <FaUsers className="h-5 w-5 text-primary" /> Informações Gerais
                 </CardTitle>
               </CardHeader>
-              <CardContent className="pt-0 text-sm text-muted-foreground">
-                <p>{client.notes}</p>
+              <CardContent className="grid grid-cols-1 md:grid-cols-2 gap-y-2 pt-0 text-sm text-muted-foreground">
+                <p><span className="font-medium text-foreground">Tipo:</span> {client.clientType === "physical" ? "Pessoa Física" : "Pessoa Jurídica"}</p>
+                <p><span className="font-medium text-foreground">Nacionalidade:</span> {client.nationality === "brazilian" ? "Brasileira" : client.nationality}</p>
+                {client.gender && <p><span className="font-medium text-foreground">Sexo:</span> {client.gender}</p>}
+                <p><span className="font-medium text-foreground">{client.clientType === "physical" ? "CPF" : "CNPJ"}:</span> {client.identificationNumber}</p>
+                <p><span className="font-medium text-foreground">{client.clientType === "physical" ? "RG" : "Inscrição Estadual"}:</span> {client.secondaryIdentification}</p>
+                {client.birthday && <p><span className="font-medium text-foreground">Aniversário:</span> {formatDate(client.birthday)}</p>}
+                {client.profession && <p><span className="font-medium text-foreground">Profissão:</span> {client.profession}</p>}
               </CardContent>
             </Card>
-          )}
 
-          {/* Animais do Cliente */}
-          <Card className="bg-card shadow-sm border border-border rounded-md">
-            <CardHeader className="flex flex-row items-center justify-between pb-3">
-              <CardTitle className="flex items-center gap-2 text-lg font-semibold text-foreground">
-                <FaPaw className="h-5 w-5 text-primary" /> Animais de {client.name}
-              </CardTitle>
-              <Link to={`/animals/add?clientId=${client.id}`}> {/* Passa o clientId como parâmetro */}
-                <Button size="sm" className="bg-primary text-primary-foreground hover:bg-primary/90 rounded-md font-semibold transition-all duration-200 shadow-md hover:shadow-lg">
-                  <FaPlus className="h-4 w-4 mr-2" /> Adicionar Animal
-                </Button>
-              </Link>
-            </CardHeader>
-            <CardContent className="pt-0">
-              {client.animals.length > 0 ? (
-                <div className="overflow-hidden">
-                  <Table>
-                    <TableHeader>
-                      <TableRow>
-                        <TableHead>Nome</TableHead>
-                        <TableHead>Espécie</TableHead>
-                        <TableHead>Raça</TableHead>
-                        <TableHead className="text-right">Ações</TableHead>
-                      </TableRow>
-                    </TableHeader>
-                    <TableBody>
-                      {client.animals.map((animal, index) => (
-                        <TableRow key={animal.id} className={cn(index % 2 === 1 && "bg-muted/50")}>
-                          <TableCell className="font-medium text-foreground">{animal.name}</TableCell>
-                          <TableCell className="text-muted-foreground">{animal.species}</TableCell>
-                          <TableCell className="text-muted-foreground">{animal.breed}</TableCell>
-                          <TableCell className="text-right">
-                            <Button variant="ghost" size="sm" onClick={() => handleViewRecord(animal.id)} className="rounded-md hover:bg-muted hover:text-foreground transition-colors duration-200">
-                              <FaEye className="h-4 w-4 mr-2" /> Ver Prontuário
-                            </Button>
-                          </TableCell>
+            {/* Contatos */}
+            <Card className="bg-card shadow-sm border border-border rounded-md">
+              <CardHeader className="pb-2">
+                <CardTitle className="flex items-center gap-2 text-lg font-semibold text-foreground">
+                  <FaPhone className="h-5 w-5 text-primary" /> Contatos
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="grid grid-cols-1 md:grid-cols-2 gap-y-2 pt-0 text-sm text-muted-foreground">
+                <p className="flex items-center gap-2"><FaEnvelope className="h-4 w-4" /><span className="font-medium text-foreground">Email Principal:</span> {client.mainEmailContact}</p>
+                <p className="flex items-center gap-2"><FaPhone className="h-4 w-4" /><span className="font-medium text-foreground">Telefone Principal:</span> {client.mainPhoneContact}</p>
+                {client.dynamicContacts && client.dynamicContacts.map((contact, index) => (
+                  <p key={index} className="flex items-center gap-2"><FaPhone className="h-4 w-4" /><span className="font-medium text-foreground">{contact.label || `Contato ${index + 1}`}:</span> {contact.value}</p>
+                ))}
+                <p><span className="font-medium text-foreground">Aceita Email:</span> {client.acceptEmail === "yes" ? "Sim" : "Não"}</p>
+                <p><span className="font-medium text-foreground">Aceita WhatsApp:</span> {client.acceptWhatsapp === "yes" ? "Sim" : "Não"}</p>
+                <p><span className="font-medium text-foreground">Aceita SMS:</span> {client.acceptSMS === "yes" ? "Sim" : "Não"}</p>
+              </CardContent>
+            </Card>
+
+            {/* Endereço */}
+            <Card className="bg-card shadow-sm border border-border rounded-md">
+              <CardHeader className="pb-2">
+                <CardTitle className="flex items-center gap-2 text-lg font-semibold text-foreground">
+                  <FaMapMarkerAlt className="h-5 w-5 text-primary" /> Endereço
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="grid grid-cols-1 md:grid-cols-2 gap-y-2 pt-0 text-sm text-muted-foreground">
+                <p><span className="font-medium text-foreground">CEP:</span> {client.address.cep}</p>
+                <p><span className="font-medium text-foreground">Rua:</span> {client.address.street}, {client.address.number}</p>
+                {client.address.complement && <p><span className="font-medium text-foreground">Complemento:</span> {client.address.complement}</p>}
+                <p><span className="font-medium text-foreground">Bairro:</span> {client.address.neighborhood}</p>
+                <p><span className="font-medium text-foreground">Cidade/Estado:</span> {client.address.city} - {client.address.state}</p>
+              </CardContent>
+            </Card>
+
+            {/* Outras Informações */}
+            {client.notes && (
+              <Card className="bg-card shadow-sm border border-border rounded-md">
+                <CardHeader className="pb-2">
+                  <CardTitle className="flex items-center gap-2 text-lg font-semibold text-foreground">
+                    <FaStickyNote className="h-5 w-5 text-primary" /> Observações
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="pt-0 text-sm text-muted-foreground">
+                  <p>{client.notes}</p>
+                </CardContent>
+              </Card>
+            )}
+          </div>
+
+          {/* Coluna da Direita: Animais do Cliente */}
+          <div className="lg:col-span-1">
+            <Card className="bg-card shadow-sm border border-border rounded-md">
+              <CardHeader className="flex flex-row items-center justify-between pb-3">
+                <CardTitle className="flex items-center gap-2 text-lg font-semibold text-foreground">
+                  <FaPaw className="h-5 w-5 text-primary" /> Animais de {client.name}
+                </CardTitle>
+                <Link to={`/animals/add?clientId=${client.id}`}> {/* Passa o clientId como parâmetro */}
+                  <Button size="sm" className="bg-primary text-primary-foreground hover:bg-primary/90 rounded-md font-semibold transition-all duration-200 shadow-md hover:shadow-lg">
+                    <FaPlus className="h-4 w-4 mr-2" /> Adicionar Animal
+                  </Button>
+                </Link>
+              </CardHeader>
+              <CardContent className="pt-0">
+                {client.animals.length > 0 ? (
+                  <div className="overflow-hidden">
+                    <Table>
+                      <TableHeader>
+                        <TableRow>
+                          <TableHead>Nome</TableHead>
+                          <TableHead>Espécie</TableHead>
+                          <TableHead className="text-right">Ações</TableHead>
                         </TableRow>
-                      ))}
-                    </TableBody>
-                  </Table>
-                </div>
-              ) : (
-                <p className="text-muted-foreground py-4">Nenhum animal cadastrado para este cliente.</p>
-              )}
-            </CardContent>
-          </Card>
+                      </TableHeader>
+                      <TableBody>
+                        {client.animals.map((animal, index) => (
+                          <TableRow key={animal.id} className={cn(index % 2 === 1 && "bg-muted/50")}>
+                            <TableCell className="font-medium text-foreground">{animal.name}</TableCell>
+                            <TableCell className="text-muted-foreground">{animal.species}</TableCell>
+                            <TableCell className="text-right">
+                              <Button variant="ghost" size="sm" onClick={() => handleViewRecord(animal.id)} className="rounded-md hover:bg-muted hover:text-foreground transition-colors duration-200">
+                                <FaEye className="h-4 w-4 mr-2" /> Ver Prontuário
+                              </Button>
+                            </TableCell>
+                          </TableRow>
+                        ))}
+                      </TableBody>
+                    </Table>
+                  </div>
+                ) : (
+                  <p className="text-muted-foreground py-4">Nenhum animal cadastrado para este cliente.</p>
+                )}
+              </CardContent>
+            </Card>
+          </div>
         </div>
       </div>
     </div>
