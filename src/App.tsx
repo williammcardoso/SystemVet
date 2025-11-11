@@ -6,7 +6,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Layout from "./components/Layout";
 import Dashboard from "./pages/Dashboard";
 import ClientsPage from "./pages/ClientsPage";
-import AddClientPage from "./pages/AddClientPage";
+import ClientFormPage from "./pages/ClientFormPage"; // Importar a nova página de formulário
 import AddAnimalPage from "./pages/AddAnimalPage";
 import ClientDetailPage from "./pages/ClientDetailPage";
 import PatientRecordPage from "./pages/PatientRecordPage";
@@ -63,7 +63,8 @@ const App = () => (
             <Routes>
               <Route path="/" element={<Dashboard />} />
               <Route path="/clients" element={<ClientsPage />} />
-              <Route path="/clients/add" element={<AddClientPage />} />
+              <Route path="/clients/add" element={<ClientFormPage />} /> {/* Rota para adicionar cliente */}
+              <Route path="/clients/:clientId/edit" element={<ClientFormPage />} /> {/* Nova rota para editar cliente */}
               <Route path="/animals/add" element={<AddAnimalPage />} />
               <Route path="/clients/:clientId" element={<ClientDetailPage />} />
               <Route path="/clients/:clientId/animals/:animalId/record" element={<PatientRecordPage />} />

@@ -187,37 +187,37 @@ const AgendaPage = () => {
   };
 
   return (
-    <div className="flex flex-col min-h-screen bg-gray-50 dark:bg-gray-950">
+    <div className="flex flex-col min-h-screen bg-background">
       {/* Header da Página com Gradiente e Breadcrumb */}
-      <div className="bg-gradient-to-r from-gray-50 via-white to-gray-50 dark:from-gray-900 dark:via-gray-950 dark:to-gray-950 p-6 pb-4 border-b border-gray-200 dark:border-gray-800">
+      <div className="bg-gradient-to-r from-background via-card to-background p-6 pb-4 border-b border-border">
         <div className="flex items-center justify-between mb-2">
           <div className="flex items-center gap-4">
             <div>
-              <h1 className="text-2xl font-semibold flex items-center gap-3 text-[#1E293B] dark:text-gray-100 group">
-                <FaCalendarAlt className="h-5 w-5 text-gray-500 dark:text-gray-400" /> Agenda
+              <h1 className="text-2xl font-semibold flex items-center gap-3 text-foreground group">
+                <FaCalendarAlt className="h-5 w-5 text-muted-foreground" /> Agenda
               </h1>
-              <p className="text-sm text-[#6B7280] dark:text-gray-400 mt-1 mb-4">
+              <p className="text-sm text-muted-foreground mt-1 mb-4">
                 Gerencie seus agendamentos e consultas.
               </p>
             </div>
           </div>
           <Link to="/">
-            <Button variant="outline" className="rounded-md border-gray-300 text-gray-700 hover:bg-gray-100 hover:text-gray-900 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200 dark:hover:bg-gray-700 transition-colors duration-200">
+            <Button variant="outline" className="rounded-md border-border text-foreground hover:bg-muted hover:text-foreground transition-colors duration-200">
               <FaArrowLeft className="mr-2 h-4 w-4" /> Voltar
             </Button>
           </Link>
         </div>
-        <p className="text-sm text-gray-400 dark:text-gray-500">
+        <p className="text-sm text-muted-foreground">
           Painel &gt; Agenda
         </p>
       </div>
 
       <div className="flex-1 p-6 grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Coluna do Calendário */}
-        <Card className="bg-white/90 backdrop-blur-sm border border-gray-200 dark:border-gray-700 rounded-2xl shadow-[0_1px_3px_rgba(0,0,0,0.05)] hover:shadow-[0_4px_8px_rgba(0,0,0,0.08)] transition-all duration-300 border-t-4 border-blue-400 dark:bg-gray-800/90">
+        <Card className="bg-card shadow-sm border border-border rounded-md">
           <CardHeader className="pb-3">
-            <CardTitle className="flex items-center gap-2 text-lg font-semibold text-[#374151] dark:text-gray-100">
-              <FaCalendarAlt className="h-5 w-5 text-blue-500" /> Calendário
+            <CardTitle className="flex items-center gap-2 text-lg font-semibold text-foreground">
+              <FaCalendarAlt className="h-5 w-5 text-primary" /> Calendário
             </CardTitle>
           </CardHeader>
           <CardContent className="flex flex-col items-center justify-center pt-0">
@@ -226,32 +226,32 @@ const AgendaPage = () => {
               selected={selectedDate}
               onSelect={setSelectedDate}
               locale={ptBR}
-              className="rounded-md border shadow"
+              className="rounded-md border shadow bg-input"
               modifiers={{
                 hasAppointments: appointments.map(app => app.date),
               }}
               modifiersClassNames={{
-                hasAppointments: "bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200 rounded-full",
+                hasAppointments: "bg-primary text-primary-foreground rounded-full",
               }}
             />
-            <Button onClick={() => handleAddAppointmentClick(selectedDate)} className="mt-4 rounded-md bg-gradient-to-r from-blue-500 to-indigo-500 text-white hover:from-blue-600 hover:to-indigo-600 font-semibold transition-all duration-200 shadow-md hover:shadow-lg">
+            <Button onClick={() => handleAddAppointmentClick(selectedDate)} className="mt-4 rounded-md bg-primary text-primary-foreground hover:bg-primary/90 font-semibold transition-all duration-200 shadow-md hover:shadow-lg">
               <FaCalendarPlus className="mr-2 h-4 w-4" /> Novo Agendamento
             </Button>
           </CardContent>
         </Card>
 
         {/* Coluna de Agendamentos do Dia */}
-        <Card className="bg-white/90 backdrop-blur-sm border border-gray-200 dark:border-gray-700 rounded-2xl shadow-[0_1px_3px_rgba(0,0,0,0.05)] hover:shadow-[0_4px_8px_rgba(0,0,0,0.08)] transition-all duration-300 border-t-4 border-purple-400 dark:bg-gray-800/90">
+        <Card className="bg-card shadow-sm border border-border rounded-md">
           <CardHeader className="pb-3">
-            <CardTitle className="flex items-center gap-2 text-lg font-semibold text-[#374151] dark:text-gray-100">
-              <FaClock className="h-5 w-5 text-purple-500" /> Agendamentos para {selectedDate ? format(selectedDate, "dd/MM/yyyy", { locale: ptBR }) : "Nenhum dia selecionado"}
+            <CardTitle className="flex items-center gap-2 text-lg font-semibold text-foreground">
+              <FaClock className="h-5 w-5 text-primary" /> Agendamentos para {selectedDate ? format(selectedDate, "dd/MM/yyyy", { locale: ptBR }) : "Nenhum dia selecionado"}
             </CardTitle>
           </CardHeader>
           <CardContent className="pt-0">
             {appointmentsForSelectedDate.length > 0 ? (
               <div className="space-y-4">
                 {appointmentsForSelectedDate.map((app) => (
-                  <div key={app.id} className="flex items-center justify-between p-3 border rounded-lg bg-background dark:bg-gray-800 shadow-sm">
+                  <div key={app.id} className="flex items-center justify-between p-3 border rounded-lg bg-input shadow-sm">
                     <div>
                       <p className="text-lg font-semibold text-foreground">{app.time} - {app.title}</p>
                       <p className="text-sm text-muted-foreground flex items-center gap-1">
@@ -260,17 +260,17 @@ const AgendaPage = () => {
                         <FaPaw className="h-3 w-3" /> {app.animalName}
                       </p>
                       {app.notes && (
-                        <p className="text-xs text-gray-600 dark:text-gray-400 mt-1 flex items-center gap-1">
+                        <p className="text-xs text-muted-foreground mt-1 flex items-center gap-1">
                           <FaStickyNote className="h-3 w-3" /> {app.notes}
                         </p>
                       )}
                     </div>
                     <div className="flex gap-2">
-                      <Button variant="ghost" size="sm" onClick={() => handleEditAppointmentClick(app)} className="rounded-md hover:bg-gray-100 hover:text-gray-900 dark:hover:bg-gray-700 dark:hover:text-gray-200 transition-colors duration-200">
+                      <Button variant="ghost" size="sm" onClick={() => handleEditAppointmentClick(app)} className="rounded-md hover:bg-muted hover:text-foreground transition-colors duration-200">
                         <FaEdit className="h-4 w-4" />
                       </Button>
-                      <Button variant="ghost" size="sm" onClick={() => handleDeleteAppointment(app.id)} className="rounded-md hover:bg-gray-100 hover:text-gray-900 dark:hover:bg-gray-700 dark:hover:text-gray-200 transition-colors duration-200">
-                        <FaTrashAlt className="h-4 w-4" />
+                      <Button variant="ghost" size="sm" onClick={() => handleDeleteAppointment(app.id)} className="rounded-md hover:bg-muted hover:text-foreground transition-colors duration-200">
+                        <FaTrashAlt className="h-4 w-4 text-destructive" />
                       </Button>
                     </div>
                   </div>
@@ -285,50 +285,50 @@ const AgendaPage = () => {
 
       {/* Dialog para Adicionar/Editar Agendamento */}
       <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-        <DialogContent className="sm:max-w-[500px] bg-white/90 backdrop-blur-sm border border-gray-200 dark:border-gray-700 rounded-2xl shadow-[0_1px_3px_rgba(0,0,0,0.05)] dark:bg-gray-800/90">
+        <DialogContent className="sm:max-w-[500px] bg-card shadow-sm border border-border rounded-md">
           <DialogHeader>
-            <DialogTitle className="text-lg font-semibold text-[#374151] dark:text-gray-100">
+            <DialogTitle className="text-lg font-semibold text-foreground">
               {editingAppointment ? "Editar Agendamento" : "Novo Agendamento"}
             </DialogTitle>
-            <DialogDescription className="text-sm text-[#6B7280] dark:text-gray-400">
+            <DialogDescription className="text-sm text-muted-foreground">
               Preencha os detalhes do agendamento.
             </DialogDescription>
           </DialogHeader>
           <div className="grid gap-4 py-4">
             <div className="space-y-2">
-              <Label htmlFor="appointmentDate" className="text-[#4B5563] dark:text-gray-400 font-medium">Data</Label>
+              <Label htmlFor="appointmentDate" className="text-muted-foreground font-medium">Data</Label>
               <Input
                 id="appointmentDate"
                 type="date"
                 value={selectedDate ? format(selectedDate, "yyyy-MM-dd") : ""}
                 onChange={(e) => setSelectedDate(new Date(e.target.value))}
-                className="bg-white rounded-lg border-gray-200 dark:border-gray-600 focus:ring-2 focus:ring-blue-400 placeholder-[#9CA3AF] dark:placeholder-gray-500 transition-all duration-200"
+                className="bg-input rounded-md border-border focus:ring-2 focus:ring-ring placeholder-muted-foreground transition-all duration-200"
               />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="appointmentTime" className="text-[#4B5563] dark:text-gray-400 font-medium">Hora</Label>
+              <Label htmlFor="appointmentTime" className="text-muted-foreground font-medium">Hora</Label>
               <Input
                 id="appointmentTime"
                 type="time"
                 value={newAppointmentTime}
                 onChange={(e) => setNewAppointmentTime(e.target.value)}
-                className="bg-white rounded-lg border-gray-200 dark:border-gray-600 focus:ring-2 focus:ring-blue-400 placeholder-[#9CA3AF] dark:placeholder-gray-500 transition-all duration-200"
+                className="bg-input rounded-md border-border focus:ring-2 focus:ring-ring placeholder-muted-foreground transition-all duration-200"
               />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="appointmentTitle" className="text-[#4B5563] dark:text-gray-400 font-medium">Título/Motivo</Label>
+              <Label htmlFor="appointmentTitle" className="text-muted-foreground font-medium">Título/Motivo</Label>
               <Input
                 id="appointmentTitle"
                 placeholder="Ex: Consulta de Rotina"
                 value={newAppointmentTitle}
                 onChange={(e) => setNewAppointmentTitle(e.target.value)}
-                className="bg-white rounded-lg border-gray-200 dark:border-gray-600 focus:ring-2 focus:ring-blue-400 placeholder-[#9CA3AF] dark:placeholder-gray-500 transition-all duration-200"
+                className="bg-input rounded-md border-border focus:ring-2 focus:ring-ring placeholder-muted-foreground transition-all duration-200"
               />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="clientSelect" className="text-[#4B5563] dark:text-gray-400 font-medium">Cliente</Label>
+              <Label htmlFor="clientSelect" className="text-muted-foreground font-medium">Cliente</Label>
               <Select onValueChange={setNewAppointmentClientId} value={newAppointmentClientId}>
-                <SelectTrigger id="clientSelect" className="bg-white rounded-lg border-gray-200 dark:border-gray-600 focus:ring-2 focus:ring-blue-400 placeholder-[#9CA3AF] dark:placeholder-gray-500 transition-all duration-200">
+                <SelectTrigger id="clientSelect" className="bg-input rounded-md border-border focus:ring-2 focus:ring-ring placeholder-muted-foreground transition-all duration-200">
                   <SelectValue placeholder="Selecione o cliente" />
                 </SelectTrigger>
                 <SelectContent>
@@ -341,9 +341,9 @@ const AgendaPage = () => {
               </Select>
             </div>
             <div className="space-y-2">
-              <Label htmlFor="animalSelect" className="text-[#4B5563] dark:text-gray-400 font-medium">Animal</Label>
+              <Label htmlFor="animalSelect" className="text-muted-foreground font-medium">Animal</Label>
               <Select onValueChange={setNewAppointmentAnimalId} value={newAppointmentAnimalId} disabled={!newAppointmentClientId}>
-                <SelectTrigger id="animalSelect" className="bg-white rounded-lg border-gray-200 dark:border-gray-600 focus:ring-2 focus:ring-blue-400 placeholder-[#9CA3AF] dark:placeholder-gray-500 transition-all duration-200">
+                <SelectTrigger id="animalSelect" className="bg-input rounded-md border-border focus:ring-2 focus:ring-ring placeholder-muted-foreground transition-all duration-200">
                   <SelectValue placeholder="Selecione o animal" />
                 </SelectTrigger>
                 <SelectContent>
@@ -356,22 +356,22 @@ const AgendaPage = () => {
               </Select>
             </div>
             <div className="space-y-2">
-              <Label htmlFor="appointmentNotes" className="text-[#4B5563] dark:text-gray-400 font-medium">Observações</Label>
+              <Label htmlFor="appointmentNotes" className="text-muted-foreground font-medium">Observações</Label>
               <Textarea
                 id="appointmentNotes"
                 placeholder="Notas adicionais sobre o agendamento..."
                 value={newAppointmentNotes}
                 onChange={(e) => setNewAppointmentNotes(e.target.value)}
-                className="bg-white rounded-lg border-gray-200 dark:border-gray-600 focus:ring-2 focus:ring-blue-400 placeholder-[#9CA3AF] dark:placeholder-gray-500 transition-all duration-200"
+                className="bg-input rounded-md border-border focus:ring-2 focus:ring-ring placeholder-muted-foreground transition-all duration-200"
                 rows={3}
               />
             </div>
           </div>
           <DialogFooter>
-            <Button variant="outline" onClick={() => setIsDialogOpen(false)} className="bg-white border border-gray-300 text-gray-700 hover:bg-gray-50 rounded-md transition-all duration-200 shadow-sm hover:shadow-md dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200 dark:hover:bg-gray-600">
+            <Button variant="outline" onClick={() => setIsDialogOpen(false)} className="bg-card border border-border text-foreground hover:bg-muted rounded-md transition-all duration-200 shadow-sm hover:shadow-md">
               <FaTimes className="mr-2 h-4 w-4" /> Cancelar
             </Button>
-            <Button onClick={handleSaveAppointment} className="bg-gradient-to-r from-blue-500 to-indigo-500 text-white hover:from-blue-600 hover:to-indigo-600 rounded-md font-semibold transition-all duration-200 shadow-md hover:shadow-lg">
+            <Button onClick={handleSaveAppointment} className="bg-primary text-primary-foreground hover:bg-primary/90 rounded-md font-semibold transition-all duration-200 shadow-md hover:shadow-lg">
               <FaSave className="mr-2 h-4 w-4" /> Salvar Agendamento
             </Button>
           </DialogFooter>

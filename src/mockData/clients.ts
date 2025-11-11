@@ -14,7 +14,7 @@ export let mockClients: Client[] = [
     acceptEmail: "yes",
     acceptWhatsapp: "yes",
     acceptSMS: "yes",
-    mainEmailContact: "william@example.com",
+    mainEmailContact: "(19) 99363-1981",
     mainPhoneContact: "(19) 99363-1981",
     dynamicContacts: [],
     address: {
@@ -203,6 +203,15 @@ export const addMockClient = (newClient: Omit<Client, 'id' | 'animals'>) => {
   const clientWithId: Client = { ...newClient, id: newId, animals: [] };
   mockClients.push(clientWithId);
   return clientWithId;
+};
+
+export const updateMockClient = (updatedClient: Client) => {
+  const index = mockClients.findIndex(c => c.id === updatedClient.id);
+  if (index !== -1) {
+    mockClients[index] = { ...updatedClient, animals: mockClients[index].animals }; // Preserve existing animals
+    return true;
+  }
+  return false;
 };
 
 export const addMockAnimalToClient = (clientId: string, newAnimal: Omit<Animal, 'id'>) => {

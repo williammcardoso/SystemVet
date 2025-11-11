@@ -237,37 +237,37 @@ const AddAnimalPage = () => {
   };
 
   return (
-    <div className="flex flex-col min-h-screen bg-gray-50 dark:bg-gray-950">
+    <div className="flex flex-col min-h-screen bg-background">
       {/* Header da Página com Gradiente e Breadcrumb */}
-      <div className="bg-gradient-to-r from-gray-50 via-white to-gray-50 dark:from-gray-900 dark:via-gray-950 dark:to-gray-950 p-6 pb-4 border-b border-gray-200 dark:border-gray-800">
+      <div className="bg-gradient-to-r from-background via-card to-background p-6 pb-4 border-b border-border">
         <div className="flex items-center justify-between mb-2">
           <div className="flex items-center gap-4">
             <div>
-              <h1 className="text-2xl font-semibold flex items-center gap-3 text-[#1E293B] dark:text-gray-100 group">
-                <FaPaw className="h-5 w-5 text-gray-500 dark:text-gray-400" /> Adicionar Animal
+              <h1 className="text-2xl font-semibold flex items-center gap-3 text-foreground group">
+                <FaPaw className="h-5 w-5 text-muted-foreground" /> Adicionar Animal
               </h1>
-              <p className="text-sm text-[#6B7280] dark:text-gray-400 mt-1 mb-4">
+              <p className="text-sm text-muted-foreground mt-1 mb-4">
                 Cadastre um novo animal e suas informações.
               </p>
             </div>
           </div>
           <Link to="/clients">
-            <Button variant="outline" className="rounded-md border-gray-300 text-gray-700 hover:bg-gray-100 hover:text-gray-900 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200 dark:hover:bg-gray-700 transition-colors duration-200">
+            <Button variant="outline" className="rounded-md border-border text-foreground hover:bg-muted hover:text-foreground transition-colors duration-200">
               <FaArrowLeft className="mr-2 h-4 w-4" /> Voltar para Clientes
             </Button>
           </Link>
         </div>
-        <p className="text-sm text-gray-400 dark:text-gray-500">
-          Painel &gt; <Link to="/clients" className="hover:text-blue-500 dark:hover:text-blue-400">Clientes</Link> &gt; Adicionar Animal
+        <p className="text-sm text-muted-foreground">
+          Painel &gt; <Link to="/clients" className="hover:text-primary">Clientes</Link> &gt; Adicionar Animal
         </p>
       </div>
 
       <div className="flex-1 p-6">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 p-6 bg-white/90 backdrop-blur-sm border border-gray-200 dark:border-gray-700 rounded-2xl shadow-[0_1px_3px_rgba(0,0,0,0.05)]">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 p-6 bg-card shadow-sm border border-border rounded-md">
           <div className="space-y-2">
-            <Label htmlFor="tutor">Tutor/Responsável*</Label>
+            <Label htmlFor="tutor" className="text-muted-foreground font-medium">Tutor/Responsável*</Label>
             <Select onValueChange={setSelectedTutorId} value={selectedTutorId} disabled={!!initialClientId}>
-              <SelectTrigger id="tutor" className="bg-white rounded-lg border-gray-200 dark:border-gray-600 focus:ring-2 focus:ring-blue-400 placeholder-[#9CA3AF] dark:placeholder-gray-500 transition-all duration-200">
+              <SelectTrigger id="tutor" className="bg-input rounded-md border-border focus:ring-2 focus:ring-ring placeholder-muted-foreground transition-all duration-200">
                 <SelectValue placeholder="Selecione o tutor..." />
               </SelectTrigger>
               <SelectContent>
@@ -280,13 +280,13 @@ const AddAnimalPage = () => {
             </Select>
           </div>
           <div className="space-y-2">
-            <Label htmlFor="animalName">Nome do Animal*</Label>
-            <Input id="animalName" placeholder="Nome do animal" value={animalName} onChange={(e) => setAnimalName(e.target.value)} className="bg-white rounded-lg border-gray-200 dark:border-gray-600 focus:ring-2 focus:ring-blue-400 placeholder-[#9CA3AF] dark:placeholder-gray-500 transition-all duration-200" />
+            <Label htmlFor="animalName" className="text-muted-foreground font-medium">Nome do Animal*</Label>
+            <Input id="animalName" placeholder="Nome do animal" value={animalName} onChange={(e) => setAnimalName(e.target.value)} className="bg-input rounded-md border-border focus:ring-2 focus:ring-ring placeholder-muted-foreground transition-all duration-200" />
           </div>
           <div className="space-y-2">
-            <Label htmlFor="species">Espécie*</Label>
+            <Label htmlFor="species" className="text-muted-foreground font-medium">Espécie*</Label>
             <Select onValueChange={setSelectedSpecies} value={selectedSpecies}>
-              <SelectTrigger id="species" className="bg-white rounded-lg border-gray-200 dark:border-gray-600 focus:ring-2 focus:ring-blue-400 placeholder-[#9CA3AF] dark:placeholder-gray-500 transition-all duration-200">
+              <SelectTrigger id="species" className="bg-input rounded-md border-border focus:ring-2 focus:ring-ring placeholder-muted-foreground transition-all duration-200">
                 <SelectValue placeholder="Selecione..." />
               </SelectTrigger>
               <SelectContent>
@@ -303,14 +303,14 @@ const AddAnimalPage = () => {
                 placeholder="Digite a espécie"
                 value={customSpeciesName}
                 onChange={(e) => setCustomSpeciesName(e.target.value)}
-                className="mt-2 bg-white rounded-lg border-gray-200 dark:border-gray-600 focus:ring-2 focus:ring-blue-400 placeholder-[#9CA3AF] dark:placeholder-gray-500 transition-all duration-200"
+                className="mt-2 bg-input rounded-md border-border focus:ring-2 focus:ring-ring placeholder-muted-foreground transition-all duration-200"
               />
             )}
           </div>
           <div className="space-y-2">
-            <Label htmlFor="breed">Raça</Label>
+            <Label htmlFor="breed" className="text-muted-foreground font-medium">Raça</Label>
             <Select disabled={!selectedSpecies || selectedSpecies === "other"} onValueChange={setSelectedBreed} value={selectedBreed}>
-              <SelectTrigger id="breed" className="bg-white rounded-lg border-gray-200 dark:border-gray-600 focus:ring-2 focus:ring-blue-400 placeholder-[#9CA3AF] dark:placeholder-gray-500 transition-all duration-200">
+              <SelectTrigger id="breed" className="bg-input rounded-md border-border focus:ring-2 focus:ring-ring placeholder-muted-foreground transition-all duration-200">
                 <SelectValue placeholder="Selecione..." />
               </SelectTrigger>
               <SelectContent>
@@ -327,14 +327,14 @@ const AddAnimalPage = () => {
                 placeholder="Digite a raça"
                 value={customBreedName}
                 onChange={(e) => setCustomBreedName(e.target.value)}
-                className="mt-2 bg-white rounded-lg border-gray-200 dark:border-gray-600 focus:ring-2 focus:ring-blue-400 placeholder-[#9CA3AF] dark:placeholder-gray-500 transition-all duration-200"
+                className="mt-2 bg-input rounded-md border-border focus:ring-2 focus:ring-ring placeholder-muted-foreground transition-all duration-200"
               />
             )}
           </div>
           <div className="space-y-2">
-            <Label htmlFor="gender">Sexo*</Label>
+            <Label htmlFor="gender" className="text-muted-foreground font-medium">Sexo*</Label>
             <Select onValueChange={(value: Animal['gender']) => setGender(value)} value={gender}>
-              <SelectTrigger id="gender" className="bg-white rounded-lg border-gray-200 dark:border-gray-600 focus:ring-2 focus:ring-blue-400 placeholder-[#9CA3AF] dark:placeholder-gray-500 transition-all duration-200">
+              <SelectTrigger id="gender" className="bg-input rounded-md border-border focus:ring-2 focus:ring-ring placeholder-muted-foreground transition-all duration-200">
                 <SelectValue placeholder="Selecione..." />
               </SelectTrigger>
               <SelectContent>
@@ -345,13 +345,13 @@ const AddAnimalPage = () => {
             </Select>
           </div>
           <div className="space-y-2">
-            <Label htmlFor="birthday">Data de Nascimento*</Label>
-            <Input id="birthday" type="date" value={birthday} onChange={(e) => setBirthday(e.target.value)} className="bg-white rounded-lg border-gray-200 dark:border-gray-600 focus:ring-2 focus:ring-blue-400 placeholder-[#9CA3AF] dark:placeholder-gray-500 transition-all duration-200" />
+            <Label htmlFor="birthday" className="text-muted-foreground font-medium">Data de Nascimento*</Label>
+            <Input id="birthday" type="date" value={birthday} onChange={(e) => setBirthday(e.target.value)} className="bg-input rounded-md border-border focus:ring-2 focus:ring-ring placeholder-muted-foreground transition-all duration-200" />
           </div>
           <div className="space-y-2">
-            <Label htmlFor="coatColor">Cor da Pelagem</Label>
+            <Label htmlFor="coatColor" className="text-muted-foreground font-medium">Cor da Pelagem</Label>
             <Select onValueChange={setSelectedCoatColor} value={selectedCoatColor}>
-              <SelectTrigger id="coatColor" className="bg-white rounded-lg border-gray-200 dark:border-gray-600 focus:ring-2 focus:ring-blue-400 placeholder-[#9CA3AF] dark:placeholder-gray-500 transition-all duration-200">
+              <SelectTrigger id="coatColor" className="bg-input rounded-md border-border focus:ring-2 focus:ring-ring placeholder-muted-foreground transition-all duration-200">
                 <SelectValue placeholder="Selecione..." />
               </SelectTrigger>
               <SelectContent>
@@ -368,30 +368,30 @@ const AddAnimalPage = () => {
                 placeholder="Digite a cor da pelagem"
                 value={customCoatColorName}
                 onChange={(e) => setCustomCoatColorName(e.target.value)}
-                className="mt-2 bg-white rounded-lg border-gray-200 dark:border-gray-600 focus:ring-2 focus:ring-blue-400 placeholder-[#9CA3AF] dark:placeholder-gray-500 transition-all duration-200"
+                className="mt-2 bg-input rounded-md border-border focus:ring-2 focus:ring-ring placeholder-muted-foreground transition-all duration-200"
               />
             )}
           </div>
           <div className="space-y-2">
-            <Label htmlFor="weight">Peso (kg)*</Label>
-            <Input id="weight" type="number" placeholder="Ex: 5.5" value={weight} onChange={(e) => setWeight(Number(e.target.value))} className="bg-white rounded-lg border-gray-200 dark:border-gray-600 focus:ring-2 focus:ring-blue-400 placeholder-[#9CA3AF] dark:placeholder-gray-500 transition-all duration-200" />
+            <Label htmlFor="weight" className="text-muted-foreground font-medium">Peso (kg)*</Label>
+            <Input id="weight" type="number" placeholder="Ex: 5.5" value={weight} onChange={(e) => setWeight(Number(e.target.value))} className="bg-input rounded-md border-border focus:ring-2 focus:ring-ring placeholder-muted-foreground transition-all duration-200" />
           </div>
           <div className="space-y-2">
-            <Label htmlFor="microchip">Microchip</Label>
-            <Input id="microchip" placeholder="Número do microchip" value={microchip} onChange={(e) => setMicrochip(e.target.value)} className="bg-white rounded-lg border-gray-200 dark:border-gray-600 focus:ring-2 focus:ring-blue-400 placeholder-[#9CA3AF] dark:placeholder-gray-500 transition-all duration-200" />
+            <Label htmlFor="microchip" className="text-muted-foreground font-medium">Microchip</Label>
+            <Input id="microchip" placeholder="Número do microchip" value={microchip} onChange={(e) => setMicrochip(e.target.value)} className="bg-input rounded-md border-border focus:ring-2 focus:ring-ring placeholder-muted-foreground transition-all duration-200" />
           </div>
         </div>
 
-        <div className="mt-6 space-y-2 p-6 bg-white/90 backdrop-blur-sm border border-gray-200 dark:border-gray-700 rounded-2xl shadow-[0_1px_3px_rgba(0,0,0,0.05)]">
-          <Label htmlFor="animalNotes">Observações</Label>
-          <Textarea id="animalNotes" placeholder="Adicione observações sobre o animal..." rows={5} value={notes} onChange={(e) => setNotes(e.target.value)} className="bg-white rounded-lg border-gray-200 dark:border-gray-600 focus:ring-2 focus:ring-blue-400 placeholder-[#9CA3AF] dark:placeholder-gray-500 transition-all duration-200" />
+        <div className="mt-6 space-y-2 p-6 bg-card shadow-sm border border-border rounded-md">
+          <Label htmlFor="animalNotes" className="text-muted-foreground font-medium">Observações</Label>
+          <Textarea id="animalNotes" placeholder="Adicione observações sobre o animal..." rows={5} value={notes} onChange={(e) => setNotes(e.target.value)} className="bg-input rounded-md border-border focus:ring-2 focus:ring-ring placeholder-muted-foreground transition-all duration-200" />
         </div>
 
         <div className="flex justify-end gap-2 mt-6">
-          <Button variant="outline" onClick={() => navigate("/clients")} className="bg-white border border-gray-300 text-gray-700 hover:bg-gray-50 rounded-md transition-all duration-200 shadow-sm hover:shadow-md dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200 dark:hover:bg-gray-600">
+          <Button variant="outline" onClick={() => navigate("/clients")} className="bg-card border border-border text-foreground hover:bg-muted rounded-md transition-all duration-200 shadow-sm hover:shadow-md">
             <FaTimes className="mr-2 h-4 w-4" /> Cancelar
           </Button>
-          <Button onClick={handleSaveAnimal} className="bg-gradient-to-r from-blue-500 to-indigo-500 text-white hover:from-blue-600 hover:to-indigo-600 rounded-md font-semibold transition-all duration-200 shadow-md hover:shadow-lg">
+          <Button onClick={handleSaveAnimal} className="bg-primary text-primary-foreground hover:bg-primary/90 rounded-md font-semibold transition-all duration-200 shadow-md hover:shadow-lg">
             <FaSave className="mr-2 h-4 w-4" /> Salvar
           </Button>
         </div>

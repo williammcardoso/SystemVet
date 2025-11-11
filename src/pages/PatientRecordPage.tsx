@@ -306,7 +306,7 @@ const PatientRecordPage = () => {
       <div className="p-6 text-center">
         <h1 className="text-3xl font-bold mb-4">Animal ou Cliente não encontrado.</h1>
         <Link to="/clients">
-          <Button variant="outline">
+          <Button variant="outline" className="bg-card border border-border text-foreground hover:bg-muted rounded-md transition-all duration-200 shadow-sm hover:shadow-md">
             <FaArrowLeft className="mr-2 h-4 w-4" /> Voltar para Clientes
           </Button>
         </Link>
@@ -486,45 +486,45 @@ const PatientRecordPage = () => {
 
 
   return (
-    <div className="flex flex-col min-h-screen bg-gray-50 dark:bg-gray-950">
+    <div className="flex flex-col min-h-screen bg-background">
       {/* Header da Página com Gradiente e Breadcrumb */}
-      <div className="bg-gradient-to-r from-gray-50 via-white to-gray-50 dark:from-gray-900 dark:via-gray-950 dark:to-gray-950 p-6 pb-4 border-b border-gray-200 dark:border-gray-800">
+      <div className="bg-gradient-to-r from-background via-card to-background p-6 pb-4 border-b border-border">
         <div className="flex items-center justify-between mb-2">
           <div className="flex items-center gap-4">
             <div>
-              <h1 className="text-2xl font-semibold flex items-center gap-3 text-[#1E293B] dark:text-gray-100 group">
-                <FaUser className="h-5 w-5 text-gray-500 dark:text-gray-400" /> Prontuário Consolidado
+              <h1 className="text-2xl font-semibold flex items-center gap-3 text-foreground group">
+                <FaUser className="h-5 w-5 text-muted-foreground" /> Prontuário Consolidado
               </h1>
-              <p className="text-sm text-[#6B7280] dark:text-gray-400 mt-1 mb-4">
+              <p className="text-sm text-muted-foreground mt-1 mb-4">
                 Visão completa do histórico médico
               </p>
             </div>
           </div>
           <div className="flex items-center gap-2">
-            <Button variant="outline" className="rounded-md border-gray-300 text-gray-700 hover:bg-gray-100 hover:text-gray-900 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200 dark:hover:bg-gray-700 transition-colors duration-200">
+            <Button variant="outline" className="rounded-md border-border text-foreground hover:bg-muted hover:text-foreground transition-colors duration-200">
               <FaPrint className="mr-2 h-4 w-4" /> Imprimir
             </Button>
-            <Button variant="outline" className="rounded-md border-gray-300 text-gray-700 hover:bg-gray-50 transition-colors duration-200 shadow-sm hover:shadow-md dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200 dark:hover:bg-gray-600">
+            <Button variant="outline" className="rounded-md border-border text-foreground hover:bg-muted hover:text-foreground transition-colors duration-200">
               <FaDownload className="mr-2 h-4 w-4" /> Exportar PDF
             </Button>
             <Link to={`/clients/${client.id}`}>
-              <Button variant="outline" className="rounded-md border-gray-300 text-gray-700 hover:bg-gray-100 hover:text-gray-900 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200 dark:hover:bg-gray-700 transition-colors duration-200">
+              <Button variant="outline" className="rounded-md border-border text-foreground hover:bg-muted hover:text-foreground transition-colors duration-200">
                 <FaArrowLeft className="mr-2 h-4 w-4" /> Voltar para {client.name}
               </Button>
             </Link>
           </div>
         </div>
-        <p className="text-sm text-gray-400 dark:text-gray-500">
-          Painel &gt; <Link to="/clients" className="hover:text-blue-500 dark:hover:text-blue-400">Clientes</Link> &gt; <Link to={`/clients/${client.id}`} className="hover:text-blue-500 dark:hover:text-blue-400">{client.name}</Link> &gt; {animal.name}
+        <p className="text-sm text-muted-foreground">
+          Painel &gt; <Link to="/clients" className="hover:text-primary">Clientes</Link> &gt; <Link to={`/clients/${client.id}`} className="hover:text-primary">{client.name}</Link> &gt; {animal.name}
         </p>
       </div>
 
       <div className="flex-1 p-6">
         <div className="mb-6">
-          <Card className="bg-white/90 backdrop-blur-sm border border-gray-200 dark:border-gray-700 rounded-2xl shadow-[0_1px_3px_rgba(0,0,0,0.05)] hover:shadow-[0_4px_8px_rgba(0,0,0,0.08)] transition-all duration-300 border-t-4 border-blue-400 dark:bg-gray-800/90">
+          <Card className="bg-card shadow-sm border border-border rounded-md">
             <CardHeader className="pb-3">
-              <CardTitle className="flex items-center gap-2 text-lg font-semibold text-[#374151] dark:text-gray-100">
-                <FaHeart className="h-5 w-5 text-red-500" /> Informações do Paciente
+              <CardTitle className="flex items-center gap-2 text-lg font-semibold text-foreground">
+                <FaHeart className="h-5 w-5 text-primary" /> Informações do Paciente
               </CardTitle>
             </CardHeader>
             <CardContent className="p-4 grid grid-cols-1 md:grid-cols-3 gap-4 pt-0">
@@ -533,7 +533,7 @@ const PatientRecordPage = () => {
                 <div className="flex items-center gap-3">
                   <Avatar className="h-12 w-12">
                     <AvatarImage src="/public/placeholder.svg" alt="Animal Avatar" />
-                    <AvatarFallback className="bg-blue-500 text-white text-lg font-bold">{animal.name.charAt(0)}</AvatarFallback>
+                    <AvatarFallback className="bg-primary text-primary-foreground text-lg font-bold">{animal.name.charAt(0)}</AvatarFallback>
                   </Avatar>
                   <div>
                     <p className="text-xl font-bold text-foreground">{animal.name}</p>
@@ -552,33 +552,33 @@ const PatientRecordPage = () => {
               <div className="grid grid-cols-2 gap-y-2">
                 <div className="flex items-center gap-2">
                   <FaCalendarAlt className="h-4 w-4 text-muted-foreground" />
-                  <p className="text-sm text-[#4B5563] dark:text-gray-400">Idade: <span className="font-normal text-foreground">{calculateAge(animal.birthday)}</span></p>
+                  <p className="text-sm text-muted-foreground">Idade: <span className="font-normal text-foreground">{calculateAge(animal.birthday)}</span></p>
                 </div>
                 <div className="flex items-center gap-2">
                   <FaBalanceScale className="h-4 w-4 text-muted-foreground" />
-                  <p className="text-sm text-[#4B5563] dark:text-gray-400">Peso: <span className="font-normal text-foreground">{animal.weight.toFixed(1)} kg</span></p>
+                  <p className="text-sm text-muted-foreground">Peso: <span className="font-normal text-foreground">{animal.weight.toFixed(1)} kg</span></p>
                 </div>
                 <div className="flex items-center gap-2">
                   {animal.gender === "Macho" ? <FaMale className="h-4 w-4 text-muted-foreground" /> : <FaUser className="h-4 w-4 text-muted-foreground" />}
-                  <p className="text-sm text-[#4B5563] dark:text-gray-400">Sexo: <span className="font-normal text-foreground">{animal.gender}</span></p>
+                  <p className="text-sm text-muted-foreground">Sexo: <span className="font-normal text-foreground">{animal.gender}</span></p>
                 </div>
                 <div className="flex items-center gap-2">
                   <FaCalendarAlt className="h-4 w-4 text-muted-foreground" />
-                  <p className="text-sm text-[#4B5563] dark:text-gray-400">Última consulta: <span className="font-normal text-foreground">{formatDate(animal.lastConsultationDate || '')}</span></p>
+                  <p className="text-sm text-muted-foreground">Última consulta: <span className="font-normal text-foreground">{formatDate(animal.lastConsultationDate || '')}</span></p>
                 </div>
               </div>
 
               {/* Coluna 3: Tutor e Financeiro */}
               <div className="flex flex-col gap-4">
                 <div>
-                  <p className="text-sm font-semibold text-[#374151] dark:text-gray-100 mb-1">Tutor Responsável</p>
-                  <p className="text-sm text-[#4B5563] dark:text-gray-400">Nome: <span className="font-normal text-foreground">{client.name}</span></p>
-                  <p className="text-sm text-[#4B5563] dark:text-gray-400">Telefone: <span className="font-normal text-foreground">{client.mainPhoneContact}</span></p>
+                  <p className="text-sm font-semibold text-foreground mb-1">Tutor Responsável</p>
+                  <p className="text-sm text-muted-foreground">Nome: <span className="font-normal text-foreground">{client.name}</span></p>
+                  <p className="text-sm text-muted-foreground">Telefone: <span className="font-normal text-foreground">{client.mainPhoneContact}</span></p>
                 </div>
-                <div className="bg-muted/50 dark:bg-muted/30 p-3 rounded-md border border-muted dark:border-gray-700">
-                  <p className="text-sm font-semibold text-[#374151] dark:text-gray-100 mb-1">Resumo Financeiro</p>
-                  <p className="text-sm text-[#4B5563] dark:text-gray-400">Total de procedimentos: <span className="font-normal text-foreground">{animal.totalProcedures || 0}</span></p>
-                  <p className="text-sm text-[#4B5563] dark:text-gray-400">Valor total: <span className="font-normal text-foreground">R$ {(animal.totalValue || 0).toFixed(2).replace('.', ',')}</span></p>
+                <div className="bg-muted/50 dark:bg-muted/30 p-3 rounded-md border border-border">
+                  <p className="text-sm font-semibold text-foreground mb-1">Resumo Financeiro</p>
+                  <p className="text-sm text-muted-foreground">Total de procedimentos: <span className="font-normal text-foreground">{animal.totalProcedures || 0}</span></p>
+                  <p className="text-sm text-muted-foreground">Valor total: <span className="font-normal text-foreground">R$ {(animal.totalValue || 0).toFixed(2).replace('.', ',')}</span></p>
                 </div>
               </div>
             </CardContent>
@@ -586,43 +586,43 @@ const PatientRecordPage = () => {
         </div>
 
         <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full mt-6">
-          <TabsList className="grid w-full grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-9 h-auto flex-wrap bg-white/90 backdrop-blur-sm border border-gray-200 dark:border-gray-700 rounded-2xl shadow-[0_1px_3px_rgba(0,0,0,0.05)] p-2">
-            <TabsTrigger value="appointments" className="rounded-xl data-[state=active]:bg-blue-500 data-[state=active]:text-white transition-colors duration-200 text-gray-700 dark:text-gray-300 data-[state=active]:dark:bg-blue-600">
+          <TabsList className="grid w-full grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-9 h-auto flex-wrap bg-card shadow-sm border border-border rounded-md p-2">
+            <TabsTrigger value="appointments" className="rounded-md data-[state=active]:bg-primary data-[state=active]:text-primary-foreground transition-colors duration-200 text-muted-foreground data-[state=active]:dark:bg-primary">
               <FaStethoscope className="h-4 w-4 mr-2" /> Atendimento
             </TabsTrigger>
-            <TabsTrigger value="exams" className="rounded-xl data-[state=active]:bg-blue-500 data-[state=active]:text-white transition-colors duration-200 text-gray-700 dark:text-gray-300 data-[state=active]:dark:bg-blue-600">
+            <TabsTrigger value="exams" className="rounded-md data-[state=active]:bg-primary data-[state=active]:text-primary-foreground transition-colors duration-200 text-muted-foreground data-[state=active]:dark:bg-primary">
               <FaCalendarAlt className="h-4 w-4 mr-2" /> Exames
             </TabsTrigger>
-            <TabsTrigger value="sales" className="rounded-xl data-[state=active]:bg-blue-500 data-[state=active]:text-white transition-colors duration-200 text-gray-700 dark:text-gray-300 data-[state=active]:dark:bg-blue-600">
+            <TabsTrigger value="sales" className="rounded-md data-[state=active]:bg-primary data-[state=active]:text-primary-foreground transition-colors duration-200 text-muted-foreground data-[state=active]:dark:bg-primary">
               <FaDollarSign className="h-4 w-4 mr-2" /> Vendas
             </TabsTrigger>
-            <TabsTrigger value="vaccines" className="rounded-xl data-[state=active]:bg-blue-500 data-[state=active]:text-white transition-colors duration-200 text-gray-700 dark:text-gray-300 data-[state=active]:dark:bg-blue-600">
+            <TabsTrigger value="vaccines" className="rounded-md data-[state=active]:bg-primary data-[state=active]:text-primary-foreground transition-colors duration-200 text-muted-foreground data-[state=active]:dark:bg-primary">
               <FaSyringe className="h-4 w-4 mr-2" /> Vacinas
             </TabsTrigger>
-            <TabsTrigger value="weight" className="rounded-xl data-[state=active]:bg-blue-500 data-[state=active]:text-white transition-colors duration-200 text-gray-700 dark:text-gray-300 data-[state=active]:dark:bg-blue-600">
+            <TabsTrigger value="weight" className="rounded-md data-[state=active]:bg-primary data-[state=active]:text-primary-foreground transition-colors duration-200 text-muted-foreground data-[state=active]:dark:bg-primary">
               <FaWeightHanging className="h-4 w-4 mr-2" /> Peso
             </TabsTrigger>
-            <TabsTrigger value="documents" className="rounded-xl data-[state=active]:bg-blue-500 data-[state=active]:text-white transition-colors duration-200 text-gray-700 dark:text-gray-300 data-[state=active]:dark:bg-blue-600">
+            <TabsTrigger value="documents" className="rounded-md data-[state=active]:bg-primary data-[state=active]:text-primary-foreground transition-colors duration-200 text-muted-foreground data-[state=active]:dark:bg-primary">
               <FaFileAlt className="h-4 w-4 mr-2" /> Documentos
             </TabsTrigger>
-            <TabsTrigger value="prescriptions" className="rounded-xl data-[state=active]:bg-blue-500 data-[state=active]:text-white transition-colors duration-200 text-gray-700 dark:text-gray-300 data-[state=active]:dark:bg-blue-600">
+            <TabsTrigger value="prescriptions" className="rounded-md data-[state=active]:bg-primary data-[state=active]:text-primary-foreground transition-colors duration-200 text-muted-foreground data-[state=active]:dark:bg-primary">
               <FaClipboardList className="h-4 w-4 mr-2" /> Receitas
             </TabsTrigger>
-            <TabsTrigger value="observations" className="rounded-xl data-[state=active]:bg-blue-500 data-[state=active]:text-white transition-colors duration-200 text-gray-700 dark:text-gray-300 data-[state=active]:dark:bg-blue-600">
+            <TabsTrigger value="observations" className="rounded-md data-[state=active]:bg-primary data-[state=active]:text-primary-foreground transition-colors duration-200 text-muted-foreground data-[state=active]:dark:bg-primary">
               <FaCommentAlt className="h-4 w-4 mr-2" /> Observações
             </TabsTrigger>
-            <TabsTrigger value="financial" className="rounded-xl data-[state=active]:bg-blue-500 data-[state=active]:text-white transition-colors duration-200 text-gray-700 dark:text-gray-300 data-[state=active]:dark:bg-blue-600">
+            <TabsTrigger value="financial" className="rounded-md data-[state=active]:bg-primary data-[state=active]:text-primary-foreground transition-colors duration-200 text-muted-foreground data-[state=active]:dark:bg-primary">
               <FaMoneyBillWave className="h-4 w-4 mr-2" /> Financeiro
             </TabsTrigger>
           </TabsList>
 
           <TabsContent value="appointments" className="mt-4">
-            <Card className="bg-white/90 backdrop-blur-sm border border-gray-200 dark:border-gray-700 rounded-2xl shadow-[0_1px_3px_rgba(0,0,0,0.05)] hover:shadow-[0_4px_8px_rgba(0,0,0,0.08)] transition-all duration-300 border-t-4 border-blue-400 dark:bg-gray-800/90">
+            <Card className="bg-card shadow-sm border border-border rounded-md">
               <CardHeader className="flex flex-row items-center justify-between pb-3">
-                <CardTitle className="flex items-center gap-2 text-lg font-semibold text-[#374151] dark:text-gray-100">
-                  <FaStethoscope className="h-5 w-5 text-blue-500" /> Histórico de Atendimentos
+                <CardTitle className="flex items-center gap-2 text-lg font-semibold text-foreground">
+                  <FaStethoscope className="h-5 w-5 text-primary" /> Histórico de Atendimentos
                 </CardTitle>
-                <Button size="sm" onClick={handleAddAppointmentClick} className="rounded-md bg-gradient-to-r from-blue-500 to-indigo-500 text-white hover:from-blue-600 hover:to-indigo-600 font-semibold transition-all duration-200 shadow-md hover:shadow-lg">
+                <Button size="sm" onClick={handleAddAppointmentClick} className="rounded-md bg-primary text-primary-foreground hover:bg-primary/90 font-semibold transition-all duration-200 shadow-md hover:shadow-lg">
                   <FaPlus className="h-4 w-4 mr-2" /> Adicionar Atendimento
                 </Button>
               </CardHeader>
@@ -630,7 +630,7 @@ const PatientRecordPage = () => {
                 {animalAppointments.length > 0 ? (
                   <div className="space-y-4">
                     {animalAppointments.map((app) => (
-                      <Card key={app.id} className="p-4 bg-background dark:bg-gray-800 shadow-sm border border-gray-200 dark:border-gray-700">
+                      <Card key={app.id} className="p-4 bg-input shadow-sm border border-border">
                         <div className="flex items-center justify-between mb-2">
                           <div className="flex items-center gap-2">
                             <Badge className="px-2 py-0.5 text-xs font-medium rounded-full bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200">
@@ -641,11 +641,11 @@ const PatientRecordPage = () => {
                             </p>
                           </div>
                           <div className="flex gap-2">
-                            <Button variant="ghost" size="icon" onClick={() => handleEditAppointmentClick(app)} className="rounded-md hover:bg-gray-100 hover:text-gray-900 dark:hover:bg-gray-700 dark:hover:text-gray-200 transition-colors duration-200">
+                            <Button variant="ghost" size="icon" onClick={() => handleEditAppointmentClick(app)} className="rounded-md hover:bg-muted hover:text-foreground transition-colors duration-200">
                               <FaEye className="h-4 w-4" />
                             </Button>
-                            <Button variant="ghost" size="icon" onClick={() => handleDeleteAppointment(app.id)} className="rounded-md hover:bg-gray-100 hover:text-gray-900 dark:hover:bg-gray-700 dark:hover:text-gray-200 transition-colors duration-200">
-                              <FaTrashAlt className="h-4 w-4 text-red-500" />
+                            <Button variant="ghost" size="icon" onClick={() => handleDeleteAppointment(app.id)} className="rounded-md hover:bg-muted hover:text-foreground transition-colors duration-200">
+                              <FaTrashAlt className="h-4 w-4 text-destructive" />
                             </Button>
                           </div>
                         </div>
@@ -667,12 +667,12 @@ const PatientRecordPage = () => {
             </Card>
             {/* REMOVIDO: Dialog para Adicionar/Editar Atendimento */}
             {/* <Dialog open={isAppointmentFormOpen} onOpenChange={setIsAppointmentFormOpen}>
-              <DialogContent className="sm:max-w-[900px] max-h-[90vh] overflow-y-auto bg-white/90 backdrop-blur-sm border border-gray-200 dark:border-gray-700 rounded-2xl shadow-[0_1px_3px_rgba(0,0,0,0.05)] dark:bg-gray-800/90">
+              <DialogContent className="sm:max-w-[900px] max-h-[90vh] overflow-y-auto bg-card shadow-sm border border-border rounded-md">
                 <DialogHeader>
-                  <DialogTitle className="text-lg font-semibold text-[#374151] dark:text-gray-100">
+                  <DialogTitle className="text-lg font-semibold text-foreground">
                     {editingAppointment ? "Editar Atendimento" : "Novo Atendimento"}
                   </DialogTitle>
-                  <DialogDescription className="text-sm text-[#6B7280] dark:text-gray-400">
+                  <DialogDescription className="text-sm text-muted-foreground">
                     Preencha os detalhes do atendimento.
                   </DialogDescription>
                 </DialogHeader>
@@ -689,13 +689,13 @@ const PatientRecordPage = () => {
           </TabsContent>
 
           <TabsContent value="exams" className="mt-4">
-            <Card className="bg-white/90 backdrop-blur-sm border border-gray-200 dark:border-gray-700 rounded-2xl shadow-[0_1px_3px_rgba(0,0,0,0.05)] hover:shadow-[0_4px_8px_rgba(0,0,0,0.08)] transition-all duration-300 border-t-4 border-purple-400 dark:bg-gray-800/90">
+            <Card className="bg-card shadow-sm border border-border rounded-md">
               <CardHeader className="flex flex-row items-center justify-between pb-3">
-                <CardTitle className="flex items-center gap-2 text-lg font-semibold text-[#374151] dark:text-gray-100">
-                  <FaCalendarAlt className="h-5 w-5 text-purple-500" /> Histórico de Exames
+                <CardTitle className="flex items-center gap-2 text-lg font-semibold text-foreground">
+                  <FaCalendarAlt className="h-5 w-5 text-primary" /> Histórico de Exames
                 </CardTitle>
                 <Link to={`/clients/${clientId}/animals/${animalId}/add-exam`}>
-                  <Button size="sm" className="rounded-md bg-gradient-to-r from-blue-500 to-indigo-500 text-white hover:from-blue-600 hover:to-indigo-600 font-semibold transition-all duration-200 shadow-md hover:shadow-lg">
+                  <Button size="sm" className="rounded-md bg-primary text-primary-foreground hover:bg-primary/90 font-semibold transition-all duration-200 shadow-md hover:shadow-lg">
                     <FaPlus className="h-4 w-4 mr-2" /> Adicionar Exame
                   </Button>
                 </Link>
@@ -704,7 +704,7 @@ const PatientRecordPage = () => {
                 {examsList.length > 0 ? (
                   <div className="space-y-4">
                     {examsList.map((exam) => (
-                      <Card key={exam.id} className="p-4 bg-background dark:bg-gray-800 shadow-sm border border-gray-200 dark:border-gray-700">
+                      <Card key={exam.id} className="p-4 bg-input shadow-sm border border-border">
                         <div className="flex items-center justify-between mb-2">
                           <div className="flex items-center gap-2">
                             <Badge className="px-2 py-0.5 text-xs font-medium rounded-full bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-200">
@@ -714,7 +714,7 @@ const PatientRecordPage = () => {
                               {exam.result}
                             </p>
                           </div>
-                          <Button variant="ghost" size="icon" className="rounded-md hover:bg-gray-100 hover:text-gray-900 dark:hover:bg-gray-700 dark:hover:text-gray-200 transition-colors duration-200">
+                          <Button variant="ghost" size="icon" className="rounded-md hover:bg-muted hover:text-foreground transition-colors duration-200">
                             <FaEye className="h-4 w-4" />
                           </Button>
                         </div>
@@ -736,16 +736,16 @@ const PatientRecordPage = () => {
             </Card>
 
             <Dialog open={isAddExamDialogOpen} onOpenChange={setIsAddExamDialogOpen}>
-              <DialogContent className="sm:max-w-[700px] bg-white/90 backdrop-blur-sm border border-gray-200 dark:border-gray-700 rounded-2xl shadow-[0_1px_3px_rgba(0,0,0,0.05)] dark:bg-gray-800/90">
+              <DialogContent className="sm:max-w-[700px] bg-card shadow-sm border border-border rounded-md">
                 <DialogHeader>
-                  <DialogTitle className="text-lg font-semibold text-[#374151] dark:text-gray-100">Adicionar Novo Exame</DialogTitle>
-                  <DialogDescription className="text-sm text-[#6B7280] dark:text-gray-400">
+                  <DialogTitle className="text-lg font-semibold text-foreground">Adicionar Novo Exame</DialogTitle>
+                  <DialogDescription className="text-sm text-muted-foreground">
                     Preencha os detalhes do exame para adicionar ao prontuário.
                   </DialogDescription>
                 </DialogHeader>
                 <div className="grid gap-4 py-4">
                   <div className="grid grid-cols-4 items-center gap-4">
-                    <Label htmlFor="examDate" className="text-right text-[#4B5563] dark:text-gray-400 font-medium">
+                    <Label htmlFor="examDate" className="text-right text-muted-foreground font-medium">
                       Data
                     </Label>
                     <Input
@@ -753,15 +753,15 @@ const PatientRecordPage = () => {
                       type="date"
                       value={newExamDate}
                       onChange={(e) => setNewExamDate(e.target.value)}
-                      className="col-span-3 bg-white rounded-lg border-gray-200 dark:border-gray-600 focus:ring-2 focus:ring-blue-400 placeholder-[#9CA3AF] dark:placeholder-gray-500 transition-all duration-200"
+                      className="col-span-3 bg-input rounded-md border-border focus:ring-2 focus:ring-ring placeholder-muted-foreground transition-all duration-200"
                     />
                   </div>
                   <div className="grid grid-cols-4 items-center gap-4">
-                    <Label htmlFor="examType" className="text-right text-[#4B5563] dark:text-gray-400 font-medium">
+                    <Label htmlFor="examType" className="text-right text-muted-foreground font-medium">
                       Tipo de Exame
                     </Label>
                     <Select onValueChange={setNewExamType} value={newExamType} >
-                      <SelectTrigger id="examType" className="col-span-3 bg-white rounded-lg border-gray-200 dark:border-gray-600 focus:ring-2 focus:ring-blue-400 placeholder-[#9CA3AF] dark:placeholder-gray-500 transition-all duration-200">
+                      <SelectTrigger id="examType" className="col-span-3 bg-input rounded-md border-border focus:ring-2 focus:ring-ring placeholder-muted-foreground transition-all duration-200">
                         <SelectValue placeholder="Selecione o tipo de exame" />
                       </SelectTrigger>
                       <SelectContent>
@@ -774,11 +774,11 @@ const PatientRecordPage = () => {
                     </Select>
                   </div>
                   <div className="grid grid-cols-4 items-center gap-4">
-                    <Label htmlFor="examVet" className="text-right text-[#4B5563] dark:text-gray-400 font-medium">
+                    <Label htmlFor="examVet" className="text-right text-muted-foreground font-medium">
                       Veterinário
                     </Label>
                     <Select onValueChange={setNewExamVet} value={newExamVet}>
-                      <SelectTrigger id="examVet" className="col-span-3 bg-white rounded-lg border-gray-200 dark:border-gray-600 focus:ring-2 focus:ring-blue-400 placeholder-[#9CA3AF] dark:placeholder-gray-500 transition-all duration-200">
+                      <SelectTrigger id="examVet" className="col-span-3 bg-input rounded-md border-border focus:ring-2 focus:ring-ring placeholder-muted-foreground transition-all duration-200">
                         <SelectValue placeholder="Selecione o veterinário" />
                       </SelectTrigger>
                       <SelectContent>
@@ -793,148 +793,148 @@ const PatientRecordPage = () => {
 
                   {newExamType === "Hemograma Completo" ? (
                     <>
-                      <h3 className="col-span-4 text-lg font-semibold mt-4 mb-2 text-[#374151] dark:text-gray-100">Eritrograma</h3>
+                      <h3 className="col-span-4 text-lg font-semibold mt-4 mb-2 text-foreground">Eritrograma</h3>
                       <div className="grid grid-cols-2 col-span-4 gap-4">
                         <div className="space-y-2">
-                          <Label htmlFor="hemacias" className="text-[#4B5563] dark:text-gray-400 font-medium">Hemácias (m/mm3)</Label>
-                          <Input id="hemacias" type="number" placeholder="Ex: 5.5" value={newHemacias} onChange={(e) => setNewHemacias(e.target.value)} className="bg-white rounded-lg border-gray-200 dark:border-gray-600 focus:ring-2 focus:ring-blue-400 placeholder-[#9CA3AF] dark:placeholder-gray-500 transition-all duration-200" />
+                          <Label htmlFor="hemacias" className="text-muted-foreground font-medium">Hemácias (m/mm3)</Label>
+                          <Input id="hemacias" type="number" placeholder="Ex: 5.5" value={newHemacias} onChange={(e) => setNewHemacias(e.target.value)} className="bg-input rounded-md border-border focus:ring-2 focus:ring-ring placeholder-muted-foreground transition-all duration-200" />
                         </div>
                         <div className="space-y-2">
-                          <Label htmlFor="volumeGlobular" className="text-[#4B5563] dark:text-gray-400 font-medium">Volume globular (%)</Label>
-                          <Input id="volumeGlobular" type="number" placeholder="Ex: 37" value={newVolumeGlobular} onChange={(e) => setNewVolumeGlobular(e.target.value)} className="bg-white rounded-lg border-gray-200 dark:border-gray-600 focus:ring-2 focus:ring-blue-400 placeholder-[#9CA3AF] dark:placeholder-gray-500 transition-all duration-200" />
+                          <Label htmlFor="volumeGlobular" className="text-muted-foreground font-medium">Volume globular (%)</Label>
+                          <Input id="volumeGlobular" type="number" placeholder="Ex: 37" value={newVolumeGlobular} onChange={(e) => setNewVolumeGlobular(e.target.value)} className="bg-input rounded-md border-border focus:ring-2 focus:ring-ring placeholder-muted-foreground transition-all duration-200" />
                         </div>
                         <div className="space-y-2">
-                          <Label htmlFor="hemoglobina" className="text-[#4B5563] dark:text-gray-400 font-medium">Hemoglobina (g/dL)</Label>
-                          <Input id="hemoglobina" type="number" placeholder="Ex: 12.0" value={newHemoglobina} onChange={(e) => setNewHemoglobina(e.target.value)} className="bg-white rounded-lg border-gray-200 dark:border-gray-600 focus:ring-2 focus:ring-blue-400 placeholder-[#9CA3AF] dark:placeholder-gray-500 transition-all duration-200" />
+                          <Label htmlFor="hemoglobina" className="text-muted-foreground font-medium">Hemoglobina (g/dL)</Label>
+                          <Input id="hemoglobina" type="number" placeholder="Ex: 12.0" value={newHemoglobina} onChange={(e) => setNewHemoglobina(e.target.value)} className="bg-input rounded-md border-border focus:ring-2 focus:ring-ring placeholder-muted-foreground transition-all duration-200" />
                         </div>
                         <div className="space-y-2">
-                          <Label htmlFor="vgm" className="text-[#4B5563] dark:text-gray-400 font-medium">VGM (fL)</Label>
-                          <Input id="vgm" type="number" placeholder="Ex: 60.0" value={newVGM} onChange={(e) => setNewVGM(e.target.value)} className="bg-white rounded-lg border-gray-200 dark:border-gray-600 focus:ring-2 focus:ring-blue-400 placeholder-[#9CA3AF] dark:placeholder-gray-500 transition-all duration-200" />
+                          <Label htmlFor="vgm" className="text-muted-foreground font-medium">VGM (fL)</Label>
+                          <Input id="vgm" type="number" placeholder="Ex: 60.0" value={newVGM} onChange={(e) => setNewVGM(e.target.value)} className="bg-input rounded-md border-border focus:ring-2 focus:ring-ring placeholder-muted-foreground transition-all duration-200" />
                         </div>
                         <div className="space-y-2">
-                          <Label htmlFor="chgm" className="text-[#4B5563] dark:text-gray-400 font-medium">CHGM (%)</Label>
-                          <Input id="chgm" type="number" placeholder="Ex: 31" value={newCHGM} onChange={(e) => setNewCHGM(e.target.value)} className="bg-white rounded-lg border-gray-200 dark:border-gray-600 focus:ring-2 focus:ring-blue-400 placeholder-[#9CA3AF] dark:placeholder-gray-500 transition-all duration-200" />
+                          <Label htmlFor="chgm" className="text-muted-foreground font-medium">CHGM (%)</Label>
+                          <Input id="chgm" type="number" placeholder="Ex: 31" value={newCHGM} onChange={(e) => setNewCHGM(e.target.value)} className="bg-input rounded-md border-border focus:ring-2 focus:ring-ring placeholder-muted-foreground transition-all duration-200" />
                         </div>
                         <div className="space-y-2">
-                          <Label htmlFor="plaquetas" className="text-[#4B5563] dark:text-gray-400 font-medium">Plaquetas (m/mm3)</Label>
-                          <Input id="plaquetas" type="number" placeholder="Ex: 300" value={newPlaquetas} onChange={(e) => setNewPlaquetas(e.target.value)} className="bg-white rounded-lg border-gray-200 dark:border-gray-600 focus:ring-2 focus:ring-blue-400 placeholder-[#9CA3AF] dark:placeholder-gray-500 transition-all duration-200" />
+                          <Label htmlFor="plaquetas" className="text-muted-foreground font-medium">Plaquetas (m/mm3)</Label>
+                          <Input id="plaquetas" type="number" placeholder="Ex: 300" value={newPlaquetas} onChange={(e) => setNewPlaquetas(e.target.value)} className="bg-input rounded-md border-border focus:ring-2 focus:ring-ring placeholder-muted-foreground transition-all duration-200" />
                         </div>
                         <div className="space-y-2">
-                          <Label htmlFor="formasTotais" className="text-[#4B5563] dark:text-gray-400 font-medium">Formas totais (m/mm3)</Label>
-                          <Input id="formasTotais" type="number" placeholder="Ex: 6.0" value={newFormasTotais} onChange={(e) => setNewFormasTotais(e.target.value)} className="bg-white rounded-lg border-gray-200 dark:border-gray-600 focus:ring-2 focus:ring-blue-400 placeholder-[#9CA3AF] dark:placeholder-gray-500 transition-all duration-200" />
+                          <Label htmlFor="formasTotais" className="text-muted-foreground font-medium">Formas totais (m/mm3)</Label>
+                          <Input id="formasTotais" type="number" placeholder="Ex: 6.0" value={newFormasTotais} onChange={(e) => setNewFormasTotais(e.target.value)} className="bg-input rounded-md border-border focus:ring-2 focus:ring-ring placeholder-muted-foreground transition-all duration-200" />
                         </div>
                         <div className="space-y-2">
-                          <Label htmlFor="hemaciasNucleadas" className="text-[#4B5563] dark:text-gray-400 font-medium">Hemácias nucleadas (g/dL)</Label>
-                          <Input id="hemaciasNucleadas" type="number" placeholder="Ex: 0" value={newHemaciasNucleadas} onChange={(e) => setNewHemaciasNucleadas(e.target.value)} className="bg-white rounded-lg border-gray-200 dark:border-gray-600 focus:ring-2 focus:ring-blue-400 placeholder-[#9CA3AF] dark:placeholder-gray-500 transition-all duration-200" />
+                          <Label htmlFor="hemaciasNucleadas" className="text-muted-foreground font-medium">Hemácias nucleadas (g/dL)</Label>
+                          <Input id="hemaciasNucleadas" type="number" placeholder="Ex: 0" value={newHemaciasNucleadas} onChange={(e) => setNewHemaciasNucleadas(e.target.value)} className="bg-input rounded-md border-border focus:ring-2 focus:ring-ring placeholder-muted-foreground transition-all duration-200" />
                         </div>
                       </div>
 
-                      <h3 className="col-span-4 text-lg font-semibold mt-4 mb-2 text-[#374151] dark:text-gray-100">Leucograma</h3>
+                      <h3 className="col-span-4 text-lg font-semibold mt-4 mb-2 text-foreground">Leucograma</h3>
                       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
                         <div className="space-y-2">
-                          <Label htmlFor="leucocitos" className="text-[#4B5563] dark:text-gray-400 font-medium">Leucócitos (m/mm3)</Label>
-                          <Input id="leucocitos" type="number" placeholder="Ex: 6.0" value={newLeucocitos} onChange={(e) => setNewLeucocitos(e.target.value)} className="bg-white rounded-lg border-gray-200 dark:border-gray-600 focus:ring-2 focus:ring-blue-400 placeholder-[#9CA3AF] dark:placeholder-gray-500 transition-all duration-200" />
+                          <Label htmlFor="leucocitos" className="text-muted-foreground font-medium">Leucócitos (m/mm3)</Label>
+                          <Input id="leucocitos" type="number" placeholder="Ex: 6.0" value={newLeucocitos} onChange={(e) => setNewLeucocitos(e.target.value)} className="bg-input rounded-md border-border focus:ring-2 focus:ring-ring placeholder-muted-foreground transition-all duration-200" />
                         </div>
                         <div className="space-y-2">
-                          <Label htmlFor="bastoes" className="text-[#4B5563] dark:text-gray-400 font-medium">Bastões (%)</Label>
-                          <Input id="bastoes" type="number" placeholder="Ex: 0" value={newBastoes} onChange={(e) => setNewBastoes(e.target.value)} className="bg-white rounded-lg border-gray-200 dark:border-gray-600 focus:ring-2 focus:ring-blue-400 placeholder-[#9CA3AF] dark:placeholder-gray-500 transition-all duration-200" />
+                          <Label htmlFor="bastoes" className="text-muted-foreground font-medium">Bastões (%)</Label>
+                          <Input id="bastoes" type="number" placeholder="Ex: 0" value={newBastoes} onChange={(e) => setNewBastoes(e.target.value)} className="bg-input rounded-md border-border focus:ring-2 focus:ring-ring placeholder-muted-foreground transition-all duration-200" />
                         </div>
                         <div className="space-y-2">
-                          <Label htmlFor="segmentados" className="text-[#4B5563] dark:text-gray-400 font-medium">Segmentados (%)</Label>
-                          <Input id="segmentados" type="number" placeholder="Ex: 60" value={newSegmentados} onChange={(e) => setNewSegmentados(e.target.value)} className="bg-white rounded-lg border-gray-200 dark:border-gray-600 focus:ring-2 focus:ring-blue-400 placeholder-[#9CA3AF] dark:placeholder-gray-500 transition-all duration-200" />
+                          <Label htmlFor="segmentados" className="text-muted-foreground font-medium">Segmentados (%)</Label>
+                          <Input id="segmentados" type="number" placeholder="Ex: 60" value={newSegmentados} onChange={(e) => setNewSegmentados(e.target.value)} className="bg-input rounded-md border-border focus:ring-2 focus:ring-ring placeholder-muted-foreground transition-all duration-200" />
                         </div>
                         <div className="space-y-2">
-                          <Label htmlFor="linfocitos" className="text-[#4B5563] dark:text-gray-400 font-medium">Linfócitos (%)</Label>
-                          <Input id="linfocitos" type="number" placeholder="Ex: 30" value={newLinfocitos} onChange={(e) => setNewLinfocitos(e.target.value)} className="bg-white rounded-lg border-gray-200 dark:border-gray-600 focus:ring-2 focus:ring-blue-400 placeholder-[#9CA3AF] dark:placeholder-gray-500 transition-all duration-200" />
+                          <Label htmlFor="linfocitos" className="text-muted-foreground font-medium">Linfócitos (%)</Label>
+                          <Input id="linfocitos" type="number" placeholder="Ex: 30" value={newLinfocitos} onChange={(e) => setNewLinfocitos(e.target.value)} className="bg-input rounded-md border-border focus:ring-2 focus:ring-ring placeholder-muted-foreground transition-all duration-200" />
                         </div>
                         <div className="space-y-2">
-                          <Label htmlFor="monocitos" className="text-[#4B5563] dark:text-gray-400 font-medium">Monócitos (%)</Label>
-                          <Input id="monocitos" type="number" placeholder="Ex: 3" value={newMonocitos} onChange={(e) => setNewMonocitos(e.target.value)} className="bg-white rounded-lg border-gray-200 dark:border-gray-600 focus:ring-2 focus:ring-blue-400 placeholder-[#9CA3AF] dark:placeholder-gray-500 transition-all duration-200" />
+                          <Label htmlFor="monocitos" className="text-muted-foreground font-medium">Monócitos (%)</Label>
+                          <Input id="monocitos" type="number" placeholder="Ex: 3" value={newMonocitos} onChange={(e) => setNewMonocitos(e.target.value)} className="bg-input rounded-md border-border focus:ring-2 focus:ring-ring placeholder-muted-foreground transition-all duration-200" />
                         </div>
                         <div className="space-y-2">
-                          <Label htmlFor="eosinofilos" className="text-[#4B5563] dark:text-gray-400 font-medium">Eosinófilos (%)</Label>
-                          <Input id="eosinofilos" type="number" placeholder="Ex: 2" value={newEosinofilos} onChange={(e) => setNewEosinofilos(e.target.value)} className="bg-white rounded-lg border-gray-200 dark:border-gray-600 focus:ring-2 focus:ring-blue-400 placeholder-[#9CA3AF] dark:placeholder-gray-500 transition-all duration-200" />
+                          <Label htmlFor="eosinofilos" className="text-muted-foreground font-medium">Eosinófilos (%)</Label>
+                          <Input id="eosinofilos" type="number" placeholder="Ex: 2" value={newEosinofilos} onChange={(e) => setNewEosinofilos(e.target.value)} className="bg-input rounded-md border-border focus:ring-2 focus:ring-ring placeholder-muted-foreground transition-all duration-200" />
                         </div>
                         <div className="space-y-2">
-                          <Label htmlFor="basofilos" className="text-[#4B5563] dark:text-gray-400 font-medium">Basófilos (%)</Label>
-                          <Input id="basofilos" type="number" placeholder="Ex: 1" value={newBasofilos} onChange={(e) => setNewBasofilos(e.target.value)} className="bg-white rounded-lg border-gray-200 dark:border-gray-600 focus:ring-2 focus:ring-blue-400 placeholder-[#9CA3AF] dark:placeholder-gray-500 transition-all duration-200" />
+                          <Label htmlFor="basofilos" className="text-muted-foreground font-medium">Basófilos (%)</Label>
+                          <Input id="basofilos" type="number" placeholder="Ex: 1" value={newBasofilos} onChange={(e) => setNewBasofilos(e.target.value)} className="bg-input rounded-md border-border focus:ring-2 focus:ring-ring placeholder-muted-foreground transition-all duration-200" />
                         </div>
                       </div>
                     </>
                   ) : (
                     <div className="space-y-2 col-span-full">
-                      <Label htmlFor="examResult">Resultado</Label>
+                      <Label htmlFor="examResult" className="text-muted-foreground font-medium">Resultado</Label>
                       <Input
                         id="examResult"
                         placeholder="Resultado do exame"
                         value={newExamResult}
                         onChange={(e) => setNewExamResult(e.target.value)}
-                        className="bg-white rounded-lg border-gray-200 dark:border-gray-600 focus:ring-2 focus:ring-blue-400 placeholder-[#9CA3AF] dark:placeholder-gray-500 transition-all duration-200"
+                        className="bg-input rounded-md border-border focus:ring-2 focus:ring-ring placeholder-muted-foreground transition-all duration-200"
                       />
                     </div>
                   )}
 
                   <div className="space-y-2 col-span-full mt-4">
-                    <Label htmlFor="examObservations">Observações</Label>
+                    <Label htmlFor="examObservations" className="text-muted-foreground font-medium">Observações</Label>
                     <Textarea
                       id="examObservations"
                       placeholder="Observações gerais do exame"
                       value={newExamObservations}
                       onChange={(e) => setNewExamObservations(e.target.value)}
                       rows={3}
-                      className="bg-white rounded-lg border-gray-200 dark:border-gray-600 focus:ring-2 focus:ring-blue-400 placeholder-[#9CA3AF] dark:placeholder-gray-500 transition-all duration-200"
+                      className="bg-input rounded-md border-border focus:ring-2 focus:ring-ring placeholder-muted-foreground transition-all duration-200"
                     />
                   </div>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div className="space-y-2">
-                      <Label htmlFor="operator">Operador</Label>
+                      <Label htmlFor="operator" className="text-muted-foreground font-medium">Operador</Label>
                       <Input
                         id="operator"
                         placeholder="Nome do operador"
                         value={newOperator}
                         onChange={(e) => setNewOperator(e.target.value)}
-                        className="bg-white rounded-lg border-gray-200 dark:border-gray-600 focus:ring-2 focus:ring-blue-400 placeholder-[#9CA3AF] dark:placeholder-gray-500 transition-all duration-200"
+                        className="bg-input rounded-md border-border focus:ring-2 focus:ring-ring placeholder-muted-foreground transition-all duration-200"
                       />
                     </div>
                     <div className="space-y-2">
-                      <Label htmlFor="referenceDate">Data de Referência</Label>
+                      <Label htmlFor="referenceDate" className="text-muted-foreground font-medium">Data de Referência</Label>
                       <Input
                         id="referenceDate"
                         type="date"
                         value={newReferenceDate}
                         onChange={(e) => setNewReferenceDate(e.target.value)}
-                        className="bg-white rounded-lg border-gray-200 dark:border-gray-600 focus:ring-2 focus:ring-blue-400 placeholder-[#9CA3AF] dark:placeholder-gray-500 transition-all duration-200"
+                        className="bg-input rounded-md border-border focus:ring-2 focus:ring-ring placeholder-muted-foreground transition-all duration-200"
                       />
                     </div>
                   </div>
                   <div className="space-y-2 col-span-full">
-                    <Label htmlFor="referenceTables">Tabelas de referência</Label>
+                    <Label htmlFor="referenceTables" className="text-muted-foreground font-medium">Tabelas de referência</Label>
                     <Textarea
                       id="referenceTables"
                       placeholder="Tabelas de referência"
                       value={newReferenceTables}
                       onChange={(e) => setNewReferenceTables(e.target.value)}
                       rows={3}
-                      className="bg-white rounded-lg border-gray-200 dark:border-gray-600 focus:ring-2 focus:ring-blue-400 placeholder-[#9CA3AF] dark:placeholder-gray-500 transition-all duration-200"
+                      className="bg-input rounded-md border-border focus:ring-2 focus:ring-ring placeholder-muted-foreground transition-all duration-200"
                     />
                   </div>
                   <div className="space-y-2 col-span-full">
-                    <Label htmlFor="conclusions">Conclusões</Label>
+                    <Label htmlFor="conclusions" className="text-muted-foreground font-medium">Conclusões</Label>
                     <Textarea
                       id="conclusions"
                       placeholder="Conclusões do exame"
                       value={newConclusions}
                       onChange={(e) => setNewConclusions(e.target.value)}
                       rows={5}
-                      className="bg-white rounded-lg border-gray-200 dark:border-gray-600 focus:ring-2 focus:ring-blue-400 placeholder-[#9CA3AF] dark:placeholder-gray-500 transition-all duration-200"
+                      className="bg-input rounded-md border-border focus:ring-2 focus:ring-ring placeholder-muted-foreground transition-all duration-200"
                     />
                   </div>
                 </div>
                 <DialogFooter>
-                  <Button variant="outline" onClick={() => setIsAddExamDialogOpen(false)} className="bg-white border border-gray-300 text-gray-700 hover:bg-gray-50 rounded-md transition-all duration-200 shadow-sm hover:shadow-md dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200 dark:hover:bg-gray-600">
+                  <Button variant="outline" onClick={() => setIsAddExamDialogOpen(false)} className="bg-card border border-border text-foreground hover:bg-muted rounded-md transition-all duration-200 shadow-sm hover:shadow-md">
                     <FaTimes className="mr-2 h-4 w-4" /> Cancelar
                   </Button>
-                  <Button onClick={handleAddExam} className="bg-gradient-to-r from-blue-500 to-indigo-500 text-white hover:from-blue-600 hover:to-indigo-600 rounded-md font-semibold transition-all duration-200 shadow-md hover:shadow-lg">
+                  <Button onClick={handleAddExam} className="bg-primary text-primary-foreground hover:bg-primary/90 rounded-md font-semibold transition-all duration-200 shadow-md hover:shadow-lg">
                     <FaSave className="mr-2 h-4 w-4" /> Salvar Exame
                   </Button>
                 </DialogFooter>
@@ -943,12 +943,12 @@ const PatientRecordPage = () => {
           </TabsContent>
 
           <TabsContent value="sales" className="mt-4">
-            <Card className="bg-white/90 backdrop-blur-sm border border-gray-200 dark:border-gray-700 rounded-2xl shadow-[0_1px_3px_rgba(0,0,0,0.05)] hover:shadow-[0_4px_8px_rgba(0,0,0,0.08)] transition-all duration-300 border-t-4 border-green-400 dark:bg-gray-800/90">
+            <Card className="bg-card shadow-sm border border-border rounded-md">
               <CardHeader className="flex flex-row items-center justify-between pb-3">
-                <CardTitle className="flex items-center gap-2 text-lg font-semibold text-[#374151] dark:text-gray-100">
-                  <FaDollarSign className="h-5 w-5 text-green-500" /> Histórico de Vendas
+                <CardTitle className="flex items-center gap-2 text-lg font-semibold text-foreground">
+                  <FaDollarSign className="h-5 w-5 text-primary" /> Histórico de Vendas
                 </CardTitle>
-                <Button size="sm" className="rounded-md bg-gradient-to-r from-blue-500 to-indigo-500 text-white hover:from-blue-600 hover:to-indigo-600 font-semibold transition-all duration-200 shadow-md hover:shadow-lg">
+                <Button size="sm" className="rounded-md bg-primary text-primary-foreground hover:bg-primary/90 font-semibold transition-all duration-200 shadow-md hover:shadow-lg">
                   <FaPlus className="h-4 w-4 mr-2" /> Adicionar Venda
                 </Button>
               </CardHeader>
@@ -956,7 +956,7 @@ const PatientRecordPage = () => {
                 {animalSalesTransactions.length > 0 ? (
                   <div className="space-y-4">
                     {animalSalesTransactions.map((sale) => (
-                      <Card key={sale.id} className="p-4 bg-background dark:bg-gray-800 shadow-sm border border-gray-200 dark:border-gray-700">
+                      <Card key={sale.id} className="p-4 bg-input shadow-sm border border-border">
                         <div className="flex items-center justify-between mb-2">
                           <div className="flex items-center gap-2">
                             <Badge className="px-2 py-0.5 text-xs font-medium rounded-full bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200">
@@ -989,12 +989,12 @@ const PatientRecordPage = () => {
           </TabsContent>
 
           <TabsContent value="vaccines" className="mt-4">
-            <Card className="bg-white/90 backdrop-blur-sm border border-gray-200 dark:border-gray-700 rounded-2xl shadow-[0_1px_3px_rgba(0,0,0,0.05)] hover:shadow-[0_4px_8px_rgba(0,0,0,0.08)] transition-all duration-300 border-t-4 border-yellow-400 dark:bg-gray-800/90">
+            <Card className="bg-card shadow-sm border border-border rounded-md">
               <CardHeader className="flex flex-row items-center justify-between pb-3">
-                <CardTitle className="flex items-center gap-2 text-lg font-semibold text-[#374151] dark:text-gray-100">
-                  <FaSyringe className="h-5 w-5 text-yellow-500" /> Histórico de Vacinas
+                <CardTitle className="flex items-center gap-2 text-lg font-semibold text-foreground">
+                  <FaSyringe className="h-5 w-5 text-primary" /> Histórico de Vacinas
                 </CardTitle>
-                <Button size="sm" className="rounded-md bg-gradient-to-r from-blue-500 to-indigo-500 text-white hover:from-blue-600 hover:to-indigo-600 font-semibold transition-all duration-200 shadow-md hover:shadow-lg">
+                <Button size="sm" className="rounded-md bg-primary text-primary-foreground hover:bg-primary/90 font-semibold transition-all duration-200 shadow-md hover:shadow-lg">
                   <FaPlus className="h-4 w-4 mr-2" /> Adicionar Vacina
                 </Button>
               </CardHeader>
@@ -1002,7 +1002,7 @@ const PatientRecordPage = () => {
                 {mockVaccines.length > 0 ? (
                   <div className="space-y-4">
                     {mockVaccines.map((vaccine) => (
-                      <Card key={vaccine.id} className="p-4 bg-background dark:bg-gray-800 shadow-sm border border-gray-200 dark:border-gray-700">
+                      <Card key={vaccine.id} className="p-4 bg-input shadow-sm border border-border">
                         <div className="flex items-center justify-between mb-2">
                           <div className="flex items-center gap-2">
                             <Badge className="px-2 py-0.5 text-xs font-medium rounded-full bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200">
@@ -1012,7 +1012,7 @@ const PatientRecordPage = () => {
                               Próxima Dose: {formatDate(vaccine.nextDue)}
                             </p>
                           </div>
-                          <Button variant="ghost" size="icon" className="rounded-md hover:bg-gray-100 hover:text-gray-900 dark:hover:bg-gray-700 dark:hover:text-gray-200 transition-colors duration-200">
+                          <Button variant="ghost" size="icon" className="rounded-md hover:bg-muted hover:text-foreground transition-colors duration-200">
                             <FaEye className="h-4 w-4" />
                           </Button>
                         </div>
@@ -1036,26 +1036,26 @@ const PatientRecordPage = () => {
 
           {/* Nova aba: Peso */}
           <TabsContent value="weight" className="mt-4">
-            <Card className="bg-white/90 backdrop-blur-sm border border-gray-200 dark:border-gray-700 rounded-2xl shadow-[0_1px_3px_rgba(0,0,0,0.05)] hover:shadow-[0_4px_8px_rgba(0,0,0,0.08)] transition-all duration-300 border-t-4 border-orange-400 dark:bg-gray-800/90">
+            <Card className="bg-card shadow-sm border border-border rounded-md">
               <CardHeader className="flex flex-row items-center justify-between pb-3">
-                <CardTitle className="flex items-center gap-2 text-lg font-semibold text-[#374151] dark:text-gray-100">
-                  <FaWeightHanging className="h-5 w-5 text-orange-500" /> Histórico de Peso
+                <CardTitle className="flex items-center gap-2 text-lg font-semibold text-foreground">
+                  <FaWeightHanging className="h-5 w-5 text-primary" /> Histórico de Peso
                 </CardTitle>
                 <div className="flex gap-2">
                   <Input
                     type="date"
                     value={newWeightDate}
                     onChange={(e) => setNewWeightDate(e.target.value)}
-                    className="w-[150px] bg-white rounded-lg border-gray-200 dark:border-gray-600 focus:ring-2 focus:ring-blue-400 placeholder-[#9CA3AF] dark:placeholder-gray-500 transition-all duration-200"
+                    className="w-[150px] bg-input rounded-md border-border focus:ring-2 focus:ring-ring placeholder-muted-foreground transition-all duration-200"
                   />
                   <Input
                     type="number"
                     placeholder="Peso (kg)"
                     value={newWeight}
                     onChange={(e) => setNewWeight(e.target.value)}
-                    className="w-[120px] bg-white rounded-lg border-gray-200 dark:border-gray-600 focus:ring-2 focus:ring-blue-400 placeholder-[#9CA3AF] dark:placeholder-gray-500 transition-all duration-200"
+                    className="w-[120px] bg-input rounded-md border-border focus:ring-2 focus:ring-ring placeholder-muted-foreground transition-all duration-200"
                   />
-                  <Button size="sm" onClick={handleAddWeight} className="rounded-md bg-gradient-to-r from-blue-500 to-indigo-500 text-white hover:from-blue-600 hover:to-indigo-600 font-semibold transition-all duration-200 shadow-md hover:shadow-lg">
+                  <Button size="sm" onClick={handleAddWeight} className="rounded-md bg-primary text-primary-foreground hover:bg-primary/90 font-semibold transition-all duration-200 shadow-md hover:shadow-lg">
                     <FaPlus className="h-4 w-4 mr-2" /> Adicionar Peso
                   </Button>
                 </div>
@@ -1064,7 +1064,7 @@ const PatientRecordPage = () => {
                 {weightHistory.length > 0 ? (
                   <div className="space-y-4">
                     {weightHistory.map((entry) => (
-                      <Card key={entry.id} className="p-4 bg-background dark:bg-gray-800 shadow-sm border border-gray-200 dark:border-gray-700">
+                      <Card key={entry.id} className="p-4 bg-input shadow-sm border border-border">
                         <div className="flex items-center justify-between mb-2">
                           <div className="flex items-center gap-2">
                             <FaWeightHanging className="h-4 w-4 text-muted-foreground" />
@@ -1073,7 +1073,7 @@ const PatientRecordPage = () => {
                             </p>
                           </div>
                           {/* Ações para peso, se houver */}
-                          <Button variant="ghost" size="icon" className="rounded-md hover:bg-gray-100 hover:text-gray-900 dark:hover:bg-gray-700 dark:hover:text-gray-200 transition-colors duration-200">
+                          <Button variant="ghost" size="icon" className="rounded-md hover:bg-muted hover:text-foreground transition-colors duration-200">
                             <FaEye className="h-4 w-4" />
                           </Button>
                         </div>
@@ -1092,10 +1092,10 @@ const PatientRecordPage = () => {
 
           {/* Nova aba: Documentos */}
           <TabsContent value="documents" className="mt-4">
-            <Card className="bg-white/90 backdrop-blur-sm border border-gray-200 dark:border-gray-700 rounded-2xl shadow-[0_1px_3px_rgba(0,0,0,0.05)] hover:shadow-[0_4px_8px_rgba(0,0,0,0.08)] transition-all duration-300 border-t-4 border-teal-400 dark:bg-gray-800/90">
+            <Card className="bg-card shadow-sm border border-border rounded-md">
               <CardHeader className="flex flex-row items-center justify-between pb-3">
-                <CardTitle className="flex items-center gap-2 text-lg font-semibold text-[#374151] dark:text-gray-100">
-                  <FaFileAlt className="h-5 w-5 text-teal-500" /> Documentos
+                <CardTitle className="flex items-center gap-2 text-lg font-semibold text-foreground">
+                  <FaFileAlt className="h-5 w-5 text-primary" /> Documentos
                 </CardTitle>
                 <div className="flex gap-2 items-center flex-wrap">
                   <Input
@@ -1103,14 +1103,14 @@ const PatientRecordPage = () => {
                     placeholder="Nome do Documento"
                     value={newDocumentName}
                     onChange={(e) => setNewDocumentName(e.target.value)}
-                    className="w-[200px] bg-white rounded-lg border-gray-200 dark:border-gray-600 focus:ring-2 focus:ring-blue-400 placeholder-[#9CA3AF] dark:placeholder-gray-500 transition-all duration-200"
+                    className="w-[200px] bg-input rounded-md border-border focus:ring-2 focus:ring-ring placeholder-muted-foreground transition-all duration-200"
                   />
                   <Input
                     type="file"
                     onChange={(e) => setNewDocumentFile(e.target.files ? e.target.files[0] : null)}
-                    className="w-[200px] bg-white rounded-lg border-gray-200 dark:border-gray-600 focus:ring-2 focus:ring-blue-400 placeholder-[#9CA3AF] dark:placeholder-gray-500 transition-all duration-200"
+                    className="w-[200px] bg-input rounded-md border-border focus:ring-2 focus:ring-ring placeholder-muted-foreground transition-all duration-200"
                   />
-                  <Button size="sm" onClick={handleAddDocument} disabled={!newDocumentName || !newDocumentFile} className="rounded-md bg-gradient-to-r from-blue-500 to-indigo-500 text-white hover:from-blue-600 hover:to-indigo-600 font-semibold transition-all duration-200 shadow-md hover:shadow-lg">
+                  <Button size="sm" onClick={handleAddDocument} disabled={!newDocumentName || !newDocumentFile} className="rounded-md bg-primary text-primary-foreground hover:bg-primary/90 font-semibold transition-all duration-200 shadow-md hover:shadow-lg">
                     <FaPlus className="h-4 w-4 mr-2" /> Adicionar Documento
                   </Button>
                 </div>
@@ -1119,7 +1119,7 @@ const PatientRecordPage = () => {
                 {documents.length > 0 ? (
                   <div className="space-y-4">
                     {documents.map((doc) => (
-                      <Card key={doc.id} className="p-4 bg-background dark:bg-gray-800 shadow-sm border border-gray-200 dark:border-gray-700">
+                      <Card key={doc.id} className="p-4 bg-input shadow-sm border border-border">
                         <div className="flex items-center justify-between mb-2">
                           <div className="flex items-center gap-2">
                             <FaFileAlt className="h-4 w-4 text-muted-foreground" />
@@ -1128,7 +1128,7 @@ const PatientRecordPage = () => {
                             </p>
                           </div>
                           <a href={doc.fileUrl} target="_blank" rel="noopener noreferrer">
-                            <Button variant="ghost" size="icon" className="rounded-md hover:bg-gray-100 hover:text-gray-900 dark:hover:bg-gray-700 dark:hover:text-gray-200 transition-colors duration-200">
+                            <Button variant="ghost" size="icon" className="rounded-md hover:bg-muted hover:text-foreground transition-colors duration-200">
                               <FaEye className="h-4 w-4" />
                             </Button>
                           </a>
@@ -1151,43 +1151,43 @@ const PatientRecordPage = () => {
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
               {/* Card para Receita Simples */}
               <Link to={`/clients/${clientId}/animals/${animalId}/add-prescription?type=simple`}>
-                <Card className="flex flex-col items-center justify-center p-6 text-center bg-white/90 backdrop-blur-sm border border-gray-200 dark:border-gray-700 rounded-2xl shadow-[0_1px_3px_rgba(0,0,0,0.05)] hover:shadow-[0_4px_8px_rgba(0,0,0,0.08)] transition-all duration-300 h-full">
-                  <FaFileMedical className="h-12 w-12 text-blue-500 mb-3" />
-                  <CardTitle className="text-lg font-semibold text-[#374151] dark:text-gray-100">Receita Simples</CardTitle>
-                  <p className="text-sm text-[#6B7280] dark:text-gray-400 mt-1">Medicamentos de uso comum</p>
+                <Card className="flex flex-col items-center justify-center p-6 text-center bg-card shadow-sm border border-border rounded-md h-full">
+                  <FaFileMedical className="h-12 w-12 text-primary mb-3" />
+                  <CardTitle className="text-lg font-semibold text-foreground">Receita Simples</CardTitle>
+                  <p className="text-sm text-muted-foreground mt-1">Medicamentos de uso comum</p>
                 </Card>
               </Link>
 
               {/* Card para Receita Controlada */}
               <Link to={`/clients/${clientId}/animals/${animalId}/add-prescription?type=controlled`}>
-                <Card className="flex flex-col items-center justify-center p-6 text-center bg-white/90 backdrop-blur-sm border border-gray-200 dark:border-gray-700 rounded-2xl shadow-[0_1px_3px_rgba(0,0,0,0.05)] hover:shadow-[0_4px_8px_rgba(0,0,0,0.08)] transition-all duration-300 h-full">
-                  <FaExclamationTriangle className="h-12 w-12 text-red-500 mb-3" />
-                  <CardTitle className="text-lg font-semibold text-[#374151] dark:text-gray-100">Receita Controlada</CardTitle>
-                  <p className="text-sm text-[#6B7280] dark:text-gray-400 mt-1">Medicamentos controlados</p>
+                <Card className="flex flex-col items-center justify-center p-6 text-center bg-card shadow-sm border border-border rounded-md h-full">
+                  <FaExclamationTriangle className="h-12 w-12 text-destructive mb-3" />
+                  <CardTitle className="text-lg font-semibold text-foreground">Receita Controlada</CardTitle>
+                  <p className="text-sm text-muted-foreground mt-1">Medicamentos controlados</p>
                 </Card>
               </Link>
 
               {/* Card para Receita Manipulada */}
               <Link to={`/clients/${clientId}/animals/${animalId}/add-prescription?type=manipulated`}>
-                <Card className="flex flex-col items-center justify-center p-6 text-center bg-white/90 backdrop-blur-sm border border-gray-200 dark:border-gray-700 rounded-2xl shadow-[0_1px_3px_rgba(0,0,0,0.05)] hover:shadow-[0_4px_8px_rgba(0,0,0,0.08)] transition-all duration-300 h-full">
-                  <FaFlask className="h-12 w-12 text-green-500 mb-3" />
-                  <CardTitle className="text-lg font-semibold text-[#374151] dark:text-gray-100">Receita Manipulada</CardTitle>
-                  <p className="text-sm text-[#6B7280] dark:text-gray-400 mt-1">Medicamentos manipulados</p>
+                <Card className="flex flex-col items-center justify-center p-6 text-center bg-card shadow-sm border border-border rounded-md h-full">
+                  <FaFlask className="h-12 w-12 text-accent mb-3" />
+                  <CardTitle className="text-lg font-semibold text-foreground">Receita Manipulada</CardTitle>
+                  <p className="text-sm text-muted-foreground mt-1">Medicamentos manipulados</p>
                 </Card>
               </Link>
             </div>
 
-            <Card className="bg-white/90 backdrop-blur-sm border border-gray-200 dark:border-gray-700 rounded-2xl shadow-[0_1px_3px_rgba(0,0,0,0.05)] hover:shadow-[0_4px_8px_rgba(0,0,0,0.08)] transition-all duration-300 border-t-4 border-indigo-400 dark:bg-gray-800/90">
+            <Card className="bg-card shadow-sm border border-border rounded-md">
               <CardHeader className="flex flex-row items-center justify-between pb-3">
-                <CardTitle className="flex items-center gap-2 text-lg font-semibold text-[#374151] dark:text-gray-100">
-                  <FaClipboardList className="h-5 w-5 text-indigo-500" /> Prescrições Recentes
+                <CardTitle className="flex items-center gap-2 text-lg font-semibold text-foreground">
+                  <FaClipboardList className="h-5 w-5 text-primary" /> Prescrições Recentes
                 </CardTitle>
               </CardHeader>
               <CardContent className="pt-0">
                 {prescriptions.length > 0 ? (
                   <div className="space-y-4">
                     {prescriptions.map((rx) => (
-                      <Card key={rx.id} className="p-4 bg-background dark:bg-gray-800 shadow-sm border border-gray-200 dark:border-gray-700">
+                      <Card key={rx.id} className="p-4 bg-input shadow-sm border border-border">
                         <div className="flex items-center justify-between mb-2">
                           <div className="flex items-center gap-2">
                             <Badge className={cn(
@@ -1203,11 +1203,11 @@ const PatientRecordPage = () => {
                             </p>
                           </div>
                           <div className="flex items-center gap-2">
-                            <Button variant="ghost" size="icon" onClick={() => handlePrintSinglePrescription(rx)} className="rounded-md hover:bg-gray-100 hover:text-gray-900 dark:hover:bg-gray-700 dark:hover:text-gray-200 transition-colors duration-200">
+                            <Button variant="ghost" size="icon" onClick={() => handlePrintSinglePrescription(rx)} className="rounded-md hover:bg-muted hover:text-foreground transition-colors duration-200">
                               <FaPrint className="h-4 w-4" />
                             </Button>
                             <Link to={`/clients/${clientId}/animals/${animalId}/edit-prescription/${rx.id}?type=${rx.type}`}> {/* Adicionado ?type=${rx.type} */}
-                              <Button variant="ghost" size="icon" className="rounded-md hover:bg-gray-100 hover:text-gray-900 dark:hover:bg-gray-700 dark:hover:text-gray-200 transition-colors duration-200">
+                              <Button variant="ghost" size="icon" className="rounded-md hover:bg-muted hover:text-foreground transition-colors duration-200">
                                 <FaEye className="h-4 w-4" />
                               </Button>
                             </Link>
@@ -1225,7 +1225,7 @@ const PatientRecordPage = () => {
                           </div>
                         </div>
                         {rx.medicationName && (
-                          <p className="text-sm text-foreground bg-muted/50 dark:bg-muted/30 p-3 rounded-md border border-muted dark:border-gray-700">
+                          <p className="text-sm text-foreground bg-muted/50 dark:bg-muted/30 p-3 rounded-md border border-border">
                             Medicamentos: {rx.medicationName}
                           </p>
                         )}
@@ -1241,12 +1241,12 @@ const PatientRecordPage = () => {
 
           {/* Nova aba: Observações */}
           <TabsContent value="observations" className="mt-4">
-            <Card className="bg-white/90 backdrop-blur-sm border border-gray-200 dark:border-gray-700 rounded-2xl shadow-[0_1px_3px_rgba(0,0,0,0.05)] hover:shadow-[0_4px_8px_rgba(0,0,0,0.08)] transition-all duration-300 border-t-4 border-gray-400 dark:bg-gray-800/90">
+            <Card className="bg-card shadow-sm border border-border rounded-md">
               <CardHeader className="flex flex-row items-center justify-between pb-3">
-                <CardTitle className="flex items-center gap-2 text-lg font-semibold text-[#374151] dark:text-gray-100">
-                  <FaCommentAlt className="h-5 w-5 text-gray-500" /> Observações Gerais
+                <CardTitle className="flex items-center gap-2 text-lg font-semibold text-foreground">
+                  <FaCommentAlt className="h-5 w-5 text-muted-foreground" /> Observações Gerais
                 </CardTitle>
-                <Button size="sm" onClick={handleAddObservation} disabled={!newObservation.trim()} className="rounded-md bg-gradient-to-r from-blue-500 to-indigo-500 text-white hover:from-blue-600 hover:to-indigo-600 font-semibold transition-all duration-200 shadow-md hover:shadow-lg">
+                <Button size="sm" onClick={handleAddObservation} disabled={!newObservation.trim()} className="rounded-md bg-primary text-primary-foreground hover:bg-primary/90 font-semibold transition-all duration-200 shadow-md hover:shadow-lg">
                     <FaPlus className="h-4 w-4 mr-2" /> Adicionar Observação
                 </Button>
               </CardHeader>
@@ -1257,13 +1257,13 @@ const PatientRecordPage = () => {
                     rows={3}
                     value={newObservation}
                     onChange={(e) => setNewObservation(e.target.value)}
-                    className="bg-white rounded-lg border-gray-200 dark:border-gray-600 focus:ring-2 focus:ring-blue-400 placeholder-[#9CA3AF] dark:placeholder-gray-500 transition-all duration-200"
+                    className="bg-input rounded-md border-border focus:ring-2 focus:ring-ring placeholder-muted-foreground transition-all duration-200"
                   />
                 </div>
                 {observations.length > 0 ? (
                   <div className="space-y-4">
                     {observations.map((obs) => (
-                      <Card key={obs.id} className="p-4 bg-background dark:bg-gray-800 shadow-sm border border-gray-200 dark:border-gray-700">
+                      <Card key={obs.id} className="p-4 bg-input shadow-sm border border-border">
                         <div className="flex items-center justify-between mb-2">
                           <div className="flex items-center gap-2">
                             <FaCommentAlt className="h-4 w-4 text-muted-foreground" />
@@ -1272,7 +1272,7 @@ const PatientRecordPage = () => {
                             </p>
                           </div>
                           {/* Ações para observação, se houver */}
-                          <Button variant="ghost" size="icon" className="rounded-md hover:bg-gray-100 hover:text-gray-900 dark:hover:bg-gray-700 dark:hover:text-gray-200 transition-colors duration-200">
+                          <Button variant="ghost" size="icon" className="rounded-md hover:bg-muted hover:text-foreground transition-colors duration-200">
                             <FaEye className="h-4 w-4" />
                           </Button>
                         </div>
@@ -1291,12 +1291,12 @@ const PatientRecordPage = () => {
 
           {/* Nova aba: Financeiro */}
           <TabsContent value="financial" className="mt-4">
-            <Card className="bg-white/90 backdrop-blur-sm border border-gray-200 dark:border-gray-700 rounded-2xl shadow-[0_1px_3px_rgba(0,0,0,0.05)] hover:shadow-[0_4px_8px_rgba(0,0,0,0.08)] transition-all duration-300 border-t-4 border-pink-400 dark:bg-gray-800/90">
+            <Card className="bg-card shadow-sm border border-border rounded-md">
               <CardHeader className="flex flex-row items-center justify-between pb-3">
-                <CardTitle className="flex items-center gap-2 text-lg font-semibold text-[#374151] dark:text-gray-100">
-                  <FaMoneyBillWave className="h-5 w-5 text-pink-500" /> Histórico Financeiro
+                <CardTitle className="flex items-center gap-2 text-lg font-semibold text-foreground">
+                  <FaMoneyBillWave className="h-5 w-5 text-primary" /> Histórico Financeiro
                 </CardTitle>
-                <Button size="sm" className="rounded-md bg-gradient-to-r from-blue-500 to-indigo-500 text-white hover:from-blue-600 hover:to-indigo-600 font-semibold transition-all duration-200 shadow-md hover:shadow-lg">
+                <Button size="sm" className="rounded-md bg-primary text-primary-foreground hover:bg-primary/90 font-semibold transition-all duration-200 shadow-md hover:shadow-lg">
                   <FaPlus className="h-4 w-4 mr-2" /> Adicionar Lançamento
                 </Button>
               </CardHeader>
@@ -1304,7 +1304,7 @@ const PatientRecordPage = () => {
                 {animalFinancialTransactions.length > 0 ? (
                   <div className="space-y-4">
                     {animalFinancialTransactions.map((transaction) => (
-                      <Card key={transaction.id} className="p-4 bg-background dark:bg-gray-800 shadow-sm border border-gray-200 dark:border-gray-700">
+                      <Card key={transaction.id} className="p-4 bg-input shadow-sm border border-border">
                         <div className="flex items-center justify-between mb-2">
                           <div className="flex items-center gap-2">
                             <Badge className={cn(
