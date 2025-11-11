@@ -5,8 +5,10 @@ import { Link, useParams, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { FaArrowLeft, FaStethoscope, FaSave, FaTimes } from "react-icons/fa";
 import AppointmentForm from "@/components/AppointmentForm";
-import { AppointmentEntry } from "@/types/appointment";
+import SimpleAppointmentForm from "@/components/SimpleAppointmentForm"; // Importar o novo formulário simples
+import { AppointmentEntry, ConsultationDetails, BaseAppointmentDetails } from "@/types/appointment";
 import { toast } from "sonner";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"; // Importar Tabs
 
 // Mock data para atendimentos (para o select de "Atendimento de Origem" no formulário de Retorno)
 // Em uma aplicação real, isso seria carregado de um serviço ou contexto.
@@ -33,7 +35,7 @@ const mockAppointments: AppointmentEntry[] = [
       diagnosticoDefinitivo: "Saudável",
       condutaTratamento: "Manter rotina, próxima vacina em 6 meses.",
       retornoRecomendadoEmDias: 180,
-    },
+    } as ConsultationDetails,
     attachments: [],
   },
   {
@@ -78,6 +80,21 @@ const mockAppointments: AppointmentEntry[] = [
     },
     attachments: [],
   },
+  {
+    id: "app4",
+    animalId: "a1",
+    date: "2024-07-25",
+    type: "Outros", // Exemplo de atendimento simples
+    vet: "Dr. William Cardoso",
+    pesoAtual: 26.0,
+    temperaturaCorporal: 38.2,
+    observacoesGerais: "Animal com leve tosse. Prescrito xarope.",
+    details: {
+      queixaPrincipal: "Tosse leve",
+      condutaTratamento: "Xarope para tosse por 5 dias.",
+    } as BaseAppointmentDetails,
+    attachments: [],
+  },
 ];
 
 // Mock data para clientes e animais (para exibir informações no cabeçalho)
@@ -116,18 +133,26 @@ const AddAppointmentPage = () => {
   const animal = mockAnimals.find(a => a.id === animalId);
 
   const [initialAppointmentData, setInitialAppointmentData] = useState<AppointmentEntry | undefined>(undefined);
+  const [formMode, setFormMode] = useState<'simple' | 'complete'>('simple'); // Estado para controlar o modo do formulário
 
   useEffect(() => {
     if (appointmentId) {
       const existingAppointment = mockAppointments.find(app => app.id === appointmentId);
       if (existingAppointment) {
         setInitialAppointmentData(existingAppointment);
+        // Tenta inferir o modo do formulário com base nos detalhes existentes
+        if (existingAppointment.type === 'Outros' && (existingAppointment.details as BaseAppointmentDetails)?.queixaPrincipal && !(existingAppointment.details as ConsultationDetails)?.historicoClinico) {
+          setFormMode('simple');
+        } else {
+          setFormMode('complete');
+        }
       } else {
         toast.error("Atendimento não encontrado.");
         navigate(`/clients/${clientId}/animals/${animalId}/record`);
       }
     } else {
       setInitialAppointmentData(undefined); // Reset for new appointment
+      setFormMode('simple'); // Default para simples ao adicionar novo
     }
   }, [appointmentId, clientId, animalId, navigate]);
 
@@ -145,11 +170,8 @@ const AddAppointmentPage = () => {
   }
 
   const handleSaveAppointment = (appointment: AppointmentEntry) => {
-    // Aqui você faria a lógica para salvar o atendimento (enviar para uma API, etc.)
-    // Por enquanto, apenas exibiremos um toast de sucesso e navegaremos de volta.
     console.log("Salvando atendimento:", appointment);
 
-    // Simular atualização ou adição no mockAppointments (apenas para demonstração)
     if (appointmentId) {
       const index = mockAppointments.findIndex(app => app.id === appointmentId);
       if (index !== -1) {
@@ -194,14 +216,31 @@ const AddAppointmentPage = () => {
       </div>
 
       <div className="flex-1 p-6">
-        <AppointmentForm
-          animalId={animalId!}
-          clientId={clientId!}
-          initialData={initialAppointmentData}
-          onSave={handleSaveAppointment}
-          onCancel={handleCancel}
-          mockAppointments={mockAppointments} // Passar mockAppointments para o formulário
-        />
+        <Tabs value={formMode} onValueChange={(value) => setFormMode(value as 'simple' | 'complete')} className="w-full mb-6">
+          <TabsList className="grid w-full grid-cols-2 bg-card shadow-sm border border-border rounded-md p-2">
+            <TabsTrigger value="simple" className="rounded-md data-[state=active]:bg-primary data-[state=active]:text-primary-foreground transition-colors duration-200 text-muted-foreground data-[state=active]:dark:bg-primary">Atendimento Simples</TabsTrigger>
+            <TabsTrigger value="complete" className="rounded-md data-[state=active]:bg-primary data-[state=active]:text-primary-foreground transition-colors duration-200 text-muted-foreground data-[state=active]:dark:bg-primary">Atendimento Completo</TabsTrigger>
+          </TabsList>
+          <TabsContent value="simple" className="mt-4">
+            <SimpleAppointmentForm
+              animalId={animalId!}
+              clientId={clientId!}
+              initialData={initialAppointmentData}
+              onSave={handleSaveAppointment}
+              onCancel={handleCancel}
+            />
+          </TabsContent>
+          <TabsContent value="complete" className="mt-4">
+            <AppointmentForm
+              animalId={animalId!}
+              clientId={clientId!}
+              initialData={initialAppointmentData}
+              onSave={handleSaveAppointment}
+              onCancel={handleCancel}
+              mockAppointments={mockAppointments}
+            />
+          </TabsContent>
+        </Tabs>
       </div>
     </div>
   );
