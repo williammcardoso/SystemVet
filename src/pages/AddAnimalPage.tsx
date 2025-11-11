@@ -3,11 +3,11 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
-import { FaArrowLeft, FaPlus, FaTimes, FaSave, FaPaw } from "react-icons/fa"; // Importar ícones de react-icons
+import { FaArrowLeft, FaPlus, FaTimes, FaSave, FaPaw, FaEdit } from "react-icons/fa"; // Importar ícones de react-icons
 import React, { useState, useEffect } from "react";
-import { Link, useNavigate, useSearchParams } from "react-router-dom"; // Importar useSearchParams
+import { Link, useNavigate, useParams, useSearchParams } from "react-router-dom"; // Importar useParams e useSearchParams
 import { toast } from "sonner";
-import { mockClients, addMockAnimalToClient } from "@/mockData/clients"; // Importar o mock de clientes centralizado e a função para adicionar animal
+import { mockClients, addMockAnimalToClient, updateMockClient } from "@/mockData/clients"; // Importar o mock de clientes centralizado e a função para adicionar animal
 import { Animal, Client } from "@/types/client"; // Importar as interfaces Animal e Client
 
 // Mock data for species
@@ -102,10 +102,12 @@ const mockCoatTypesBase = [
 
 const AddAnimalPage = () => {
   const navigate = useNavigate();
+  const { clientId, animalId } = useParams<{ clientId?: string; animalId?: string }>(); // Obter clientId e animalId da URL
+  const isEditing = !!animalId; // Determinar se está em modo de edição
   const [searchParams] = useSearchParams();
-  const initialClientId = searchParams.get('clientId');
+  const initialClientIdFromParams = searchParams.get('clientId');
 
-  const [selectedTutorId, setSelectedTutorId] = useState<string | undefined>(initialClientId || undefined);
+  const [selectedTutorId, setSelectedTutorId] = useState<string | undefined>(initialClientIdFromParams || clientId || undefined);
   const [animalName, setAnimalName] = useState("");
   const [selectedSpecies, setSelectedSpecies] = useState<string | undefined>(undefined);
   const [customSpeciesName, setCustomSpeciesName] = useState(""); // New state for custom species
@@ -118,6 +120,58 @@ const AddAnimalPage = () => {
   const [weight, setWeight] = useState<number | ''>('');
   const [microchip, setMicrochip] = useState("");
   const [notes, setNotes] = useState("");
+
+  // Carregar dados do animal se estiver em modo de edição
+  useEffect(() => {
+    if (isEditing && clientId && animalId) {
+      const clientToEdit = mockClients.find(c => c.id === clientId);
+      const animalToEdit = clientToEdit?.animals.find(a => a.id === animalId);
+
+      if (animalToEdit) {
+        setAnimalName(animalToEdit.name);
+        // Encontrar o ID da espécie correspondente ou definir como 'other'
+        const speciesFound = mockSpecies.find(s => s.name === animalToEdit.species);
+        if (speciesFound) {
+          setSelectedSpecies(speciesFound.id);
+          setCustomSpeciesName("");
+        } else {
+          setSelectedSpecies("other");
+          setCustomSpeciesName(animalToEdit.species);
+        }
+
+        // Encontrar o ID da raça correspondente ou definir como 'other'
+        const breedFound = mockBreeds.find(b => b.name === animalToEdit.breed && b.speciesId === speciesFound?.id);
+        if (breedFound) {
+          setSelectedBreed(breedFound.id);
+          setCustomBreedName("");
+        } else {
+          setSelectedBreed(`other-${speciesFound?.id || 'other'}`); // Usar um ID genérico para 'other'
+          setCustomBreedName(animalToEdit.breed);
+        }
+
+        setGender(animalToEdit.gender);
+        setBirthday(animalToEdit.birthday);
+
+        // Encontrar o ID da cor da pelagem correspondente ou definir como 'other-color'
+        const coatColorFound = mockCoatTypesBase.find(c => c.name === animalToEdit.coatColor);
+        if (coatColorFound) {
+          setSelectedCoatColor(coatColorFound.id);
+          setCustomCoatColorName("");
+        } else {
+          setSelectedCoatColor("other-color");
+          setCustomCoatColorName(animalToEdit.coatColor);
+        }
+
+        setWeight(animalToEdit.weight);
+        setMicrochip(animalToEdit.microchip);
+        setNotes(animalToEdit.notes);
+      } else {
+        toast.error("Animal não encontrado para edição.");
+        navigate(`/clients/${clientId}/animals/${animalId}/record`);
+      }
+    }
+  }, [isEditing, clientId, animalId, navigate]);
+
 
   // Filter breeds based on selected species and sort them
   const getFilteredBreeds = () => {
@@ -152,9 +206,12 @@ const AddAnimalPage = () => {
 
   // Reset breed and custom breed when species changes
   useEffect(() => {
-    setSelectedBreed(undefined);
-    setCustomBreedName("");
-  }, [selectedSpecies]);
+    // Only reset if not in editing mode or if the species is actually changing
+    if (!isEditing || (isEditing && selectedSpecies !== (mockSpecies.find(s => s.name === (mockClients.find(c => c.id === clientId)?.animals.find(a => a.id === animalId)?.species))?.id || "other"))) {
+      setSelectedBreed(undefined);
+      setCustomBreedName("");
+    }
+  }, [selectedSpecies, isEditing, clientId, animalId]);
 
   // Reset custom species name if "Outro" is deselected
   useEffect(() => {
@@ -213,7 +270,7 @@ const AddAnimalPage = () => {
     }
 
 
-    const newAnimal: Omit<Animal, 'id'> = {
+    const animalData: Omit<Animal, 'id'> = {
       name: animalName.trim(),
       species: finalSpeciesName,
       breed: finalBreedName,
@@ -226,15 +283,36 @@ const AddAnimalPage = () => {
       status: 'Ativo', // Default status
     };
 
-    const addedAnimal = addMockAnimalToClient(selectedTutorId, newAnimal);
+    if (isEditing && clientId && animalId) {
+      const clientIndex = mockClients.findIndex(c => c.id === clientId);
+      if (clientIndex !== -1) {
+        const animalIndex = mockClients[clientIndex].animals.findIndex(a => a.id === animalId);
+        if (animalIndex !== -1) {
+          mockClients[clientIndex].animals[animalIndex] = { ...mockClients[clientIndex].animals[animalIndex], ...animalData };
+          toast.success(`Animal ${animalData.name} atualizado com sucesso!`);
+          navigate(`/clients/${clientId}/animals/${animalId}/record`);
+        } else {
+          toast.error("Erro ao atualizar animal. Animal não encontrado.");
+        }
+      } else {
+        toast.error("Erro ao atualizar animal. Cliente não encontrado.");
+      }
+    } else if (selectedTutorId) {
+      const addedAnimal = addMockAnimalToClient(selectedTutorId, animalData);
 
-    if (addedAnimal) {
-      toast.success(`Animal ${addedAnimal.name} adicionado com sucesso ao cliente!`);
-      navigate(`/clients/${selectedTutorId}`); // Navegar para a página de detalhes do cliente
-    } else {
-      toast.error("Erro ao adicionar animal. Cliente não encontrado.");
+      if (addedAnimal) {
+        toast.success(`Animal ${addedAnimal.name} adicionado com sucesso ao cliente!`);
+        navigate(`/clients/${selectedTutorId}`); // Navegar para a página de detalhes do cliente
+      } else {
+        toast.error("Erro ao adicionar animal. Cliente não encontrado.");
+      }
     }
   };
+
+  const pageTitle = isEditing ? `Editar Animal: ${animalName}` : "Adicionar Animal";
+  const breadcrumbText = isEditing ? "Editar Animal" : "Adicionar Animal";
+  const backLink = isEditing ? `/clients/${clientId}/animals/${animalId}/record` : `/clients/${selectedTutorId || ''}`;
+
 
   return (
     <div className="flex flex-col min-h-screen bg-background">
@@ -244,21 +322,22 @@ const AddAnimalPage = () => {
           <div className="flex items-center gap-4">
             <div>
               <h1 className="text-2xl font-semibold flex items-center gap-3 text-foreground group">
-                <FaPaw className="h-5 w-5 text-muted-foreground" /> Adicionar Animal
+                {isEditing ? <FaEdit className="h-5 w-5 text-muted-foreground" /> : <FaPaw className="h-5 w-5 text-muted-foreground" />}
+                {pageTitle}
               </h1>
               <p className="text-sm text-muted-foreground mt-1 mb-4">
-                Cadastre um novo animal e suas informações.
+                {isEditing ? "Edite as informações do animal." : "Cadastre um novo animal e suas informações."}
               </p>
             </div>
           </div>
-          <Link to="/clients">
+          <Link to={backLink}>
             <Button variant="outline" className="rounded-md border-border text-foreground hover:bg-muted hover:text-foreground transition-colors duration-200">
-              <FaArrowLeft className="mr-2 h-4 w-4" /> Voltar para Clientes
+              <FaArrowLeft className="mr-2 h-4 w-4" /> Voltar
             </Button>
           </Link>
         </div>
         <p className="text-sm text-muted-foreground">
-          Painel &gt; <Link to="/clients" className="hover:text-primary">Clientes</Link> &gt; Adicionar Animal
+          Painel &gt; <Link to="/clients" className="hover:text-primary">Clientes</Link> &gt; {breadcrumbText}
         </p>
       </div>
 
@@ -266,7 +345,7 @@ const AddAnimalPage = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 p-6 bg-card shadow-sm border border-border rounded-md">
           <div className="space-y-2">
             <Label htmlFor="tutor" className="text-muted-foreground font-medium">Tutor/Responsável*</Label>
-            <Select onValueChange={setSelectedTutorId} value={selectedTutorId} disabled={!!initialClientId}>
+            <Select onValueChange={setSelectedTutorId} value={selectedTutorId} disabled={isEditing || !!initialClientIdFromParams}>
               <SelectTrigger id="tutor" className="bg-input rounded-md border-border focus:ring-2 focus:ring-ring placeholder-muted-foreground transition-all duration-200">
                 <SelectValue placeholder="Selecione o tutor..." />
               </SelectTrigger>
@@ -388,7 +467,7 @@ const AddAnimalPage = () => {
         </div>
 
         <div className="flex justify-end gap-2 mt-6">
-          <Button variant="outline" onClick={() => navigate("/clients")} className="bg-card border border-border text-foreground hover:bg-muted rounded-md transition-all duration-200 shadow-sm hover:shadow-md">
+          <Button variant="outline" onClick={() => navigate(backLink)} className="bg-card border border-border text-foreground hover:bg-muted rounded-md transition-all duration-200 shadow-sm hover:shadow-md">
             <FaTimes className="mr-2 h-4 w-4" /> Cancelar
           </Button>
           <Button onClick={handleSaveAnimal} className="bg-primary text-primary-foreground hover:bg-primary/90 rounded-md font-semibold transition-all duration-200 shadow-md hover:shadow-lg">

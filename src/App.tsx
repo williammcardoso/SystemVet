@@ -69,6 +69,7 @@ const App = () => (
               <Route path="/clients/:clientId" element={<ClientDetailPage />} />
               <Route path="/clients/:clientId/animals/:animalId/record" element={<PatientRecordPage />} />
               <Route path="/clients/:clientId/animals/:animalId/add-exam" element={<AddExamPage />} />
+              <Route path="/clients/:clientId/animals/:animalId/edit" element={<AddAnimalPage />} /> {/* Nova rota para editar animal */}
               <Route path="/clients/:clientId/animals/:animalId/add-prescription" element={<AddPrescriptionPage />} />
               <Route path="/clients/:clientId/animals/:animalId/edit-prescription/:prescriptionId" element={<AddPrescriptionPage />} />
               {/* Novas rotas para adicionar/editar atendimento */}

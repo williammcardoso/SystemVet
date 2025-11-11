@@ -1,7 +1,9 @@
+"use client";
+
 import React, { useState, useEffect } from "react";
 import { Link, useParams, useNavigate, useSearchParams } from "react-router-dom";
 import {
-  FaArrowLeft, FaUsers, FaPaw, FaPlus, FaEye, FaStethoscope, FaCalendarAlt, FaDollarSign, FaSyringe, FaWeightHanging, FaFileAlt, FaClipboardList, FaCommentAlt, FaHeart, FaMale, FaUser, FaPrint, FaDownload, FaTimes, FaSave, FaBalanceScale, FaFileMedical, FaExclamationTriangle, FaFlask, FaTag, FaBox, FaClock, FaMoneyBillWave, FaArrowUp, FaArrowDown, FaTrashAlt, FaPrescriptionBottleAlt
+  FaArrowLeft, FaUsers, FaPaw, FaPlus, FaEye, FaStethoscope, FaCalendarAlt, FaDollarSign, FaSyringe, FaWeightHanging, FaFileAlt, FaClipboardList, FaCommentAlt, FaHeart, FaMale, FaUser, FaPrint, FaDownload, FaTimes, FaSave, FaBalanceScale, FaFileMedical, FaExclamationTriangle, FaFlask, FaTag, FaBox, FaClock, FaMoneyBillWave, FaArrowUp, FaArrowDown, FaTrashAlt, FaPrescriptionBottleAlt, FaEdit
 } from "react-icons/fa"; // Importar ícones de react-icons
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -120,7 +122,7 @@ const mockExamTypes = [
 const mockVets = [
   { id: "1", name: "Dr. Silva" },
   { id: "2", name: "Dra. Costa" },
-  { id: "3", name: "Dr. Souza" },
+  { id: "3", "name": "Dr. Souza" },
 ];
 
 // Interface para Exames (incluindo campos de hemograma)
@@ -481,6 +483,10 @@ const PatientRecordPage = () => {
     toast.info("Atendimento excluído.");
   };
 
+  const handleEditAnimal = () => {
+    navigate(`/clients/${clientId}/animals/${animalId}/edit`);
+  };
+
 
   return (
     <div className="flex flex-col min-h-screen bg-background">
@@ -519,18 +525,23 @@ const PatientRecordPage = () => {
       <div className="flex-1 p-6">
         <div className="mb-6">
           <Card className="bg-card shadow-sm border border-border rounded-md">
-            <CardHeader className="pb-3">
+            <CardHeader className="flex flex-row items-center justify-between pb-3">
               <CardTitle className="flex items-center gap-2 text-lg font-semibold text-foreground">
                 <FaHeart className="h-5 w-5 text-primary" /> Informações do Paciente
               </CardTitle>
+              <Button variant="outline" size="sm" onClick={handleEditAnimal} className="rounded-md border-border text-foreground hover:bg-muted hover:text-foreground transition-colors duration-200">
+                <FaEdit className="mr-2 h-4 w-4" /> Editar Animal
+              </Button>
             </CardHeader>
-            <CardContent className="p-4 grid grid-cols-1 md:grid-cols-3 gap-4 pt-0">
-              {/* Coluna 1: Animal Info */}
-              <div className="flex flex-col items-start gap-2">
+            <CardContent className="p-4 grid grid-cols-1 md:grid-cols-2 gap-4 pt-0">
+              {/* Coluna 1: Animal Info & Details */}
+              <div className="flex flex-col gap-4">
                 <div className="flex items-center gap-3">
                   <Avatar className="h-12 w-12">
-                    <AvatarImage src="/public/placeholder.svg" alt="Animal Avatar" />
-                    <AvatarFallback className="bg-primary text-primary-foreground text-lg font-bold">{animal.name.charAt(0)}</AvatarFallback>
+                    {/* Usar FaPaw como fallback para o avatar do animal */}
+                    <AvatarFallback className="bg-primary text-primary-foreground text-lg font-bold">
+                      <FaPaw className="h-6 w-6" />
+                    </AvatarFallback>
                   </Avatar>
                   <div>
                     <p className="text-xl font-bold text-foreground">{animal.name}</p>
@@ -538,42 +549,40 @@ const PatientRecordPage = () => {
                   </div>
                 </div>
                 <Badge className={cn(
-                  "mt-2 px-3 py-1 rounded-full text-xs font-medium",
+                  "px-3 py-1 rounded-full text-xs font-medium w-fit",
                   animal.status === 'Ativo' ? "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200" : "bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200"
                 )}>
                   {animal.status}
                 </Badge>
-              </div>
-
-              {/* Coluna 2: Detalhes do Animal */}
-              <div className="grid grid-cols-2 gap-y-2">
-                <div className="flex items-center gap-2">
-                  <FaCalendarAlt className="h-4 w-4 text-muted-foreground" />
-                  <p className="text-sm text-muted-foreground">Idade: <span className="font-normal text-foreground">{calculateAge(animal.birthday)}</span></p>
-                </div>
-                <div className="flex items-center gap-2">
-                  <FaBalanceScale className="h-4 w-4 text-muted-foreground" />
-                  <p className="text-sm text-muted-foreground">Peso: <span className="font-normal text-foreground">{animal.weight.toFixed(1)} kg</span></p>
-                </div>
-                <div className="flex items-center gap-2">
-                  {animal.gender === "Macho" ? <FaMale className="h-4 w-4 text-muted-foreground" /> : <FaUser className="h-4 w-4 text-muted-foreground" />}
-                  <p className="text-sm text-muted-foreground">Sexo: <span className="font-normal text-foreground">{animal.gender}</span></p>
-                </div>
-                <div className="flex items-center gap-2">
-                  <FaCalendarAlt className="h-4 w-4 text-muted-foreground" />
-                  <p className="text-sm text-muted-foreground">Última consulta: <span className="font-normal text-foreground">{formatDate(animal.lastConsultationDate || '')}</span></p>
+                <div className="grid grid-cols-2 gap-y-2 text-sm text-muted-foreground">
+                  <div className="flex items-center gap-2">
+                    <FaCalendarAlt className="h-4 w-4 text-muted-foreground" />
+                    <p>Idade: <span className="font-normal text-foreground">{calculateAge(animal.birthday)}</span></p>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <FaBalanceScale className="h-4 w-4 text-muted-foreground" />
+                    <p>Peso: <span className="font-normal text-foreground">{animal.weight.toFixed(1)} kg</span></p>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    {animal.gender === "Macho" ? <FaMale className="h-4 w-4 text-muted-foreground" /> : <FaUser className="h-4 w-4 text-muted-foreground" />}
+                    <p>Sexo: <span className="font-normal text-foreground">{animal.gender}</span></p>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <FaCalendarAlt className="h-4 w-4 text-muted-foreground" />
+                    <p>Última consulta: <span className="font-normal text-foreground">{formatDate(animal.lastConsultationDate || '')}</span></p>
+                  </div>
                 </div>
               </div>
 
-              {/* Coluna 3: Tutor e Financeiro */}
+              {/* Coluna 2: Tutor e Financeiro */}
               <div className="flex flex-col gap-4">
                 <div>
-                  <p className="text-sm font-semibold text-foreground mb-1">Tutor Responsável</p>
+                  <p className="text-base font-semibold text-foreground mb-1">Tutor Responsável</p>
                   <p className="text-sm text-muted-foreground">Nome: <span className="font-normal text-foreground">{client.name}</span></p>
                   <p className="text-sm text-muted-foreground">Telefone: <span className="font-normal text-foreground">{client.mainPhoneContact}</span></p>
                 </div>
                 <div className="bg-muted/50 dark:bg-muted/30 p-3 rounded-md border border-border">
-                  <p className="text-sm font-semibold text-foreground mb-1">Resumo Financeiro</p>
+                  <p className="text-base font-semibold text-foreground mb-1">Resumo Financeiro</p>
                   <p className="text-sm text-muted-foreground">Total de procedimentos: <span className="font-normal text-foreground">{animal.totalProcedures || 0}</span></p>
                   <p className="text-sm text-muted-foreground">Valor total: <span className="font-normal text-foreground">R$ {(animal.totalValue || 0).toFixed(2).replace('.', ',')}</span></p>
                 </div>
@@ -588,7 +597,7 @@ const PatientRecordPage = () => {
               <FaStethoscope className="h-4 w-4 mr-2" /> Atendimento
             </TabsTrigger>
             <TabsTrigger value="exams" className="rounded-md data-[state=active]:bg-primary data-[state=active]:text-primary-foreground transition-colors duration-200 text-muted-foreground data-[state=active]:dark:bg-primary">
-              <FaCalendarAlt className="h-4 w-4 mr-2" /> Exames
+              <FaFlask className="h-4 w-4 mr-2" /> Exames
             </TabsTrigger>
             <TabsTrigger value="sales" className="rounded-md data-[state=active]:bg-primary data-[state=active]:text-primary-foreground transition-colors duration-200 text-muted-foreground data-[state=active]:dark:bg-primary">
               <FaDollarSign className="h-4 w-4 mr-2" /> Vendas
@@ -603,7 +612,7 @@ const PatientRecordPage = () => {
               <FaFileAlt className="h-4 w-4 mr-2" /> Documentos
             </TabsTrigger>
             <TabsTrigger value="prescriptions" className="rounded-md data-[state=active]:bg-primary data-[state=active]:text-primary-foreground transition-colors duration-200 text-muted-foreground data-[state=active]:dark:bg-primary">
-              <FaClipboardList className="h-4 w-4 mr-2" /> Receitas
+              <FaPrescriptionBottleAlt className="h-4 w-4 mr-2" /> Receitas
             </TabsTrigger>
             <TabsTrigger value="observations" className="rounded-md data-[state=active]:bg-primary data-[state=active]:text-primary-foreground transition-colors duration-200 text-muted-foreground data-[state=active]:dark:bg-primary">
               <FaCommentAlt className="h-4 w-4 mr-2" /> Observações
@@ -689,7 +698,7 @@ const PatientRecordPage = () => {
             <Card className="bg-card shadow-sm border border-border rounded-md">
               <CardHeader className="flex flex-row items-center justify-between pb-3">
                 <CardTitle className="flex items-center gap-2 text-lg font-semibold text-foreground">
-                  <FaCalendarAlt className="h-5 w-5 text-primary" /> Histórico de Exames
+                  <FaFlask className="h-5 w-5 text-primary" /> Histórico de Exames
                 </CardTitle>
                 <Link to={`/clients/${clientId}/animals/${animalId}/add-exam`}>
                   <Button size="sm" className="rounded-md bg-primary text-primary-foreground hover:bg-primary/90 font-semibold transition-all duration-200 shadow-md hover:shadow-lg">
@@ -821,7 +830,7 @@ const PatientRecordPage = () => {
                           <Input id="formasTotais" type="number" placeholder="Ex: 6.0" value={newFormasTotais} onChange={(e) => setNewFormasTotais(e.target.value)} className="bg-input rounded-md border-border focus:ring-2 focus:ring-ring placeholder-muted-foreground transition-all duration-200" />
                         </div>
                         <div className="space-y-2">
-                          <Label htmlFor="hemaciasNucleadas" className="text-muted-foreground font-medium">Hemácias nucleadas (g/dL)</Label>
+                          <Label htmlFor="hemaciasNucleadas">Hemácias nucleadas (g/dL)</Label>
                           <Input id="hemaciasNucleadas" type="number" placeholder="Ex: 0" value={newHemaciasNucleadas} onChange={(e) => setNewHemaciasNucleadas(e.target.value)} className="bg-input rounded-md border-border focus:ring-2 focus:ring-ring placeholder-muted-foreground transition-all duration-200" />
                         </div>
                       </div>
@@ -837,23 +846,23 @@ const PatientRecordPage = () => {
                           <Input id="bastoes" type="number" placeholder="Ex: 0" value={newBastoes} onChange={(e) => setNewBastoes(e.target.value)} className="bg-input rounded-md border-border focus:ring-2 focus:ring-ring placeholder-muted-foreground transition-all duration-200" />
                         </div>
                         <div className="space-y-2">
-                          <Label htmlFor="segmentados" className="text-muted-foreground font-medium">Segmentados (%)</Label>
+                          <Label htmlFor="segmentados">Segmentados (%)</Label>
                           <Input id="segmentados" type="number" placeholder="Ex: 60" value={newSegmentados} onChange={(e) => setNewSegmentados(e.target.value)} className="bg-input rounded-md border-border focus:ring-2 focus:ring-ring placeholder-muted-foreground transition-all duration-200" />
                         </div>
                         <div className="space-y-2">
-                          <Label htmlFor="linfocitos" className="text-muted-foreground font-medium">Linfócitos (%)</Label>
+                          <Label htmlFor="linfocitos">Linfócitos (%)</Label>
                           <Input id="linfocitos" type="number" placeholder="Ex: 30" value={newLinfocitos} onChange={(e) => setNewLinfocitos(e.target.value)} className="bg-input rounded-md border-border focus:ring-2 focus:ring-ring placeholder-muted-foreground transition-all duration-200" />
                         </div>
                         <div className="space-y-2">
-                          <Label htmlFor="monocitos" className="text-muted-foreground font-medium">Monócitos (%)</Label>
+                          <Label htmlFor="monocitos">Monócitos (%)</Label>
                           <Input id="monocitos" type="number" placeholder="Ex: 3" value={newMonocitos} onChange={(e) => setNewMonocitos(e.target.value)} className="bg-input rounded-md border-border focus:ring-2 focus:ring-ring placeholder-muted-foreground transition-all duration-200" />
                         </div>
                         <div className="space-y-2">
-                          <Label htmlFor="eosinofilos" className="text-muted-foreground font-medium">Eosinófilos (%)</Label>
+                          <Label htmlFor="eosinofilos">Eosinófilos (%)</Label>
                           <Input id="eosinofilos" type="number" placeholder="Ex: 2" value={newEosinofilos} onChange={(e) => setNewEosinofilos(e.target.value)} className="bg-input rounded-md border-border focus:ring-2 focus:ring-ring placeholder-muted-foreground transition-all duration-200" />
                         </div>
                         <div className="space-y-2">
-                          <Label htmlFor="basofilos" className="text-muted-foreground font-medium">Basófilos (%)</Label>
+                          <Label htmlFor="basofilos">Basófilos (%)</Label>
                           <Input id="basofilos" type="number" placeholder="Ex: 1" value={newBasofilos} onChange={(e) => setNewBasofilos(e.target.value)} className="bg-input rounded-md border-border focus:ring-2 focus:ring-ring placeholder-muted-foreground transition-all duration-200" />
                         </div>
                       </div>
@@ -1177,7 +1186,7 @@ const PatientRecordPage = () => {
             <Card className="bg-card shadow-sm border border-border rounded-md">
               <CardHeader className="flex flex-row items-center justify-between pb-3">
                 <CardTitle className="flex items-center gap-2 text-lg font-semibold text-foreground">
-                  <FaClipboardList className="h-5 w-5 text-primary" /> Prescrições Recentes
+                  <FaPrescriptionBottleAlt className="h-5 w-5 text-primary" /> Prescrições Recentes
                 </CardTitle>
               </CardHeader>
               <CardContent className="pt-0">
@@ -1241,7 +1250,7 @@ const PatientRecordPage = () => {
             <Card className="bg-card shadow-sm border border-border rounded-md">
               <CardHeader className="flex flex-col sm:flex-row items-start sm:items-center justify-between pb-3 gap-2">
                 <CardTitle className="flex items-center gap-2 text-lg font-semibold text-foreground">
-                  <FaCommentAlt className="h-5 w-5 text-muted-foreground" /> Observações Gerais
+                  <FaCommentAlt className="h-5 w-5 text-primary" /> Observações Gerais
                 </CardTitle>
                 <Button size="sm" onClick={handleAddObservation} disabled={!newObservation.trim()} className="rounded-md bg-primary text-primary-foreground hover:bg-primary/90 font-semibold transition-all duration-200 shadow-md hover:shadow-lg">
                     <FaPlus className="h-4 w-4 mr-2" /> Adicionar Observação
