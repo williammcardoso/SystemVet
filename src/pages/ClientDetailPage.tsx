@@ -7,6 +7,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { cn } from "@/lib/utils"; // Importar cn
 import { mockClients } from "@/mockData/clients"; // Importar o mock de clientes centralizado
 import { Client, Animal } from "@/types/client"; // Importar as interfaces Client e Animal
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip"; // Importar Tooltip
 
 const ClientDetailPage = () => {
   const { clientId } = useParams<{ clientId: string }>();
@@ -152,9 +153,16 @@ const ClientDetailPage = () => {
                   <FaPaw className="h-5 w-5 text-primary" /> Animais de {client.name}
                 </CardTitle>
                 <Link to={`/animals/add?clientId=${client.id}`}> {/* Passa o clientId como parâmetro */}
-                  <Button size="sm" className="bg-primary text-primary-foreground hover:bg-primary/90 rounded-md font-semibold transition-all duration-200 shadow-md hover:shadow-lg">
-                    <FaPlus className="h-4 w-4 mr-2" /> Adicionar Animal
-                  </Button>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <Button size="icon" className="bg-primary text-primary-foreground hover:bg-primary/90 rounded-md font-semibold transition-all duration-200 shadow-md hover:shadow-lg">
+                        <FaPlus className="h-4 w-4" />
+                      </Button>
+                    </TooltipTrigger>
+                    <TooltipContent>
+                      <p>Adicionar Animal</p>
+                    </TooltipContent>
+                  </Tooltip>
                 </Link>
               </CardHeader>
               <CardContent className="pt-0">
@@ -174,9 +182,16 @@ const ClientDetailPage = () => {
                             <TableCell className="font-medium text-foreground">{animal.name}</TableCell>
                             <TableCell className="text-muted-foreground">{animal.species}</TableCell>
                             <TableCell className="text-right">
-                              <Button variant="ghost" size="sm" onClick={() => handleViewRecord(animal.id)} className="rounded-md hover:bg-muted hover:text-foreground transition-colors duration-200">
-                                <FaEye className="h-4 w-4 mr-2" /> Ver Prontuário
-                              </Button>
+                              <Tooltip>
+                                <TooltipTrigger asChild>
+                                  <Button variant="ghost" size="icon" onClick={() => handleViewRecord(animal.id)} className="rounded-md hover:bg-muted hover:text-foreground transition-colors duration-200">
+                                    <FaEye className="h-4 w-4" />
+                                  </Button>
+                                </TooltipTrigger>
+                                <TooltipContent>
+                                  <p>Ver Prontuário</p>
+                                </TooltipContent>
+                              </Tooltip>
                             </TableCell>
                           </TableRow>
                         ))}
