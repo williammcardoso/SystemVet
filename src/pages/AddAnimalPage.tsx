@@ -10,63 +10,178 @@ import { toast } from "sonner";
 import { mockClients, addMockAnimalToClient } from "@/mockData/clients"; // Importar o mock de clientes centralizado e a função para adicionar animal
 import { Animal, Client } from "@/types/client"; // Importar as interfaces Animal e Client
 
-// Mock data for species (from SpeciesPage.tsx)
+// Mock data for species
 const mockSpecies = [
-  { id: "1", name: "Cachorro" },
-  { id: "2", name: "Gato" },
+  { id: "1", name: "Canino" },
+  { id: "2", name: "Felino" },
   { id: "3", name: "Pássaro" },
   { id: "4", name: "Roedor" },
+  { id: "other", name: "Outro" },
 ];
 
-// Mock data for breeds (from BreedsPage.tsx)
+// Mock data for breeds, categorized by speciesId
 const mockBreeds = [
-  { id: "1", name: "Labrador", speciesId: "1" },
-  { id: "2", name: "Poodle", speciesId: "1" },
-  { id: "3", name: "Siamês", speciesId: "2" },
-  { id: "4", name: "Persa", speciesId: "2" },
+  // Canino (speciesId: "1")
+  { id: "c1", name: "SRD / Vira-lata", speciesId: "1" },
+  { id: "c2", name: "American Bully", speciesId: "1" },
+  { id: "c3", name: "Beagle", speciesId: "1" },
+  { id: "c4", name: "Bernese Mountain Dog", speciesId: "1" },
+  { id: "c5", name: "Bichon Frisé", speciesId: "1" },
+  { id: "c6", name: "Border Collie", speciesId: "1" },
+  { id: "c7", name: "Boxer", speciesId: "1" },
+  { id: "c8", name: "Bulldog Francês", speciesId: "1" },
+  { id: "c9", name: "Cane Corso", speciesId: "1" },
+  { id: "c10", name: "Chihuahua", speciesId: "1" },
+  { id: "c11", name: "Chow Chow", speciesId: "1" },
+  { id: "c12", name: "Cocker Spaniel", speciesId: "1" },
+  { id: "c13", name: "Dachshund (Salsicha)", speciesId: "1" },
+  { id: "c14", name: "Dogue Alemão", speciesId: "1" },
+  { id: "c15", name: "Golden Retriever", speciesId: "1" },
+  { id: "c16", name: "Husky Siberiano", speciesId: "1" },
+  { id: "c17", name: "Labrador Retriever", speciesId: "1" },
+  { id: "c18", name: "Lhasa Apso", speciesId: "1" },
+  { id: "c19", name: "Lulu da Pomerânia (Spitz Alemão)", speciesId: "1" },
+  { id: "c20", name: "Maltês", speciesId: "1" },
+  { id: "c21", name: "Pastor Alemão", speciesId: "1" },
+  { id: "c22", name: "Pastor Australiano", speciesId: "1" },
+  { id: "c23", name: "Pastor Belga Malinois", speciesId: "1" },
+  { id: "c24", name: "Pinscher Miniatura", speciesId: "1" },
+  { id: "c25", name: "Pit Bull (American Pit Bull Terrier)", speciesId: "1" },
+  { id: "c26", name: "Pit Monster", speciesId: "1" },
+  { id: "c27", name: "Poodle", speciesId: "1" },
+  { id: "c28", name: "Pug", speciesId: "1" },
+  { id: "c29", name: "Rottweiler", speciesId: "1" },
+  { id: "c30", name: "Schnauzer", speciesId: "1" },
+  { id: "c31", name: "Shih Tzu", speciesId: "1" },
+  { id: "c32", name: "Staffordshire Terrier (Amstaff)", speciesId: "1" },
+  { id: "c33", name: "Yorkshire Terrier", speciesId: "1" },
+  { id: "other-canine", name: "Outra Raça", speciesId: "1" },
+
+  // Felino (speciesId: "2")
+  { id: "f1", name: "SRD / Vira-lata", speciesId: "2" },
+  { id: "f2", name: "American Shorthair", speciesId: "2" },
+  { id: "f3", name: "Angorá Turco", speciesId: "2" },
+  { id: "f4", name: "Azul Russo", speciesId: "2" },
+  { id: "f5", name: "Bengal", speciesId: "2" },
+  { id: "f6", name: "Maine Coon", speciesId: "2" },
+  { id: "f7", name: "Persa", speciesId: "2" },
+  { id: "f8", name: "Ragdoll", speciesId: "2" },
+  { id: "f9", name: "Siamês", speciesId: "2" },
+  { id: "f10", name: "Sphynx", speciesId: "2" },
+  { id: "other-feline", name: "Outra Raça", speciesId: "2" },
 ];
 
-// Mock data for coat types (from CoatTypesPage.tsx)
+// Mock data for coat types
 const mockCoatTypes = [
-  { id: "1", name: "Curta" },
-  { id: "2", name: "Longa" },
-  { id: "3", name: "Lisa" },
-  { id: "4", name: "Ondulada" },
+  { id: "ct1", name: "Preto" },
+  { id: "ct2", name: "Branco" },
+  { id: "ct3", name: "Marrom (Chocolate)" },
+  { id: "ct4", name: "Caramelo (Dourado/Fulvo)" },
+  { id: "ct5", name: "Amarelo" },
+  { id: "ct6", name: "Cinza (Azul/Prata)" },
+  { id: "ct7", name: "Creme (Bege)" },
+  { id: "ct8", name: "Laranja (Vermelho)" },
+  { id: "ct9", name: "Bicolor (Duas cores)" },
+  { id: "ct10", name: "Tricolor (Três cores)" },
+  { id: "ct11", name: "Tigrado (Listrado)" },
+  { id: "ct12", name: "Malhado (Com manchas)" },
+  { id: "other-color", name: "Outra Cor" },
 ];
 
 const AddAnimalPage = () => {
   const navigate = useNavigate();
-  const [searchParams] = useSearchParams(); // Hook para ler parâmetros da URL
-  const initialClientId = searchParams.get('clientId'); // Pega o clientId da URL
+  const [searchParams] = useSearchParams();
+  const initialClientId = searchParams.get('clientId');
 
   const [selectedTutorId, setSelectedTutorId] = useState<string | undefined>(initialClientId || undefined);
   const [animalName, setAnimalName] = useState("");
   const [selectedSpecies, setSelectedSpecies] = useState<string | undefined>(undefined);
+  const [customSpeciesName, setCustomSpeciesName] = useState(""); // New state for custom species
   const [selectedBreed, setSelectedBreed] = useState<string | undefined>(undefined);
+  const [customBreedName, setCustomBreedName] = useState(""); // New state for custom breed
   const [gender, setGender] = useState<Animal['gender'] | undefined>(undefined);
   const [birthday, setBirthday] = useState("");
-  const [coatColor, setCoatColor] = useState<string | undefined>(undefined);
+  const [selectedCoatColor, setSelectedCoatColor] = useState<string | undefined>(undefined);
+  const [customCoatColorName, setCustomCoatColorName] = useState(""); // New state for custom coat color
   const [weight, setWeight] = useState<number | ''>('');
   const [microchip, setMicrochip] = useState("");
   const [notes, setNotes] = useState("");
 
+  // Filter breeds based on selected species
   const filteredBreeds = selectedSpecies
     ? mockBreeds.filter(breed => breed.speciesId === selectedSpecies)
     : [];
 
+  // Reset breed and custom breed when species changes
+  useEffect(() => {
+    setSelectedBreed(undefined);
+    setCustomBreedName("");
+  }, [selectedSpecies]);
+
+  // Reset custom species name if "Outro" is deselected
+  useEffect(() => {
+    if (selectedSpecies !== "other") {
+      setCustomSpeciesName("");
+    }
+  }, [selectedSpecies]);
+
+  // Reset custom breed name if "Outra Raça" is deselected
+  useEffect(() => {
+    if (selectedBreed !== `other-${selectedSpecies}`) {
+      setCustomBreedName("");
+    }
+  }, [selectedBreed, selectedSpecies]);
+
+  // Reset custom coat color name if "Outra Cor" is deselected
+  useEffect(() => {
+    if (selectedCoatColor !== "other-color") {
+      setCustomCoatColorName("");
+    }
+  }, [selectedCoatColor]);
+
+
   const handleSaveAnimal = () => {
-    if (!selectedTutorId || !animalName.trim() || !selectedSpecies || !gender || !birthday || weight === '') {
+    // Determine final species name
+    const finalSpeciesName = selectedSpecies === "other"
+      ? customSpeciesName.trim()
+      : mockSpecies.find(s => s.id === selectedSpecies)?.name || '';
+
+    // Determine final breed name
+    const finalBreedName = selectedBreed && selectedBreed.startsWith("other-")
+      ? customBreedName.trim()
+      : mockBreeds.find(b => b.id === selectedBreed)?.name || '';
+
+    // Determine final coat color name
+    const finalCoatColorName = selectedCoatColor === "other-color"
+      ? customCoatColorName.trim()
+      : mockCoatTypes.find(c => c.id === selectedCoatColor)?.name || '';
+
+    // Basic validation
+    if (!selectedTutorId || !animalName.trim() || !finalSpeciesName || !gender || !birthday || weight === '') {
       toast.error("Por favor, preencha todos os campos obrigatórios.");
       return;
     }
+    if (selectedSpecies === "other" && !customSpeciesName.trim()) {
+      toast.error("Por favor, digite o nome da espécie personalizada.");
+      return;
+    }
+    if (selectedBreed && selectedBreed.startsWith("other-") && !customBreedName.trim()) {
+      toast.error("Por favor, digite o nome da raça personalizada.");
+      return;
+    }
+    if (selectedCoatColor === "other-color" && !customCoatColorName.trim()) {
+      toast.error("Por favor, digite o nome da cor da pelagem personalizada.");
+      return;
+    }
+
 
     const newAnimal: Omit<Animal, 'id'> = {
       name: animalName.trim(),
-      species: mockSpecies.find(s => s.id === selectedSpecies)?.name || '',
-      breed: mockBreeds.find(b => b.id === selectedBreed)?.name || '',
+      species: finalSpeciesName,
+      breed: finalBreedName,
       gender: gender,
       birthday: birthday,
-      coatColor: mockCoatTypes.find(c => c.id === coatColor)?.name || '',
+      coatColor: finalCoatColorName,
       weight: Number(weight),
       microchip: microchip.trim(),
       notes: notes.trim(),
@@ -144,10 +259,19 @@ const AddAnimalPage = () => {
                 ))}
               </SelectContent>
             </Select>
+            {selectedSpecies === "other" && (
+              <Input
+                id="customSpeciesName"
+                placeholder="Digite a espécie"
+                value={customSpeciesName}
+                onChange={(e) => setCustomSpeciesName(e.target.value)}
+                className="mt-2 bg-white rounded-lg border-gray-200 dark:border-gray-600 focus:ring-2 focus:ring-blue-400 placeholder-[#9CA3AF] dark:placeholder-gray-500 transition-all duration-200"
+              />
+            )}
           </div>
           <div className="space-y-2">
             <Label htmlFor="breed">Raça</Label>
-            <Select disabled={!selectedSpecies} onValueChange={setSelectedBreed} value={selectedBreed}>
+            <Select disabled={!selectedSpecies || selectedSpecies === "other"} onValueChange={setSelectedBreed} value={selectedBreed}>
               <SelectTrigger id="breed" className="bg-white rounded-lg border-gray-200 dark:border-gray-600 focus:ring-2 focus:ring-blue-400 placeholder-[#9CA3AF] dark:placeholder-gray-500 transition-all duration-200">
                 <SelectValue placeholder="Selecione..." />
               </SelectTrigger>
@@ -159,6 +283,15 @@ const AddAnimalPage = () => {
                 ))}
               </SelectContent>
             </Select>
+            {selectedBreed && selectedBreed.startsWith("other-") && (
+              <Input
+                id="customBreedName"
+                placeholder="Digite a raça"
+                value={customBreedName}
+                onChange={(e) => setCustomBreedName(e.target.value)}
+                className="mt-2 bg-white rounded-lg border-gray-200 dark:border-gray-600 focus:ring-2 focus:ring-blue-400 placeholder-[#9CA3AF] dark:placeholder-gray-500 transition-all duration-200"
+              />
+            )}
           </div>
           <div className="space-y-2">
             <Label htmlFor="gender">Sexo*</Label>
@@ -179,7 +312,7 @@ const AddAnimalPage = () => {
           </div>
           <div className="space-y-2">
             <Label htmlFor="coatColor">Cor da Pelagem</Label>
-            <Select onValueChange={setCoatColor} value={coatColor}>
+            <Select onValueChange={setSelectedCoatColor} value={selectedCoatColor}>
               <SelectTrigger id="coatColor" className="bg-white rounded-lg border-gray-200 dark:border-gray-600 focus:ring-2 focus:ring-blue-400 placeholder-[#9CA3AF] dark:placeholder-gray-500 transition-all duration-200">
                 <SelectValue placeholder="Selecione..." />
               </SelectTrigger>
@@ -191,6 +324,15 @@ const AddAnimalPage = () => {
                 ))}
               </SelectContent>
             </Select>
+            {selectedCoatColor === "other-color" && (
+              <Input
+                id="customCoatColorName"
+                placeholder="Digite a cor da pelagem"
+                value={customCoatColorName}
+                onChange={(e) => setCustomCoatColorName(e.target.value)}
+                className="mt-2 bg-white rounded-lg border-gray-200 dark:border-gray-600 focus:ring-2 focus:ring-blue-400 placeholder-[#9CA3AF] dark:placeholder-gray-500 transition-all duration-200"
+              />
+            )}
           </div>
           <div className="space-y-2">
             <Label htmlFor="weight">Peso (kg)*</Label>

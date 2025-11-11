@@ -31,11 +31,11 @@ export let mockClients: Client[] = [
       {
         id: "a1",
         name: "Totó",
-        species: "Cachorro",
-        breed: "Labrador",
+        species: "Canino", // Updated
+        breed: "Labrador Retriever", // Updated
         gender: "Macho",
         birthday: "2020-01-15",
-        coatColor: "Dourado",
+        coatColor: "Caramelo (Dourado/Fulvo)", // Updated
         weight: 25.0,
         microchip: "123456789",
         notes: "Animal muito dócil e brincalhão.",
@@ -47,11 +47,11 @@ export let mockClients: Client[] = [
       {
         id: "a2",
         name: "Bolinha",
-        species: "Cachorro",
-        breed: "Poodle",
+        species: "Canino", // Updated
+        breed: "Poodle", // Updated
         gender: "Fêmea",
         birthday: "2021-05-20",
-        coatColor: "Branco",
+        coatColor: "Branco", // Updated
         weight: 5.0,
         microchip: "987654321",
         notes: "Adora passear no parque.",
@@ -92,11 +92,11 @@ export let mockClients: Client[] = [
       {
         id: "a3",
         name: "Fido",
-        species: "Cachorro",
-        breed: "Vira-lata",
+        species: "Canino", // Updated
+        breed: "SRD / Vira-lata", // Updated
         gender: "Macho",
         birthday: "2019-03-10",
-        coatColor: "Caramelo",
+        coatColor: "Caramelo (Dourado/Fulvo)", // Updated
         weight: 18.0,
         microchip: "",
         notes: "Resgatado, um pouco tímido.",
@@ -108,11 +108,11 @@ export let mockClients: Client[] = [
       {
         id: "a4",
         name: "Miau",
-        species: "Gato",
-        breed: "Siamês",
+        species: "Felino", // Updated
+        breed: "Siamês", // Still Siamês
         gender: "Fêmea",
         birthday: "2022-07-01",
-        coatColor: "Creme",
+        coatColor: "Creme (Bege)", // Updated
         weight: 3.5,
         microchip: "112233445",
         notes: "Gosta de dormir no sol.",
@@ -153,11 +153,11 @@ export let mockClients: Client[] = [
       {
         id: "a5",
         name: "Rex",
-        species: "Cachorro",
-        breed: "Pastor Alemão",
+        species: "Canino", // Updated
+        breed: "Pastor Alemão", // Still Pastor Alemão
         gender: "Macho",
         birthday: "2018-11-22",
-        coatColor: "Preto e Marrom",
+        coatColor: "Preto", // Updated
         weight: 30.0,
         microchip: "556677889",
         notes: "Animal de guarda, muito leal.",
