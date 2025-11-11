@@ -36,7 +36,7 @@ import {
 import { pdf } from "@react-pdf/renderer"; // Importar pdf para impressão
 import { PrescriptionPdfContent } from "@/components/PrescriptionPdfContent"; // Importar o componente de conteúdo do PDF
 import { FinancialTransaction, mockFinancialTransactions } from "@/mockData/financial"; // Importar mock data financeiro
-import { AppointmentEntry } from "@/types/appointment"; // Importar a nova interface de atendimento
+import { AppointmentEntry, BaseAppointmentDetails, ConsultationDetails } from "@/types/appointment"; // Importar a nova interface de atendimento
 import { mockClients } from "@/mockData/clients"; // Importar o mock de clientes centralizado
 import { Client, Animal } from "@/types/client"; // Importar as interfaces Client e Animal
 
@@ -64,7 +64,8 @@ const initialMockAppointments: AppointmentEntry[] = [
       diagnosticoDefinitivo: "Saudável",
       condutaTratamento: "Manter rotina, próxima vacina em 6 meses.",
       retornoRecomendadoEmDias: 180,
-    },
+      suspeitaDiagnostica: "Saudável", // Adicionado para teste
+    } as ConsultationDetails,
     attachments: [],
   },
   {
@@ -106,7 +107,25 @@ const initialMockAppointments: AppointmentEntry[] = [
       manobrasSuporteRealizadas: "Oxigenoterapia, fluidoterapia.",
       medicamentosAdministrados: "Furosemida, Dexametasona.",
       encaminhamento: "internacao",
+      suspeitaDiagnostica: "Pneumonia", // Adicionado para teste
+      condutaTratamento: "Internação e tratamento com antibióticos.",
     },
+    attachments: [],
+  },
+  {
+    id: "app4",
+    animalId: "a1",
+    date: "2024-07-25",
+    type: "Outros", // Exemplo de atendimento simples
+    vet: "Dr. William Cardoso",
+    pesoAtual: 26.0,
+    temperaturaCorporal: 38.2,
+    observacoesGerais: "Animal com leve tosse. Prescrito xarope.",
+    details: {
+      queixaPrincipal: "Tosse leve",
+      condutaTratamento: "Xarope para tosse por 5 dias.",
+      proximosPassos: "Reavaliar em 5 dias.",
+    } as BaseAppointmentDetails,
     attachments: [],
   },
 ];
@@ -635,36 +654,47 @@ const PatientRecordPage = () => {
               <CardContent className="pt-0">
                 {animalAppointments.length > 0 ? (
                   <div className="space-y-4">
-                    {animalAppointments.map((app) => (
-                      <Card key={app.id} className="p-4 bg-input shadow-sm border border-border">
-                        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-2 gap-2">
-                          <div className="flex items-center gap-2">
-                            <Badge className="px-2 py-0.5 text-xs font-medium rounded-full bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200">
-                              {app.type}
-                            </Badge>
-                            <p className="text-lg font-semibold text-foreground">
-                              {app.observacoesGerais || "Sem observações"}
-                            </p>
+                    {animalAppointments.map((app) => {
+                      const appDetails = app.details as BaseAppointmentDetails; // Cast para BaseAppointmentDetails
+                      const displaySummary = appDetails.suspeitaDiagnostica || appDetails.condutaTratamento || app.observacoesGerais || "Sem descrição detalhada.";
+                      const retornoInfo = appDetails.retornoRecomendadoEmDias ? `Retorno em ${appDetails.retornoRecomendadoEmDias} dias.` : '';
+
+                      return (
+                        <Card key={app.id} className="p-4 bg-input shadow-sm border border-border">
+                          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-2 gap-2">
+                            <div className="flex items-center gap-2">
+                              <Badge className="px-2 py-0.5 text-xs font-medium rounded-full bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200">
+                                {app.type}
+                              </Badge>
+                              <p className="text-lg font-semibold text-foreground">
+                                {displaySummary}
+                              </p>
+                            </div>
+                            <div className="flex gap-2">
+                              <Button variant="ghost" size="icon" onClick={() => handleEditAppointmentClick(app)} className="rounded-md hover:bg-muted hover:text-foreground transition-colors duration-200">
+                                <FaEye className="h-4 w-4" />
+                              </Button>
+                              <Button variant="ghost" size="icon" onClick={() => handleDeleteAppointment(app.id)} className="rounded-md hover:bg-muted hover:text-foreground transition-colors duration-200">
+                                <FaTrashAlt className="h-4 w-4 text-destructive" />
+                              </Button>
+                            </div>
                           </div>
-                          <div className="flex gap-2">
-                            <Button variant="ghost" size="icon" onClick={() => handleEditAppointmentClick(app)} className="rounded-md hover:bg-muted hover:text-foreground transition-colors duration-200">
-                              <FaEye className="h-4 w-4" />
-                            </Button>
-                            <Button variant="ghost" size="icon" onClick={() => handleDeleteAppointment(app.id)} className="rounded-md hover:bg-muted hover:text-foreground transition-colors duration-200">
-                              <FaTrashAlt className="h-4 w-4 text-destructive" />
-                            </Button>
+                          <div className="grid grid-cols-1 md:grid-cols-2 gap-2 text-sm text-muted-foreground">
+                            <div className="flex items-center gap-1">
+                              <FaCalendarAlt className="h-3 w-3" /> {formatDate(app.date)}
+                            </div>
+                            <div className="flex items-center gap-1">
+                              <FaStethoscope className="h-3 w-3" /> {app.vet}
+                            </div>
+                            {retornoInfo && (
+                              <div className="flex items-center gap-1 col-span-full">
+                                <FaClock className="h-3 w-3" /> {retornoInfo}
+                              </div>
+                            )}
                           </div>
-                        </div>
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-2 text-sm text-muted-foreground">
-                          <div className="flex items-center gap-1">
-                            <FaCalendarAlt className="h-3 w-3" /> {formatDate(app.date)}
-                          </div>
-                          <div className="flex items-center gap-1">
-                            <FaStethoscope className="h-3 w-3" /> {app.vet}
-                          </div>
-                        </div>
-                      </Card>
-                    ))}
+                        </Card>
+                      );
+                    })}
                   </div>
                 ) : (
                   <p className="text-muted-foreground py-4">Nenhum atendimento registrado.</p>
