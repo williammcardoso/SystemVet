@@ -540,7 +540,7 @@ const PatientRecordPage = () => {
                   <Avatar className="h-12 w-12">
                     {/* Usar FaPaw como fallback para o avatar do animal */}
                     <AvatarFallback className="bg-primary text-primary-foreground text-lg font-bold">
-                      <FaPaw className="h-6 w-6" />
+                      <FaPaw className="h-6 w-6 text-white" /> {/* Adicionado text-white explicitamente */}
                     </AvatarFallback>
                   </Avatar>
                   <div>
@@ -593,32 +593,32 @@ const PatientRecordPage = () => {
 
         <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full mt-6">
           <TabsList className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-9 h-auto flex-wrap bg-card shadow-sm border border-border rounded-md p-2">
-            <TabsTrigger value="appointments" className="rounded-md data-[state=active]:bg-primary data-[state=active]:text-primary-foreground transition-colors duration-200 text-muted-foreground data-[state=active]:dark:bg-primary">
-              <FaStethoscope className="h-4 w-4 mr-2" /> Atendimento
+            <TabsTrigger value="appointments" className="rounded-md data-[state=active]:bg-primary data-[state=active]:text-primary-foreground transition-colors duration-200 text-muted-foreground data-[state=active]:dark:bg-primary flex items-center">
+              <FaStethoscope className="h-4 w-4 mr-2" /> <span className="whitespace-nowrap">Atendimento</span>
             </TabsTrigger>
-            <TabsTrigger value="exams" className="rounded-md data-[state=active]:bg-primary data-[state=active]:text-primary-foreground transition-colors duration-200 text-muted-foreground data-[state=active]:dark:bg-primary">
-              <FaFlask className="h-4 w-4 mr-2" /> Exames
+            <TabsTrigger value="exams" className="rounded-md data-[state=active]:bg-primary data-[state=active]:text-primary-foreground transition-colors duration-200 text-muted-foreground data-[state=active]:dark:bg-primary flex items-center">
+              <FaFlask className="h-4 w-4 mr-2" /> <span className="whitespace-nowrap">Exames</span>
             </TabsTrigger>
-            <TabsTrigger value="sales" className="rounded-md data-[state=active]:bg-primary data-[state=active]:text-primary-foreground transition-colors duration-200 text-muted-foreground data-[state=active]:dark:bg-primary">
-              <FaDollarSign className="h-4 w-4 mr-2" /> Vendas
+            <TabsTrigger value="sales" className="rounded-md data-[state=active]:bg-primary data-[state=active]:text-primary-foreground transition-colors duration-200 text-muted-foreground data-[state=active]:dark:bg-primary flex items-center">
+              <FaDollarSign className="h-4 w-4 mr-2" /> <span className="whitespace-nowrap">Vendas</span>
             </TabsTrigger>
-            <TabsTrigger value="vaccines" className="rounded-md data-[state=active]:bg-primary data-[state=active]:text-primary-foreground transition-colors duration-200 text-muted-foreground data-[state=active]:dark:bg-primary">
-              <FaSyringe className="h-4 w-4 mr-2" /> Vacinas
+            <TabsTrigger value="vaccines" className="rounded-md data-[state=active]:bg-primary data-[state=active]:text-primary-foreground transition-colors duration-200 text-muted-foreground data-[state=active]:dark:bg-primary flex items-center">
+              <FaSyringe className="h-4 w-4 mr-2" /> <span className="whitespace-nowrap">Vacinas</span>
             </TabsTrigger>
-            <TabsTrigger value="weight" className="rounded-md data-[state=active]:bg-primary data-[state=active]:text-primary-foreground transition-colors duration-200 text-muted-foreground data-[state=active]:dark:bg-primary">
-              <FaWeightHanging className="h-4 w-4 mr-2" /> Peso
+            <TabsTrigger value="weight" className="rounded-md data-[state=active]:bg-primary data-[state=active]:text-primary-foreground transition-colors duration-200 text-muted-foreground data-[state=active]:dark:bg-primary flex items-center">
+              <FaWeightHanging className="h-4 w-4 mr-2" /> <span className="whitespace-nowrap">Peso</span>
             </TabsTrigger>
-            <TabsTrigger value="documents" className="rounded-md data-[state=active]:bg-primary data-[state=active]:text-primary-foreground transition-colors duration-200 text-muted-foreground data-[state=active]:dark:bg-primary">
-              <FaFileAlt className="h-4 w-4 mr-2" /> Documentos
+            <TabsTrigger value="documents" className="rounded-md data-[state=active]:bg-primary data-[state=active]:text-primary-foreground transition-colors duration-200 text-muted-foreground data-[state=active]:dark:bg-primary flex items-center">
+              <FaFileAlt className="h-4 w-4 mr-2" /> <span className="whitespace-nowrap">Documentos</span>
             </TabsTrigger>
-            <TabsTrigger value="prescriptions" className="rounded-md data-[state=active]:bg-primary data-[state=active]:text-primary-foreground transition-colors duration-200 text-muted-foreground data-[state=active]:dark:bg-primary">
-              <FaPrescriptionBottleAlt className="h-4 w-4 mr-2" /> Receitas
+            <TabsTrigger value="prescriptions" className="rounded-md data-[state=active]:bg-primary data-[state=active]:text-primary-foreground transition-colors duration-200 text-muted-foreground data-[state=active]:dark:bg-primary flex items-center">
+              <FaPrescriptionBottleAlt className="h-4 w-4 mr-2" /> <span className="whitespace-nowrap">Receitas</span>
             </TabsTrigger>
-            <TabsTrigger value="observations" className="rounded-md data-[state=active]:bg-primary data-[state=active]:text-primary-foreground transition-colors duration-200 text-muted-foreground data-[state=active]:dark:bg-primary">
-              <FaCommentAlt className="h-4 w-4 mr-2" /> Observações
+            <TabsTrigger value="observations" className="rounded-md data-[state=active]:bg-primary data-[state=active]:text-primary-foreground transition-colors duration-200 text-muted-foreground data-[state=active]:dark:bg-primary flex items-center">
+              <FaCommentAlt className="h-4 w-4 mr-2" /> <span className="whitespace-nowrap">Observações</span>
             </TabsTrigger>
-            <TabsTrigger value="financial" className="rounded-md data-[state=active]:bg-primary data-[state=active]:text-primary-foreground transition-colors duration-200 text-muted-foreground data-[state=active]:dark:bg-primary">
-              <FaMoneyBillWave className="h-4 w-4 mr-2" /> Financeiro
+            <TabsTrigger value="financial" className="rounded-md data-[state=active]:bg-primary data-[state=active]:text-primary-foreground transition-colors duration-200 text-muted-foreground data-[state=active]:dark:bg-primary flex items-center">
+              <FaMoneyBillWave className="h-4 w-4 mr-2" /> <span className="whitespace-nowrap">Financeiro</span>
             </TabsTrigger>
           </TabsList>
 
