@@ -46,7 +46,7 @@ const ClientDetailPage = () => {
     <div className="flex flex-col min-h-screen bg-background">
       {/* Header da Página com Gradiente e Breadcrumb */}
       <div className="bg-gradient-to-r from-background via-card to-background p-6 pb-4 border-b border-border">
-        <div className="flex items-center justify-between mb-2">
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-2 gap-4 sm:gap-2">
           <div className="flex items-center gap-4">
             <div>
               <h1 className="text-2xl font-semibold flex items-center gap-3 text-foreground group">
@@ -57,7 +57,7 @@ const ClientDetailPage = () => {
               </p>
             </div>
           </div>
-          <div className="flex items-center gap-2">
+          <div className="flex flex-wrap items-center gap-2">
             <Button variant="outline" onClick={handleEditClient} className="rounded-md border-border text-foreground hover:bg-muted hover:text-foreground transition-colors duration-200">
               <FaEdit className="mr-2 h-4 w-4" /> Editar Cliente
             </Button>
@@ -76,7 +76,7 @@ const ClientDetailPage = () => {
       <div className="flex-1 p-6">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 py-4 max-w-5xl mx-auto">
           {/* Coluna da Esquerda: Informações do Tutor */}
-          <div className="lg:col-span-2 space-y-4">
+          <div className="col-span-1 lg:col-span-2 space-y-4">
             {/* Informações Gerais */}
             <Card className="bg-card shadow-sm border border-border rounded-md">
               <CardHeader className="pb-3">
@@ -161,7 +161,7 @@ const ClientDetailPage = () => {
           </div>
 
           {/* Coluna da Direita: Animais do Cliente */}
-          <div className="lg:col-span-1">
+          <div className="col-span-1 lg:col-span-1">
             <Card className="bg-card shadow-sm border border-border rounded-md">
               <CardHeader className="flex flex-row items-center justify-between pb-3">
                 <CardTitle className="flex items-center gap-2 text-lg font-semibold text-foreground">
@@ -182,7 +182,7 @@ const ClientDetailPage = () => {
               </CardHeader>
               <CardContent className="pt-0">
                 {client.animals.length > 0 ? (
-                  <div className="overflow-hidden">
+                  <div className="overflow-x-auto"> {/* Adicionado overflow-x-auto para tabelas em mobile */}
                     <Table>
                       <TableHeader>
                         <TableRow>

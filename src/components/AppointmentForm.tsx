@@ -1495,7 +1495,7 @@ const AppointmentForm: React.FC<AppointmentFormProps> = ({
                 onChange={(e) => setNewAttachmentFile(e.target.files ? e.target.files[0] : null)}
               />
             </div>
-            <Button type="button" onClick={handleAddAttachment} className="shrink-0">
+            <Button type="button" onClick={handleAddAttachment} className="shrink-0 w-full md:w-auto">
               <FaPlus className="mr-2 h-4 w-4" /> Adicionar Anexo
             </Button>
           </div>
@@ -1520,19 +1520,19 @@ const AppointmentForm: React.FC<AppointmentFormProps> = ({
       </Card>
 
       {/* Botões de Ação */}
-      <div className="flex justify-end gap-2 mt-6 p-4 bg-white/80 backdrop-blur-sm border-t border-gray-200 dark:bg-gray-950/80 dark:border-gray-800 sticky bottom-0 z-10">
-        <Button type="button" variant="outline" onClick={onCancel} className="bg-white border border-gray-300 text-gray-700 hover:bg-gray-50 rounded-md transition-all duration-200 shadow-sm hover:shadow-md dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200 dark:hover:bg-gray-600">
+      <div className="flex flex-col sm:flex-row justify-end gap-2 mt-6 p-4 bg-white/80 backdrop-blur-sm border-t border-gray-200 dark:bg-gray-950/80 dark:border-gray-800 sticky bottom-0 z-10">
+        <Button type="button" variant="outline" onClick={onCancel} className="w-full sm:w-auto bg-white border border-gray-300 text-gray-700 hover:bg-gray-50 rounded-md transition-all duration-200 shadow-sm hover:shadow-md dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200 dark:hover:bg-gray-600">
           <FaTimes className="mr-2 h-4 w-4" /> Cancelar
         </Button>
-        <Link to={`/clients/${clientId}/animals/${animalId}/add-prescription`} className="mr-2">
-          <Button type="button" variant="secondary" className="rounded-md bg-white border border-gray-300 text-gray-700 hover:bg-gray-50 transition-colors duration-200 shadow-sm hover:shadow-md dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200 dark:hover:bg-gray-600">
+        <Link to={`/clients/${clientId}/animals/${animalId}/add-prescription`} className="w-full sm:w-auto">
+          <Button type="button" variant="secondary" className="w-full bg-white border border-gray-300 text-gray-700 hover:bg-gray-50 transition-colors duration-200 shadow-sm hover:shadow-md dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200 dark:hover:bg-gray-600">
             <FaPrescriptionBottleAlt className="mr-2 h-4 w-4" /> Gerar Prescrição
           </Button>
         </Link>
-        <Button type="button" variant="secondary" className="rounded-md bg-white border border-gray-300 text-gray-700 hover:bg-gray-50 transition-colors duration-200 shadow-sm hover:shadow-md dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200 dark:hover:bg-gray-600">
+        <Button type="button" variant="secondary" className="w-full sm:w-auto bg-white border border-gray-300 text-gray-700 hover:bg-gray-50 transition-colors duration-200 shadow-sm hover:shadow-md dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200 dark:hover:bg-gray-600">
           <FaFileAlt className="mr-2 h-4 w-4" /> Gerar PDF do Atendimento
         </Button>
-        <Button type="submit" className="bg-gradient-to-r from-blue-500 to-indigo-500 text-white hover:from-blue-600 hover:to-indigo-600 rounded-md font-semibold transition-all duration-200 shadow-md hover:shadow-lg">
+        <Button type="submit" className="w-full sm:w-auto bg-gradient-to-r from-blue-500 to-indigo-500 text-white hover:from-blue-600 hover:to-indigo-600 rounded-md font-semibold transition-all duration-200 shadow-md hover:shadow-lg">
           <FaSave className="mr-2 h-4 w-4" /> Salvar Atendimento
         </Button>
       </div>

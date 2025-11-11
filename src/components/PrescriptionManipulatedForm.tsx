@@ -363,7 +363,7 @@ const PrescriptionManipulatedForm: React.FC<PrescriptionManipulatedFormProps> = 
 
   return (
     <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-      <div className="lg:col-span-2 space-y-6">
+      <div className="col-span-1 lg:col-span-2 space-y-6">
         {/* Composição da Fórmula */}
         <Card className="shadow-sm border border-border rounded-md">
           <CardHeader>
@@ -669,14 +669,14 @@ const PrescriptionManipulatedForm: React.FC<PrescriptionManipulatedFormProps> = 
           </CardContent>
         </Card>
         <div className="flex justify-end mt-6">
-          <Button onClick={handleSave} className="bg-primary text-primary-foreground hover:bg-primary/90 rounded-md font-semibold transition-all duration-200 shadow-md hover:shadow-lg">
+          <Button onClick={handleSave} className="w-full sm:w-auto bg-primary text-primary-foreground hover:bg-primary/90 rounded-md font-semibold transition-all duration-200 shadow-md hover:shadow-lg">
             <FaSave className="h-4 w-4 mr-2" /> Salvar Dados da Receita
           </Button>
         </div>
       </div>
 
       {/* Prévia da Fórmula (Sidebar) */}
-      <div className="lg:col-span-1">
+      <div className="col-span-1 lg:col-span-1">
         <Card className="sticky top-20 shadow-sm border border-border rounded-md">
           <CardHeader>
             <CardTitle className="text-lg font-semibold text-foreground">Prévia da Fórmula</CardTitle>
@@ -696,14 +696,14 @@ const PrescriptionManipulatedForm: React.FC<PrescriptionManipulatedFormProps> = 
                     <div key={comp.id} className="flex items-end">
                       <span className="flex-shrink-0">• {comp.name}</span>
                       <span className="flex-grow border-b border-dotted border-muted-foreground mx-1 h-3"></span>
-                      <span className="flex-shrink-0">{comp.dosageQuantity} {getLongUnitAbbreviation(comp.dosageUnit)}</span>
+                      <span className="flex-shrink-0">{comp.dosageQuantity} {getShortUnitAbbreviation(comp.dosageUnit)}</span>
                     </div>
                   ))}
                   {vehicleExcipient.type && vehicleExcipient.quantity && vehicleExcipient.unit && (
                     <div className="flex items-end">
                       <span className="flex-shrink-0">• {displayVehicleType} q.s.p.</span>
                       <span className="flex-grow border-b border-dotted border-muted-foreground mx-1 h-3"></span>
-                      <span className="flex-shrink-0">{vehicleExcipient.quantity} {getLongUnitAbbreviation(vehicleExcipient.unit)}</span>
+                      <span className="flex-shrink-0">{vehicleExcipient.quantity} {getShortUnitAbbreviation(vehicleExcipient.unit)}</span>
                     </div>
                   )}
                 </div>

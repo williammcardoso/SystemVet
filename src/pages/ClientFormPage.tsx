@@ -291,7 +291,7 @@ const ClientFormPage = () => {
     <div className="flex flex-col min-h-screen bg-background">
       {/* Header da Página com Gradiente e Breadcrumb */}
       <div className="bg-gradient-to-r from-background via-card to-background p-6 pb-4 border-b border-border">
-        <div className="flex items-center justify-between mb-2">
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-2 gap-4 sm:gap-2">
           <div className="flex items-center gap-4">
             <div>
               <h1 className="text-2xl font-semibold flex items-center gap-3 text-foreground group">
@@ -447,7 +447,7 @@ const ClientFormPage = () => {
               </div>
               <div className="space-y-4 mt-4">
                 {dynamicContacts.map((contact, index) => (
-                  <div key={contact.id} className="flex items-end gap-2">
+                  <div key={contact.id} className="flex flex-col sm:flex-row items-stretch sm:items-end gap-2">
                     <div className="flex-1 space-y-2">
                       <Label htmlFor={`dynamic-contact-label-${contact.id}`} className="text-muted-foreground font-medium">Nome do Contato {index + 1}</Label>
                       <Input
@@ -481,7 +481,7 @@ const ClientFormPage = () => {
               </div>
             </div>
 
-            <div className="flex justify-end gap-2 mt-6">
+            <div className="flex flex-col sm:flex-row justify-end gap-2 mt-6">
               <Button variant="outline" onClick={() => navigate(isEditing ? `/clients/${clientId}` : "/clients")} className="bg-card border border-border text-foreground hover:bg-muted rounded-md transition-all duration-200 shadow-sm hover:shadow-md">
                 <FaTimes className="mr-2 h-4 w-4" /> Cancelar
               </Button>
@@ -554,7 +554,7 @@ const ClientFormPage = () => {
                 </Select>
               </div>
             </div>
-            <div className="flex justify-end gap-2 mt-6">
+            <div className="flex flex-col sm:flex-row justify-end gap-2 mt-6">
               <Button variant="outline" onClick={() => navigate(isEditing ? `/clients/${clientId}` : "/clients")} className="bg-card border border-border text-foreground hover:bg-muted rounded-md transition-all duration-200 shadow-sm hover:shadow-md">
                 <FaTimes className="mr-2 h-4 w-4" /> Cancelar
               </Button>
@@ -568,7 +568,7 @@ const ClientFormPage = () => {
               <Label htmlFor="notes" className="text-muted-foreground font-medium">Observações</Label>
               <Textarea id="notes" placeholder="Adicione observações adicionais sobre o responsável..." rows={5} value={notes} onChange={(e) => setNotes(e.target.value)} className="bg-input rounded-md border-border focus:ring-2 focus:ring-ring placeholder-muted-foreground transition-all duration-200" />
             </div>
-            <div className="flex justify-end gap-2 mt-6">
+            <div className="flex flex-col sm:flex-row justify-end gap-2 mt-6">
               <Button variant="outline" onClick={() => navigate(isEditing ? `/clients/${clientId}` : "/clients")} className="bg-card border border-border text-foreground hover:bg-muted rounded-md transition-all duration-200 shadow-sm hover:shadow-md">
                 <FaTimes className="mr-2 h-4 w-4" /> Cancelar
               </Button>

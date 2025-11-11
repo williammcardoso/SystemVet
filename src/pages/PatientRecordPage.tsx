@@ -255,10 +255,7 @@ const PatientRecordPage = () => {
   const [newObservation, setNewObservation] = useState<string>("");
 
   // State para a lista de exames e o modal de adição
-  const [examsList, setExamsList] = useState<ExamEntry[]>([
-    { id: "ex1", date: "2023-10-25", type: "Hemograma Completo", result: "Normal", vet: "Dr. Silva", hemacias: 5.5, leucocitos: 12.0, plaquetas: 300 },
-    { id: "ex2", date: "2024-03-09", type: "Exame de Fezes", result: "Negativo para parasitas", vet: "Dra. Costa" },
-  ]);
+  const [examsList, setExamsList] = useState<ExamEntry[]>([]); // Inicialmente vazio, pois a adição é feita em outra página
   const [isAddExamDialogOpen, setIsAddExamDialogOpen] = useState(false);
   const [newExamDate, setNewExamDate] = useState<string>(new Date().toISOString().split('T')[0]);
   const [newExamType, setNewExamType] = useState<string | undefined>(undefined);
@@ -489,7 +486,7 @@ const PatientRecordPage = () => {
     <div className="flex flex-col min-h-screen bg-background">
       {/* Header da Página com Gradiente e Breadcrumb */}
       <div className="bg-gradient-to-r from-background via-card to-background p-6 pb-4 border-b border-border">
-        <div className="flex items-center justify-between mb-2">
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-2 gap-4 sm:gap-2">
           <div className="flex items-center gap-4">
             <div>
               <h1 className="text-2xl font-semibold flex items-center gap-3 text-foreground group">
@@ -500,7 +497,7 @@ const PatientRecordPage = () => {
               </p>
             </div>
           </div>
-          <div className="flex items-center gap-2">
+          <div className="flex flex-wrap items-center gap-2">
             <Button variant="outline" className="rounded-md border-border text-foreground hover:bg-muted hover:text-foreground transition-colors duration-200">
               <FaPrint className="mr-2 h-4 w-4" /> Imprimir
             </Button>
@@ -586,7 +583,7 @@ const PatientRecordPage = () => {
         </div>
 
         <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full mt-6">
-          <TabsList className="grid w-full grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-9 h-auto flex-wrap bg-card shadow-sm border border-border rounded-md p-2">
+          <TabsList className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-9 h-auto flex-wrap bg-card shadow-sm border border-border rounded-md p-2">
             <TabsTrigger value="appointments" className="rounded-md data-[state=active]:bg-primary data-[state=active]:text-primary-foreground transition-colors duration-200 text-muted-foreground data-[state=active]:dark:bg-primary">
               <FaStethoscope className="h-4 w-4 mr-2" /> Atendimento
             </TabsTrigger>
@@ -631,7 +628,7 @@ const PatientRecordPage = () => {
                   <div className="space-y-4">
                     {animalAppointments.map((app) => (
                       <Card key={app.id} className="p-4 bg-input shadow-sm border border-border">
-                        <div className="flex items-center justify-between mb-2">
+                        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-2 gap-2">
                           <div className="flex items-center gap-2">
                             <Badge className="px-2 py-0.5 text-xs font-medium rounded-full bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200">
                               {app.type}
@@ -705,7 +702,7 @@ const PatientRecordPage = () => {
                   <div className="space-y-4">
                     {examsList.map((exam) => (
                       <Card key={exam.id} className="p-4 bg-input shadow-sm border border-border">
-                        <div className="flex items-center justify-between mb-2">
+                        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-2 gap-2">
                           <div className="flex items-center gap-2">
                             <Badge className="px-2 py-0.5 text-xs font-medium rounded-full bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-200">
                               {exam.type}
@@ -744,8 +741,8 @@ const PatientRecordPage = () => {
                   </DialogDescription>
                 </DialogHeader>
                 <div className="grid gap-4 py-4">
-                  <div className="grid grid-cols-4 items-center gap-4">
-                    <Label htmlFor="examDate" className="text-right text-muted-foreground font-medium">
+                  <div className="grid grid-cols-1 sm:grid-cols-4 items-center gap-4">
+                    <Label htmlFor="examDate" className="sm:text-right text-muted-foreground font-medium">
                       Data
                     </Label>
                     <Input
@@ -756,8 +753,8 @@ const PatientRecordPage = () => {
                       className="col-span-3 bg-input rounded-md border-border focus:ring-2 focus:ring-ring placeholder-muted-foreground transition-all duration-200"
                     />
                   </div>
-                  <div className="grid grid-cols-4 items-center gap-4">
-                    <Label htmlFor="examType" className="text-right text-muted-foreground font-medium">
+                  <div className="grid grid-cols-1 sm:grid-cols-4 items-center gap-4">
+                    <Label htmlFor="examType" className="sm:text-right text-muted-foreground font-medium">
                       Tipo de Exame
                     </Label>
                     <Select onValueChange={setNewExamType} value={newExamType} >
@@ -773,8 +770,8 @@ const PatientRecordPage = () => {
                       </SelectContent>
                     </Select>
                   </div>
-                  <div className="grid grid-cols-4 items-center gap-4">
-                    <Label htmlFor="examVet" className="text-right text-muted-foreground font-medium">
+                  <div className="grid grid-cols-1 sm:grid-cols-4 items-center gap-4">
+                    <Label htmlFor="examVet" className="sm:text-right text-muted-foreground font-medium">
                       Veterinário
                     </Label>
                     <Select onValueChange={setNewExamVet} value={newExamVet}>
@@ -794,7 +791,7 @@ const PatientRecordPage = () => {
                   {newExamType === "Hemograma Completo" ? (
                     <>
                       <h3 className="col-span-4 text-lg font-semibold mt-4 mb-2 text-foreground">Eritrograma</h3>
-                      <div className="grid grid-cols-2 col-span-4 gap-4">
+                      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 col-span-4 gap-4">
                         <div className="space-y-2">
                           <Label htmlFor="hemacias" className="text-muted-foreground font-medium">Hemácias (m/mm3)</Label>
                           <Input id="hemacias" type="number" placeholder="Ex: 5.5" value={newHemacias} onChange={(e) => setNewHemacias(e.target.value)} className="bg-input rounded-md border-border focus:ring-2 focus:ring-ring placeholder-muted-foreground transition-all duration-200" />
@@ -957,7 +954,7 @@ const PatientRecordPage = () => {
                   <div className="space-y-4">
                     {animalSalesTransactions.map((sale) => (
                       <Card key={sale.id} className="p-4 bg-input shadow-sm border border-border">
-                        <div className="flex items-center justify-between mb-2">
+                        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-2 gap-2">
                           <div className="flex items-center gap-2">
                             <Badge className="px-2 py-0.5 text-xs font-medium rounded-full bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200">
                               {sale.category}
@@ -1003,7 +1000,7 @@ const PatientRecordPage = () => {
                   <div className="space-y-4">
                     {mockVaccines.map((vaccine) => (
                       <Card key={vaccine.id} className="p-4 bg-input shadow-sm border border-border">
-                        <div className="flex items-center justify-between mb-2">
+                        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-2 gap-2">
                           <div className="flex items-center gap-2">
                             <Badge className="px-2 py-0.5 text-xs font-medium rounded-full bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200">
                               {vaccine.type}
@@ -1037,25 +1034,25 @@ const PatientRecordPage = () => {
           {/* Nova aba: Peso */}
           <TabsContent value="weight" className="mt-4">
             <Card className="bg-card shadow-sm border border-border rounded-md">
-              <CardHeader className="flex flex-row items-center justify-between pb-3">
+              <CardHeader className="flex flex-col sm:flex-row items-start sm:items-center justify-between pb-3 gap-2">
                 <CardTitle className="flex items-center gap-2 text-lg font-semibold text-foreground">
                   <FaWeightHanging className="h-5 w-5 text-primary" /> Histórico de Peso
                 </CardTitle>
-                <div className="flex gap-2">
+                <div className="flex flex-col sm:flex-row gap-2 items-stretch sm:items-center">
                   <Input
                     type="date"
                     value={newWeightDate}
                     onChange={(e) => setNewWeightDate(e.target.value)}
-                    className="w-[150px] bg-input rounded-md border-border focus:ring-2 focus:ring-ring placeholder-muted-foreground transition-all duration-200"
+                    className="w-full sm:w-[150px] bg-input rounded-md border-border focus:ring-2 focus:ring-ring placeholder-muted-foreground transition-all duration-200"
                   />
                   <Input
                     type="number"
                     placeholder="Peso (kg)"
                     value={newWeight}
                     onChange={(e) => setNewWeight(e.target.value)}
-                    className="w-[120px] bg-input rounded-md border-border focus:ring-2 focus:ring-ring placeholder-muted-foreground transition-all duration-200"
+                    className="w-full sm:w-[120px] bg-input rounded-md border-border focus:ring-2 focus:ring-ring placeholder-muted-foreground transition-all duration-200"
                   />
-                  <Button size="sm" onClick={handleAddWeight} className="rounded-md bg-primary text-primary-foreground hover:bg-primary/90 font-semibold transition-all duration-200 shadow-md hover:shadow-lg">
+                  <Button size="sm" onClick={handleAddWeight} className="w-full sm:w-auto rounded-md bg-primary text-primary-foreground hover:bg-primary/90 font-semibold transition-all duration-200 shadow-md hover:shadow-lg">
                     <FaPlus className="h-4 w-4 mr-2" /> Adicionar Peso
                   </Button>
                 </div>
@@ -1065,7 +1062,7 @@ const PatientRecordPage = () => {
                   <div className="space-y-4">
                     {weightHistory.map((entry) => (
                       <Card key={entry.id} className="p-4 bg-input shadow-sm border border-border">
-                        <div className="flex items-center justify-between mb-2">
+                        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-2 gap-2">
                           <div className="flex items-center gap-2">
                             <FaWeightHanging className="h-4 w-4 text-muted-foreground" />
                             <p className="text-lg font-semibold text-foreground">
@@ -1093,24 +1090,24 @@ const PatientRecordPage = () => {
           {/* Nova aba: Documentos */}
           <TabsContent value="documents" className="mt-4">
             <Card className="bg-card shadow-sm border border-border rounded-md">
-              <CardHeader className="flex flex-row items-center justify-between pb-3">
+              <CardHeader className="flex flex-col sm:flex-row items-start sm:items-center justify-between pb-3 gap-2">
                 <CardTitle className="flex items-center gap-2 text-lg font-semibold text-foreground">
                   <FaFileAlt className="h-5 w-5 text-primary" /> Documentos
                 </CardTitle>
-                <div className="flex gap-2 items-center flex-wrap">
+                <div className="flex flex-col sm:flex-row gap-2 items-stretch sm:items-center flex-wrap">
                   <Input
                     type="text"
                     placeholder="Nome do Documento"
                     value={newDocumentName}
                     onChange={(e) => setNewDocumentName(e.target.value)}
-                    className="w-[200px] bg-input rounded-md border-border focus:ring-2 focus:ring-ring placeholder-muted-foreground transition-all duration-200"
+                    className="w-full sm:w-[200px] bg-input rounded-md border-border focus:ring-2 focus:ring-ring placeholder-muted-foreground transition-all duration-200"
                   />
                   <Input
                     type="file"
                     onChange={(e) => setNewDocumentFile(e.target.files ? e.target.files[0] : null)}
-                    className="w-[200px] bg-input rounded-md border-border focus:ring-2 focus:ring-ring placeholder-muted-foreground transition-all duration-200"
+                    className="w-full sm:w-[200px] bg-input rounded-md border-border focus:ring-2 focus:ring-ring placeholder-muted-foreground transition-all duration-200"
                   />
-                  <Button size="sm" onClick={handleAddDocument} disabled={!newDocumentName || !newDocumentFile} className="rounded-md bg-primary text-primary-foreground hover:bg-primary/90 font-semibold transition-all duration-200 shadow-md hover:shadow-lg">
+                  <Button size="sm" onClick={handleAddDocument} disabled={!newDocumentName || !newDocumentFile} className="w-full sm:w-auto rounded-md bg-primary text-primary-foreground hover:bg-primary/90 font-semibold transition-all duration-200 shadow-md hover:shadow-lg">
                     <FaPlus className="h-4 w-4 mr-2" /> Adicionar Documento
                   </Button>
                 </div>
@@ -1120,7 +1117,7 @@ const PatientRecordPage = () => {
                   <div className="space-y-4">
                     {documents.map((doc) => (
                       <Card key={doc.id} className="p-4 bg-input shadow-sm border border-border">
-                        <div className="flex items-center justify-between mb-2">
+                        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-2 gap-2">
                           <div className="flex items-center gap-2">
                             <FaFileAlt className="h-4 w-4 text-muted-foreground" />
                             <p className="text-lg font-semibold text-foreground">
@@ -1188,7 +1185,7 @@ const PatientRecordPage = () => {
                   <div className="space-y-4">
                     {prescriptions.map((rx) => (
                       <Card key={rx.id} className="p-4 bg-input shadow-sm border border-border">
-                        <div className="flex items-center justify-between mb-2">
+                        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-2 gap-2">
                           <div className="flex items-center gap-2">
                             <Badge className={cn(
                               "px-2 py-0.5 text-xs font-medium rounded-full",
@@ -1242,7 +1239,7 @@ const PatientRecordPage = () => {
           {/* Nova aba: Observações */}
           <TabsContent value="observations" className="mt-4">
             <Card className="bg-card shadow-sm border border-border rounded-md">
-              <CardHeader className="flex flex-row items-center justify-between pb-3">
+              <CardHeader className="flex flex-col sm:flex-row items-start sm:items-center justify-between pb-3 gap-2">
                 <CardTitle className="flex items-center gap-2 text-lg font-semibold text-foreground">
                   <FaCommentAlt className="h-5 w-5 text-muted-foreground" /> Observações Gerais
                 </CardTitle>
@@ -1264,7 +1261,7 @@ const PatientRecordPage = () => {
                   <div className="space-y-4">
                     {observations.map((obs) => (
                       <Card key={obs.id} className="p-4 bg-input shadow-sm border border-border">
-                        <div className="flex items-center justify-between mb-2">
+                        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-2 gap-2">
                           <div className="flex items-center gap-2">
                             <FaCommentAlt className="h-4 w-4 text-muted-foreground" />
                             <p className="text-lg font-semibold text-foreground">
@@ -1305,7 +1302,7 @@ const PatientRecordPage = () => {
                   <div className="space-y-4">
                     {animalFinancialTransactions.map((transaction) => (
                       <Card key={transaction.id} className="p-4 bg-input shadow-sm border border-border">
-                        <div className="flex items-center justify-between mb-2">
+                        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-2 gap-2">
                           <div className="flex items-center gap-2">
                             <Badge className={cn(
                               "px-2 py-0.5 text-xs font-medium rounded-full",

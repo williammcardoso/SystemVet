@@ -190,7 +190,7 @@ const AgendaPage = () => {
     <div className="flex flex-col min-h-screen bg-background">
       {/* Header da Página com Gradiente e Breadcrumb */}
       <div className="bg-gradient-to-r from-background via-card to-background p-6 pb-4 border-b border-border">
-        <div className="flex items-center justify-between mb-2">
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-2 gap-4 sm:gap-2">
           <div className="flex items-center gap-4">
             <div>
               <h1 className="text-2xl font-semibold flex items-center gap-3 text-foreground group">
@@ -226,7 +226,7 @@ const AgendaPage = () => {
               selected={selectedDate}
               onSelect={setSelectedDate}
               locale={ptBR}
-              className="rounded-md border shadow bg-input"
+              className="rounded-md border shadow bg-input w-full" // Adicionado w-full
               modifiers={{
                 hasAppointments: appointments.map(app => app.date),
               }}
@@ -234,7 +234,7 @@ const AgendaPage = () => {
                 hasAppointments: "bg-primary text-primary-foreground rounded-full",
               }}
             />
-            <Button onClick={() => handleAddAppointmentClick(selectedDate)} className="mt-4 rounded-md bg-primary text-primary-foreground hover:bg-primary/90 font-semibold transition-all duration-200 shadow-md hover:shadow-lg">
+            <Button onClick={() => handleAddAppointmentClick(selectedDate)} className="mt-4 w-full sm:w-auto rounded-md bg-primary text-primary-foreground hover:bg-primary/90 font-semibold transition-all duration-200 shadow-md hover:shadow-lg">
               <FaCalendarPlus className="mr-2 h-4 w-4" /> Novo Agendamento
             </Button>
           </CardContent>
@@ -251,7 +251,7 @@ const AgendaPage = () => {
             {appointmentsForSelectedDate.length > 0 ? (
               <div className="space-y-4">
                 {appointmentsForSelectedDate.map((app) => (
-                  <div key={app.id} className="flex items-center justify-between p-3 border rounded-lg bg-input shadow-sm">
+                  <div key={app.id} className="flex flex-col sm:flex-row items-start sm:items-center justify-between p-3 border rounded-lg bg-input shadow-sm gap-2">
                     <div>
                       <p className="text-lg font-semibold text-foreground">{app.time} - {app.title}</p>
                       <p className="text-sm text-muted-foreground flex items-center gap-1">
@@ -367,11 +367,11 @@ const AgendaPage = () => {
               />
             </div>
           </div>
-          <DialogFooter>
-            <Button variant="outline" onClick={() => setIsDialogOpen(false)} className="bg-card border border-border text-foreground hover:bg-muted rounded-md transition-all duration-200 shadow-sm hover:shadow-md">
+          <DialogFooter className="flex flex-col sm:flex-row gap-2">
+            <Button variant="outline" onClick={() => setIsDialogOpen(false)} className="w-full sm:w-auto bg-card border border-border text-foreground hover:bg-muted rounded-md transition-all duration-200 shadow-sm hover:shadow-md">
               <FaTimes className="mr-2 h-4 w-4" /> Cancelar
             </Button>
-            <Button onClick={handleSaveAppointment} className="bg-primary text-primary-foreground hover:bg-primary/90 rounded-md font-semibold transition-all duration-200 shadow-md hover:shadow-lg">
+            <Button onClick={handleSaveAppointment} className="w-full sm:w-auto bg-primary text-primary-foreground hover:bg-primary/90 rounded-md font-semibold transition-all duration-200 shadow-md hover:shadow-lg">
               <FaSave className="mr-2 h-4 w-4" /> Salvar Agendamento
             </Button>
           </DialogFooter>

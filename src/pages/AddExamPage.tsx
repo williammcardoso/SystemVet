@@ -102,7 +102,7 @@ const AddExamPage = () => {
     <div className="flex flex-col min-h-screen bg-background">
       {/* Header da Página com Gradiente e Breadcrumb */}
       <div className="bg-gradient-to-r from-background via-card to-background p-6 pb-4 border-b border-border">
-        <div className="flex items-center justify-between mb-2">
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-2 gap-4 sm:gap-2">
           <div className="flex items-center gap-4">
             <div>
               <h1 className="text-2xl font-semibold flex items-center gap-3 text-foreground group">
@@ -303,7 +303,7 @@ const AddExamPage = () => {
                 id="conclusions"
                 placeholder="Conclusões do exame"
                 value={conclusions}
-                onChange={(e) => setConclusions(e.target.value)}
+                onChange={(e) => setConclusiones(e.target.value)}
                 rows={5}
                 className="bg-input rounded-md border-border focus:ring-2 focus:ring-ring placeholder-muted-foreground transition-all duration-200"
               />
@@ -311,13 +311,13 @@ const AddExamPage = () => {
           </CardContent>
         </Card>
 
-        <div className="flex justify-end gap-2 mt-6">
+        <div className="flex flex-col sm:flex-row justify-end gap-2 mt-6">
           <Link to={`/clients/${clientId}/animals/${animalId}/record`}>
-            <Button variant="outline" className="bg-card border border-border text-foreground hover:bg-muted rounded-md transition-all duration-200 shadow-sm hover:shadow-md">
+            <Button variant="outline" className="w-full sm:w-auto bg-card border border-border text-foreground hover:bg-muted rounded-md transition-all duration-200 shadow-sm hover:shadow-md">
               <FaTimes className="mr-2 h-4 w-4" /> Cancelar
             </Button>
           </Link>
-          <Button onClick={handleSaveExam} className="bg-primary text-primary-foreground hover:bg-primary/90 rounded-md font-semibold transition-all duration-200 shadow-md hover:shadow-lg">
+          <Button onClick={handleSaveExam} className="w-full sm:w-auto bg-primary text-primary-foreground hover:bg-primary/90 rounded-md font-semibold transition-all duration-200 shadow-md hover:shadow-lg">
             <FaSave className="mr-2 h-4 w-4" /> Salvar Exame
           </Button>
         </div>

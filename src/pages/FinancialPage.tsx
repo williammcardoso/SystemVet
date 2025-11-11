@@ -31,7 +31,7 @@ const FinancialPage = () => {
     <div className="flex flex-col min-h-screen bg-background">
       {/* Header da Página com Gradiente e Breadcrumb */}
       <div className="bg-gradient-to-r from-background via-card to-background p-6 pb-4 border-b border-border">
-        <div className="flex items-center justify-between mb-2">
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-2 gap-4 sm:gap-2">
           <div className="flex items-center gap-4">
             <div>
               <h1 className="text-2xl font-semibold flex items-center gap-3 text-foreground group">
@@ -55,7 +55,7 @@ const FinancialPage = () => {
 
       <div className="flex-1 p-6">
         {/* Cards de Resumo Financeiro */}
-        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3 mb-6">
+        <div className="grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 mb-6">
           <Card className="shadow-sm hover:shadow-md transition-all duration-300 ease-in-out transform hover:-translate-y-1">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium">Receita Total</CardTitle>
@@ -102,11 +102,11 @@ const FinancialPage = () => {
 
         {/* Lançamentos Recentes */}
         <Card className="shadow-sm hover:shadow-md transition-all duration-300 border-border rounded-md">
-          <CardHeader className="flex flex-row items-center justify-between pb-3">
+          <CardHeader className="flex flex-col sm:flex-row items-start sm:items-center justify-between pb-3 gap-2">
             <CardTitle className="flex items-center gap-2 text-lg font-semibold text-foreground">
               <FaWallet className="h-5 w-5 text-primary" /> Lançamentos Recentes
             </CardTitle>
-            <Button size="sm" className="bg-primary text-primary-foreground hover:bg-primary/90 rounded-md font-semibold transition-all duration-200 shadow-md hover:shadow-lg">
+            <Button size="sm" className="w-full sm:w-auto bg-primary text-primary-foreground hover:bg-primary/90 rounded-md font-semibold transition-all duration-200 shadow-md hover:shadow-lg">
               <FaPlus className="h-4 w-4 mr-2" /> Adicionar Lançamento
             </Button>
           </CardHeader>
@@ -115,7 +115,7 @@ const FinancialPage = () => {
               <div className="space-y-4">
                 {sortedTransactions.map((transaction) => (
                   <Card key={transaction.id} className="p-4 bg-card shadow-sm border border-border">
-                    <div className="flex items-center justify-between mb-2">
+                    <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-2 gap-2">
                       <div className="flex items-center gap-2">
                         <span className={cn(
                           "px-2 py-0.5 text-xs font-medium rounded-full",
