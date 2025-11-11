@@ -69,23 +69,42 @@ const mockBreeds = [
   { id: "f9", name: "Siamês", speciesId: "2" },
   { id: "f10", name: "Sphynx", speciesId: "2" },
   { id: "other-feline", name: "Outra Raça", speciesId: "2" },
+
+  // Pássaro (speciesId: "3")
+  { id: "p1", name: "Calopsita", speciesId: "3" },
+  { id: "p2", name: "Canário", speciesId: "3" },
+  { id: "p3", name: "Periquito", speciesId: "3" },
+  { id: "p4", name: "Agapornis", speciesId: "3" },
+  { id: "p5", name: "Cacatua", speciesId: "3" },
+  { id: "p6", name: "Papagaio", speciesId: "3" },
+  { id: "other-bird", name: "Outra Raça", speciesId: "3" },
+
+  // Roedor (speciesId: "4")
+  { id: "r1", name: "Hamster", speciesId: "4" },
+  { id: "r2", name: "Porquinho-da-Índia", speciesId: "4" },
+  { id: "r3", name: "Coelho", speciesId: "4" },
+  { id: "r4", name: "Chinchila", speciesId: "4" },
+  { id: "r5", name: "Rato Twister", speciesId: "4" },
+  { id: "other-rodent", name: "Outra Raça", speciesId: "4" },
+
+  // Outro (speciesId: "other") - Não terá raças pré-definidas, apenas campo manual
 ];
 
-// Mock data for coat types
+// Mock data for coat types (sorted alphabetically)
 const mockCoatTypes = [
-  { id: "ct1", name: "Preto" },
-  { id: "ct2", name: "Branco" },
-  { id: "ct3", name: "Marrom (Chocolate)" },
-  { id: "ct4", name: "Caramelo (Dourado/Fulvo)" },
   { id: "ct5", name: "Amarelo" },
+  { id: "ct9", name: "Bicolor (Duas cores)" },
+  { id: "ct4", name: "Caramelo (Dourado/Fulvo)" },
   { id: "ct6", name: "Cinza (Azul/Prata)" },
   { id: "ct7", name: "Creme (Bege)" },
   { id: "ct8", name: "Laranja (Vermelho)" },
-  { id: "ct9", name: "Bicolor (Duas cores)" },
-  { id: "ct10", name: "Tricolor (Três cores)" },
-  { id: "ct11", name: "Tigrado (Listrado)" },
   { id: "ct12", name: "Malhado (Com manchas)" },
+  { id: "ct3", name: "Marrom (Chocolate)" },
   { id: "other-color", name: "Outra Cor" },
+  { id: "ct1", name: "Preto" },
+  { id: "ct11", name: "Tigrado (Listrado)" },
+  { id: "ct10", name: "Tricolor (Três cores)" },
+  { id: "ct2", name: "Branco" },
 ];
 
 const AddAnimalPage = () => {
@@ -108,9 +127,19 @@ const AddAnimalPage = () => {
   const [notes, setNotes] = useState("");
 
   // Filter breeds based on selected species
-  const filteredBreeds = selectedSpecies
-    ? mockBreeds.filter(breed => breed.speciesId === selectedSpecies)
-    : [];
+  const getFilteredBreeds = () => {
+    if (!selectedSpecies) return [];
+    if (selectedSpecies === "other") return [{ id: "other-custom", name: "Outra Raça", speciesId: "other" }]; // Only custom option for "Outro" species
+
+    const breedsForSpecies = mockBreeds.filter(breed => breed.speciesId === selectedSpecies);
+    const sortedBreeds = [...breedsForSpecies].sort((a, b) => {
+      if (a.name.includes("SRD") || a.name.includes("Vira-lata")) return -1;
+      if (b.name.includes("SRD") || b.name.includes("Vira-lata")) return 1;
+      return a.name.localeCompare(b.name);
+    });
+    // Add "Outra Raça" at the end of the sorted list
+    return [...sortedBreeds, { id: `other-${selectedSpecies}`, name: "Outra Raça", speciesId: selectedSpecies }];
+  };
 
   // Reset breed and custom breed when species changes
   useEffect(() => {
@@ -127,10 +156,10 @@ const AddAnimalPage = () => {
 
   // Reset custom breed name if "Outra Raça" is deselected
   useEffect(() => {
-    if (selectedBreed !== `other-${selectedSpecies}`) {
+    if (selectedBreed && !selectedBreed.startsWith("other-")) {
       setCustomBreedName("");
     }
-  }, [selectedBreed, selectedSpecies]);
+  }, [selectedBreed]);
 
   // Reset custom coat color name if "Outra Cor" is deselected
   useEffect(() => {
@@ -276,7 +305,7 @@ const AddAnimalPage = () => {
                 <SelectValue placeholder="Selecione..." />
               </SelectTrigger>
               <SelectContent>
-                {filteredBreeds.map((breed) => (
+                {getFilteredBreeds().map((breed) => (
                   <SelectItem key={breed.id} value={breed.id}>
                     {breed.name}
                   </SelectItem>
