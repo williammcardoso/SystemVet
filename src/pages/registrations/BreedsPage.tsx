@@ -61,46 +61,46 @@ const BreedsPage = () => {
   };
 
   return (
-    <div className="flex flex-col min-h-screen bg-gray-50 dark:bg-gray-950">
+    <div className="flex flex-col min-h-screen bg-background">
       {/* Header da Página com Gradiente e Breadcrumb */}
-      <div className="bg-gradient-to-r from-gray-50 via-white to-gray-50 dark:from-gray-900 dark:via-gray-950 dark:to-gray-950 p-6 pb-4 border-b border-gray-200 dark:border-gray-800">
+      <div className="bg-gradient-to-r from-background via-card to-background p-6 pb-4 border-b border-border">
         <div className="flex items-center justify-between mb-2">
           <div className="flex items-center gap-4">
             <div>
-              <h1 className="text-2xl font-semibold flex items-center gap-3 text-[#1E293B] dark:text-gray-100 group">
-                <FaPaw className="h-5 w-5 text-gray-500 dark:text-gray-400" /> Cadastro de Raças
+              <h1 className="text-2xl font-semibold flex items-center gap-3 text-foreground group">
+                <FaPaw className="h-5 w-5 text-muted-foreground" /> Cadastro de Raças
               </h1>
-              <p className="text-sm text-[#6B7280] dark:text-gray-400 mt-1 mb-4">
+              <p className="text-sm text-muted-foreground mt-1 mb-4">
                 Gerencie as raças de animais, associando-as às suas respectivas espécies.
               </p>
             </div>
           </div>
           <Link to="/">
-            <Button variant="outline" className="rounded-md border-gray-300 text-gray-700 hover:bg-gray-100 hover:text-gray-900 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200 dark:hover:bg-gray-700 transition-colors duration-200">
+            <Button variant="outline" className="rounded-md border-border text-foreground hover:bg-muted hover:text-foreground transition-colors duration-200">
               <FaArrowLeft className="mr-2 h-4 w-4" /> Voltar
             </Button>
           </Link>
         </div>
-        <p className="text-sm text-gray-400 dark:text-gray-500">
+        <p className="text-sm text-muted-foreground">
           Painel &gt; Cadastros &gt; Raças
         </p>
       </div>
 
       <div className="flex-1 p-6">
-        <Card className="bg-white/90 backdrop-blur-sm border border-gray-200 dark:border-gray-700 rounded-2xl shadow-[0_1px_3px_rgba(0,0,0,0.05)] hover:shadow-[0_4px_8px_rgba(0,0,0,0.08)] transition-all duration-300 border-t-4 border-green-400 dark:bg-gray-800/90">
+        <Card className="shadow-sm hover:shadow-md transition-all duration-300 border-border rounded-md">
           <CardHeader className="flex flex-row items-center justify-between pb-3">
-            <CardTitle className="flex items-center gap-2 text-lg font-semibold text-[#374151] dark:text-gray-100">
-              <FaPaw className="h-5 w-5 text-green-500" /> Lista de Raças
+            <CardTitle className="flex items-center gap-2 text-lg font-semibold text-foreground">
+              <FaPaw className="h-5 w-5 text-primary" /> Lista de Raças
             </CardTitle>
             <div className="flex gap-2">
               <Input
                 placeholder="Nova raça"
-                className="max-w-xs bg-white rounded-lg border-gray-200 dark:border-gray-600 focus:ring-2 focus:ring-blue-400 placeholder-[#9CA3AF] dark:placeholder-gray-500 transition-all duration-200"
+                className="max-w-xs bg-input rounded-md border-border focus:ring-2 focus:ring-ring placeholder-muted-foreground transition-all duration-200"
                 value={newBreedName}
                 onChange={(e) => setNewBreedName(e.target.value)}
               />
               <Select onValueChange={setSelectedSpeciesId} value={selectedSpeciesId}>
-                <SelectTrigger className="w-[180px] bg-white rounded-lg border-gray-200 dark:border-gray-600 focus:ring-2 focus:ring-blue-400 placeholder-[#9CA3AF] dark:placeholder-gray-500 transition-all duration-200">
+                <SelectTrigger className="w-[180px] bg-input rounded-md border-border focus:ring-2 focus:ring-ring placeholder-muted-foreground transition-all duration-200">
                   <SelectValue placeholder="Selecione a Espécie" />
                 </SelectTrigger>
                 <SelectContent>
@@ -111,7 +111,7 @@ const BreedsPage = () => {
                   ))}
                 </SelectContent>
               </Select>
-              <Button onClick={handleAddBreed} disabled={!newBreedName.trim() || !selectedSpeciesId} className="rounded-md bg-gradient-to-r from-blue-500 to-indigo-500 text-white hover:from-blue-600 hover:to-indigo-600 font-semibold transition-all duration-200 shadow-md hover:shadow-lg">
+              <Button onClick={handleAddBreed} disabled={!newBreedName.trim() || !selectedSpeciesId} className="bg-primary text-primary-foreground hover:bg-primary/90 rounded-md font-semibold transition-all duration-200 shadow-md hover:shadow-lg">
                 <FaPlus className="mr-2 h-4 w-4" /> Adicionar
               </Button>
             </div>
@@ -132,10 +132,10 @@ const BreedsPage = () => {
                       <TableCell className="font-medium">{breed.name}</TableCell>
                       <TableCell>{breed.speciesName}</TableCell>
                       <TableCell className="text-right">
-                        <Button variant="ghost" size="sm" className="mr-2 rounded-md hover:bg-gray-100 hover:text-gray-900 dark:hover:bg-gray-700 dark:hover:text-gray-200 transition-colors duration-200">
+                        <Button variant="ghost" size="sm" className="mr-2 rounded-md hover:bg-muted hover:text-foreground transition-colors duration-200">
                           <FaEdit className="h-4 w-4" />
                         </Button>
-                        <Button variant="ghost" size="sm" onClick={() => handleDeleteBreed(breed.id)} className="rounded-md hover:bg-gray-100 hover:text-gray-900 dark:hover:bg-gray-700 dark:hover:text-gray-200 transition-colors duration-200">
+                        <Button variant="ghost" size="sm" onClick={() => handleDeleteBreed(breed.id)} className="rounded-md hover:bg-muted hover:text-foreground transition-colors duration-200">
                           <FaTrashAlt className="h-4 w-4" />
                         </Button>
                       </TableCell>

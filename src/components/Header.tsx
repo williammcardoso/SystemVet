@@ -23,19 +23,19 @@ const Header: React.FC<HeaderProps> = ({ onToggleMobileSidebar }) => {
   const { theme, setTheme } = useTheme();
 
   return (
-    <header className="sticky top-0 z-30 flex h-16 items-center gap-4 border-b bg-background px-4 sm:static sm:h-auto sm:border-0 sm:bg-transparent sm:px-6 shadow-sm">
+    <header className="sticky top-0 z-30 flex h-16 items-center gap-4 border-b border-border bg-primary px-4 sm:static sm:h-auto sm:border-0 sm:bg-primary sm:px-6">
       {/* Hamburger menu para mobile */}
       <Button
         variant="ghost"
         size="icon"
-        className="lg:hidden"
+        className="lg:hidden text-white hover:bg-primary/80"
         onClick={onToggleMobileSidebar}
       >
         <FaBars className="h-5 w-5" />
         <span className="sr-only">Toggle Sidebar</span>
       </Button>
 
-      <div className="flex-1 text-lg font-medium"></div> {/* Espaço flexível para empurrar itens para a direita */}
+      <div className="flex-1 text-lg font-medium text-white"></div> {/* Espaço flexível para empurrar itens para a direita */}
 
       <div className="flex items-center gap-4">
         {/* Botão de Dark Mode */}
@@ -43,18 +43,18 @@ const Header: React.FC<HeaderProps> = ({ onToggleMobileSidebar }) => {
           variant="ghost"
           size="icon"
           onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
-          className="transition-colors duration-200"
+          className="transition-colors duration-200 text-white hover:bg-primary/80"
         >
           {theme === "dark" ? (
-            <FaSun className="h-5 w-5 text-yellow-500" />
+            <FaSun className="h-5 w-5" />
           ) : (
-            <FaMoon className="h-5 w-5 text-blue-600" />
+            <FaMoon className="h-5 w-5" />
           )}
           <span className="sr-only">Toggle theme</span>
         </Button>
 
         {/* Notificações */}
-        <Button variant="ghost" size="icon" className="relative">
+        <Button variant="ghost" size="icon" className="relative text-white hover:bg-primary/80">
           <FaBell className="h-5 w-5" />
           <span className="absolute top-1 right-1 h-2 w-2 rounded-full bg-red-500" />
           <span className="sr-only">Notificações</span>
@@ -62,7 +62,7 @@ const Header: React.FC<HeaderProps> = ({ onToggleMobileSidebar }) => {
 
         {/* Ajuda */}
         <Link to="/help">
-          <Button variant="ghost" size="icon">
+          <Button variant="ghost" size="icon" className="text-white hover:bg-primary/80">
             <FaQuestionCircle className="h-5 w-5" />
             <span className="sr-only">Ajuda</span>
           </Button>
@@ -71,10 +71,10 @@ const Header: React.FC<HeaderProps> = ({ onToggleMobileSidebar }) => {
         {/* Menu do Usuário */}
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button variant="ghost" className="relative h-8 w-8 rounded-full">
+            <Button variant="ghost" className="relative h-8 w-8 rounded-full text-white hover:bg-primary/80">
               <Avatar className="h-8 w-8">
                 <AvatarImage src="/public/placeholder.svg" alt="User Avatar" />
-                <AvatarFallback>WC</AvatarFallback>
+                <AvatarFallback className="bg-white text-primary">WC</AvatarFallback>
               </Avatar>
             </Button>
           </DropdownMenuTrigger>

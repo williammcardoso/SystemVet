@@ -349,34 +349,34 @@ const AddPrescriptionPage = () => {
   const isPrintSaveDisabled = (prescriptionType !== 'manipulated' && currentPrescriptionMedications.length === 0) || (prescriptionType === 'manipulated' && !manipulatedPrescriptionData);
 
   return (
-    <div className="flex flex-col min-h-screen bg-gray-50 dark:bg-gray-950">
+    <div className="flex flex-col min-h-screen bg-background">
       {/* Header da Página com Gradiente e Breadcrumb */}
-      <div className="bg-gradient-to-r from-gray-50 via-white to-gray-50 dark:from-gray-900 dark:via-gray-950 dark:to-gray-950 p-6 pb-4 border-b border-gray-200 dark:border-gray-800">
+      <div className="bg-gradient-to-r from-background via-card to-background p-6 pb-4 border-b border-border">
         <div className="flex items-center justify-between mb-2">
           <div className="flex items-center gap-4">
             <div>
-              <h1 className="text-2xl font-semibold flex items-center gap-3 text-[#1E293B] dark:text-gray-100 group">
-                <FaClipboardList className="h-5 w-5 text-gray-500 dark:text-gray-400" /> {getPrescriptionTitle()}
+              <h1 className="text-2xl font-semibold flex items-center gap-3 text-foreground group">
+                <FaClipboardList className="h-5 w-5 text-muted-foreground" /> {getPrescriptionTitle()}
               </h1>
-              <p className="text-sm text-[#6B7280] dark:text-gray-400 mt-1 mb-4">
+              <p className="text-sm text-muted-foreground mt-1 mb-4">
                 Gerencie os detalhes da receita para {animal.name}.
               </p>
             </div>
           </div>
           <Link to={`/clients/${clientId}/animals/${animalId}/record`}>
-            <Button variant="outline" className="rounded-md border-gray-300 text-gray-700 hover:bg-gray-100 hover:text-gray-900 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200 dark:hover:bg-gray-700 transition-colors duration-200">
+            <Button variant="outline" className="rounded-md border-border text-foreground hover:bg-muted hover:text-foreground transition-colors duration-200">
               <FaArrowLeft className="mr-2 h-4 w-4" /> Voltar para Prontuário
             </Button>
           </Link>
         </div>
-        <p className="text-sm text-gray-400 dark:text-gray-500">
-          Painel &gt; <Link to="/clients" className="hover:text-blue-500 dark:hover:text-blue-400">Clientes</Link> &gt; <Link to={`/clients/${client.id}`} className="hover:text-blue-500 dark:hover:text-blue-400">{client.name}</Link> &gt; <Link to={`/clients/${clientId}/animals/${animalId}/record`} className="hover:text-blue-500 dark:hover:text-blue-400">{animal.name}</Link> &gt; Receita
+        <p className="text-sm text-muted-foreground">
+          Painel &gt; <Link to="/clients" className="hover:text-primary">Clientes</Link> &gt; <Link to={`/clients/${client.id}`} className="hover:text-primary">{client.name}</Link> &gt; <Link to={`/clients/${clientId}/animals/${animalId}/record`} className="hover:text-primary">{animal.name}</Link> &gt; Receita
         </p>
       </div>
 
       <div className="flex-1 p-6">
         <div className="grid gap-4 py-4">
-          <Card className="mb-4 bg-white/90 backdrop-blur-sm border border-gray-200 dark:border-gray-700 rounded-2xl shadow-[0_1px_3px_rgba(0,0,0,0.05)]">
+          <Card className="mb-4 shadow-sm border border-border rounded-md">
             <CardHeader>
               <CardTitle>Descrição do Tratamento</CardTitle>
             </CardHeader>
@@ -389,7 +389,7 @@ const AddPrescriptionPage = () => {
                   rows={3}
                   value={treatmentDescription}
                   onChange={(e) => setTreatmentDescription(e.target.value)}
-                  className="bg-white rounded-lg border-gray-200 dark:border-gray-600 focus:ring-2 focus:ring-blue-400 placeholder-[#9CA3AF] dark:placeholder-gray-500 transition-all duration-200"
+                  className="bg-input rounded-md border-border focus:ring-2 focus:ring-ring placeholder-muted-foreground transition-all duration-200"
                 />
               </div>
             </CardContent>
@@ -401,7 +401,7 @@ const AddPrescriptionPage = () => {
               onSave={handleSaveManipulatedPrescription}
             />
           ) : (
-            <Card className="mb-4 bg-white/90 backdrop-blur-sm border border-gray-200 dark:border-gray-700 rounded-2xl shadow-[0_1px_3px_rgba(0,0,0,0.05)]">
+            <Card className="mb-4 shadow-sm border border-border rounded-md">
               <CardHeader>
                 <CardTitle>Medicamentos</CardTitle>
               </CardHeader>
@@ -419,7 +419,7 @@ const AddPrescriptionPage = () => {
                     onToggleCollapse={handleToggleMedicationCollapse}
                   />
                 ))}
-                <Button onClick={handleAddMedication} className="w-full bg-gradient-to-r from-blue-500 to-indigo-500 text-white hover:from-blue-600 hover:to-indigo-600 font-semibold transition-all duration-200 shadow-md hover:shadow-lg">
+                <Button onClick={handleAddMedication} className="w-full bg-primary text-primary-foreground hover:bg-primary/90 font-semibold transition-all duration-200 shadow-md hover:shadow-lg">
                   <FaPlus className="mr-2 h-4 w-4" /> Adicionar Medicamento
                 </Button>
               </CardContent>
@@ -428,7 +428,7 @@ const AddPrescriptionPage = () => {
 
           {/* Observações Gerais da Receita (este campo será preenchido pelo estado de manipulatedPrescriptionData.generalObservations se for manipulada) */}
           {prescriptionType !== 'manipulated' && (
-            <Card className="bg-white/90 backdrop-blur-sm border border-gray-200 dark:border-gray-700 rounded-2xl shadow-[0_1px_3px_rgba(0,0,0,0.05)]">
+            <Card className="shadow-sm border border-border rounded-md">
               <CardHeader>
                 <CardTitle>Observações Gerais da Receita</CardTitle>
               </CardHeader>
@@ -439,7 +439,7 @@ const AddPrescriptionPage = () => {
                   rows={5}
                   value={currentPrescriptionGeneralObservations}
                   onChange={(e) => setCurrentPrescriptionGeneralObservations(e.target.value)}
-                  className="bg-white rounded-lg border-gray-200 dark:border-gray-600 focus:ring-2 focus:ring-blue-400 placeholder-[#9CA3AF] dark:placeholder-gray-500 transition-all duration-200"
+                  className="bg-input rounded-md border-border focus:ring-2 focus:ring-ring placeholder-muted-foreground transition-all duration-200"
                 />
               </CardContent>
             </Card>
@@ -447,33 +447,33 @@ const AddPrescriptionPage = () => {
         </div>
       </div>
 
-      <div className="flex justify-end gap-2 mt-6 p-4 bg-white/80 backdrop-blur-sm border-t border-gray-200 dark:bg-gray-950/80 dark:border-gray-800 sticky bottom-0 z-10">
-        <Button variant="outline" onClick={() => navigate(`/clients/${clientId}/animals/${animalId}/record`)} className="bg-white border border-gray-300 text-gray-700 hover:bg-gray-50 rounded-md transition-all duration-200 shadow-sm hover:shadow-md dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200 dark:hover:bg-gray-600">
+      <div className="flex justify-end gap-2 mt-6 p-4 bg-card/80 backdrop-blur-sm border-t border-border sticky bottom-0 z-10">
+        <Button variant="outline" onClick={() => navigate(`/clients/${clientId}/animals/${animalId}/record`)} className="bg-card border border-border text-foreground hover:bg-muted rounded-md transition-all duration-200 shadow-sm hover:shadow-md">
           <FaTimes className="mr-2 h-4 w-4" /> Cancelar
         </Button>
-        <Button variant="secondary" onClick={handlePrintPrescription} disabled={isPrintSaveDisabled} className="rounded-md bg-white border border-gray-300 text-gray-700 hover:bg-gray-50 transition-colors duration-200 shadow-sm hover:shadow-md dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200 dark:hover:bg-gray-600">
+        <Button variant="secondary" onClick={handlePrintPrescription} disabled={isPrintSaveDisabled} className="rounded-md bg-card border border-border text-foreground hover:bg-muted transition-colors duration-200 shadow-sm hover:shadow-md">
           <FaPrint className="mr-2 h-4 w-4" /> Imprimir
         </Button>
-        <Button variant="secondary" onClick={handleSavePdf} disabled={isPrintSaveDisabled} className="rounded-md bg-white border border-gray-300 text-gray-700 hover:bg-gray-50 transition-colors duration-200 shadow-sm hover:shadow-md dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200 dark:hover:bg-gray-600">
+        <Button variant="secondary" onClick={handleSavePdf} disabled={isPrintSaveDisabled} className="rounded-md bg-card border border-border text-foreground hover:bg-muted transition-colors duration-200 shadow-sm hover:shadow-md">
           <FaDownload className="mr-2 h-4 w-4" /> Salvar PDF
         </Button>
-        <Button onClick={handleSavePrescription} disabled={isPrintSaveDisabled} className="bg-gradient-to-r from-blue-500 to-indigo-500 text-white hover:from-blue-600 hover:to-indigo-600 rounded-md font-semibold transition-all duration-200 shadow-md hover:shadow-lg">
+        <Button onClick={handleSavePrescription} disabled={isPrintSaveDisabled} className="bg-primary text-primary-foreground hover:bg-primary/90 rounded-md font-semibold transition-all duration-200 shadow-md hover:shadow-lg">
           <FaSave className="mr-2 h-4 w-4" /> Salvar Receita
         </Button>
       </div>
 
       {/* AlertDialog para Receita Controlada */}
       <AlertDialog open={isControlledMedicationWarningOpen} onOpenChange={setIsControlledMedicationWarningOpen}>
-        <AlertDialogContent className="bg-white/90 backdrop-blur-sm border border-gray-200 dark:border-gray-700 rounded-2xl shadow-[0_1px_3px_rgba(0,0,0,0.05)] dark:bg-gray-800/90">
+        <AlertDialogContent className="shadow-sm border border-border rounded-md">
           <AlertDialogHeader>
-            <AlertDialogTitle className="text-lg font-semibold text-[#374151] dark:text-gray-100">Receita Controlada: Múltiplos Medicamentos</AlertDialogTitle>
-            <AlertDialogDescription className="text-sm text-[#6B7280] dark:text-gray-400">
+            <AlertDialogTitle className="text-lg font-semibold text-foreground">Receita Controlada: Múltiplos Medicamentos</AlertDialogTitle>
+            <AlertDialogDescription className="text-sm text-muted-foreground">
               Receitas controladas geralmente permitem apenas um medicamento por formulário. Deseja adicionar mais de um medicamento mesmo assim?
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel className="bg-white border border-gray-300 text-gray-700 hover:bg-gray-50 rounded-md transition-all duration-200 shadow-sm hover:shadow-md dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200 dark:hover:bg-gray-600">Cancelar</AlertDialogCancel>
-            <AlertDialogAction onClick={handleConfirmAddMultipleMedications} className="bg-gradient-to-r from-blue-500 to-indigo-500 text-white hover:from-blue-600 hover:to-indigo-600 rounded-md font-semibold transition-all duration-200 shadow-md hover:shadow-lg">Continuar</AlertDialogAction>
+            <AlertDialogCancel className="bg-card border border-border text-foreground hover:bg-muted rounded-md transition-all duration-200 shadow-sm hover:shadow-md">Cancelar</AlertDialogCancel>
+            <AlertDialogAction onClick={handleConfirmAddMultipleMedications} className="bg-primary text-primary-foreground hover:bg-primary/90 rounded-md font-semibold transition-all duration-200 shadow-md hover:shadow-lg">Continuar</AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>

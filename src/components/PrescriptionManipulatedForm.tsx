@@ -365,10 +365,10 @@ const PrescriptionManipulatedForm: React.FC<PrescriptionManipulatedFormProps> = 
     <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
       <div className="lg:col-span-2 space-y-6">
         {/* Composição da Fórmula */}
-        <Card className="bg-white/90 backdrop-blur-sm border border-gray-200 dark:border-gray-700 rounded-2xl shadow-[0_1px_3px_rgba(0,0,0,0.05)]">
+        <Card className="shadow-sm border border-border rounded-md">
           <CardHeader>
-            <CardTitle className="flex items-center gap-2 text-lg font-semibold text-[#374151] dark:text-gray-100">
-              <FaFlask className="h-5 w-5 text-blue-500" /> Composição da Fórmula
+            <CardTitle className="flex items-center gap-2 text-lg font-semibold text-foreground">
+              <FaFlask className="h-5 w-5 text-primary" /> Composição da Fórmula
             </CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
@@ -382,24 +382,24 @@ const PrescriptionManipulatedForm: React.FC<PrescriptionManipulatedFormProps> = 
                 shouldFocus={comp.id === lastAddedComponentId} // Passa a prop para o componente filho
               />
             ))}
-            <Button onClick={handleAddComponent} variant="outline" className="w-full rounded-md bg-white border border-gray-300 text-gray-700 hover:bg-gray-50 transition-colors duration-200 shadow-sm hover:shadow-md dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200 dark:hover:bg-gray-600">
+            <Button onClick={handleAddComponent} variant="outline" className="w-full bg-card border border-border text-foreground hover:bg-muted transition-colors duration-200 shadow-sm hover:shadow-md">
               <FaPlus className="mr-2 h-4 w-4" /> Adicionar Componente
             </Button>
           </CardContent>
         </Card>
 
         {/* Veículo / Excipiente */}
-        <Card className="bg-white/90 backdrop-blur-sm border border-gray-200 dark:border-gray-700 rounded-2xl shadow-[0_1px_3px_rgba(0,0,0,0.05)]">
+        <Card className="shadow-sm border border-border rounded-md">
           <CardHeader>
-            <CardTitle className="flex items-center gap-2 text-lg font-semibold text-[#374151] dark:text-gray-100">
-              <FaVial className="h-5 w-5 text-purple-500" /> Veículo / Excipiente
+            <CardTitle className="flex items-center gap-2 text-lg font-semibold text-foreground">
+              <FaVial className="h-5 w-5 text-primary" /> Veículo / Excipiente
             </CardTitle>
           </CardHeader>
           <CardContent className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div className="space-y-2">
               <Label htmlFor="vehicle-type">Tipo*</Label>
               <Select onValueChange={(value) => setVehicleExcipient(prev => ({ ...prev, type: value }))} value={vehicleExcipient.type}>
-                <SelectTrigger id="vehicle-type" className="bg-white rounded-lg border-gray-200 dark:border-gray-600 focus:ring-2 focus:ring-blue-400 placeholder-[#9CA3AF] dark:placeholder-gray-500 transition-all duration-200">
+                <SelectTrigger id="vehicle-type" className="bg-input rounded-md border-border focus:ring-2 focus:ring-ring placeholder-muted-foreground transition-all duration-200">
                   <SelectValue placeholder="Ex: Comprimido" />
                 </SelectTrigger>
                 <SelectContent>
@@ -416,7 +416,7 @@ const PrescriptionManipulatedForm: React.FC<PrescriptionManipulatedFormProps> = 
                   placeholder="Digite o tipo personalizado"
                   value={customVehicleType}
                   onChange={(e) => setCustomVehicleType(e.target.value)}
-                  className="mt-2 bg-white rounded-lg border-gray-200 dark:border-gray-600 focus:ring-2 focus:ring-blue-400 placeholder-[#9CA3AF] dark:placeholder-gray-500 transition-all duration-200"
+                  className="mt-2 bg-input rounded-md border-border focus:ring-2 focus:ring-ring placeholder-muted-foreground transition-all duration-200"
                 />
               )}
             </div>
@@ -427,13 +427,13 @@ const PrescriptionManipulatedForm: React.FC<PrescriptionManipulatedFormProps> = 
                 placeholder="Ex: 30"
                 value={vehicleExcipient.quantity}
                 onChange={(e) => setVehicleExcipient(prev => ({ ...prev, quantity: e.target.value }))}
-                className="bg-white rounded-lg border-gray-200 dark:border-gray-600 focus:ring-2 focus:ring-blue-400 placeholder-[#9CA3AF] dark:placeholder-gray-500 transition-all duration-200"
+                className="bg-input rounded-md border-border focus:ring-2 focus:ring-ring placeholder-muted-foreground transition-all duration-200"
               />
             </div>
             <div className="space-y-2">
               <Label htmlFor="vehicle-unit">Unidade*</Label>
               <Select onValueChange={(value) => setVehicleExcipient(prev => ({ ...prev, unit: value }))} value={vehicleExcipient.unit}>
-                <SelectTrigger id="vehicle-unit" className="bg-white rounded-lg border-gray-200 dark:border-gray-600 focus:ring-2 focus:ring-blue-400 placeholder-[#9CA3AF] dark:placeholder-gray-500 transition-all duration-200">
+                <SelectTrigger id="vehicle-unit" className="bg-input rounded-md border-border focus:ring-2 focus:ring-ring placeholder-muted-foreground transition-all duration-200">
                   <SelectValue placeholder="Ex: Unidade(s)" />
                 </SelectTrigger>
                 <SelectContent>
@@ -449,17 +449,17 @@ const PrescriptionManipulatedForm: React.FC<PrescriptionManipulatedFormProps> = 
         </Card>
 
         {/* Posologia */}
-        <Card className="bg-white/90 backdrop-blur-sm border border-gray-200 dark:border-gray-700 rounded-2xl shadow-[0_1px_3px_rgba(0,0,0,0.05)]">
+        <Card className="shadow-sm border border-border rounded-md">
           <CardHeader>
-            <CardTitle className="flex items-center gap-2 text-lg font-semibold text-[#374151] dark:text-gray-100">
-              <FaPills className="h-5 w-5 text-green-500" /> Posologia
+            <CardTitle className="flex items-center gap-2 text-lg font-semibold text-foreground">
+              <FaPills className="h-5 w-5 text-primary" /> Posologia
             </CardTitle>
           </CardHeader>
           <CardContent>
             <Tabs defaultValue={posologyType} onValueChange={(value) => setPosologyType(value as 'automatic' | 'freeText')} className="w-full">
-              <TabsList className="grid w-full grid-cols-2 bg-gray-100 dark:bg-gray-700 rounded-lg p-1 mb-4">
-                <TabsTrigger value="automatic" className="rounded-md data-[state=active]:bg-blue-500 data-[state=active]:text-white transition-colors duration-200 text-gray-700 dark:text-gray-300 data-[state=active]:dark:bg-blue-600">Automática</TabsTrigger>
-                <TabsTrigger value="freeText" className="rounded-md data-[state=active]:bg-blue-500 data-[state=active]:text-white transition-colors duration-200 text-gray-700 dark:text-gray-300 data-[state=active]:dark:bg-blue-600">Texto Livre</TabsTrigger>
+              <TabsList className="grid w-full grid-cols-2 bg-muted rounded-md p-1 mb-4">
+                <TabsTrigger value="automatic" className="rounded-sm data-[state=active]:bg-primary data-[state=active]:text-primary-foreground transition-colors duration-200 text-muted-foreground data-[state=active]:dark:bg-primary">Automática</TabsTrigger>
+                <TabsTrigger value="freeText" className="rounded-sm data-[state=active]:bg-primary data-[state=active]:text-primary-foreground transition-colors duration-200 text-muted-foreground data-[state=active]:dark:bg-primary">Texto Livre</TabsTrigger>
               </TabsList>
               <TabsContent value="automatic" className="space-y-4">
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
@@ -470,13 +470,13 @@ const PrescriptionManipulatedForm: React.FC<PrescriptionManipulatedFormProps> = 
                       placeholder="Ex: 1"
                       value={posologyAutomatic.dosage}
                       onChange={(e) => setPosologyAutomatic(prev => ({ ...prev, dosage: e.target.value }))}
-                      className="bg-white rounded-lg border-gray-200 dark:border-gray-600 focus:ring-2 focus:ring-blue-400 placeholder-[#9CA3AF] dark:placeholder-gray-500 transition-all duration-200"
+                      className="bg-input rounded-md border-border focus:ring-2 focus:ring-ring placeholder-muted-foreground transition-all duration-200"
                     />
                   </div>
                   <div className="space-y-2">
                     <Label htmlFor="posology-measure">Medida*</Label>
                     <Select onValueChange={(value) => setPosologyAutomatic(prev => ({ ...prev, measure: value }))} value={posologyAutomatic.measure}>
-                      <SelectTrigger id="posology-measure" className="bg-white rounded-lg border-gray-200 dark:border-gray-600 focus:ring-2 focus:ring-blue-400 placeholder-[#9CA3AF] dark:placeholder-gray-500 transition-all duration-200">
+                      <SelectTrigger id="posology-measure" className="bg-input rounded-md border-border focus:ring-2 focus:ring-ring placeholder-muted-foreground transition-all duration-200">
                         <SelectValue placeholder="Ex: Comprimido" />
                       </SelectTrigger>
                       <SelectContent>
@@ -493,7 +493,7 @@ const PrescriptionManipulatedForm: React.FC<PrescriptionManipulatedFormProps> = 
                         placeholder="Digite a medida personalizada"
                         value={customPosologyMeasure}
                         onChange={(e) => setCustomPosologyMeasure(e.target.value)}
-                        className="mt-2 bg-white rounded-lg border-gray-200 dark:border-gray-600 focus:ring-2 focus:ring-blue-400 placeholder-[#9CA3AF] dark:placeholder-gray-500 transition-all duration-200"
+                        className="mt-2 bg-input rounded-md border-border focus:ring-2 focus:ring-ring placeholder-muted-foreground transition-all duration-200"
                       />
                     )}
                   </div>
@@ -501,7 +501,7 @@ const PrescriptionManipulatedForm: React.FC<PrescriptionManipulatedFormProps> = 
                     <Label htmlFor="posology-frequency-value">Frequência*</Label>
                     <div className="flex gap-2">
                       <Select onValueChange={(value) => setPosologyAutomatic(prev => ({ ...prev, frequencyValue: value }))} value={posologyAutomatic.frequencyValue}>
-                        <SelectTrigger id="posology-frequency-value" className="w-1/2 bg-white rounded-lg border-gray-200 dark:border-gray-600 focus:ring-2 focus:ring-blue-400 placeholder-[#9CA3AF] dark:placeholder-gray-500 transition-all duration-200">
+                        <SelectTrigger id="posology-frequency-value" className="w-1/2 bg-input rounded-md border-border focus:ring-2 focus:ring-ring placeholder-muted-foreground transition-all duration-200">
                           <SelectValue placeholder="Ex: 1" />
                         </SelectTrigger>
                         <SelectContent>
@@ -513,7 +513,7 @@ const PrescriptionManipulatedForm: React.FC<PrescriptionManipulatedFormProps> = 
                         </SelectContent>
                       </Select>
                       <Select onValueChange={(value) => setPosologyAutomatic(prev => ({ ...prev, frequencyUnit: value }))} value={posologyAutomatic.frequencyUnit}>
-                        <SelectTrigger id="posology-frequency-unit" className="w-1/2 bg-white rounded-lg border-gray-200 dark:border-gray-600 focus:ring-2 focus:ring-blue-400 placeholder-[#9CA3AF] dark:placeholder-gray-500 transition-all duration-200">
+                        <SelectTrigger id="posology-frequency-unit" className="w-1/2 bg-input rounded-md border-border focus:ring-2 focus:ring-ring placeholder-muted-foreground transition-all duration-200">
                           <SelectValue placeholder="Ex: Dia" />
                         </SelectTrigger>
                         <SelectContent>
@@ -531,7 +531,7 @@ const PrescriptionManipulatedForm: React.FC<PrescriptionManipulatedFormProps> = 
                         placeholder="Digite o valor da frequência personalizada"
                         value={customPosologyFrequencyValue}
                         onChange={(e) => setCustomPosologyFrequencyValue(e.target.value)}
-                        className="mt-2 bg-white rounded-lg border-gray-200 dark:border-gray-600 focus:ring-2 focus:ring-blue-400 placeholder-[#9CA3AF] dark:placeholder-gray-500 transition-all duration-200"
+                        className="mt-2 bg-input rounded-md border-border focus:ring-2 focus:ring-ring placeholder-muted-foreground transition-all duration-200"
                       />
                     )}
                     {posologyAutomatic.frequencyUnit === "Outro" && (
@@ -540,7 +540,7 @@ const PrescriptionManipulatedForm: React.FC<PrescriptionManipulatedFormProps> = 
                         placeholder="Digite a unidade da frequência personalizada"
                         value={customPosologyFrequencyUnit}
                         onChange={(e) => setCustomPosologyFrequencyUnit(e.target.value)}
-                        className="mt-2 bg-white rounded-lg border-gray-200 dark:border-gray-600 focus:ring-2 focus:ring-blue-400 placeholder-[#9CA3AF] dark:placeholder-gray-500 transition-all duration-200"
+                        className="mt-2 bg-input rounded-md border-border focus:ring-2 focus:ring-ring placeholder-muted-foreground transition-all duration-200"
                       />
                     )}
                   </div>
@@ -548,7 +548,7 @@ const PrescriptionManipulatedForm: React.FC<PrescriptionManipulatedFormProps> = 
                     <Label htmlFor="posology-duration-value">Duração*</Label>
                     <div className="flex gap-2">
                       <Select onValueChange={(value) => setPosologyAutomatic(prev => ({ ...prev, durationValue: value }))} value={posologyAutomatic.durationValue}>
-                        <SelectTrigger id="posology-duration-value" className="w-1/2 bg-white rounded-lg border-gray-200 dark:border-gray-600 focus:ring-2 focus:ring-blue-400 placeholder-[#9CA3AF] dark:placeholder-gray-500 transition-all duration-200">
+                        <SelectTrigger id="posology-duration-value" className="w-1/2 bg-input rounded-md border-border focus:ring-2 focus:ring-ring placeholder-muted-foreground transition-all duration-200">
                           <SelectValue placeholder="Ex: 5" />
                         </SelectTrigger>
                         <SelectContent>
@@ -560,7 +560,7 @@ const PrescriptionManipulatedForm: React.FC<PrescriptionManipulatedFormProps> = 
                         </SelectContent>
                       </Select>
                       <Select onValueChange={(value) => setPosologyAutomatic(prev => ({ ...prev, durationUnit: value }))} value={posologyAutomatic.durationUnit}>
-                        <SelectTrigger id="posology-duration-unit" className="w-1/2 bg-white rounded-lg border-gray-200 dark:border-gray-600 focus:ring-2 focus:ring-blue-400 placeholder-[#9CA3AF] dark:placeholder-gray-500 transition-all duration-200">
+                        <SelectTrigger id="posology-duration-unit" className="w-1/2 bg-input rounded-md border-border focus:ring-2 focus:ring-ring placeholder-muted-foreground transition-all duration-200">
                           <SelectValue placeholder="Ex: Dia" />
                         </SelectTrigger>
                         <SelectContent>
@@ -578,7 +578,7 @@ const PrescriptionManipulatedForm: React.FC<PrescriptionManipulatedFormProps> = 
                         placeholder="Digite o valor da duração personalizada"
                         value={customPosologyDurationValue}
                         onChange={(e) => setCustomPosologyDurationValue(e.target.value)}
-                        className="mt-2 bg-white rounded-lg border-gray-200 dark:border-gray-600 focus:ring-2 focus:ring-blue-400 placeholder-[#9CA3AF] dark:placeholder-gray-500 transition-all duration-200"
+                        className="mt-2 bg-input rounded-md border-border focus:ring-2 focus:ring-ring placeholder-muted-foreground transition-all duration-200"
                       />
                     )}
                     {posologyAutomatic.durationUnit === "Outro" && (
@@ -587,12 +587,12 @@ const PrescriptionManipulatedForm: React.FC<PrescriptionManipulatedFormProps> = 
                         placeholder="Digite a unidade da duração personalizada"
                         value={customPosologyDurationUnit}
                         onChange={(e) => setCustomPosologyDurationUnit(e.target.value)}
-                        className="mt-2 bg-white rounded-lg border-gray-200 dark:border-gray-600 focus:ring-2 focus:ring-blue-400 placeholder-[#9CA3AF] dark:placeholder-gray-500 transition-all duration-200"
+                        className="mt-2 bg-input rounded-md border-border focus:ring-2 focus:ring-ring placeholder-muted-foreground transition-all duration-200"
                       />
                     )}
                   </div>
                 </div>
-                <div className="bg-blue-50 border border-blue-200 text-blue-800 p-3 rounded-md text-sm mt-4 dark:bg-blue-950 dark:border-blue-700 dark:text-blue-200">
+                <div className="bg-muted/50 border border-border text-foreground p-3 rounded-md text-sm mt-4">
                   <p className="font-semibold mb-1">Descrição Final:</p>
                   <p>{posologyAutomatic.finalDescription || "Preencha os campos para gerar a descrição."}</p>
                 </div>
@@ -606,7 +606,7 @@ const PrescriptionManipulatedForm: React.FC<PrescriptionManipulatedFormProps> = 
                     rows={5}
                     value={posologyFreeText.finalDescription}
                     onChange={(e) => setPosologyFreeText(prev => ({ ...prev, finalDescription: e.target.value }))}
-                    className="bg-white rounded-lg border-gray-200 dark:border-gray-600 focus:ring-2 focus:ring-blue-400 placeholder-[#9CA3AF] dark:placeholder-gray-500 transition-all duration-200"
+                    className="bg-input rounded-md border-border focus:ring-2 focus:ring-ring placeholder-muted-foreground transition-all duration-200"
                   />
                 </div>
               </TabsContent>
@@ -615,17 +615,17 @@ const PrescriptionManipulatedForm: React.FC<PrescriptionManipulatedFormProps> = 
         </Card>
 
         {/* Detalhes do Produto (apenas 'Via' agora) */}
-        <Card className="bg-white/90 backdrop-blur-sm border border-gray-200 dark:border-gray-700 rounded-2xl shadow-[0_1px_3px_rgba(0,0,0,0.05)]">
+        <Card className="shadow-sm border border-border rounded-md">
           <CardHeader>
-            <CardTitle className="flex items-center gap-2 text-lg font-semibold text-[#374151] dark:text-gray-100">
-              <FaFileMedical className="h-5 w-5 text-orange-500" /> Detalhes do Produto
+            <CardTitle className="flex items-center gap-2 text-lg font-semibold text-foreground">
+              <FaFileMedical className="h-5 w-5 text-primary" /> Detalhes do Produto
             </CardTitle>
           </CardHeader>
           <CardContent className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="space-y-2">
               <Label htmlFor="product-route">Via*</Label>
               <Select onValueChange={(value) => setProductDetails(prev => ({ ...prev, route: value }))} value={productDetails.route}>
-                <SelectTrigger id="product-route" className="bg-white rounded-lg border-gray-200 dark:border-gray-600 focus:ring-2 focus:ring-blue-400 placeholder-[#9CA3AF] dark:placeholder-gray-500 transition-all duration-200">
+                <SelectTrigger id="product-route" className="bg-input rounded-md border-border focus:ring-2 focus:ring-ring placeholder-muted-foreground transition-all duration-200">
                   <SelectValue placeholder="Selecione a via" />
                 </SelectTrigger>
                 <SelectContent>
@@ -642,7 +642,7 @@ const PrescriptionManipulatedForm: React.FC<PrescriptionManipulatedFormProps> = 
                   placeholder="Digite a via personalizada"
                   value={customProductRoute}
                   onChange={(e) => setCustomProductRoute(e.target.value)}
-                  className="mt-2 bg-white rounded-lg border-gray-200 dark:border-gray-600 focus:ring-2 focus:ring-blue-400 placeholder-[#9CA3AF] dark:placeholder-gray-500 transition-all duration-200"
+                  className="mt-2 bg-input rounded-md border-border focus:ring-2 focus:ring-ring placeholder-muted-foreground transition-all duration-200"
                 />
               )}
             </div>
@@ -651,10 +651,10 @@ const PrescriptionManipulatedForm: React.FC<PrescriptionManipulatedFormProps> = 
         </Card>
 
         {/* Observações Gerais da Receita Manipulada */}
-        <Card className="bg-white/90 backdrop-blur-sm border border-gray-200 dark:border-gray-700 rounded-2xl shadow-[0_1px_3px_rgba(0,0,0,0.05)]">
+        <Card className="shadow-sm border border-border rounded-md">
           <CardHeader>
-            <CardTitle className="flex items-center gap-2 text-lg font-semibold text-[#374151] dark:text-gray-100">
-              <FaInfoCircle className="h-5 w-5 text-gray-500" /> Observações Gerais da Receita
+            <CardTitle className="flex items-center gap-2 text-lg font-semibold text-foreground">
+              <FaInfoCircle className="h-5 w-5 text-muted-foreground" /> Observações Gerais da Receita
             </CardTitle>
           </CardHeader>
           <CardContent>
@@ -664,12 +664,12 @@ const PrescriptionManipulatedForm: React.FC<PrescriptionManipulatedFormProps> = 
               rows={5}
               value={generalObservations}
               onChange={(e) => setGeneralObservations(e.target.value)}
-              className="bg-white rounded-lg border-gray-200 dark:border-gray-600 focus:ring-2 focus:ring-blue-400 placeholder-[#9CA3AF] dark:placeholder-gray-500 transition-all duration-200"
+              className="bg-input rounded-md border-border focus:ring-2 focus:ring-ring placeholder-muted-foreground transition-all duration-200"
             />
           </CardContent>
         </Card>
         <div className="flex justify-end mt-6">
-          <Button onClick={handleSave} className="bg-gradient-to-r from-blue-500 to-indigo-500 text-white hover:from-blue-600 hover:to-indigo-600 rounded-md font-semibold transition-all duration-200 shadow-md hover:shadow-lg">
+          <Button onClick={handleSave} className="bg-primary text-primary-foreground hover:bg-primary/90 rounded-md font-semibold transition-all duration-200 shadow-md hover:shadow-lg">
             <FaSave className="h-4 w-4 mr-2" /> Salvar Dados da Receita
           </Button>
         </div>
@@ -677,13 +677,13 @@ const PrescriptionManipulatedForm: React.FC<PrescriptionManipulatedFormProps> = 
 
       {/* Prévia da Fórmula (Sidebar) */}
       <div className="lg:col-span-1">
-        <Card className="sticky top-20 bg-white/90 backdrop-blur-sm border border-gray-200 dark:border-gray-700 rounded-2xl shadow-[0_1px_3px_rgba(0,0,0,0.05)]">
+        <Card className="sticky top-20 shadow-sm border border-border rounded-md">
           <CardHeader>
-            <CardTitle className="text-lg font-semibold text-[#374151] dark:text-gray-100">Prévia da Fórmula</CardTitle>
+            <CardTitle className="text-lg font-semibold text-foreground">Prévia da Fórmula</CardTitle>
           </CardHeader>
           <CardContent className="text-sm text-muted-foreground space-y-4">
             {displayProductRoute && (
-              <div className="pb-2 border-b border-gray-300 dark:border-gray-600">
+              <div className="pb-2 border-b border-border">
                 <p className="font-bold text-base text-foreground">VIA {displayProductRoute.toUpperCase()}</p>
               </div>
             )}
@@ -695,15 +695,15 @@ const PrescriptionManipulatedForm: React.FC<PrescriptionManipulatedFormProps> = 
                   {formulaComponents.map((comp) => (
                     <div key={comp.id} className="flex items-end">
                       <span className="flex-shrink-0">• {comp.name}</span>
-                      <span className="flex-grow border-b border-dotted border-gray-400 dark:border-gray-500 mx-1 h-3"></span>
-                      <span className="flex-shrink-0">{comp.dosageQuantity} {getShortUnitAbbreviation(comp.dosageUnit)}</span>
+                      <span className="flex-grow border-b border-dotted border-muted-foreground mx-1 h-3"></span>
+                      <span className="flex-shrink-0">{comp.dosageQuantity} {getLongUnitAbbreviation(comp.dosageUnit)}</span>
                     </div>
                   ))}
                   {vehicleExcipient.type && vehicleExcipient.quantity && vehicleExcipient.unit && (
                     <div className="flex items-end">
                       <span className="flex-shrink-0">• {displayVehicleType} q.s.p.</span>
-                      <span className="flex-grow border-b border-dotted border-gray-400 dark:border-gray-500 mx-1 h-3"></span>
-                      <span className="flex-shrink-0">{vehicleExcipient.quantity} {getShortUnitAbbreviation(vehicleExcipient.unit)}</span>
+                      <span className="flex-grow border-b border-dotted border-muted-foreground mx-1 h-3"></span>
+                      <span className="flex-shrink-0">{vehicleExcipient.quantity} {getLongUnitAbbreviation(vehicleExcipient.unit)}</span>
                     </div>
                   )}
                 </div>
