@@ -168,28 +168,28 @@ const AddAppointmentPage = () => {
   };
 
   return (
-    <div className="flex flex-col min-h-screen bg-gray-50 dark:bg-gray-950">
+    <div className="flex flex-col min-h-screen bg-background">
       {/* Header da Página com Gradiente e Breadcrumb */}
-      <div className="bg-gradient-to-r from-gray-50 via-white to-gray-50 dark:from-gray-900 dark:via-gray-950 dark:to-gray-950 p-6 pb-4 border-b border-gray-200 dark:border-gray-800">
+      <div className="bg-gradient-to-r from-background via-card to-background p-6 pb-4 border-b border-border">
         <div className="flex items-center justify-between mb-2">
           <div className="flex items-center gap-4">
             <div>
-              <h1 className="text-2xl font-semibold flex items-center gap-3 text-[#1E293B] dark:text-gray-100 group">
-                <FaStethoscope className="h-5 w-5 text-gray-500 dark:text-gray-400" /> {appointmentId ? "Editar Atendimento" : "Adicionar Atendimento"}
+              <h1 className="text-2xl font-semibold flex items-center gap-3 text-foreground group">
+                <FaStethoscope className="h-5 w-5 text-muted-foreground" /> {appointmentId ? "Editar Atendimento" : "Adicionar Atendimento"}
               </h1>
-              <p className="text-sm text-[#6B7280] dark:text-gray-400 mt-1 mb-4">
+              <p className="text-sm text-muted-foreground mt-1 mb-4">
                 {appointmentId ? `Editando atendimento para ${animal.name}.` : `Cadastre um novo atendimento para ${animal.name}.`}
               </p>
             </div>
           </div>
           <Link to={`/clients/${clientId}/animals/${animalId}/record`}>
-            <Button variant="outline" className="rounded-md border-gray-300 text-gray-700 hover:bg-gray-100 hover:text-gray-900 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200 dark:hover:bg-gray-700 transition-colors duration-200">
+            <Button variant="outline" className="rounded-md border-border text-foreground hover:bg-muted hover:text-foreground transition-colors duration-200">
               <FaArrowLeft className="mr-2 h-4 w-4" /> Voltar para Prontuário
             </Button>
           </Link>
         </div>
-        <p className="text-sm text-gray-400 dark:text-gray-500">
-          Painel &gt; <Link to="/clients" className="hover:text-blue-500 dark:hover:text-blue-400">Clientes</Link> &gt; <Link to={`/clients/${client.id}`} className="hover:text-blue-500 dark:hover:text-blue-400">{client.name}</Link> &gt; <Link to={`/clients/${clientId}/animals/${animalId}/record`} className="hover:text-blue-500 dark:hover:text-blue-400">{animal.name}</Link> &gt; {appointmentId ? "Editar Atendimento" : "Adicionar Atendimento"}
+        <p className="text-sm text-muted-foreground">
+          Painel &gt; <Link to="/clients" className="hover:text-primary">Clientes</Link> &gt; <Link to={`/clients/${client.id}`} className="hover:text-primary">{client.name}</Link> &gt; <Link to={`/clients/${clientId}/animals/${animalId}/record`} className="hover:text-primary">{animal.name}</Link> &gt; {appointmentId ? "Editar Atendimento" : "Adicionar Atendimento"}
         </p>
       </div>
 
