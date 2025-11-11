@@ -78,12 +78,12 @@ const ClientDetailPage = () => {
           <div className="lg:col-span-2 space-y-4">
             {/* Informações Gerais */}
             <Card className="bg-card shadow-sm border border-border rounded-md">
-              <CardHeader className="pb-2">
+              <CardHeader className="pb-3">
                 <CardTitle className="flex items-center gap-2 text-lg font-semibold text-foreground">
                   <FaUsers className="h-5 w-5 text-primary" /> Informações Gerais
                 </CardTitle>
               </CardHeader>
-              <CardContent className="grid grid-cols-1 md:grid-cols-2 gap-y-2 pt-0 text-sm text-muted-foreground">
+              <CardContent className="grid grid-cols-1 md:grid-cols-2 gap-y-3 pt-0 text-sm text-muted-foreground">
                 <p><span className="font-medium text-foreground">Tipo:</span> {client.clientType === "physical" ? "Pessoa Física" : "Pessoa Jurídica"}</p>
                 <p><span className="font-medium text-foreground">Nacionalidade:</span> {client.nationality === "brazilian" ? "Brasileira" : client.nationality}</p>
                 {client.gender && <p><span className="font-medium text-foreground">Sexo:</span> {client.gender}</p>}
@@ -96,7 +96,7 @@ const ClientDetailPage = () => {
 
             {/* Contatos */}
             <Card className="bg-card shadow-sm border border-border rounded-md">
-              <CardHeader className="pb-2">
+              <CardHeader className="pb-3">
                 <CardTitle className="flex items-center gap-2 text-lg font-semibold text-foreground">
                   <FaPhone className="h-5 w-5 text-primary" /> Contatos
                 </CardTitle>
@@ -115,7 +115,7 @@ const ClientDetailPage = () => {
 
             {/* Endereço */}
             <Card className="bg-card shadow-sm border border-border rounded-md">
-              <CardHeader className="pb-2">
+              <CardHeader className="pb-3">
                 <CardTitle className="flex items-center gap-2 text-lg font-semibold text-foreground">
                   <FaMapMarkerAlt className="h-5 w-5 text-primary" /> Endereço
                 </CardTitle>
@@ -132,7 +132,7 @@ const ClientDetailPage = () => {
             {/* Outras Informações */}
             {client.notes && (
               <Card className="bg-card shadow-sm border border-border rounded-md">
-                <CardHeader className="pb-2">
+                <CardHeader className="pb-3">
                   <CardTitle className="flex items-center gap-2 text-lg font-semibold text-foreground">
                     <FaStickyNote className="h-5 w-5 text-primary" /> Observações
                   </CardTitle>
