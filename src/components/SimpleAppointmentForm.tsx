@@ -10,6 +10,7 @@ import { FaSave, FaTimes, FaStethoscope, FaWeightHanging, FaThermometerHalf, FaN
 import { toast } from "sonner";
 import { AppointmentEntry, BaseAppointmentDetails } from "@/types/appointment";
 import { mockUserSettings } from "@/mockData/settings";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"; // Importação adicionada
 
 interface SimpleAppointmentFormProps {
   animalId: string;
