@@ -37,7 +37,7 @@ import {
   FaHeartbeat,
   FaLungs,
   FaHamburger,
-  FaBrain, // Removido FaBrain
+  FaBrain,
   FaExclamationCircle,
   FaRunning,
   FaBone as FaBoneIcon,
@@ -310,7 +310,7 @@ const AppointmentForm: React.FC<AppointmentFormProps> = ({
         const consultationDetails = details as ConsultationDetails;
         return (
           <>
-            <Accordion type="multiple" defaultValue={["anamnese", "exameFisico", "parametrosAvdn"]} className="w-full">
+            <Accordion type="multiple" defaultValue={["anamnese", "exameFisico", "parametrosAvdn", "diagnosticoTratamento"]} className="w-full">
               {/* Anamnese Section */}
               <AccordionItem value="anamnese">
                 <AccordionTrigger className="text-base font-semibold text-[#374151] dark:text-gray-100 flex items-center gap-2">
@@ -707,20 +707,20 @@ const AppointmentForm: React.FC<AppointmentFormProps> = ({
                       <div className="space-y-2">
                         <Label>Foi necessário uso de alguma forma de contenção?</Label>
                         <RadioGroup onValueChange={(value: 'sim' | 'nao') => handleDetailChange('usoContencao', value)} value={consultationDetails.usoContencao || ''} className="flex space-x-4">
-                          <div className="flex items-center space-x-2">
-                            <RadioGroupItem value="sim" id="contencao-sim" />
-                            <Label htmlFor="contencao-sim">Sim</Label>
+                              <div className="flex items-center space-x-2">
+                                <RadioGroupItem value="sim" id="contencao-sim" />
+                                <Label htmlFor="contencao-sim">Sim</Label>
+                              </div>
+                              <div className="flex items-center space-x-2">
+                                <RadioGroupItem value="nao" id="contencao-nao" />
+                                <Label htmlFor="contencao-nao">Não</Label>
+                              </div>
+                            </RadioGroup>
+                            {consultationDetails.usoContencao === 'sim' && (
+                              <Input placeholder="Qual contenção?" value={consultationDetails.usoContencaoQual || ''} onChange={(e) => handleDetailChange('usoContencaoQual', e.target.value)} />
+                            )}
                           </div>
-                          <div className="flex items-center space-x-2">
-                            <RadioGroupItem value="nao" id="contencao-nao" />
-                            <Label htmlFor="contencao-nao">Não</Label>
-                          </div>
-                        </RadioGroup>
-                        {consultationDetails.usoContencao === 'sim' && (
-                          <Input placeholder="Qual contenção?" value={consultationDetails.usoContencaoQual || ''} onChange={(e) => handleDetailChange('usoContencaoQual', e.target.value)} />
-                        )}
-                      </div>
-                    </div>
+                        </div>
 
                     <Accordion type="multiple" defaultValue={["cabecaPescoco", "toraxAbdomen", "linfonodosPele"]}>
                       <AccordionItem value="cabecaPescoco">
@@ -1080,6 +1080,55 @@ const AppointmentForm: React.FC<AppointmentFormProps> = ({
                   <div className="space-y-2 col-span-full">
                     <Label htmlFor="avdnHidratacaoTurgorCutaneo">Hidratação: Turgor cutâneo</Label>
                     <Input id="avdnHidratacaoTurgorCutaneo" value={consultationDetails.avdnHidratacaoTurgorCutaneo || ''} onChange={(e) => handleDetailChange('avdnHidratacaoTurgorCutaneo', e.target.value)} />
+                  </div>
+                </AccordionContent>
+              </AccordionItem>
+
+              {/* Diagnóstico e Tratamento Section (Restored) */}
+              <AccordionItem value="diagnosticoTratamento">
+                <AccordionTrigger className="text-base font-semibold text-[#374151] dark:text-gray-100 flex items-center gap-2">
+                  <FaBrain className="h-5 w-5 text-purple-500" /> Diagnóstico e Tratamento
+                </AccordionTrigger>
+                <AccordionContent className="p-4 border-t border-gray-200 dark:border-gray-700 grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className="space-y-2 col-span-full">
+                    <Label htmlFor="observacoesOcorrencias">Observações e Ocorrências</Label>
+                    <Textarea id="observacoesOcorrencias" value={consultationDetails.observacoesOcorrencias || ''} onChange={(e) => handleDetailChange('observacoesOcorrencias', e.target.value)} rows={2} />
+                  </div>
+                  <div className="space-y-2 col-span-full">
+                    <Label htmlFor="examesSolicitados">Exames Solicitados</Label>
+                    <Textarea id="examesSolicitados" value={consultationDetails.examesSolicitados || ''} onChange={(e) => handleDetailChange('examesSolicitados', e.target.value)} rows={2} />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="suspeitaDiagnostica">Suspeita Diagnóstica</Label>
+                    <Input id="suspeitaDiagnostica" value={consultationDetails.suspeitaDiagnostica || ''} onChange={(e) => handleDetailChange('suspeitaDiagnostica', e.target.value)} />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="diagnosticoDiferencial">Diagnóstico Diferencial</Label>
+                    <Input id="diagnosticoDiferencial" value={consultationDetails.diagnosticoDiferencial || ''} onChange={(e) => handleDetailChange('diagnosticoDiferencial', e.target.value)} />
+                  </div>
+                  <div className="space-y-2 col-span-full">
+                    <Label htmlFor="procedimentoRealizadoConsulta">Procedimento Realizado Durante a Consulta</Label>
+                    <Textarea id="procedimentoRealizadoConsulta" value={consultationDetails.procedimentoRealizadoConsulta || ''} onChange={(e) => handleDetailChange('procedimentoRealizadoConsulta', e.target.value)} rows={2} />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="diagnosticoPresuntivo">Diagnóstico Presuntivo</Label>
+                    <Input id="diagnosticoPresuntivo" value={consultationDetails.diagnosticoPresuntivo || ''} onChange={(e) => handleDetailChange('diagnosticoPresuntivo', e.target.value)} />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="diagnosticoDefinitivo">Diagnóstico Definitivo</Label>
+                    <Input id="diagnosticoDefinitivo" value={consultationDetails.diagnosticoDefinitivo || ''} onChange={(e) => handleDetailChange('diagnosticoDefinitivo', e.target.value)} />
+                  </div>
+                  <div className="space-y-2 col-span-full">
+                    <Label htmlFor="condutaTratamento">Conduta / Tratamento Prescrito</Label>
+                    <Textarea id="condutaTratamento" value={consultationDetails.condutaTratamento || ''} onChange={(e) => handleDetailChange('condutaTratamento', e.target.value)} rows={3} />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="retornoRecomendadoEmDias">Retorno recomendado em (dias)</Label>
+                    <Input id="retornoRecomendadoEmDias" type="number" value={consultationDetails.retornoRecomendadoEmDias || ''} onChange={(e) => handleDetailChange('retornoRecomendadoEmDias', Number(e.target.value))} />
+                  </div>
+                  <div className="space-y-2 col-span-full">
+                    <Label htmlFor="proximosPassos">Próximos Passos</Label>
+                    <Textarea id="proximosPassos" value={consultationDetails.proximosPassos || ''} onChange={(e) => handleDetailChange('proximosPassos', e.target.value)} rows={3} />
                   </div>
                 </AccordionContent>
               </AccordionItem>
