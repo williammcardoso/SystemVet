@@ -289,7 +289,20 @@ export const updateAnimalDetails = (clientId: string, animalId: string, updates:
         };
         updatedAnimal.weightHistory = [...(currentAnimal.weightHistory || []), newWeightEntry];
       }
-      mockClients[clientIndex].animals[animalIndex] = updatedAnimal;
+      
+      // Create new references for immutability
+      const newAnimals = [...mockClients[clientIndex].animals];
+      newAnimals[animalIndex] = updatedAnimal;
+      
+      const newClient = {
+        ...mockClients[clientIndex],
+        animals: newAnimals,
+      };
+
+      mockClients = mockClients.map((client, idx) => 
+        idx === clientIndex ? newClient : client
+      );
+      
       return true;
     }
   }

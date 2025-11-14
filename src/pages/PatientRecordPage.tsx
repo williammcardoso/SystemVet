@@ -37,8 +37,8 @@ import { pdf } from "@react-pdf/renderer"; // Importar pdf para impressão
 import { PrescriptionPdfContent } from "@/components/PrescriptionPdfContent"; // Importar o componente de conteúdo do PDF
 import { FinancialTransaction, mockFinancialTransactions } from "@/mockData/financial"; // Importar mock data financeiro
 import { AppointmentEntry, BaseAppointmentDetails, ConsultationDetails } from "@/types/appointment"; // Importar a nova interface de atendimento
-import { mockClients } from "@/mockData/clients"; // Importar o mock de clientes centralizado
-import { Client, Animal } from "@/types/client"; // Importar as interfaces Client e Animal
+import { mockClients, updateAnimalDetails } from "@/mockData/clients"; // Importar o mock de clientes centralizado e updateAnimalDetails
+import { Client, Animal, WeightEntry } from "@/types/client"; // Importar as interfaces Client, Animal e WeightEntry
 import { mockAppointments } from "@/pages/AddAppointmentPage"; // Importar mockAppointments do AddAppointmentPage
 
 // Mock data para tipos de exame e veterinários
@@ -87,12 +87,7 @@ interface ExamEntry {
 }
 
 // Mock data para as novas abas
-interface WeightEntry {
-  id: string;
-  date: string;
-  weight: number;
-}
-
+// WeightEntry já está em src/types/client.ts
 interface DocumentEntry {
   id: string;
   date: string;
@@ -127,8 +122,20 @@ const PatientRecordPage = () => {
   const { clientId, animalId } = useParams<{ clientId: string; animalId: string }>();
   const navigate = useNavigate();
 
-  const client = mockClients.find(c => c.id === clientId);
-  const animal = client?.animals.find(a => a.id === animalId);
+  // Usar um estado para o cliente e animal para que possam ser atualizados
+  const [currentClient, setCurrentClient] = useState<Client | undefined>(
+    mockClients.find(c => c.id === clientId)
+  );
+  const [currentAnimal, setCurrentAnimal] = useState<Animal | undefined>(
+    currentClient?.animals.find(a => a.id === animalId)
+  );
+
+  // Efeito para atualizar currentClient e currentAnimal quando mockClients muda
+  useEffect(() => {
+    const updatedClient = mockClients.find(c => c.id === clientId);
+    setCurrentClient(updatedClient);
+    setCurrentAnimal(updatedClient?.animals.find(a => a.id === animalId));
+  }, [mockClients, clientId, animalId]); // Dependência em mockClients para re-renderizar quando ele é alterado
 
   // State para a aba ativa, com valor inicial do localStorage ou 'appointments'
   const [activeTab, setActiveTab] = useState<string>(() => {
@@ -158,13 +165,17 @@ const PatientRecordPage = () => {
 
 
   // State para as novas abas
-  const [weightHistory, setWeightHistory] = useState<WeightEntry[]>([
-    { id: "w1", date: "2023-01-01", weight: 20.5 },
-    { id: "w2", date: "2023-07-15", weight: 22.1 },
-    { id: "w3", date: "2024-01-20", weight: 23.0 },
-  ]);
+  const [weightHistory, setWeightHistory] = useState<WeightEntry[]>(currentAnimal?.weightHistory || []);
   const [newWeight, setNewWeight] = useState<string>("");
   const [newWeightDate, setNewWeightDate] = useState<string>(new Date().toISOString().split('T')[0]);
+
+  // Atualizar weightHistory quando o animal mudar (ex: após edição ou adição de peso via atendimento)
+  useEffect(() => {
+    if (currentAnimal?.weightHistory) {
+      setWeightHistory(currentAnimal.weightHistory);
+    }
+  }, [currentAnimal?.weightHistory]);
+
 
   const [documents, setDocuments] = useState<DocumentEntry[]>([
     { id: "d1", date: "2023-05-01", name: "Termo de Adoção", fileUrl: "#" },
@@ -233,7 +244,7 @@ const PatientRecordPage = () => {
   );
 
 
-  if (!client || !animal) {
+  if (!currentClient || !currentAnimal) {
     return (
       <div className="p-6 text-center">
         <h1 className="text-3xl font-bold mb-4">Animal ou Cliente não encontrado.</h1>
@@ -257,13 +268,26 @@ const PatientRecordPage = () => {
   const handleAddWeight = () => {
     if (newWeight.trim() && newWeightDate) {
       const newEntry: WeightEntry = {
-        id: String(weightHistory.length + 1),
+        id: `wh-${Date.now()}`,
         date: newWeightDate,
         weight: parseFloat(newWeight),
+        source: "Manual", // Origem manual
       };
-      setWeightHistory([...weightHistory, newEntry]);
-      setNewWeight("");
-      setNewWeightDate(new Date().toISOString().split('T')[0]);
+      // Usar a função updateAnimalDetails para adicionar ao histórico e atualizar o peso atual
+      const success = updateAnimalDetails(clientId, animalId, {
+        weight: parseFloat(newWeight),
+        lastWeightSource: "Manual",
+        // O weightHistory será atualizado dentro de updateAnimalDetails
+      });
+
+      if (success) {
+        setNewWeight("");
+        setNewWeightDate(new Date().toISOString().split('T')[0]);
+        toast.success("Peso adicionado ao histórico!");
+        // O useEffect que observa mockClients se encarregará de atualizar currentAnimal e weightHistory
+      } else {
+        toast.error("Erro ao adicionar peso.");
+      }
     }
   };
 
@@ -371,18 +395,18 @@ const PatientRecordPage = () => {
   };
 
   const handlePrintSinglePrescription = async (rx: PrescriptionEntry) => {
-    if (!client || !animal) {
+    if (!currentClient || !currentAnimal) {
       toast.error("Erro: Dados do cliente ou animal não disponíveis para impressão.");
       return;
     }
 
     const blob = await pdf(
       PrescriptionPdfContent({
-        animalName: animal.name,
-        animalId: animal.id,
-        animalSpecies: animal.species,
-        tutorName: client.name,
-        tutorAddress: client.address.street + ", " + client.address.number + " - " + client.address.city + " - " + client.address.state,
+        animalName: currentAnimal.name,
+        animalId: currentAnimal.id,
+        animalSpecies: currentAnimal.species,
+        tutorName: currentClient.name,
+        tutorAddress: currentClient.address.street + ", " + currentClient.address.number + " - " + currentClient.address.city + " - " + currentClient.address.state,
         medications: rx.medications || [], // Passar array vazio se for manipulada
         generalObservations: rx.instructions,
         showElectronicSignatureText: false,
@@ -448,15 +472,15 @@ const PatientRecordPage = () => {
             <Button variant="outline" className="rounded-md border-border text-foreground hover:bg-muted hover:text-foreground transition-colors duration-200">
               <FaDownload className="mr-2 h-4 w-4" /> Exportar PDF
             </Button>
-            <Link to={`/clients/${client.id}`}>
+            <Link to={`/clients/${currentClient.id}`}>
               <Button variant="outline" className="rounded-md border-border text-foreground hover:bg-muted hover:text-foreground transition-colors duration-200">
-                <FaArrowLeft className="mr-2 h-4 w-4" /> Voltar para {client.name}
+                <FaArrowLeft className="mr-2 h-4 w-4" /> Voltar para {currentClient.name}
               </Button>
             </Link>
           </div>
         </div>
         <p className="text-sm text-muted-foreground">
-          Painel &gt; <Link to="/clients" className="hover:text-primary">Clientes</Link> &gt; <Link to={`/clients/${client.id}`} className="hover:text-primary">{client.name}</Link> &gt; {animal.name}
+          Painel &gt; <Link to="/clients" className="hover:text-primary">Clientes</Link> &gt; <Link to={`/clients/${currentClient.id}`} className="hover:text-primary">{currentClient.name}</Link> &gt; {currentAnimal.name}
         </p>
       </div>
 
@@ -482,32 +506,32 @@ const PatientRecordPage = () => {
                     </AvatarFallback>
                   </Avatar>
                   <div>
-                    <p className="text-xl font-bold text-foreground">{animal.name}</p>
-                    <p className="text-sm text-muted-foreground">{animal.species} • {animal.breed}</p>
+                    <p className="text-xl font-bold text-foreground">{currentAnimal.name}</p>
+                    <p className="text-sm text-muted-foreground">{currentAnimal.species} • {currentAnimal.breed}</p>
                   </div>
                 </div>
                 <Badge className={cn(
                   "px-3 py-1 rounded-full text-xs font-medium w-fit",
-                  animal.status === 'Ativo' ? "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200" : "bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200"
+                  currentAnimal.status === 'Ativo' ? "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200" : "bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200"
                 )}>
-                  {animal.status}
+                  {currentAnimal.status}
                 </Badge>
                 <div className="grid grid-cols-2 gap-y-2 text-sm text-muted-foreground">
                   <div className="flex items-center gap-2">
                     <FaCalendarAlt className="h-4 w-4 text-muted-foreground" />
-                    <p>Idade: <span className="font-normal text-foreground">{calculateAge(animal.birthday)}</span></p>
+                    <p>Idade: <span className="font-normal text-foreground">{calculateAge(currentAnimal.birthday)}</span></p>
                   </div>
                   <div className="flex items-center gap-2">
                     <FaBalanceScale className="h-4 w-4 text-muted-foreground" />
-                    <p>Peso: <span className="font-normal text-foreground">{animal.weight.toFixed(1)} kg</span></p>
+                    <p>Peso: <span className="font-normal text-foreground">{currentAnimal.weight.toFixed(1)} kg</span> {currentAnimal.lastWeightSource && <span className="text-xs italic">({currentAnimal.lastWeightSource})</span>}</p>
                   </div>
                   <div className="flex items-center gap-2">
-                    {animal.gender === "Macho" ? <FaMale className="h-4 w-4 text-muted-foreground" /> : <FaUser className="h-4 w-4 text-muted-foreground" />}
-                    <p>Sexo: <span className="font-normal text-foreground">{animal.gender}</span></p>
+                    {currentAnimal.gender === "Macho" ? <FaMale className="h-4 w-4 text-muted-foreground" /> : <FaUser className="h-4 w-4 text-muted-foreground" />}
+                    <p>Sexo: <span className="font-normal text-foreground">{currentAnimal.gender}</span></p>
                   </div>
                   <div className="flex items-center gap-2">
                     <FaCalendarAlt className="h-4 w-4 text-muted-foreground" />
-                    <p>Última consulta: <span className="font-normal text-foreground">{formatDate(animal.lastConsultationDate || '')}</span></p>
+                    <p>Última consulta: <span className="font-normal text-foreground">{formatDate(currentAnimal.lastConsultationDate || '')}</span></p>
                   </div>
                 </div>
               </div>
@@ -516,13 +540,13 @@ const PatientRecordPage = () => {
               <div className="flex flex-col gap-4">
                 <div>
                   <p className="text-base font-semibold text-foreground mb-1">Tutor Responsável</p>
-                  <p className="text-sm text-muted-foreground">Nome: <span className="font-normal text-foreground">{client.name}</span></p>
-                  <p className="text-sm text-muted-foreground">Telefone: <span className="font-normal text-foreground">{client.mainPhoneContact}</span></p>
+                  <p className="text-sm text-muted-foreground">Nome: <span className="font-normal text-foreground">{currentClient.name}</span></p>
+                  <p className="text-sm text-muted-foreground">Telefone: <span className="font-normal text-foreground">{currentClient.mainPhoneContact}</span></p>
                 </div>
                 <div className="bg-muted/50 dark:bg-muted/30 p-3 rounded-md border border-border">
                   <p className="text-base font-semibold text-foreground mb-1">Resumo Financeiro</p>
-                  <p className="text-sm text-muted-foreground">Total de procedimentos: <span className="font-normal text-foreground">{animal.totalProcedures || 0}</span></p>
-                  <p className="text-sm text-muted-foreground">Valor total: <span className="font-normal text-foreground">R$ {(animal.totalValue || 0).toFixed(2).replace('.', ',')}</span></p>
+                  <p className="text-sm text-muted-foreground">Total de procedimentos: <span className="font-normal text-foreground">{currentAnimal.totalProcedures || 0}</span></p>
+                  <p className="text-sm text-muted-foreground">Valor total: <span className="font-normal text-foreground">R$ {(currentAnimal.totalValue || 0).toFixed(2).replace('.', ',')}</span></p>
                 </div>
               </div>
             </CardContent>
@@ -1012,7 +1036,7 @@ const PatientRecordPage = () => {
                           </Button>
                         </div>
                         <div className="flex items-center gap-1 text-sm text-muted-foreground">
-                          <FaCalendarAlt className="h-3 w-3" /> {formatDate(entry.date)}
+                          <FaCalendarAlt className="h-3 w-3" /> {formatDate(entry.date)} {entry.source && <span className="text-xs italic">({entry.source})</span>}
                         </div>
                       </Card>
                     ))}
