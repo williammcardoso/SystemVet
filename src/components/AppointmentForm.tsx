@@ -50,7 +50,7 @@ import { AppointmentEntry, ConsultationDetails, VaccinationDetails, SurgeryDetai
 import { mockUserSettings } from "@/mockData/settings";
 import { Link } from "react-router-dom";
 import { cn } from "@/lib/utils";
-import { updateAnimalDetails, mockClients } from "@/mockData/clients"; // Importar a função de atualização do animal e mockClients
+import { updateAnimalDetails, mockClients } from "@/mockData/clients"; // Re-importado mockClients
 
 interface AppointmentFormProps {
   animalId: string;
@@ -1053,7 +1053,7 @@ const AppointmentForm: React.FC<AppointmentFormProps> = ({
                               <Label htmlFor="frequenciaCardiacaObsAusculta">Obs. Ausculta Cardíaca</Label>
                               <Textarea placeholder="Observações na ausculta cardíaca" value={consultationDetails.frequenciaCardiacaObsAusculta || ''} onChange={(e) => handleDetailChange('frequenciaCardiacaObsAusculta', e.target.value)} rows={1} />
                             </div>
-                          </div>
+                          </AccordionContent>
                         </AccordionItem>
 
                         <AccordionItem value="linfonodosPele">
@@ -1164,7 +1164,7 @@ const AppointmentForm: React.FC<AppointmentFormProps> = ({
               <div className="space-y-2">
                 <Label htmlFor="tipoVacina">Tipo de Vacina</Label>
                 <Select onValueChange={(value) => handleDetailChange('tipoVacina', value)} value={vaccinationDetails.tipoVacina || ''}>
-                  <SelectTrigger><SelectValue placeholder="Selecione..." /></SelectTrigger>
+                  <SelectTrigger id="tipoVacina"><SelectValue placeholder="Selecione..." /></SelectTrigger>
                   <SelectContent>
                     {mockVaccineTypes.map(type => <SelectItem key={type} value={type}>{type}</SelectItem>)}
                   </SelectContent>
@@ -1197,7 +1197,7 @@ const AppointmentForm: React.FC<AppointmentFormProps> = ({
               <div className="space-y-2">
                 <Label htmlFor="viaAdministracao">Via de Administração</Label>
                 <Select onValueChange={(value: 'SC' | 'IM' | 'VO' | 'IN') => handleDetailChange('viaAdministracao', value)} value={vaccinationDetails.viaAdministracao || ''}>
-                  <SelectTrigger><SelectValue placeholder="Selecione..." /></SelectTrigger>
+                  <SelectTrigger id="viaAdministracao"><SelectValue placeholder="Selecione..." /></SelectTrigger>
                   <SelectContent>
                     {mockViaAdministracao.map(via => <SelectItem key={via.value} value={via.value}>{via.label}</SelectItem>)}
                   </SelectContent>
@@ -1206,7 +1206,7 @@ const AppointmentForm: React.FC<AppointmentFormProps> = ({
               <div className="space-y-2">
                 <Label htmlFor="localAplicacao">Local de Aplicação</Label>
                 <Select onValueChange={(value) => handleDetailChange('localAplicacao', value)} value={vaccinationDetails.localAplicacao || ''}>
-                  <SelectTrigger><SelectValue placeholder="Selecione..." /></SelectTrigger>
+                  <SelectTrigger id="localAplicacao"><SelectValue placeholder="Selecione..." /></SelectTrigger>
                   <SelectContent>
                     {mockLocalAplicacao.map(local => <SelectItem key={local} value={local}>{local}</SelectItem>)}
                   </SelectContent>
@@ -1232,7 +1232,7 @@ const AppointmentForm: React.FC<AppointmentFormProps> = ({
               <div className="space-y-2">
                 <Label htmlFor="tipoCirurgia">Tipo de Cirurgia</Label>
                 <Select onValueChange={(value) => handleDetailChange('tipoCirurgia', value)} value={surgeryDetails.tipoCirurgia || ''}>
-                  <SelectTrigger><SelectValue placeholder="Selecione..." /></SelectTrigger>
+                  <SelectTrigger id="tipoCirurgia"><SelectValue placeholder="Selecione..." /></SelectTrigger>
                   <SelectContent>
                     {mockSurgeryTypes.map(type => <SelectItem key={type} value={type}>{type}</SelectItem>)}
                   </SelectContent>
@@ -1291,7 +1291,7 @@ const AppointmentForm: React.FC<AppointmentFormProps> = ({
               <div className="space-y-2">
                 <Label htmlFor="atendimentoOrigemId">Atendimento de Origem</Label>
                 <Select onValueChange={(value) => handleDetailChange('atendimentoOrigemId', value)} value={returnDetails.atendimentoOrigemId || ''}>
-                  <SelectTrigger><SelectValue placeholder="Selecione um atendimento anterior..." /></SelectTrigger>
+                  <SelectTrigger id="atendimentoOrigemId"><SelectValue placeholder="Selecione um atendimento anterior..." /></SelectTrigger>
                   <SelectContent>
                     {animalAppointmentsForSelect.map(app => (
                       <SelectItem key={app.id} value={app.id}>
@@ -1329,7 +1329,7 @@ const AppointmentForm: React.FC<AppointmentFormProps> = ({
               <div className="space-y-2">
                 <Label htmlFor="condicaoGeral">Condição Geral</Label>
                 <Select onValueChange={(value: EmergencyDetails['condicaoGeral']) => handleDetailChange('condicaoGeral', value)} value={emergencyDetails.condicaoGeral || ''}>
-                  <SelectTrigger><SelectValue placeholder="Selecione..." /></SelectTrigger>
+                  <SelectTrigger id="condicaoGeral"><SelectValue placeholder="Selecione..." /></SelectTrigger>
                   <SelectContent>
                     {mockCondicaoGeral.map(cond => <SelectItem key={cond.value} value={cond.value}>{cond.label}</SelectItem>)}
                   </SelectContent>
@@ -1346,7 +1346,7 @@ const AppointmentForm: React.FC<AppointmentFormProps> = ({
               <div className="space-y-2">
                 <Label htmlFor="encaminhamento">Encaminhamento</Label>
                 <Select onValueChange={(value: EmergencyDetails['encaminhamento']) => handleDetailChange('encaminhamento', value)} value={emergencyDetails.encaminhamento || ''}>
-                  <SelectTrigger><SelectValue placeholder="Selecione..." /></SelectTrigger>
+                  <SelectTrigger id="encaminhamento"><SelectValue placeholder="Selecione..." /></SelectTrigger>
                   <SelectContent>
                     {mockEncaminhamento.map(enc => <SelectItem key={enc.value} value={enc.value}>{enc.label}</SelectItem>)}
                   </SelectContent>
