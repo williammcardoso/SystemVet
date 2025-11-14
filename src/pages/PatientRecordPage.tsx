@@ -105,6 +105,17 @@ const mockVaccines = [
   { id: "vac1", date: "2024-03-10", type: "V8", nextDue: "2025-03-10", vet: "Dra. Costa" },
 ];
 
+// Interface para eventos da linha do tempo
+interface TimelineEvent {
+  id: string;
+  date: string;
+  type: 'Atendimento' | 'Exame' | 'Receita' | 'Peso' | 'Observação' | 'Venda' | 'Vacina' | 'Documento';
+  description: string;
+  icon: React.ElementType;
+  link?: string; // Opcional, para navegar para detalhes
+  badgeColor?: string; // Opcional, para customizar a cor do badge
+}
+
 
 // Helper function to calculate age
 const calculateAge = (birthday: string) => {
@@ -140,9 +151,9 @@ const PatientRecordPage = () => {
   // State para a aba ativa, com valor inicial do localStorage ou 'appointments'
   const [activeTab, setActiveTab] = useState<string>(() => {
     if (typeof window !== 'undefined') {
-      return localStorage.getItem(`patientRecordActiveTab-${animalId}`) || 'appointments';
+      return localStorage.getItem(`patientRecordActiveTab-${animalId}`) || 'timeline'; // Default para timeline
     }
-    return 'appointments';
+    return 'timeline';
   });
 
   // Efeito para salvar a aba ativa no localStorage sempre que ela mudar
@@ -314,7 +325,6 @@ const PatientRecordPage = () => {
         observation: newObservation.trim(),
       };
       setObservations([...observations, newEntry]);
-      setNewObservation("");
     }
   };
 
@@ -449,6 +459,120 @@ const PatientRecordPage = () => {
     navigate(`/clients/${clientId}/animals/${animalId}/edit`);
   };
 
+  // Lógica para a Linha do Tempo
+  const allTimelineEvents: TimelineEvent[] = [];
+
+  // Adicionar Atendimentos
+  animalAppointments.forEach(app => {
+    const appDetails = app.details as BaseAppointmentDetails;
+    const description = appDetails.suspeitaDiagnostica || appDetails.condutaTratamento || app.observacoesGerais || `Atendimento de ${app.type}`;
+    allTimelineEvents.push({
+      id: `app-${app.id}`,
+      date: app.date,
+      type: 'Atendimento',
+      description: `${app.type}: ${description}`,
+      icon: FaStethoscope,
+      link: `/clients/${clientId}/animals/${animalId}/view-appointment/${app.id}`,
+      badgeColor: "bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200",
+    });
+  });
+
+  // Adicionar Exames
+  examsList.forEach(exam => {
+    allTimelineEvents.push({
+      id: `exam-${exam.id}`,
+      date: exam.date,
+      type: 'Exame',
+      description: `${exam.type}: ${exam.result}`,
+      icon: FaFlask,
+      // link: `/clients/${clientId}/animals/${animalId}/view-exam/${exam.id}`, // Se houver uma página de visualização de exame
+      badgeColor: "bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-200",
+    });
+  });
+
+  // Adicionar Receitas
+  prescriptions.forEach(rx => {
+    const description = rx.treatmentDescription || rx.medicationName || "Receita sem descrição";
+    let badgeColor = "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200";
+    if (rx.type === 'controlled') badgeColor = "bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200";
+    if (rx.type === 'manipulated') badgeColor = "bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-200";
+
+    allTimelineEvents.push({
+      id: `rx-${rx.id}`,
+      date: rx.date,
+      type: 'Receita',
+      description: `${rx.type === 'simple' ? 'Receita Simples' : rx.type === 'controlled' ? 'Receita Controlada' : 'Receita Manipulada'}: ${description}`,
+      icon: FaPrescriptionBottleAlt,
+      link: `/clients/${clientId}/animals/${animalId}/edit-prescription/${rx.id}?type=${rx.type}`,
+      badgeColor: badgeColor,
+    });
+  });
+
+  // Adicionar Pesos
+  weightHistory.forEach(entry => {
+    allTimelineEvents.push({
+      id: `weight-${entry.id}`,
+      date: entry.date,
+      type: 'Peso',
+      description: `Peso registrado: ${entry.weight.toFixed(1)} kg (${entry.source})`,
+      icon: FaWeightHanging,
+      badgeColor: "bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200",
+    });
+  });
+
+  // Adicionar Observações
+  observations.forEach(obs => {
+    allTimelineEvents.push({
+      id: `obs-${obs.id}`,
+      date: obs.date,
+      type: 'Observação',
+      description: `Observação: ${obs.observation}`,
+      icon: FaCommentAlt,
+      badgeColor: "bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-200",
+    });
+  });
+
+  // Adicionar Vendas
+  animalSalesTransactions.forEach(sale => {
+    allTimelineEvents.push({
+      id: `sale-${sale.id}`,
+      date: sale.date,
+      type: 'Venda',
+      description: `Venda: ${sale.description} (R$ ${sale.amount.toFixed(2).replace('.', ',')})`,
+      icon: FaDollarSign,
+      badgeColor: "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200",
+    });
+  });
+
+  // Adicionar Vacinas (mockadas)
+  mockVaccines.forEach(vaccine => {
+    allTimelineEvents.push({
+      id: `vaccine-${vaccine.id}`,
+      date: vaccine.date,
+      type: 'Vacina',
+      description: `Vacina ${vaccine.type} aplicada. Próxima dose: ${formatDate(vaccine.nextDue)}`,
+      icon: FaSyringe,
+      badgeColor: "bg-teal-100 text-teal-800 dark:bg-teal-900 dark:text-teal-200",
+    });
+  });
+
+  // Adicionar Documentos
+  documents.forEach(doc => {
+    allTimelineEvents.push({
+      id: `doc-${doc.id}`,
+      date: doc.date,
+      type: 'Documento',
+      description: `Documento: ${doc.name}`,
+      icon: FaFileAlt,
+      link: doc.fileUrl,
+      badgeColor: "bg-orange-100 text-orange-800 dark:bg-orange-900 dark:text-orange-200",
+    });
+  });
+
+
+  // Ordenar todos os eventos por data (mais recente primeiro)
+  const sortedTimelineEvents = allTimelineEvents.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+
 
   return (
     <div className="flex flex-col min-h-screen bg-background">
@@ -554,7 +678,10 @@ const PatientRecordPage = () => {
         </div>
 
         <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full mt-6">
-          <TabsList className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-9 h-auto flex-wrap bg-card shadow-sm border border-border rounded-md p-2">
+          <TabsList className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-10 h-auto flex-wrap bg-card shadow-sm border border-border rounded-md p-2">
+            <TabsTrigger value="timeline" className="rounded-md data-[state=active]:bg-primary data-[state=active]:text-primary-foreground transition-colors duration-200 text-muted-foreground data-[state=active]:dark:bg-primary flex items-center">
+              <FaClock className="h-4 w-4 mr-2" /> <span className="whitespace-nowrap">Linha do Tempo</span>
+            </TabsTrigger>
             <TabsTrigger value="appointments" className="rounded-md data-[state=active]:bg-primary data-[state=active]:text-primary-foreground transition-colors duration-200 text-muted-foreground data-[state=active]:dark:bg-primary flex items-center">
               <FaStethoscope className="h-4 w-4 mr-2" /> <span className="whitespace-nowrap">Atendimento</span>
             </TabsTrigger>
@@ -583,6 +710,53 @@ const PatientRecordPage = () => {
               <FaMoneyBillWave className="h-4 w-4 mr-2" /> <span className="whitespace-nowrap">Financeiro</span>
             </TabsTrigger>
           </TabsList>
+
+          {/* Nova Aba: Linha do Tempo */}
+          <TabsContent value="timeline" className="mt-4">
+            <Card className="bg-card shadow-sm border border-border rounded-md">
+              <CardHeader className="pb-3">
+                <CardTitle className="flex items-center gap-2 text-lg font-semibold text-foreground">
+                  <FaClock className="h-5 w-5 text-primary" /> Linha do Tempo do Paciente
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="pt-0">
+                {sortedTimelineEvents.length > 0 ? (
+                  <div className="space-y-4">
+                    {sortedTimelineEvents.map((event) => (
+                      <Card key={event.id} className="p-4 bg-input shadow-sm border border-border">
+                        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-2 gap-2">
+                          <div className="flex items-center gap-2">
+                            {React.createElement(event.icon, { className: "h-4 w-4 text-muted-foreground" })}
+                            <Badge className={cn(
+                              "px-2 py-0.5 text-xs font-medium rounded-full",
+                              event.badgeColor || "bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-200"
+                            )}>
+                              {event.type}
+                            </Badge>
+                            <p className="text-lg font-semibold text-foreground">
+                              {event.description}
+                            </p>
+                          </div>
+                          {event.link && (
+                            <Link to={event.link}>
+                              <Button variant="ghost" size="icon" className="rounded-md hover:bg-muted hover:text-foreground transition-colors duration-200">
+                                <FaEye className="h-4 w-4" />
+                              </Button>
+                            </Link>
+                          )}
+                        </div>
+                        <div className="flex items-center gap-1 text-sm text-muted-foreground">
+                          <FaCalendarAlt className="h-3 w-3" /> {formatDate(event.date)}
+                        </div>
+                      </Card>
+                    ))}
+                  </div>
+                ) : (
+                  <p className="text-muted-foreground py-4">Nenhum evento registrado para este paciente.</p>
+                )}
+              </CardContent>
+            </Card>
+          </TabsContent>
 
           <TabsContent value="appointments" className="mt-4">
             <Card className="bg-card shadow-sm border border-border rounded-md">
