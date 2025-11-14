@@ -13,6 +13,7 @@ export interface Animal {
   lastConsultationDate?: string;
   totalProcedures?: number;
   totalValue?: number;
+  lastWeightSource?: string; // Novo campo para a origem da última atualização de peso
 }
 
 export interface DynamicContact {

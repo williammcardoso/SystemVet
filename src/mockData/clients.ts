@@ -43,6 +43,7 @@ export let mockClients: Client[] = [
         lastConsultationDate: "2024-07-20",
         totalProcedures: 5,
         totalValue: 435.00,
+        lastWeightSource: "Cadastro Inicial",
       },
       {
         id: "a2",
@@ -59,6 +60,7 @@ export let mockClients: Client[] = [
         lastConsultationDate: "2024-06-10",
         totalProcedures: 2,
         totalValue: 150.00,
+        lastWeightSource: "Cadastro Inicial",
       },
     ],
   },
@@ -104,6 +106,7 @@ export let mockClients: Client[] = [
         lastConsultationDate: "2024-05-01",
         totalProcedures: 3,
         totalValue: 280.00,
+        lastWeightSource: "Cadastro Inicial",
       },
       {
         id: "a4",
@@ -120,6 +123,7 @@ export let mockClients: Client[] = [
         lastConsultationDate: "2023-12-15",
         totalProcedures: 1,
         totalValue: 80.00,
+        lastWeightSource: "Cadastro Inicial",
       },
     ],
   },
@@ -165,6 +169,7 @@ export let mockClients: Client[] = [
         lastConsultationDate: "2024-04-05",
         totalProcedures: 7,
         totalValue: 600.00,
+        lastWeightSource: "Cadastro Inicial",
       },
     ],
   },
@@ -223,4 +228,19 @@ export const addMockAnimalToClient = (clientId: string, newAnimal: Omit<Animal, 
     return animalWithId;
   }
   return null;
+};
+
+export const updateAnimalDetails = (clientId: string, animalId: string, updates: Partial<Animal>) => {
+  const clientIndex = mockClients.findIndex(c => c.id === clientId);
+  if (clientIndex !== -1) {
+    const animalIndex = mockClients[clientIndex].animals.findIndex(a => a.id === animalId);
+    if (animalIndex !== -1) {
+      mockClients[clientIndex].animals[animalIndex] = {
+        ...mockClients[clientIndex].animals[animalIndex],
+        ...updates
+      };
+      return true;
+    }
+  }
+  return false;
 };

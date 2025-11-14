@@ -6,11 +6,8 @@ export interface BaseAppointmentDetails {
   usoMedicacoes?: string;
   ambiente?: 'interno' | 'externo' | 'misto' | '';
   contatoOutrosAnimais?: 'sim' | 'nao' | '';
-  temperaturaCorporal?: number;
-  mucosas?: string;
-  frequenciaCardiaca?: number;
-  frequenciaRespiratoria?: number;
-  linfonodos?: string;
+  mucosas?: string; // Mantido aqui se for uma observação geral de mucosas, não um valor numérico
+  linfonodos?: string; // Mantido aqui se for uma observação geral de linfonodos
   auscultaCardiaca?: string;
   auscultaPulmonar?: string;
   abdomen?: string;
@@ -104,16 +101,12 @@ export interface ConsultationDetails extends BaseAppointmentDetails {
   linfonodosEstado?: 'normal' | 'infartado' | '';
   linfonodosAlteracaoQualObs?: string;
 
-  // Parâmetros de Atitude A (AVDN)
+  // Parâmetros de Atitude A (AVDN) - Campos consolidados ou removidos
   avdnMucosa?: string;
   avdnTpc?: string;
-  avdnFc?: string;
-  avdnFr?: string;
-  avdnPadraoRespiratorio?: string;
   avdnPulso?: string;
   avdnPas?: string;
   avdnManguito?: string;
-  avdnTemperatura?: number | '';
   avdnSemDorAbdominal?: 'sim' | 'nao' | '';
   avdnHidratacaoTurgorCutaneo?: string;
 }
@@ -187,6 +180,8 @@ export interface AppointmentEntry {
   vet: string; // Veterinário responsável
   pesoAtual?: number;
   temperaturaCorporal?: number; // Temperatura corporal (campo sempre visível)
+  frequenciaCardiaca?: number; // Frequência Cardíaca (campo sempre visível)
+  frequenciaRespiratoria?: number; // Frequência Respiratória (campo sempre visível)
   observacoesGerais?: string; // Observações gerais (campo sempre visível)
   details: AppointmentSpecificDetails['details']; // Detalhes específicos do tipo de atendimento
   attachments?: { name: string; url: string }[]; // Para anexos
