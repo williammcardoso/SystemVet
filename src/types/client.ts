@@ -1,3 +1,10 @@
+export interface WeightEntry {
+  id: string;
+  date: string;
+  weight: number;
+  source: string; // Ex: "Atendimento Clínico", "Cadastro Inicial", "Manual"
+}
+
 export interface Animal {
   id: string;
   name: string;
@@ -14,6 +21,7 @@ export interface Animal {
   totalProcedures?: number;
   totalValue?: number;
   lastWeightSource?: string; // Novo campo para a origem da última atualização de peso
+  weightHistory?: WeightEntry[]; // Histórico de pesos
 }
 
 export interface DynamicContact {

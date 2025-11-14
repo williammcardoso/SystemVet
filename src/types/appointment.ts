@@ -100,15 +100,6 @@ export interface ConsultationDetails extends BaseAppointmentDetails {
   frequenciaCardiacaObsAusculta?: string;
   linfonodosEstado?: 'normal' | 'infartado' | '';
   linfonodosAlteracaoQualObs?: string;
-
-  // Parâmetros de Atitude A (AVDN) - Campos consolidados ou removidos
-  avdnMucosa?: string;
-  avdnTpc?: string;
-  avdnPulso?: string;
-  avdnPas?: string;
-  avdnManguito?: string;
-  avdnSemDorAbdominal?: 'sim' | 'nao' | '';
-  avdnHidratacaoTurgorCutaneo?: string;
 }
 
 export interface VaccinationDetails {

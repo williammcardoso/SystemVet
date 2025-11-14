@@ -1,4 +1,4 @@
-import { Client, Animal, DynamicContact } from "@/types/client";
+import { Client, Animal, DynamicContact, WeightEntry } from "@/types/client";
 
 export let mockClients: Client[] = [
   {
@@ -44,6 +44,13 @@ export let mockClients: Client[] = [
         totalProcedures: 5,
         totalValue: 435.00,
         lastWeightSource: "Cadastro Inicial",
+        weightHistory: [
+          { id: "wh1", date: "2020-01-15", weight: 5.0, source: "Cadastro Inicial" },
+          { id: "wh2", date: "2021-01-15", weight: 15.0, source: "Consulta Anual" },
+          { id: "wh3", date: "2022-01-15", weight: 20.0, source: "Consulta Anual" },
+          { id: "wh4", date: "2023-01-15", weight: 23.5, source: "Consulta Anual" },
+          { id: "wh5", date: "2024-07-20", weight: 25.0, source: "Atendimento Clínico" },
+        ],
       },
       {
         id: "a2",
@@ -61,6 +68,12 @@ export let mockClients: Client[] = [
         totalProcedures: 2,
         totalValue: 150.00,
         lastWeightSource: "Cadastro Inicial",
+        weightHistory: [
+          { id: "wh6", date: "2021-05-20", weight: 1.5, source: "Cadastro Inicial" },
+          { id: "wh7", date: "2022-05-20", weight: 4.0, source: "Consulta Anual" },
+          { id: "wh8", date: "2023-05-20", weight: 4.8, source: "Consulta Anual" },
+          { id: "wh9", date: "2024-06-10", weight: 5.0, source: "Atendimento Clínico" },
+        ],
       },
     ],
   },
@@ -107,6 +120,12 @@ export let mockClients: Client[] = [
         totalProcedures: 3,
         totalValue: 280.00,
         lastWeightSource: "Cadastro Inicial",
+        weightHistory: [
+          { id: "wh10", date: "2019-03-10", weight: 10.0, source: "Cadastro Inicial" },
+          { id: "wh11", date: "2020-03-10", weight: 15.0, source: "Consulta Anual" },
+          { id: "wh12", date: "2021-03-10", weight: 17.0, source: "Consulta Anual" },
+          { id: "wh13", date: "2024-05-01", weight: 18.0, source: "Atendimento Clínico" },
+        ],
       },
       {
         id: "a4",
@@ -124,6 +143,10 @@ export let mockClients: Client[] = [
         totalProcedures: 1,
         totalValue: 80.00,
         lastWeightSource: "Cadastro Inicial",
+        weightHistory: [
+          { id: "wh14", date: "2022-07-01", weight: 1.0, source: "Cadastro Inicial" },
+          { id: "wh15", date: "2023-12-15", weight: 3.5, source: "Atendimento Clínico" },
+        ],
       },
     ],
   },
@@ -170,6 +193,12 @@ export let mockClients: Client[] = [
         totalProcedures: 7,
         totalValue: 600.00,
         lastWeightSource: "Cadastro Inicial",
+        weightHistory: [
+          { id: "wh16", date: "2018-11-22", weight: 10.0, source: "Cadastro Inicial" },
+          { id: "wh17", date: "2020-01-01", weight: 25.0, source: "Consulta Anual" },
+          { id: "wh18", date: "2022-01-01", weight: 28.0, source: "Consulta Anual" },
+          { id: "wh19", date: "2024-04-05", weight: 30.0, source: "Atendimento Clínico" },
+        ],
       },
     ],
   },
@@ -223,7 +252,16 @@ export const addMockAnimalToClient = (clientId: string, newAnimal: Omit<Animal, 
   const clientIndex = mockClients.findIndex(c => c.id === clientId);
   if (clientIndex !== -1) {
     const newAnimalId = String(mockClients[clientIndex].animals.length > 0 ? Math.max(...mockClients[clientIndex].animals.map(a => Number(a.id.replace('a', '')))) + 1 : 1);
-    const animalWithId: Animal = { ...newAnimal, id: `a${newAnimalId}` };
+    const animalWithId: Animal = { ...newAnimal, id: `a${newAnimalId}`, weightHistory: newAnimal.weightHistory || [] };
+    // Add initial weight to history if not present
+    if (animalWithId.weight !== undefined && animalWithId.weightHistory.length === 0) {
+      animalWithId.weightHistory.push({
+        id: `wh-${Date.now()}`,
+        date: new Date().toISOString().split('T')[0],
+        weight: animalWithId.weight,
+        source: "Cadastro Inicial",
+      });
+    }
     mockClients[clientIndex].animals.push(animalWithId);
     return animalWithId;
   }
@@ -235,10 +273,23 @@ export const updateAnimalDetails = (clientId: string, animalId: string, updates:
   if (clientIndex !== -1) {
     const animalIndex = mockClients[clientIndex].animals.findIndex(a => a.id === animalId);
     if (animalIndex !== -1) {
-      mockClients[clientIndex].animals[animalIndex] = {
-        ...mockClients[clientIndex].animals[animalIndex],
+      const currentAnimal = mockClients[clientIndex].animals[animalIndex];
+      const updatedAnimal = {
+        ...currentAnimal,
         ...updates
       };
+
+      // If weight is updated, add to history
+      if (updates.weight !== undefined && updates.weight !== currentAnimal.weight) {
+        const newWeightEntry: WeightEntry = {
+          id: `wh-${Date.now()}`,
+          date: new Date().toISOString().split('T')[0],
+          weight: updates.weight,
+          source: updates.lastWeightSource || "Atualização Manual", // Default source
+        };
+        updatedAnimal.weightHistory = [...(currentAnimal.weightHistory || []), newWeightEntry];
+      }
+      mockClients[clientIndex].animals[animalIndex] = updatedAnimal;
       return true;
     }
   }
