@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { Link, useParams, useNavigate } from "react-router-dom";
 import {
   FaArrowLeft,
@@ -77,23 +77,6 @@ const AppointmentViewPage: React.FC = () => {
     return `${day}/${month}/${year}`;
   };
 
-  const renderDetailSection = (
-    title: string,
-    icon: React.ElementType,
-    content: React.ReactNode,
-    defaultOpen: boolean = false
-  ) => (
-    <Card className="bg-card shadow-sm border border-border rounded-md">
-      <CardHeader>
-        <CardTitle className="flex items-center gap-2 text-lg font-semibold text-foreground">
-          {React.createElement(icon, { className: "h-5 w-5 text-primary" })}
-          {title}
-        </CardTitle>
-      </CardHeader>
-      <CardContent className="pt-0">{content}</CardContent>
-    </Card>
-  );
-
   const renderField = (label: string, value: any, icon?: React.ElementType) => {
     if (value === undefined || value === null || value === "" || (Array.isArray(value) && value.length === 0)) {
       return null;
@@ -123,10 +106,9 @@ const AppointmentViewPage: React.FC = () => {
         const consultationDetails = details as ConsultationDetails;
         return (
           <>
-            {renderDetailSection(
-              "Anamnese",
-              FaUserMd,
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="p-4 border-t border-border">
+              <h3 className="text-lg font-semibold text-foreground mb-3 flex items-center gap-2"><FaUserMd className="h-5 w-5 text-blue-500" /> Anamnese</h3>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-x-4 gap-y-2">
                 {renderField("Queixa Principal", consultationDetails.queixaPrincipal)}
                 {renderField("Histórico Clínico", consultationDetails.historicoClinico)}
                 {renderField("Alimentação", consultationDetails.alimentacao)}
@@ -172,11 +154,10 @@ const AppointmentViewPage: React.FC = () => {
                 {renderField("Tipos Intolerância ao Exercício", consultationDetails.intoleranciaExercicioTipos)}
                 {renderField("Obs. Intolerância ao Exercício", consultationDetails.intoleranciaExercicioObs)}
               </div>
-            )}
-            {renderDetailSection(
-              "Exame Físico",
-              FaHeartbeat,
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            </div>
+            <div className="p-4 border-t border-border">
+              <h3 className="text-lg font-semibold text-foreground mb-3 flex items-center gap-2"><FaHeartbeat className="h-5 w-5 text-green-500" /> Exame Físico</h3>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-x-4 gap-y-2">
                 {renderField("Exame Físico Realizado", consultationDetails.exameFisicoRealizado)}
                 {renderField("Obs. Exame Físico", consultationDetails.exameFisicoObs)}
                 {renderField("Uso de Contenção", consultationDetails.usoContencao)}
@@ -213,11 +194,10 @@ const AppointmentViewPage: React.FC = () => {
                 {renderField("Pele e Anexos", consultationDetails.peleAnexosAlteracoes)}
                 {renderField("Descrição Pele e Anexos", consultationDetails.peleAnexosDescricao)}
               </div>
-            )}
-            {renderDetailSection(
-              "Parâmetros de Atitude A (AVDN)",
-              FaExclamationCircle,
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            </div>
+            <div className="p-4 border-t border-border">
+              <h3 className="text-lg font-semibold text-foreground mb-3 flex items-center gap-2"><FaExclamationCircle className="h-5 w-5 text-orange-500" /> Parâmetros de Atitude A (AVDN)</h3>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-x-4 gap-y-2">
                 {renderField("Mucosa", consultationDetails.avdnMucosa)}
                 {renderField("TPC", consultationDetails.avdnTpc)}
                 {renderField("FC", consultationDetails.avdnFc)}
@@ -230,11 +210,10 @@ const AppointmentViewPage: React.FC = () => {
                 {renderField("Sem dor abdominal", consultationDetails.avdnSemDorAbdominal)}
                 {renderField("Hidratação: Turgor cutâneo", consultationDetails.avdnHidratacaoTurgorCutaneo)}
               </div>
-            )}
-            {renderDetailSection(
-              "Diagnóstico e Tratamento",
-              FaBrain,
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            </div>
+            <div className="p-4 border-t border-border">
+              <h3 className="text-lg font-semibold text-foreground mb-3 flex items-center gap-2"><FaBrain className="h-5 w-5 text-purple-500" /> Diagnóstico e Tratamento</h3>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-x-4 gap-y-2">
                 {renderField("Observações e Ocorrências", consultationDetails.observacoesOcorrencias)}
                 {renderField("Exames Solicitados", consultationDetails.examesSolicitados)}
                 {renderField("Suspeita Diagnóstica", consultationDetails.suspeitaDiagnostica)}
@@ -246,41 +225,47 @@ const AppointmentViewPage: React.FC = () => {
                 {renderField("Retorno recomendado em (dias)", consultationDetails.retornoRecomendadoEmDias)}
                 {renderField("Próximos Passos", consultationDetails.proximosPassos)}
               </div>
-            )}
+            </div>
           </>
         );
       case "Vacina":
         const vaccinationDetails = details as VaccinationDetails;
         return (
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {renderField("Tipo de Vacina", vaccinationDetails.tipoVacina)}
-            {renderField("Nome Comercial", vaccinationDetails.nomeComercial)}
-            {renderField("Lote", vaccinationDetails.lote)}
-            {renderField("Fabricante", vaccinationDetails.fabricante)}
-            {renderField("Data de Fabricação", formatDate(vaccinationDetails.dataFabricacao || ""))}
-            {renderField("Data de Validade", formatDate(vaccinationDetails.dataValidade || ""))}
-            {renderField("Dose Aplicada (mL)", vaccinationDetails.doseAplicada)}
-            {renderField("Via de Administração", vaccinationDetails.viaAdministracao)}
-            {renderField("Local de Aplicação", vaccinationDetails.localAplicacao)}
-            {renderField("Reação Adversa Observada", vaccinationDetails.reacaoAdversaObservada)}
-            {renderField("Profissional que aplicou", vaccinationDetails.profissionalAplicou)}
+          <div className="p-4 border-t border-border">
+            <h3 className="text-lg font-semibold text-foreground mb-3 flex items-center gap-2"><FaSyringe className="h-5 w-5 text-primary" /> Ficha de Controle Vacinal</h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-x-4 gap-y-2">
+              {renderField("Tipo de Vacina", vaccinationDetails.tipoVacina)}
+              {renderField("Nome Comercial", vaccinationDetails.nomeComercial)}
+              {renderField("Lote", vaccinationDetails.lote)}
+              {renderField("Fabricante", vaccinationDetails.fabricante)}
+              {renderField("Data de Fabricação", formatDate(vaccinationDetails.dataFabricacao || ""))}
+              {renderField("Data de Validade", formatDate(vaccinationDetails.dataValidade || ""))}
+              {renderField("Dose Aplicada (mL)", vaccinationDetails.doseAplicada)}
+              {renderField("Via de Administração", vaccinationDetails.viaAdministracao)}
+              {renderField("Local de Aplicação", vaccinationDetails.localAplicacao)}
+              {renderField("Reação Adversa Observada", vaccinationDetails.reacaoAdversaObservada)}
+              {renderField("Profissional que aplicou", vaccinationDetails.profissionalAplicou)}
+            </div>
           </div>
         );
       case "Cirurgia":
         const surgeryDetails = details as SurgeryDetails;
         return (
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {renderField("Tipo de Cirurgia", surgeryDetails.tipoCirurgia)}
-            {renderField("Tempo de Jejum (horas)", surgeryDetails.tempoJejumHoras)}
-            {renderField("Medicação Pré-anestésica", surgeryDetails.medicacaoPreAnestesica)}
-            {renderField("Anestésico Utilizado", surgeryDetails.anestesicoUtilizado)}
-            {renderField("Procedimento Realizado", surgeryDetails.procedimentoRealizado)}
-            {renderField("Achados Intraoperatórios", surgeryDetails.achadosIntraoperatorios)}
-            {renderField("Complicações Intraoperatórias", surgeryDetails.complicacoesIntraoperatorias)}
-            {renderField("Tempo Cirúrgico (min)", surgeryDetails.tempoCirurgicoMin)}
-            {renderField("Responsável pela Anestesia", surgeryDetails.responsavelAnestesia)}
-            {renderField("Responsável pela Cirurgia", surgeryDetails.responsavelCirurgia)}
-            {renderField("Medicamentos Pós-operatórios Prescritos", surgeryDetails.medicamentosPosOperatorios)}
+          <div className="p-4 border-t border-border">
+            <h3 className="text-lg font-semibold text-foreground mb-3 flex items-center gap-2"><FaCut className="h-5 w-5 text-primary" /> Ficha Cirúrgica</h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-x-4 gap-y-2">
+              {renderField("Tipo de Cirurgia", surgeryDetails.tipoCirurgia)}
+              {renderField("Tempo de Jejum (horas)", surgeryDetails.tempoJejumHoras)}
+              {renderField("Medicação Pré-anestésica", surgeryDetails.medicacaoPreAnestesica)}
+              {renderField("Anestésico Utilizado", surgeryDetails.anestesicoUtilizado)}
+              {renderField("Procedimento Realizado", surgeryDetails.procedimentoRealizado)}
+              {renderField("Achados Intraoperatórios", surgeryDetails.achadosIntraoperatórios)}
+              {renderField("Complicações Intraoperatórias", surgeryDetails.complicacoesIntraoperatórias)}
+              {renderField("Tempo Cirúrgico (min)", surgeryDetails.tempoCirurgicoMin)}
+              {renderField("Responsável pela Anestesia", surgeryDetails.responsavelAnestesia)}
+              {renderField("Responsável pela Cirurgia", surgeryDetails.responsavelCirurgia)}
+              {renderField("Medicamentos Pós-operatórios Prescritos", surgeryDetails.medicamentosPosOperatorios)}
+            </div>
           </div>
         );
       case "Retorno":
@@ -289,61 +274,73 @@ const AppointmentViewPage: React.FC = () => {
           (app) => app.id === returnDetails.atendimentoOrigemId
         );
         return (
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {renderField(
-              "Atendimento de Origem",
-              originalAppointment
-                ? `${formatDate(originalAppointment.date)} - ${originalAppointment.type}`
-                : "Não informado"
-            )}
-            {renderField("Motivo do Retorno", returnDetails.motivoRetorno)}
-            {renderField("Evolução Observada", returnDetails.evolucaoObservada)}
-            {renderField("Novo Diagnóstico / Conduta", returnDetails.novoDiagnosticoConduta)}
+          <div className="p-4 border-t border-border">
+            <h3 className="text-lg font-semibold text-foreground mb-3 flex items-center gap-2"><FaRedo className="h-5 w-5 text-primary" /> Evolução Clínica (Retorno)</h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-x-4 gap-y-2">
+              {renderField(
+                "Atendimento de Origem",
+                originalAppointment
+                  ? `${formatDate(originalAppointment.date)} - ${originalAppointment.type}`
+                  : "Não informado"
+              )}
+              {renderField("Motivo do Retorno", returnDetails.motivoRetorno)}
+              {renderField("Evolução Observada", returnDetails.evolucaoObservada)}
+              {renderField("Novo Diagnóstico / Conduta", returnDetails.novoDiagnosticoConduta)}
+            </div>
           </div>
         );
       case "Emergência":
         const emergencyDetails = details as EmergencyDetails;
         return (
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {renderField("Hora de Chegada", emergencyDetails.horaChegada)}
-            {renderField("Condição Geral", emergencyDetails.condicaoGeral)}
-            {renderField("Manobras de Suporte Realizadas", emergencyDetails.manobrasSuporteRealizadas)}
-            {renderField("Medicamentos Administrados", emergencyDetails.medicamentosAdministrados)}
-            {renderField("Encaminhamento", emergencyDetails.encaminhamento)}
+          <div className="p-4 border-t border-border">
+            <h3 className="text-lg font-semibold text-foreground mb-3 flex items-center gap-2"><FaAmbulance className="h-5 w-5 text-primary" /> Ficha de Atendimento Emergencial</h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-x-4 gap-y-2">
+              {renderField("Hora de Chegada", emergencyDetails.horaChegada)}
+              {renderField("Condição Geral", emergencyDetails.condicaoGeral)}
+              {renderField("Manobras de Suporte Realizadas", emergencyDetails.manobrasSuporteRealizadas)}
+              {renderField("Medicamentos Administrados", emergencyDetails.medicamentosAdministrados)}
+              {renderField("Encaminhamento", emergencyDetails.encaminhamento)}
+            </div>
           </div>
         );
       case "Check-up":
         const checkupDetails = details as CheckupDetails;
         return (
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {renderField("Última Vacinação", formatDate(checkupDetails.ultimaVacinacao || ""))}
-            {renderField("Última Vermifugação", formatDate(checkupDetails.ultimaVermifugacao || ""))}
-            {renderField("Avaliação Dentária", checkupDetails.avaliacaoDentaria)}
-            {renderField("Avaliação Nutricional", checkupDetails.avaliacaoNutricional)}
-            {renderField("Avaliação Corporal (escala 1–9)", checkupDetails.avaliacaoCorporalEscala)}
-            {renderField("Recomendações Preventivas", checkupDetails.recomendacoesPreventivas)}
+          <div className="p-4 border-t border-border">
+            <h3 className="text-lg font-semibold text-foreground mb-3 flex items-center gap-2"><FaCheckCircle className="h-5 w-5 text-primary" /> Avaliação Geral (Check-up)</h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-x-4 gap-y-2">
+              {renderField("Última Vacinação", formatDate(checkupDetails.ultimaVacinacao || ""))}
+              {renderField("Última Vermifugação", formatDate(checkupDetails.ultimaVermifugacao || ""))}
+              {renderField("Avaliação Dentária", checkupDetails.avaliacaoDentaria)}
+              {renderField("Avaliação Nutricional", checkupDetails.avaliacaoNutricional)}
+              {renderField("Avaliação Corporal (escala 1–9)", checkupDetails.avaliacaoCorporalEscala)}
+              {renderField("Recomendações Preventivas", checkupDetails.recomendacoesPreventivas)}
+            </div>
           </div>
         );
       case "Outros":
         const otherDetails = details as BaseAppointmentDetails;
         return (
-          <div className="grid grid-cols-1 gap-4">
-            {renderField("Descrição Detalhada", otherDetails.historicoClinico)}
-            {renderField("Queixa Principal", otherDetails.queixaPrincipal)}
-            {renderField("Observações e Ocorrências", otherDetails.observacoesOcorrencias)}
-            {renderField("Exames Solicitados", otherDetails.examesSolicitados)}
-            {renderField("Suspeita Diagnóstica", otherDetails.suspeitaDiagnostica)}
-            {renderField("Diagnóstico Diferencial", otherDetails.diagnosticoDiferencial)}
-            {renderField("Procedimento Realizado Durante a Consulta", otherDetails.procedimentoRealizadoConsulta)}
-            {renderField("Diagnóstico Presuntivo", otherDetails.diagnosticoPresuntivo)}
-            {renderField("Diagnóstico Definitivo", otherDetails.diagnosticoDefinitivo)}
-            {renderField("Conduta / Tratamento Prescrito", otherDetails.condutaTratamento)}
-            {renderField("Retorno recomendado em (dias)", otherDetails.retornoRecomendadoEmDias)}
-            {renderField("Próximos Passos", otherDetails.proximosPassos)}
+          <div className="p-4 border-t border-border">
+            <h3 className="text-lg font-semibold text-foreground mb-3 flex items-center gap-2"><FaNotesMedical className="h-5 w-5 text-primary" /> Detalhes Adicionais</h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-x-4 gap-y-2">
+              {renderField("Descrição Detalhada", otherDetails.historicoClinico)}
+              {renderField("Queixa Principal", otherDetails.queixaPrincipal)}
+              {renderField("Observações e Ocorrências", otherDetails.observacoesOcorrencias)}
+              {renderField("Exames Solicitados", otherDetails.examesSolicitados)}
+              {renderField("Suspeita Diagnóstica", otherDetails.suspeitaDiagnostica)}
+              {renderField("Diagnóstico Diferencial", otherDetails.diagnosticoDiferencial)}
+              {renderField("Procedimento Realizado Durante a Consulta", otherDetails.procedimentoRealizadoConsulta)}
+              {renderField("Diagnóstico Presuntivo", otherDetails.diagnosticoPresuntivo)}
+              {renderField("Diagnóstico Definitivo", otherDetails.diagnosticoDefinitivo)}
+              {renderField("Conduta / Tratamento Prescrito", otherDetails.condutaTratamento)}
+              {renderField("Retorno recomendado em (dias)", otherDetails.retornoRecomendadoEmDias)}
+              {renderField("Próximos Passos", otherDetails.proximosPassos)}
+            </div>
           </div>
         );
       default:
-        return <p className="text-muted-foreground">Nenhum detalhe específico para este tipo de atendimento.</p>;
+        return <p className="text-muted-foreground p-4">Nenhum detalhe específico para este tipo de atendimento.</p>;
     }
   };
 
@@ -404,50 +401,50 @@ const AppointmentViewPage: React.FC = () => {
         </p>
       </div>
 
-      <div className="flex-1 p-6 space-y-6">
-        {/* Informações Gerais do Atendimento */}
-        {renderDetailSection(
-          "Informações Gerais",
-          FaNotesMedical,
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {renderField("Data", formatDate(appointment.date))}
-            {renderField("Tipo", appointment.type)}
-            {renderField("Veterinário", appointment.vet)}
-            {renderField("Peso Atual (kg)", appointment.pesoAtual)}
-            {renderField("Temperatura Corporal (°C)", appointment.temperaturaCorporal)}
-            {renderField("Observações Gerais", appointment.observacoesGerais)}
-          </div>
-        )}
+      <div className="flex-1 p-6">
+        <Card className="bg-card shadow-sm border border-border rounded-md">
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2 text-lg font-semibold text-foreground">
+              <FaNotesMedical className="h-5 w-5 text-primary" /> Informações do Atendimento
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="pt-0">
+            <div className="p-4 grid grid-cols-1 md:grid-cols-2 gap-x-4 gap-y-2">
+              {renderField("Data", formatDate(appointment.date))}
+              {renderField("Tipo", appointment.type)}
+              {renderField("Veterinário", appointment.vet)}
+              {renderField("Peso Atual (kg)", appointment.pesoAtual)}
+              {renderField("Temperatura Corporal (°C)", appointment.temperaturaCorporal)}
+              {renderField("Observações Gerais", appointment.observacoesGerais)}
+            </div>
 
-        {/* Detalhes Específicos do Atendimento */}
-        {renderDynamicDetails(appointment.type, appointment.details)}
+            {/* Detalhes Específicos do Atendimento */}
+            {renderDynamicDetails(appointment.type, appointment.details)}
 
-        {/* Anexos */}
-        {appointment.attachments && appointment.attachments.length > 0 && (
-          <Card className="bg-card shadow-sm border border-border rounded-md">
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2 text-lg font-semibold text-foreground">
-                <FaPaperclip className="h-5 w-5 text-primary" /> Anexos
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="pt-0">
-              <ul className="list-disc pl-5 space-y-1">
-                {appointment.attachments.map((att, index) => (
-                  <li key={index}>
-                    <a
-                      href={att.url}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-blue-500 hover:underline text-sm"
-                    >
-                      {att.name}
-                    </a>
-                  </li>
-                ))}
-              </ul>
-            </CardContent>
-          </Card>
-        )}
+            {/* Anexos */}
+            {appointment.attachments && appointment.attachments.length > 0 && (
+              <div className="p-4 border-t border-border">
+                <h3 className="text-lg font-semibold text-foreground mb-3 flex items-center gap-2">
+                  <FaPaperclip className="h-5 w-5 text-primary" /> Anexos
+                </h3>
+                <ul className="list-disc pl-5 space-y-1">
+                  {appointment.attachments.map((att, index) => (
+                    <li key={index}>
+                      <a
+                        href={att.url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-blue-500 hover:underline text-sm"
+                      >
+                        {att.name}
+                      </a>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
+          </CardContent>
+        </Card>
       </div>
     </div>
   );
