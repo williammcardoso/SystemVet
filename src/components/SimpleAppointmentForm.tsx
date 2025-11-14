@@ -86,9 +86,13 @@ const SimpleAppointmentForm: React.FC<SimpleAppointmentFormProps> = ({
   ]);
 
   const handleSave = () => {
-    if (!date || !type || !vet || pesoAtual === '' || temperaturaCorporal === '') {
-      toast.error("Por favor, preencha todos os campos obrigatórios (Data, Tipo, Veterinário, Peso, Temperatura).");
+    if (!date || !type) {
+      toast.error("Por favor, preencha a Data do Atendimento e o Tipo de Atendimento.");
       return;
+    }
+
+    if (pesoAtual === '' || temperaturaCorporal === '') {
+      toast.info("Peso e/ou Temperatura não preenchidos. Salvando como rascunho.", { duration: 3000 });
     }
 
     const newAppointment: AppointmentEntry = {
@@ -97,8 +101,8 @@ const SimpleAppointmentForm: React.FC<SimpleAppointmentFormProps> = ({
       date,
       type,
       vet,
-      pesoAtual: Number(pesoAtual),
-      temperaturaCorporal: Number(temperaturaCorporal),
+      pesoAtual: Number(pesoAtual) || undefined, // Permitir undefined se vazio
+      temperaturaCorporal: Number(temperaturaCorporal) || undefined, // Permitir undefined se vazio
       observacoesGerais,
       details: {
         queixaPrincipal,
@@ -141,8 +145,8 @@ const SimpleAppointmentForm: React.FC<SimpleAppointmentFormProps> = ({
             </Select>
           </div>
           <div className="space-y-2">
-            <Label htmlFor="vet">Veterinário Responsável *</Label>
-            <Select onValueChange={setVet} value={vet} required>
+            <Label htmlFor="vet">Veterinário Responsável</Label>
+            <Select onValueChange={setVet} value={vet}>
               <SelectTrigger id="vet"><SelectValue placeholder="Selecione o veterinário" /></SelectTrigger>
               <SelectContent>
                 {mockVets.map(v => <SelectItem key={v.id} value={v.name}>{v.name}</SelectItem>)}
@@ -151,12 +155,12 @@ const SimpleAppointmentForm: React.FC<SimpleAppointmentFormProps> = ({
           </div>
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-2">
-              <Label htmlFor="pesoAtual">Peso Atual (kg) *</Label>
-              <Input id="pesoAtual" type="number" step="0.1" value={pesoAtual} onChange={(e) => setPesoAtual(Number(e.target.value))} required />
+              <Label htmlFor="pesoAtual">Peso Atual (kg)</Label>
+              <Input id="pesoAtual" type="number" step="0.1" value={pesoAtual} onChange={(e) => setPesoAtual(Number(e.target.value))} />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="temperaturaCorporal">Temperatura Corporal (°C) *</Label>
-              <Input id="temperaturaCorporal" type="number" step="0.1" value={temperaturaCorporal} onChange={(e) => setTemperaturaCorporal(Number(e.target.value))} required />
+              <Label htmlFor="temperaturaCorporal">Temperatura Corporal (°C)</Label>
+              <Input id="temperaturaCorporal" type="number" step="0.1" value={temperaturaCorporal} onChange={(e) => setTemperaturaCorporal(Number(e.target.value))} />
             </div>
           </div>
           <div className="space-y-2 col-span-full">
