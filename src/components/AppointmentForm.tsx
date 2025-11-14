@@ -50,6 +50,7 @@ import { AppointmentEntry, ConsultationDetails, VaccinationDetails, SurgeryDetai
 import { mockUserSettings } from "@/mockData/settings";
 import { Link } from "react-router-dom";
 import { cn } from "@/lib/utils";
+import { updateAnimalDetails, mockClients } from "@/mockData/clients"; // Importar a função de atualização do animal e mockClients
 
 interface AppointmentFormProps {
   animalId: string;
@@ -220,6 +221,8 @@ const AppointmentForm: React.FC<AppointmentFormProps> = ({
   const [vet, setVet] = useState(initialData?.vet || mockUserSettings.userName); // Pré-selecionado
   const [pesoAtual, setPesoAtual] = useState<number | ''>(initialData?.pesoAtual || '');
   const [temperaturaCorporal, setTemperaturaCorporal] = useState<number | ''>(initialData?.temperaturaCorporal || '');
+  const [frequenciaCardiaca, setFrequenciaCardiaca] = useState<number | ''>(initialData?.frequenciaCardiaca || '');
+  const [frequenciaRespiratoria, setFrequenciaRespiratoria] = useState<number | ''>(initialData?.frequenciaRespiratoria || '');
   const [observacoesGerais, setObservacoesGerais] = useState(initialData?.observacoesGerais || '');
   const [details, setDetails] = useState<ConsultationDetails>(initialData?.details as ConsultationDetails || {});
   const [attachments, setAttachments] = useState<{ name: string; url: string }[]>(initialData?.attachments || []);
@@ -253,7 +256,7 @@ const AppointmentForm: React.FC<AppointmentFormProps> = ({
         clearTimeout(autoSaveTimeoutRef.current);
       }
     };
-  }, [date, type, vet, pesoAtual, temperaturaCorporal, observacoesGerais, details, attachments]);
+  }, [date, type, vet, pesoAtual, temperaturaCorporal, frequenciaCardiaca, frequenciaRespiratoria, observacoesGerais, details, attachments]);
 
   const handleDetailChange = (field: keyof ConsultationDetails, value: any) => {
     setDetails(prev => ({ ...prev, [field]: value }));
@@ -276,8 +279,8 @@ const AppointmentForm: React.FC<AppointmentFormProps> = ({
       return;
     }
 
-    if (pesoAtual === '' || temperaturaCorporal === '') {
-      toast.info("Peso e/ou Temperatura não preenchidos. Salvando como rascunho.", { duration: 3000 });
+    if (pesoAtual === '' || temperaturaCorporal === '' || frequenciaCardiaca === '' || frequenciaRespiratoria === '') {
+      toast.info("Alguns sinais vitais não preenchidos. Salvando como rascunho.", { duration: 3000 });
     }
 
     const newAppointment: AppointmentEntry = {
@@ -288,11 +291,27 @@ const AppointmentForm: React.FC<AppointmentFormProps> = ({
       vet,
       pesoAtual: Number(pesoAtual) || undefined, // Permitir undefined se vazio
       temperaturaCorporal: Number(temperaturaCorporal) || undefined, // Permitir undefined se vazio
+      frequenciaCardiaca: Number(frequenciaCardiaca) || undefined,
+      frequenciaRespiratoria: Number(frequenciaRespiratoria) || undefined,
       observacoesGerais,
       details,
       attachments,
     };
     onSave(newAppointment);
+
+    // Atualizar o peso do animal no mockClients se o peso atual for fornecido
+    if (pesoAtual !== '') {
+      const currentClient = mockClients.find(c => c.id === clientId);
+      const currentAnimal = currentClient?.animals.find(a => a.id === animalId);
+
+      if (currentAnimal && currentAnimal.weight !== Number(pesoAtual)) {
+        updateAnimalDetails(clientId, animalId, {
+          weight: Number(pesoAtual),
+          lastWeightSource: "Atendimento Clínico",
+        });
+        toast.info(`Peso do animal atualizado automaticamente para ${pesoAtual} kg!`);
+      }
+    }
   };
 
   const handleAddAttachment = () => {
@@ -380,7 +399,7 @@ const AppointmentForm: React.FC<AppointmentFormProps> = ({
               </div>
             ) : (
               // Full Consultation Fields (existing Accordion structure)
-              <Accordion type="multiple" defaultValue={["anamnese", "exameFisico", "parametrosAvdn", "diagnosticoTratamento"]} className="w-full">
+              <Accordion type="multiple" defaultValue={["anamnese", "exameFisico", "diagnosticoTratamento"]} className="w-full">
                 {/* Anamnese Section */}
                 <AccordionItem value="anamnese">
                   <AccordionTrigger className="text-base font-semibold text-[#374151] dark:text-gray-100 flex items-center gap-2">
@@ -991,11 +1010,10 @@ const AppointmentForm: React.FC<AppointmentFormProps> = ({
                               </div>
                             </div>
 
-                            {/* Frequência Respiratória */}
+                            {/* Frequência Respiratória Obs. Ausculta */}
                             <div className="space-y-2">
-                              <Label htmlFor="frequenciaRespiratoria">Frequência Respiratória (Mrm)</Label>
-                              <Input id="frequenciaRespiratoria" type="number" value={consultationDetails.frequenciaRespiratoria || ''} onChange={(e) => handleDetailChange('frequenciaRespiratoria', Number(e.target.value))} />
-                              <Textarea placeholder="Obs. Na Ausculta" value={consultationDetails.frequenciaRespiratoriaObsAusculta || ''} onChange={(e) => handleDetailChange('frequenciaRespiratoriaObsAusculta', e.target.value)} rows={1} />
+                              <Label htmlFor="frequenciaRespiratoriaObsAusculta">Obs. Ausculta Respiratória</Label>
+                              <Textarea placeholder="Observações na ausculta respiratória" value={consultationDetails.frequenciaRespiratoriaObsAusculta || ''} onChange={(e) => handleDetailChange('frequenciaRespiratoriaObsAusculta', e.target.value)} rows={1} />
                             </div>
 
                             {/* Sopro */}
@@ -1030,19 +1048,12 @@ const AppointmentForm: React.FC<AppointmentFormProps> = ({
                               </div>
                             </div>
 
-                            {/* Frequência Cardíaca */}
+                            {/* Frequência Cardíaca Obs. Ausculta */}
                             <div className="space-y-2">
-                              <Label htmlFor="frequenciaCardiaca">Frequência Cardíaca (Bpm)</Label>
-                              <Input id="frequenciaCardiaca" type="number" value={consultationDetails.frequenciaCardiaca || ''} onChange={(e) => handleDetailChange('frequenciaCardiaca', Number(e.target.value))} />
-                              <Textarea placeholder="Obs. Na Ausculta" value={consultationDetails.frequenciaCardiacaObsAusculta || ''} onChange={(e) => handleDetailChange('frequenciaCardiacaObsAusculta', e.target.value)} rows={1} />
+                              <Label htmlFor="frequenciaCardiacaObsAusculta">Obs. Ausculta Cardíaca</Label>
+                              <Textarea placeholder="Observações na ausculta cardíaca" value={consultationDetails.frequenciaCardiacaObsAusculta || ''} onChange={(e) => handleDetailChange('frequenciaCardiacaObsAusculta', e.target.value)} rows={1} />
                             </div>
-
-                            {/* Temperatura Retal */}
-                            <div className="space-y-2">
-                              <Label htmlFor="temperaturaCorporal">Temperatura Retal (°C)</Label>
-                              <Input id="temperaturaCorporal" type="number" step="0.1" value={consultationDetails.temperaturaCorporal || ''} onChange={(e) => handleDetailChange('temperaturaCorporal', Number(e.target.value))} />
-                            </div>
-                          </AccordionContent>
+                          </div>
                         </AccordionItem>
 
                         <AccordionItem value="linfonodosPele">
@@ -1088,68 +1099,6 @@ const AppointmentForm: React.FC<AppointmentFormProps> = ({
                           </AccordionContent>
                         </AccordionItem>
                       </Accordion>
-                    </div>
-                  </AccordionContent>
-                </AccordionItem>
-
-                {/* Parâmetros de Atitude A (AVDN) Section */}
-                <AccordionItem value="parametrosAvdn">
-                  <AccordionTrigger className="text-base font-semibold text-[#374151] dark:text-gray-100 flex items-center gap-2">
-                    <FaExclamationCircle className="h-5 w-5 text-orange-500" /> Parâmetros de Atitude A (AVDN)
-                  </AccordionTrigger>
-                  <AccordionContent className="grid grid-cols-1 md:grid-cols-2 gap-4 p-4 border-t border-gray-200 dark:border-gray-700">
-                    <div className="space-y-2">
-                      <Label htmlFor="avdnMucosa">Mucosa</Label>
-                      <Input id="avdnMucosa" value={consultationDetails.avdnMucosa || ''} onChange={(e) => handleDetailChange('avdnMucosa', e.target.value)} />
-                    </div>
-                    <div className="space-y-2">
-                      <Label htmlFor="avdnTpc">TPC</Label>
-                      <Input id="avdnTpc" value={consultationDetails.avdnTpc || ''} onChange={(e) => handleDetailChange('avdnTpc', e.target.value)} />
-                    </div>
-                    <div className="space-y-2">
-                      <Label htmlFor="avdnFc">FC</Label>
-                      <Input id="avdnFc" value={consultationDetails.avdnFc || ''} onChange={(e) => handleDetailChange('avdnFc', e.target.value)} />
-                    </div>
-                    <div className="space-y-2">
-                      <Label htmlFor="avdnFr">FR</Label>
-                      <Input id="avdnFr" value={consultationDetails.avdnFr || ''} onChange={(e) => handleDetailChange('avdnFr', e.target.value)} />
-                    </div>
-                    <div className="space-y-2">
-                      <Label htmlFor="avdnPadraoRespiratorio">Padrão Respiratório</Label>
-                      <Input id="avdnPadraoRespiratorio" value={consultationDetails.avdnPadraoRespiratorio || ''} onChange={(e) => handleDetailChange('avdnPadraoRespiratorio', e.target.value)} />
-                    </div>
-                    <div className="space-y-2">
-                      <Label htmlFor="avdnPulso">Pulso</Label>
-                      <Input id="avdnPulso" value={consultationDetails.avdnPulso || ''} onChange={(e) => handleDetailChange('avdnPulso', e.target.value)} />
-                    </div>
-                    <div className="space-y-2">
-                      <Label htmlFor="avdnPas">PAS</Label>
-                      <Input id="avdnPas" value={consultationDetails.avdnPas || ''} onChange={(e) => handleDetailChange('avdnPas', e.target.value)} />
-                    </div>
-                    <div className="space-y-2">
-                      <Label htmlFor="avdnManguito">Manguito #</Label>
-                      <Input id="avdnManguito" value={consultationDetails.avdnManguito || ''} onChange={(e) => handleDetailChange('avdnManguito', e.target.value)} />
-                    </div>
-                    <div className="space-y-2">
-                      <Label htmlFor="avdnTemperatura">Temperatura °C</Label>
-                      <Input id="avdnTemperatura" type="number" step="0.1" value={consultationDetails.avdnTemperatura || ''} onChange={(e) => handleDetailChange('avdnTemperatura', Number(e.target.value))} />
-                    </div>
-                    <div className="space-y-2">
-                      <Label>Sem dor abdominal</Label>
-                      <RadioGroup onValueChange={(value: 'sim' | 'nao') => handleDetailChange('avdnSemDorAbdominal', value)} value={consultationDetails.avdnSemDorAbdominal || ''} className="flex space-x-4">
-                        <div className="flex items-center space-x-2">
-                          <RadioGroupItem value="sim" id="avdn-dor-sim" />
-                          <Label htmlFor="avdn-dor-sim">Sim</Label>
-                        </div>
-                        <div className="flex items-center space-x-2">
-                          <RadioGroupItem value="nao" id="avdn-dor-nao" />
-                          <Label htmlFor="avdn-dor-nao">Não</Label>
-                        </div>
-                      </RadioGroup>
-                    </div>
-                    <div className="space-y-2 col-span-full">
-                      <Label htmlFor="avdnHidratacaoTurgorCutaneo">Hidratação: Turgor cutâneo</Label>
-                      <Input id="avdnHidratacaoTurgorCutaneo" value={consultationDetails.avdnHidratacaoTurgorCutaneo || ''} onChange={(e) => handleDetailChange('avdnHidratacaoTurgorCutaneo', e.target.value)} />
                     </div>
                   </AccordionContent>
                 </AccordionItem>
@@ -1501,6 +1450,14 @@ const AppointmentForm: React.FC<AppointmentFormProps> = ({
             <div className="space-y-2">
               <Label htmlFor="temperaturaCorporal">Temperatura Corporal (°C)</Label>
               <Input id="temperaturaCorporal" type="number" step="0.1" value={temperaturaCorporal} onChange={(e) => setTemperaturaCorporal(Number(e.target.value))} />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="frequenciaCardiaca">Frequência Cardíaca (Bpm)</Label>
+              <Input id="frequenciaCardiaca" type="number" value={frequenciaCardiaca} onChange={(e) => setFrequenciaCardiaca(Number(e.target.value))} />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="frequenciaRespiratoria">Frequência Respiratória (Mrm)</Label>
+              <Input id="frequenciaRespiratoria" type="number" value={frequenciaRespiratoria} onChange={(e) => setFrequenciaRespiratoria(Number(e.target.value))} />
             </div>
           </div>
           <div className="space-y-2 col-span-full">
