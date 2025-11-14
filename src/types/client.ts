@@ -1,6 +1,7 @@
 export interface WeightEntry {
   id: string;
   date: string;
+  time: string; // Adicionado campo de hora
   weight: number;
   source: string; // Ex: "Atendimento Clínico", "Cadastro Inicial", "Manual"
 }

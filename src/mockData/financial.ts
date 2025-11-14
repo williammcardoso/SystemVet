@@ -1,6 +1,7 @@
 export interface FinancialTransaction {
   id: string;
   date: string;
+  time: string; // Adicionado campo de hora
   description: string;
   type: 'income' | 'expense';
   amount: number;
@@ -19,6 +20,7 @@ export let mockFinancialTransactions: FinancialTransaction[] = [
   {
     id: "ft1",
     date: "2024-07-20",
+    time: "10:30",
     description: "Consulta de Rotina - Totó",
     type: "income",
     amount: 120.00,
@@ -29,6 +31,7 @@ export let mockFinancialTransactions: FinancialTransaction[] = [
   {
     id: "ft2",
     date: "2024-07-20",
+    time: "11:00",
     description: "Venda de Ração Premium - Totó",
     type: "income",
     amount: 85.00,
@@ -39,6 +42,7 @@ export let mockFinancialTransactions: FinancialTransaction[] = [
   {
     id: "ft3",
     date: "2024-07-18",
+    time: "15:45",
     description: "Exame de Sangue - Fido",
     type: "income",
     amount: 150.00,
@@ -49,6 +53,7 @@ export let mockFinancialTransactions: FinancialTransaction[] = [
   {
     id: "ft4",
     date: "2024-07-15",
+    time: "09:00",
     description: "Pagamento de Aluguel",
     type: "expense",
     amount: 2500.00,
@@ -57,6 +62,7 @@ export let mockFinancialTransactions: FinancialTransaction[] = [
   {
     id: "ft5",
     date: "2024-07-10",
+    time: "16:15",
     description: "Vacina V8 - Bolinha",
     type: "income",
     amount: 90.00,
@@ -67,6 +73,7 @@ export let mockFinancialTransactions: FinancialTransaction[] = [
   {
     id: "ft6",
     date: "2024-07-05",
+    time: "10:00",
     description: "Compra de Medicamentos",
     type: "expense",
     amount: 750.00,
@@ -75,6 +82,7 @@ export let mockFinancialTransactions: FinancialTransaction[] = [
   {
     id: "ft7",
     date: "2024-06-25",
+    time: "13:00",
     description: "Consulta de Retorno - Rex",
     type: "income",
     amount: 80.00,

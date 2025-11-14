@@ -208,11 +208,14 @@ const AddPrescriptionPage = () => {
     }
 
     let newPrescription: PrescriptionEntry;
+    const now = new Date();
+    const currentTime = now.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
 
     if (prescriptionType === 'manipulated' && manipulatedPrescriptionData) {
       newPrescription = {
         id: prescriptionId || `rx-${Date.now()}`,
-        date: new Date().toISOString().split('T')[0],
+        date: now.toISOString().split('T')[0],
+        time: currentTime, // Adicionado campo de hora
         medicationName: manipulatedPrescriptionData.formulaComponents.map(c => c.name).join(", ") || "Receita Manipulada",
         treatmentDescription: treatmentDescription.trim() || undefined,
         instructions: manipulatedPrescriptionData.generalObservations,
@@ -227,7 +230,8 @@ const AddPrescriptionPage = () => {
 
       newPrescription = {
         id: prescriptionId || `rx-${Date.now()}`,
-        date: new Date().toISOString().split('T')[0],
+        date: now.toISOString().split('T')[0],
+        time: currentTime, // Adicionado campo de hora
         medicationName: summaryMedicationName || "Receita sem medicamentos",
         treatmentDescription: treatmentDescription.trim() || undefined,
         instructions: currentPrescriptionGeneralObservations,

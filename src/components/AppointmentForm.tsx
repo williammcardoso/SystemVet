@@ -217,6 +217,7 @@ const AppointmentForm: React.FC<AppointmentFormProps> = ({
   mockAppointments,
 }) => {
   const [date, setDate] = useState(initialData?.date || new Date().toISOString().split('T')[0]);
+  const [time, setTime] = useState(initialData?.time || new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })); // Adicionado estado para a hora
   const [type, setType] = useState<AppointmentEntry['type']>(initialData?.type || '');
   const [vet, setVet] = useState(initialData?.vet || mockUserSettings.userName); // Pré-selecionado
   const [pesoAtual, setPesoAtual] = useState<number | ''>(initialData?.pesoAtual || '');
@@ -247,7 +248,7 @@ const AppointmentForm: React.FC<AppointmentFormProps> = ({
     autoSaveTimeoutRef.current = setTimeout(() => {
       // Simulate saving to a temporary state or local storage
       // In a real app, this would trigger an API call
-      console.log("Auto-saving appointment data...", { date, type, vet, pesoAtual, temperaturaCorporal, observacoesGerais, details, attachments });
+      console.log("Auto-saving appointment data...", { date, time, type, vet, pesoAtual, temperaturaCorporal, observacoesGerais, details, attachments });
       toast.info("Rascunho salvo automaticamente!", { duration: 1000 });
     }, 120000); // Auto-save every 2 minutes (120000 ms)
 
@@ -256,7 +257,7 @@ const AppointmentForm: React.FC<AppointmentFormProps> = ({
         clearTimeout(autoSaveTimeoutRef.current);
       }
     };
-  }, [date, type, vet, pesoAtual, temperaturaCorporal, frequenciaCardiaca, frequenciaRespiratoria, observacoesGerais, details, attachments]);
+  }, [date, time, type, vet, pesoAtual, temperaturaCorporal, frequenciaCardiaca, frequenciaRespiratoria, observacoesGerais, details, attachments]);
 
   const handleDetailChange = (field: keyof ConsultationDetails, value: any) => {
     setDetails(prev => ({ ...prev, [field]: value }));
@@ -287,6 +288,7 @@ const AppointmentForm: React.FC<AppointmentFormProps> = ({
       id: initialData?.id || `app-${Date.now()}`,
       animalId,
       date,
+      time, // Incluído o campo de hora
       type,
       vet,
       pesoAtual: Number(pesoAtual) || undefined, // Permitir undefined se vazio
@@ -1417,6 +1419,10 @@ const AppointmentForm: React.FC<AppointmentFormProps> = ({
           <div className="space-y-2">
             <Label htmlFor="date">Data do Atendimento *</Label>
             <Input id="date" type="date" value={date} onChange={(e) => setDate(e.target.value)} required />
+          </div>
+          <div className="space-y-2">
+            <Label htmlFor="time">Hora do Atendimento *</Label>
+            <Input id="time" type="time" value={time} onChange={(e) => setTime(e.target.value)} required />
           </div>
           <div className="space-y-2">
             <Label htmlFor="type">Tipo de Atendimento *</Label>

@@ -167,6 +167,7 @@ export interface AppointmentEntry {
   id: string;
   animalId: string;
   date: string; // Data do atendimento
+  time: string; // Hora do atendimento
   type: 'Consulta' | 'Vacina' | 'Retorno' | 'Cirurgia' | 'Emergência' | 'Check-up' | 'Outros' | '';
   vet: string; // Veterinário responsável
   pesoAtual?: number;

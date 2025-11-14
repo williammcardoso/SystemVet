@@ -4,6 +4,7 @@ export let mockPrescriptions: PrescriptionEntry[] = [
   {
     id: "rx1",
     date: "2023-11-01",
+    time: "10:00",
     medicationName: "Antibiótico X, Anti-inflamatório Y",
     treatmentDescription: "Tratamento para infecção bacteriana e inflamação.",
     instructions: "Administrar com alimento e bastante água.",
@@ -48,6 +49,7 @@ export let mockPrescriptions: PrescriptionEntry[] = [
   {
     id: "rx-long-test",
     date: new Date().toISOString().split('T')[0],
+    time: new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' }),
     medicationName: "Receita de Teste Longa",
     treatmentDescription: "Receita de teste com múltiplos medicamentos para verificação de paginação.",
     instructions: "Esta é uma receita de teste com múltiplos medicamentos para verificar a paginação do PDF.",
@@ -195,6 +197,7 @@ export let mockPrescriptions: PrescriptionEntry[] = [
   {
     id: "rx-controlled-test",
     date: new Date().toISOString().split('T')[0],
+    time: new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' }),
     medicationName: "Rivotril",
     treatmentDescription: "Tratamento para ansiedade severa.",
     instructions: "Manter fora do alcance de crianças.",
@@ -223,6 +226,7 @@ export let mockPrescriptions: PrescriptionEntry[] = [
   {
     id: "rx-new-manipulated", // ID atualizado para refletir o tipo
     date: new Date().toISOString().split('T')[0],
+    time: new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' }),
     medicationName: "Fórmula Manipulada para Pele",
     treatmentDescription: "Tratamento dermatológico com fórmula personalizada.",
     instructions: "Aplicar na área afetada conforme orientação. Manter em local fresco.",
@@ -258,6 +262,7 @@ export let mockPrescriptions: PrescriptionEntry[] = [
   {
     id: "rx-manipulated-custom",
     date: new Date().toISOString().split('T')[0],
+    time: new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' }),
     medicationName: "Fórmula Manipulada Personalizada",
     treatmentDescription: "Tratamento com componentes e posologia customizados.",
     instructions: "Observações gerais para a receita manipulada personalizada.",

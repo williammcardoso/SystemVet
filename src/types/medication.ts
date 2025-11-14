@@ -75,6 +75,7 @@ export interface ManipulatedPrescriptionData {
 export interface PrescriptionEntry {
   id: string;
   date: string;
+  time: string; // Adicionado campo de hora
   medicationName: string; // Resumo para a tabela
   treatmentDescription?: string; // Novo campo para descrição do tratamento
   instructions: string; // Observações gerais da receita (para simples/controlada)

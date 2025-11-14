@@ -11,13 +11,17 @@ import { mockClients } from "@/mockData/clients"; // Importar mockClients para o
 const FinancialPage = () => {
   const { totalRevenue, totalExpenses, netProfit } = getOverallFinancialSummary();
 
-  // Ordenar transações por data, mais recentes primeiro
-  const sortedTransactions = [...mockFinancialTransactions].sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+  // Ordenar transações por data e hora, mais recentes primeiro
+  const sortedTransactions = [...mockFinancialTransactions].sort((a, b) => {
+    const dateTimeA = new Date(`${a.date}T${a.time}`);
+    const dateTimeB = new Date(`${b.date}T${b.time}`);
+    return dateTimeB.getTime() - dateTimeA.getTime();
+  });
 
-  const formatDate = (dateString: string) => {
+  const formatDateTime = (dateString: string, timeString: string) => {
     if (!dateString) return "N/A";
     const [year, month, day] = dateString.split('-');
-    return `${day}/${month}/${year}`;
+    return `${day}/${month}/${year} ${timeString}`;
   };
 
   const getAnimalName = (clientId?: string, animalId?: string) => {
@@ -137,7 +141,7 @@ const FinancialPage = () => {
                     </div>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-2 text-sm text-muted-foreground">
                       <div className="flex items-center gap-1">
-                        <FaCalendarAlt className="h-3 w-3" /> {formatDate(transaction.date)}
+                        <FaCalendarAlt className="h-3 w-3" /> {formatDateTime(transaction.date, transaction.time)}
                       </div>
                       <div className="flex items-center gap-1">
                         <FaTag className="h-3 w-3" /> Categoria: {transaction.category}

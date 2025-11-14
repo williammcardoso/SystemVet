@@ -102,9 +102,13 @@ const POSPage = () => {
     const animalName = selectedAnimalId ? mockClients.find(c => c.id === selectedClientId)?.animals.find(a => a.id === selectedAnimalId)?.name : undefined;
 
     const description = `Venda para ${clientName}${animalName ? ` (Animal: ${animalName})` : ''}: ${cart.map(item => `${item.name} x${item.quantity}`).join(', ')}`;
+    const now = new Date();
+    const currentDate = now.toISOString().split('T')[0];
+    const currentTime = now.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
 
     addMockFinancialTransaction({
-      date: new Date().toISOString().split('T')[0],
+      date: currentDate,
+      time: currentTime, // Adicionado campo de hora
       description: description,
       type: 'income',
       amount: subtotal,
