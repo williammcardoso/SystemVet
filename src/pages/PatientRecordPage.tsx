@@ -39,96 +39,7 @@ import { FinancialTransaction, mockFinancialTransactions } from "@/mockData/fina
 import { AppointmentEntry, BaseAppointmentDetails, ConsultationDetails } from "@/types/appointment"; // Importar a nova interface de atendimento
 import { mockClients } from "@/mockData/clients"; // Importar o mock de clientes centralizado
 import { Client, Animal } from "@/types/client"; // Importar as interfaces Client e Animal
-
-// Mock data para atendimentos (agora com a nova interface AppointmentEntry)
-const initialMockAppointments: AppointmentEntry[] = [
-  {
-    id: "app1",
-    animalId: "a1",
-    date: "2023-10-26",
-    type: "Consulta",
-    vet: "Dr. William Cardoso",
-    pesoAtual: 25.0,
-    temperaturaCorporal: 38.5,
-    observacoesGerais: "Animal saudável, check-up de rotina.",
-    details: {
-      queixaPrincipal: "Check-up anual",
-      historicoClinico: "Sem intercorrências recentes.",
-      alimentacao: "Ração seca premium",
-      vacinacaoVermifugacaoAtualizadas: "sim",
-      ambiente: "interno",
-      contatoOutrosAnimais: "nao",
-      mucosas: "róseas, úmidas",
-      frequenciaCardiaca: 100,
-      frequenciaRespiratoria: 20,
-      diagnosticoDefinitivo: "Saudável",
-      condutaTratamento: "Manter rotina, próxima vacina em 6 meses.",
-      retornoRecomendadoEmDias: 180,
-      suspeitaDiagnostica: "Saudável", // Adicionado para teste
-    } as ConsultationDetails,
-    attachments: [],
-  },
-  {
-    id: "app2",
-    animalId: "a1",
-    date: "2024-03-10",
-    type: "Vacina",
-    vet: "Dra. Ana Paula",
-    pesoAtual: 25.5,
-    temperaturaCorporal: 38.0,
-    observacoesGerais: "Aplicação da vacina V8.",
-    details: {
-      tipoVacina: "Polivalente",
-      nomeComercial: "Duramune Max 5/4L",
-      lote: "ABC123XYZ",
-      fabricante: "Boehringer Ingelheim",
-      dataFabricacao: "2023-01-01",
-      dataValidade: "2025-01-01",
-      doseAplicada: 1.0,
-      viaAdministracao: "SC",
-      localAplicacao: "Escapular Direita",
-      reacaoAdversaObservada: "Nenhuma",
-      profissionalAplicou: "Dra. Ana Paula",
-    },
-    attachments: [],
-  },
-  {
-    id: "app3",
-    animalId: "a3",
-    date: "2024-01-15",
-    type: "Emergência",
-    vet: "Dr. Carlos Eduardo",
-    pesoAtual: 18.0,
-    temperaturaCorporal: 39.5,
-    observacoesGerais: "Animal chegou com dispneia e tosse.",
-    details: {
-      horaChegada: "14:30",
-      condicaoGeral: "dispneia",
-      manobrasSuporteRealizadas: "Oxigenoterapia, fluidoterapia.",
-      medicamentosAdministrados: "Furosemida, Dexametasona.",
-      encaminhamento: "internacao",
-      suspeitaDiagnostica: "Pneumonia", // Adicionado para teste
-      condutaTratamento: "Internação e tratamento com antibióticos.",
-    },
-    attachments: [],
-  },
-  {
-    id: "app4",
-    animalId: "a1",
-    date: "2024-07-25",
-    type: "Outros", // Exemplo de atendimento simples
-    vet: "Dr. William Cardoso",
-    pesoAtual: 26.0,
-    temperaturaCorporal: 38.2,
-    observacoesGerais: "Animal com leve tosse. Prescrito xarope.",
-    details: {
-      queixaPrincipal: "Tosse leve",
-      condutaTratamento: "Xarope para tosse por 5 dias.",
-      proximosPassos: "Reavaliar em 5 dias.",
-    } as BaseAppointmentDetails,
-    attachments: [],
-  },
-];
+import { mockAppointments } from "@/pages/AddAppointmentPage"; // Importar mockAppointments do AddAppointmentPage
 
 // Mock data para tipos de exame e veterinários
 const mockExamTypes = [
@@ -236,11 +147,14 @@ const PatientRecordPage = () => {
 
   // State para os atendimentos do animal
   const [animalAppointments, setAnimalAppointments] = useState<AppointmentEntry[]>(
-    initialMockAppointments.filter(app => app.animalId === animalId)
+    mockAppointments.filter(app => app.animalId === animalId)
   );
-  // REMOVIDO: isAppointmentFormOpen e editingAppointment não são mais necessários aqui
-  // const [isAppointmentFormOpen, setIsAppointmentFormOpen] = useState(false);
-  // const [editingAppointment, setEditingAppointment] = useState<AppointmentEntry | undefined>(undefined);
+  
+  // Use useEffect to update the state if mockAppointments changes (e.e., after a save)
+  // This is a simple way to "refresh" the list when returning to the page.
+  useEffect(() => {
+    setAnimalAppointments(mockAppointments.filter(app => app.animalId === animalId));
+  }, [mockAppointments, animalId]);
 
 
   // State para as novas abas
@@ -493,13 +407,18 @@ const PatientRecordPage = () => {
     navigate(`/clients/${clientId}/animals/${animalId}/add-appointment`);
   };
 
-  const handleEditAppointmentClick = (appointment: AppointmentEntry) => {
-    navigate(`/clients/${clientId}/animals/${animalId}/edit-appointment/${appointment.id}`);
+  const handleViewAppointmentClick = (appointment: AppointmentEntry) => {
+    navigate(`/clients/${clientId}/animals/${animalId}/view-appointment/${appointment.id}`);
   };
 
   const handleDeleteAppointment = (id: string) => {
-    setAnimalAppointments((prev) => prev.filter((app) => app.id !== id));
-    toast.info("Atendimento excluído.");
+    // Remove from mockAppointments directly
+    const index = mockAppointments.findIndex(app => app.id === id);
+    if (index > -1) {
+      mockAppointments.splice(index, 1);
+      setAnimalAppointments(mockAppointments.filter(app => app.animalId === animalId)); // Update local state
+      toast.info("Atendimento excluído.");
+    }
   };
 
   const handleEditAnimal = () => {
@@ -671,7 +590,7 @@ const PatientRecordPage = () => {
                               </p>
                             </div>
                             <div className="flex gap-2">
-                              <Button variant="ghost" size="icon" onClick={() => handleEditAppointmentClick(app)} className="rounded-md hover:bg-muted hover:text-foreground transition-colors duration-200">
+                              <Button variant="ghost" size="icon" onClick={() => handleViewAppointmentClick(app)} className="rounded-md hover:bg-muted hover:text-foreground transition-colors duration-200">
                                 <FaEye className="h-4 w-4" />
                               </Button>
                               <Button variant="ghost" size="icon" onClick={() => handleDeleteAppointment(app.id)} className="rounded-md hover:bg-muted hover:text-foreground transition-colors duration-200">
@@ -701,27 +620,6 @@ const PatientRecordPage = () => {
                 )}
               </CardContent>
             </Card>
-            {/* REMOVIDO: Dialog para Adicionar/Editar Atendimento */}
-            {/* <Dialog open={isAppointmentFormOpen} onOpenChange={setIsAppointmentFormOpen}>
-              <DialogContent className="sm:max-w-[900px] max-h-[90vh] overflow-y-auto bg-card shadow-sm border border-border rounded-md">
-                <DialogHeader>
-                  <DialogTitle className="text-lg font-semibold text-foreground">
-                    {editingAppointment ? "Editar Atendimento" : "Novo Atendimento"}
-                  </DialogTitle>
-                  <DialogDescription className="text-sm text-muted-foreground">
-                    Preencha os detalhes do atendimento.
-                  </DialogDescription>
-                </DialogHeader>
-                <AppointmentForm
-                  animalId={animalId!}
-                  clientId={clientId!}
-                  initialData={editingAppointment}
-                  onSave={handleSaveAppointment}
-                  onCancel={handleCancelAppointmentForm}
-                  mockAppointments={animalAppointments}
-                />
-              </DialogContent>
-            </Dialog> */}
           </TabsContent>
 
           <TabsContent value="exams" className="mt-4">
