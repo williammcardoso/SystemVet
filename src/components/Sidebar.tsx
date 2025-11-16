@@ -8,9 +8,10 @@ import {
 } from "@/components/ui/accordion";
 import { cn } from "@/lib/utils";
 import {
-  FaTachometerAlt, FaUsers, FaCalendarAlt, FaShoppingCart, FaFolder, FaPaw, FaPalette, FaDollarSign, FaBox, FaCog, FaSignOutAlt, FaMoneyBillWave, FaMoneyCheckAlt, FaSearchDollar, FaBoxOpen, FaCreditCard, FaTrophy, FaBalanceScale, FaFileInvoiceDollar, FaFileInvoice, FaTruck, FaExchangeAlt, FaTags, FaMoneyBillAlt, FaChartBar, FaWallet // Adicionado FaWallet
+  FaTachometerAlt, FaUsers, FaCalendarAlt, FaShoppingCart, FaFolder, FaPaw, FaPalette, FaDollarSign, FaBox, FaCog, FaSignOutAlt, FaMoneyBillWave, FaMoneyCheckAlt, FaSearchDollar, FaBoxOpen, FaCreditCard, FaTrophy, FaBalanceScale, FaFileInvoiceDollar, FaFileInvoice, FaTruck, FaExchangeAlt, FaTags, FaMoneyBillAlt, FaChartBar, FaWallet, FaChevronLeft, FaChevronRight // Adicionado FaWallet e ícones de chevron
 } from "react-icons/fa"; // Importar ícones de react-icons
 import SystemVetLogo from "./SystemVetLogo"; // Importar o novo componente de logo
+import { Button } from "@/components/ui/button"; // Importar Button
 
 interface NavItem {
   title: string;
@@ -123,9 +124,11 @@ const navItems: NavItem[] = [
 interface SidebarProps {
   isMobileOpen: boolean;
   onCloseMobile: () => void;
+  isDesktopOpen: boolean; // Nova prop para o estado do sidebar desktop
+  onToggleDesktop: () => void; // Nova prop para o toggle do desktop
 }
 
-const Sidebar: React.FC<SidebarProps> = ({ isMobileOpen, onCloseMobile }) => {
+const Sidebar: React.FC<SidebarProps> = ({ isMobileOpen, onCloseMobile, isDesktopOpen, onToggleDesktop }) => {
   const location = useLocation();
 
   return (
@@ -140,12 +143,20 @@ const Sidebar: React.FC<SidebarProps> = ({ isMobileOpen, onCloseMobile }) => {
 
       <aside
         className={cn(
-          "w-64 bg-sidebar text-sidebar-foreground h-screen fixed left-0 top-0 overflow-y-auto border-r border-sidebar-border p-4 shadow-lg transition-transform duration-300 ease-in-out z-50 hide-scrollbar",
-          isMobileOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0"
+          "bg-sidebar text-sidebar-foreground h-screen fixed left-0 top-0 overflow-y-auto border-r border-sidebar-border p-4 shadow-lg transition-all duration-300 ease-in-out z-50 hide-scrollbar",
+          isMobileOpen ? "translate-x-0 w-64" : "-translate-x-full",
+          isDesktopOpen ? "lg:translate-x-0 lg:w-64" : "lg:-translate-x-full lg:w-16" // Ajuste para desktop
         )}
       >
-        <div className="flex items-center justify-start h-16 border-b border-sidebar-border mb-4 px-3">
-          <SystemVetLogo /> {/* Usando o novo componente de logo */}
+        <div className={cn(
+          "flex items-center h-16 border-b border-sidebar-border mb-4 px-3",
+          isDesktopOpen ? "justify-start" : "justify-center"
+        )}>
+          {isDesktopOpen ? (
+            <SystemVetLogo />
+          ) : (
+            <FaStethoscope className="h-6 w-6 text-white" /> // Ícone menor quando recolhido
+          )}
         </div>
         <nav className="space-y-1">
           <Accordion type="multiple" className="w-full">
@@ -156,43 +167,48 @@ const Sidebar: React.FC<SidebarProps> = ({ isMobileOpen, onCloseMobile }) => {
                     to={item.href}
                     className={cn(
                       "flex items-center gap-3 rounded-md px-3 py-2 text-sidebar-foreground transition-all hover:bg-sidebar-accent hover:text-sidebar-accent-foreground",
-                      location.pathname === item.href && "bg-sidebar-primary text-sidebar-primary-foreground font-medium"
+                      location.pathname === item.href && "bg-sidebar-primary text-sidebar-primary-foreground font-medium",
+                      !isDesktopOpen && "justify-center" // Centraliza ícone quando recolhido
                     )}
                     onClick={onCloseMobile}
                   >
                     <item.icon className="h-4 w-4" />
-                    {item.title}
+                    {isDesktopOpen && item.title}
                   </Link>
                 ) : (
                   <AccordionItem value={`item-${index}`} className="border-b-0">
                     <AccordionTrigger className={cn(
                       "flex items-center justify-between gap-3 rounded-md px-3 py-2 text-sidebar-foreground transition-all hover:bg-sidebar-accent hover:text-sidebar-accent-foreground [&[data-state=open]>svg]:rotate-180",
                       "font-normal",
-                      location.pathname.startsWith(item.subItems?.[0]?.href?.split('/')[1] || "") && "bg-sidebar-accent text-sidebar-accent-foreground font-medium"
+                      location.pathname.startsWith(item.subItems?.[0]?.href?.split('/')[1] || "") && "bg-sidebar-accent text-sidebar-accent-foreground font-medium",
+                      !isDesktopOpen && "justify-center" // Centraliza ícone quando recolhido
                     )}>
-                      <div className="flex items-center gap-3">
+                      <div className={cn("flex items-center gap-3", !isDesktopOpen && "justify-center w-full")}>
                         <item.icon className="h-4 w-4" />
-                        {item.title}
+                        {isDesktopOpen && item.title}
                       </div>
+                      {isDesktopOpen && <FaChevronRight className="h-4 w-4 shrink-0 transition-transform duration-200" />}
                     </AccordionTrigger>
-                    <AccordionContent className="pb-0">
-                      <div className="ml-6 space-y-1">
-                        {item.subItems?.map((subItem) => (
-                          <Link
-                            key={subItem.title}
-                            to={subItem.href || "#"}
-                            className={cn(
-                              "flex items-center gap-3 rounded-md px-3 py-2 text-sidebar-foreground transition-all hover:bg-sidebar-accent hover:text-sidebar-accent-foreground",
-                              location.pathname === subItem.href && "bg-sidebar-primary text-sidebar-primary-foreground font-medium"
-                            )}
-                            onClick={onCloseMobile}
-                          >
-                            {subItem.icon && <subItem.icon className="h-4 w-4" />}
-                            {subItem.title}
-                          </Link>
-                        ))}
-                      </div>
-                    </AccordionContent>
+                    {isDesktopOpen && ( // Renderiza sub-itens apenas se o sidebar estiver aberto
+                      <AccordionContent className="pb-0">
+                        <div className="ml-6 space-y-1">
+                          {item.subItems?.map((subItem) => (
+                            <Link
+                              key={subItem.title}
+                              to={subItem.href || "#"}
+                              className={cn(
+                                "flex items-center gap-3 rounded-md px-3 py-2 text-sidebar-foreground transition-all hover:bg-sidebar-accent hover:text-sidebar-accent-foreground",
+                                location.pathname === subItem.href && "bg-sidebar-primary text-sidebar-primary-foreground font-medium"
+                              )}
+                              onClick={onCloseMobile}
+                            >
+                              {subItem.icon && <subItem.icon className="h-4 w-4" />}
+                              {subItem.title}
+                            </Link>
+                          ))}
+                        </div>
+                      </AccordionContent>
+                    )}
                   </AccordionItem>
                 )}
               </React.Fragment>

@@ -12,14 +12,16 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { FaBars, FaSun, FaMoon, FaBell, FaQuestionCircle, FaCog, FaSignOutAlt } from "react-icons/fa"; // Importar ícones de react-icons
+import { FaBars, FaSun, FaMoon, FaBell, FaQuestionCircle, FaCog, FaSignOutAlt, FaChevronLeft, FaChevronRight } from "react-icons/fa"; // Importar ícones de react-icons
 import { useTheme } from "next-themes";
 
 interface HeaderProps {
   onToggleMobileSidebar: () => void;
+  onToggleDesktopSidebar: () => void; // Nova prop para o toggle do desktop
+  isDesktopSidebarOpen: boolean; // Nova prop para o estado do sidebar desktop
 }
 
-const Header: React.FC<HeaderProps> = ({ onToggleMobileSidebar }) => {
+const Header: React.FC<HeaderProps> = ({ onToggleMobileSidebar, onToggleDesktopSidebar, isDesktopSidebarOpen }) => {
   const { theme, setTheme } = useTheme();
 
   return (
@@ -33,6 +35,17 @@ const Header: React.FC<HeaderProps> = ({ onToggleMobileSidebar }) => {
       >
         <FaBars className="h-5 w-5" />
         <span className="sr-only">Toggle Sidebar</span>
+      </Button>
+
+      {/* Botão de toggle para desktop sidebar (visível apenas em telas grandes) */}
+      <Button
+        variant="ghost"
+        size="icon"
+        className="hidden lg:flex text-white hover:bg-primary/80"
+        onClick={onToggleDesktopSidebar}
+      >
+        {isDesktopSidebarOpen ? <FaChevronLeft className="h-5 w-5" /> : <FaChevronRight className="h-5 w-5" />}
+        <span className="sr-only">Toggle Desktop Sidebar</span>
       </Button>
 
       <div className="flex-1 text-lg font-medium text-white"></div> {/* Espaço flexível para empurrar itens para a direita */}

@@ -24,7 +24,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { toast } from "sonner";
 import { PrescriptionEntry } from "@/types/medication";
 import { mockPrescriptions } from "@/mockData/prescriptions";
-import { cn } from "@/lib/utils";
+import { cn, formatDateTime } from "@/lib/utils"; // Importar formatDateTime
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import {
@@ -59,6 +59,7 @@ const mockVets = [
 interface ExamEntry {
   id: string;
   date: string;
+  time: string; // Adicionado campo de hora
   type: string;
   result: string;
   vet: string;
@@ -87,10 +88,10 @@ interface ExamEntry {
 }
 
 // Mock data para as novas abas
-// WeightEntry já está em src/types/client.ts
 interface DocumentEntry {
   id: string;
   date: string;
+  time: string; // Adicionado campo de hora
   name: string;
   fileUrl: string;
 }
@@ -98,17 +99,19 @@ interface DocumentEntry {
 interface ObservationEntry {
   id: string;
   date: string;
+  time: string; // Adicionado campo de hora
   observation: string;
 }
 
 const mockVaccines = [
-  { id: "vac1", date: "2024-03-10", type: "V8", nextDue: "2025-03-10", vet: "Dra. Costa" },
+  { id: "vac1", date: "2024-03-10", time: "11:00", type: "V8", nextDue: "2025-03-10", vet: "Dra. Costa" },
 ];
 
 // Interface para eventos da linha do tempo
 interface TimelineEvent {
   id: string;
   date: string;
+  time: string; // Adicionado campo de hora
   type: 'Atendimento' | 'Exame' | 'Receita' | 'Peso' | 'Observação' | 'Venda' | 'Vacina' | 'Documento';
   description: string;
   icon: React.ElementType;
@@ -189,8 +192,8 @@ const PatientRecordPage = () => {
 
 
   const [documents, setDocuments] = useState<DocumentEntry[]>([
-    { id: "d1", date: "2023-05-01", name: "Termo de Adoção", fileUrl: "#" },
-    { id: "d2", date: "2024-02-10", name: "Autorização Cirúrgica", fileUrl: "#" },
+    { id: "d1", date: "2023-05-01", time: "10:00", name: "Termo de Adoção", fileUrl: "#" },
+    { id: "d2", date: "2024-02-10", time: "14:30", name: "Autorização Cirúrgica", fileUrl: "#" },
   ]);
   const [newDocumentName, setNewDocumentName] = useState<string>("");
   const [newDocumentFile, setNewDocumentFile] = useState<File | null>(null);
@@ -206,8 +209,8 @@ const PatientRecordPage = () => {
 
 
   const [observations, setObservations] = useState<ObservationEntry[]>([
-    { id: "o1", date: "2023-09-20", observation: "Animal apresentou melhora significativa após tratamento." },
-    { id: "o2", date: "2024-01-05", observation: "Recomendado check-up anual em 6 meses." },
+    { id: "o1", date: "2023-09-20", time: "10:00", observation: "Animal apresentou melhora significativa após tratamento." },
+    { id: "o2", date: "2024-01-05", time: "15:00", observation: "Recomendado check-up anual em 6 meses." },
   ]);
   const [newObservation, setNewObservation] = useState<string>("");
 
@@ -268,19 +271,14 @@ const PatientRecordPage = () => {
     );
   }
 
-  // Helper function to format date to dd/mm/yyyy
-  const formatDate = (dateString: string) => {
-    if (!dateString) return "N/A";
-    const [year, month, day] = dateString.split('-');
-    return `${day}/${month}/${year}`;
-  };
-
   // Handlers para as novas funcionalidades
   const handleAddWeight = () => {
     if (newWeight.trim() && newWeightDate) {
+      const now = new Date();
       const newEntry: WeightEntry = {
         id: `wh-${Date.now()}`,
         date: newWeightDate,
+        time: now.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' }),
         weight: parseFloat(newWeight),
         source: "Manual", // Origem manual
       };
@@ -288,7 +286,6 @@ const PatientRecordPage = () => {
       const success = updateAnimalDetails(clientId, animalId, {
         weight: parseFloat(newWeight),
         lastWeightSource: "Manual",
-        // O weightHistory será atualizado dentro de updateAnimalDetails
       });
 
       if (success) {
@@ -304,10 +301,12 @@ const PatientRecordPage = () => {
 
   const handleAddDocument = () => {
     if (newDocumentName.trim() && newDocumentFile) {
+      const now = new Date();
       // In a real application, you would upload the file and get a URL
       const newEntry: DocumentEntry = {
         id: String(documents.length + 1),
-        date: new Date().toISOString().split('T')[0],
+        date: now.toISOString().split('T')[0],
+        time: now.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' }),
         name: newDocumentName.trim(),
         fileUrl: URL.createObjectURL(newDocumentFile), // Placeholder URL
       };
@@ -319,12 +318,15 @@ const PatientRecordPage = () => {
 
   const handleAddObservation = () => {
     if (newObservation.trim()) {
+      const now = new Date();
       const newEntry: ObservationEntry = {
         id: String(observations.length + 1),
-        date: new Date().toISOString().split('T')[0], // Usar a data atual para a observação
+        date: now.toISOString().split('T')[0], // Usar a data atual para a observação
+        time: now.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' }),
         observation: newObservation.trim(),
       };
       setObservations([...observations, newEntry]);
+      setNewObservation("");
     }
   };
 
@@ -334,9 +336,11 @@ const PatientRecordPage = () => {
       return;
     }
 
+    const now = new Date();
     let examData: ExamEntry = {
       id: String(examsList.length + 1),
       date: newExamDate,
+      time: now.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' }),
       type: newExamType,
       result: newExamResult, // Default result for non-hemogram
       vet: newExamVet,
@@ -469,6 +473,7 @@ const PatientRecordPage = () => {
     allTimelineEvents.push({
       id: `app-${app.id}`,
       date: app.date,
+      time: app.time,
       type: 'Atendimento',
       description: `${app.type}: ${description}`,
       icon: FaStethoscope,
@@ -482,6 +487,7 @@ const PatientRecordPage = () => {
     allTimelineEvents.push({
       id: `exam-${exam.id}`,
       date: exam.date,
+      time: exam.time,
       type: 'Exame',
       description: `${exam.type}: ${exam.result}`,
       icon: FaFlask,
@@ -500,6 +506,7 @@ const PatientRecordPage = () => {
     allTimelineEvents.push({
       id: `rx-${rx.id}`,
       date: rx.date,
+      time: rx.time,
       type: 'Receita',
       description: `${rx.type === 'simple' ? 'Receita Simples' : rx.type === 'controlled' ? 'Receita Controlada' : 'Receita Manipulada'}: ${description}`,
       icon: FaPrescriptionBottleAlt,
@@ -513,6 +520,7 @@ const PatientRecordPage = () => {
     allTimelineEvents.push({
       id: `weight-${entry.id}`,
       date: entry.date,
+      time: entry.time,
       type: 'Peso',
       description: `Peso registrado: ${entry.weight.toFixed(1)} kg (${entry.source})`,
       icon: FaWeightHanging,
@@ -525,6 +533,7 @@ const PatientRecordPage = () => {
     allTimelineEvents.push({
       id: `obs-${obs.id}`,
       date: obs.date,
+      time: obs.time,
       type: 'Observação',
       description: `Observação: ${obs.observation}`,
       icon: FaCommentAlt,
@@ -537,6 +546,7 @@ const PatientRecordPage = () => {
     allTimelineEvents.push({
       id: `sale-${sale.id}`,
       date: sale.date,
+      time: sale.time,
       type: 'Venda',
       description: `Venda: ${sale.description} (R$ ${sale.amount.toFixed(2).replace('.', ',')})`,
       icon: FaDollarSign,
@@ -549,8 +559,9 @@ const PatientRecordPage = () => {
     allTimelineEvents.push({
       id: `vaccine-${vaccine.id}`,
       date: vaccine.date,
+      time: vaccine.time,
       type: 'Vacina',
-      description: `Vacina ${vaccine.type} aplicada. Próxima dose: ${formatDate(vaccine.nextDue)}`,
+      description: `Vacina ${vaccine.type} aplicada. Próxima dose: ${formatDateTime(vaccine.nextDue)}`,
       icon: FaSyringe,
       badgeColor: "bg-teal-100 text-teal-800 dark:bg-teal-900 dark:text-teal-200",
     });
@@ -561,6 +572,7 @@ const PatientRecordPage = () => {
     allTimelineEvents.push({
       id: `doc-${doc.id}`,
       date: doc.date,
+      time: doc.time,
       type: 'Documento',
       description: `Documento: ${doc.name}`,
       icon: FaFileAlt,
@@ -571,7 +583,11 @@ const PatientRecordPage = () => {
 
 
   // Ordenar todos os eventos por data (mais recente primeiro)
-  const sortedTimelineEvents = allTimelineEvents.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+  const sortedTimelineEvents = allTimelineEvents.sort((a, b) => {
+    const dateTimeA = new Date(`${a.date}T${a.time}`);
+    const dateTimeB = new Date(`${b.date}T${b.time}`);
+    return dateTimeB.getTime() - dateTimeA.getTime();
+  });
 
 
   return (
@@ -655,7 +671,7 @@ const PatientRecordPage = () => {
                   </div>
                   <div className="flex items-center gap-2">
                     <FaCalendarAlt className="h-4 w-4 text-muted-foreground" />
-                    <p>Última consulta: <span className="font-normal text-foreground">{formatDate(currentAnimal.lastConsultationDate || '')}</span></p>
+                    <p>Última consulta: <span className="font-normal text-foreground">{formatDateTime(currentAnimal.lastConsultationDate || '')}</span></p>
                   </div>
                 </div>
               </div>
@@ -746,7 +762,7 @@ const PatientRecordPage = () => {
                           )}
                         </div>
                         <div className="flex items-center gap-1 text-sm text-muted-foreground">
-                          <FaCalendarAlt className="h-3 w-3" /> {formatDate(event.date)}
+                          <FaCalendarAlt className="h-3 w-3" /> {formatDateTime(event.date, event.time)}
                         </div>
                       </Card>
                     ))}
@@ -798,7 +814,7 @@ const PatientRecordPage = () => {
                           </div>
                           <div className="grid grid-cols-1 md:grid-cols-2 gap-2 text-sm text-muted-foreground">
                             <div className="flex items-center gap-1">
-                              <FaCalendarAlt className="h-3 w-3" /> {formatDate(app.date)}
+                              <FaCalendarAlt className="h-3 w-3" /> {formatDateTime(app.date, app.time)}
                             </div>
                             <div className="flex items-center gap-1">
                               <FaStethoscope className="h-3 w-3" /> {app.vet}
@@ -850,13 +866,8 @@ const PatientRecordPage = () => {
                             <FaEye className="h-4 w-4" />
                           </Button>
                         </div>
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-2 text-sm text-muted-foreground">
-                          <div className="flex items-center gap-1">
-                            <FaCalendarAlt className="h-3 w-3" /> {formatDate(exam.date)}
-                          </div>
-                          <div className="flex items-center gap-1">
-                            <FaStethoscope className="h-3 w-3" /> {exam.vet}
-                          </div>
+                        <div className="flex items-center gap-1 text-sm text-muted-foreground">
+                          <FaCalendarAlt className="h-3 w-3" /> {formatDateTime(exam.date, exam.time)}
                         </div>
                       </Card>
                     ))}
@@ -1104,7 +1115,7 @@ const PatientRecordPage = () => {
                         </div>
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-2 text-sm text-muted-foreground">
                           <div className="flex items-center gap-1">
-                            <FaCalendarAlt className="h-3 w-3" /> {formatDate(sale.date)}
+                            <FaCalendarAlt className="h-3 w-3" /> {formatDateTime(sale.date, sale.time)}
                           </div>
                           {/* <div className="flex items-center gap-1">
                             <FaBox className="h-3 w-3" /> Quantidade: {sale.quantity}
@@ -1141,7 +1152,7 @@ const PatientRecordPage = () => {
                               {vaccine.type}
                             </Badge>
                             <p className="text-lg font-semibold text-foreground">
-                              Próxima Dose: {formatDate(vaccine.nextDue)}
+                              Próxima Dose: {formatDateTime(vaccine.nextDue)}
                             </p>
                           </div>
                           <Button variant="ghost" size="icon" className="rounded-md hover:bg-muted hover:text-foreground transition-colors duration-200">
@@ -1150,7 +1161,7 @@ const PatientRecordPage = () => {
                         </div>
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-2 text-sm text-muted-foreground">
                           <div className="flex items-center gap-1">
-                            <FaCalendarAlt className="h-3 w-3" /> {formatDate(vaccine.date)}
+                            <FaCalendarAlt className="h-3 w-3" /> {formatDateTime(vaccine.date, vaccine.time)}
                           </div>
                           <div className="flex items-center gap-1">
                             <FaStethoscope className="h-3 w-3" /> {vaccine.vet}
@@ -1210,7 +1221,7 @@ const PatientRecordPage = () => {
                           </Button>
                         </div>
                         <div className="flex items-center gap-1 text-sm text-muted-foreground">
-                          <FaCalendarAlt className="h-3 w-3" /> {formatDate(entry.date)} {entry.source && <span className="text-xs italic">({entry.source})</span>}
+                          <FaCalendarAlt className="h-3 w-3" /> {formatDateTime(entry.date, entry.time)} {entry.source && <span className="text-xs italic">({entry.source})</span>}
                         </div>
                       </Card>
                     ))}
@@ -1266,7 +1277,7 @@ const PatientRecordPage = () => {
                           </a>
                         </div>
                         <div className="flex items-center gap-1 text-sm text-muted-foreground">
-                          <FaCalendarAlt className="h-3 w-3" /> {formatDate(doc.date)}
+                          <FaCalendarAlt className="h-3 w-3" /> {formatDateTime(doc.date, doc.time)}
                         </div>
                       </Card>
                     ))}
@@ -1347,7 +1358,7 @@ const PatientRecordPage = () => {
                         </div>
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-2 text-sm text-muted-foreground mb-3">
                           <div className="flex items-center gap-1">
-                            <FaCalendarAlt className="h-3 w-3" /> {formatDate(rx.date)}
+                            <FaCalendarAlt className="h-3 w-3" /> {formatDateTime(rx.date, rx.time)}
                           </div>
                           <div className="flex items-center gap-1">
                             <FaStethoscope className="h-3 w-3" /> Dr. William Cardoso {/* Placeholder para o veterinário */}
@@ -1409,7 +1420,7 @@ const PatientRecordPage = () => {
                           </Button>
                         </div>
                         <div className="flex items-center gap-1 text-sm text-muted-foreground">
-                          <FaCalendarAlt className="h-3 w-3" /> {formatDate(obs.date)}
+                          <FaCalendarAlt className="h-3 w-3" /> {formatDateTime(obs.date, obs.time)}
                         </div>
                       </Card>
                     ))}
@@ -1459,7 +1470,7 @@ const PatientRecordPage = () => {
                         </div>
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-2 text-sm text-muted-foreground">
                           <div className="flex items-center gap-1">
-                            <FaCalendarAlt className="h-3 w-3" /> {formatDate(transaction.date)}
+                            <FaCalendarAlt className="h-3 w-3" /> {formatDateTime(transaction.date, transaction.time)}
                           </div>
                           <div className="flex items-center gap-1">
                             <FaTag className="h-3 w-3" /> Categoria: {transaction.category}
