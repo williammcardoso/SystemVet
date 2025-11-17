@@ -236,8 +236,8 @@ const AddExamPage = () => {
     placeholder = "",
     getReference,
   }) => (
-    <div className="flex items-center gap-2 w-full flex-nowrap">
-      <Label htmlFor={id} className="w-[100px] text-left text-muted-foreground font-medium flex-shrink-0">
+    <div className="flex flex-wrap items-center gap-x-2 gap-y-1 w-full">
+      <Label htmlFor={id} className="min-w-[100px] text-left text-muted-foreground font-medium flex-shrink-0">
         {label}
       </Label>
       <Input
@@ -248,8 +248,8 @@ const AddExamPage = () => {
         onChange={onChange}
         className="w-[80px] bg-input rounded-md border-border focus:ring-2 focus:ring-ring placeholder-muted-foreground transition-all duration-200 flex-shrink-0"
       />
-      <span className="text-sm text-muted-foreground w-[70px] text-left flex-shrink-0">{unit}</span>
-      <div className="flex-1 flex items-center gap-1 p-1 border border-border rounded-md bg-background text-xs text-foreground overflow-hidden">
+      <span className="text-sm text-muted-foreground flex-shrink-0">{unit}</span>
+      <div className="flex-1 min-w-[150px] flex items-center gap-1 p-1 border border-border rounded-md bg-background text-xs text-foreground overflow-hidden">
         <Label className="font-medium flex-shrink-0">Ref:</Label>
         <span className="flex-1 whitespace-nowrap overflow-hidden text-ellipsis">
           {getReference(referenceKey, 'full')}
@@ -278,15 +278,15 @@ const AddExamPage = () => {
     referenceKey,
     getReference,
   }) => (
-    <div className="flex items-center gap-2 w-full flex-nowrap">
-      <Label className="w-[100px] text-left text-muted-foreground font-medium flex-shrink-0">{label}</Label>
+    <div className="flex flex-wrap items-center gap-x-2 gap-y-1 w-full">
+      <Label className="min-w-[100px] text-left text-muted-foreground font-medium flex-shrink-0">{label}</Label>
       <Input id={`${idPrefix}-relative`} type="text" value={relativeValue} onChange={onRelativeChange} className="w-[60px] bg-input flex-shrink-0" />
-      <span className="text-sm text-muted-foreground w-5 flex-shrink-0">%</span>
+      <span className="text-sm text-muted-foreground flex-shrink-0">%</span>
       <Input id={`${idPrefix}-absolute`} type="text" value={absoluteValue} onChange={onAbsoluteChange} className="w-[80px] bg-input flex-shrink-0" />
-      <span className="text-sm text-muted-foreground w-10 flex-shrink-0">/µL</span>
+      <span className="text-sm text-muted-foreground flex-shrink-0">/µL</span>
 
       {/* Dois quadrados separados para referências */}
-      <div className="flex-1 flex flex-wrap gap-1 justify-end">
+      <div className="flex-1 min-w-[150px] flex flex-wrap gap-1 justify-end">
         <div className="flex-1 min-w-[100px] max-w-[150px] flex flex-col items-start p-1 border border-border rounded-md bg-background text-xs text-foreground overflow-hidden">
           <span className="font-medium flex-shrink-0">Relativo:</span>
           <span className="flex-1 whitespace-nowrap overflow-hidden text-ellipsis">
