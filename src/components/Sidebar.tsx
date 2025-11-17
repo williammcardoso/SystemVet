@@ -178,7 +178,9 @@ const Sidebar: React.FC<SidebarProps> = ({ isMobileOpen, onCloseMobile, isDeskto
                 ) : (
                   <AccordionItem value={`item-${index}`} className="border-b-0">
                     <AccordionTrigger className={cn(
-                      "flex items-center justify-between gap-3 rounded-md px-3 py-2 text-sidebar-foreground transition-all hover:bg-sidebar-accent hover:text-sidebar-accent-foreground [&[data-state=open]>svg]:rotate-180",
+                      "flex items-center justify-between gap-3 rounded-md px-3 py-2 text-sidebar-foreground transition-all hover:bg-sidebar-accent hover:text-sidebar-accent-foreground",
+                      // Controla a visibilidade do chevron padrão do AccordionTrigger
+                      isDesktopOpen ? "[&>svg]:block [&[data-state=open]>svg]:rotate-180" : "[&>svg]:hidden",
                       "font-normal",
                       location.pathname.startsWith(item.subItems?.[0]?.href?.split('/')[1] || "") && "bg-sidebar-accent text-sidebar-accent-foreground font-medium",
                       !isDesktopOpen && "justify-center" // Centraliza ícone quando recolhido
@@ -187,8 +189,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isMobileOpen, onCloseMobile, isDeskto
                         <item.icon className="h-4 w-4" />
                         {isDesktopOpen && item.title}
                       </div>
-                      {/* Renderiza o chevron apenas se o sidebar estiver aberto */}
-                      {isDesktopOpen && <FaChevronRight className="h-4 w-4 shrink-0 transition-transform duration-200" />}
+                      {/* O chevron padrão do AccordionTrigger agora é controlado pela classe acima */}
                     </AccordionTrigger>
                     {isDesktopOpen && ( // Renderiza sub-itens apenas se o sidebar estiver aberto
                       <AccordionContent className="pb-0">
