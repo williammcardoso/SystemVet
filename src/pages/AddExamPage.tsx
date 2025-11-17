@@ -94,6 +94,7 @@ const AddExamPage = () => {
   // Estado do formulário
   const [examDate, setExamDate] = useState<string>(new Date().toISOString().split('T')[0]);
   const [examType, setExamType] = useState<string | undefined>(undefined);
+  const [examResult, setExamResult] = useState<string>(""); // Reintroduzido o estado examResult
   const [examVet, setExamVet] = useState<string | undefined>(undefined);
 
   // Novos campos gerais do exame
@@ -207,6 +208,7 @@ const AddExamPage = () => {
       laboratory,
       laboratoryDate,
       observacoesGeraisExame,
+      examResult: examType !== "Hemograma Completo" ? examResult : undefined, // Salva examResult apenas se não for hemograma
       liberadoPor,
     });
 
@@ -232,21 +234,20 @@ const AddExamPage = () => {
     unit: string;
     placeholder?: string;
   }) => (
-    <div className="flex items-center gap-2">
-      <Label htmlFor={id} className="w-[120px] text-left text-muted-foreground font-medium">
+    <div className="grid grid-cols-[120px_1fr_auto_1fr] items-center gap-2">
+      <Label htmlFor={id} className="text-left text-muted-foreground font-medium">
         {label}
       </Label>
       <Input
         id={id}
-        type="text"
+        type="text" // Alterado para tipo text
         placeholder={placeholder}
         value={value}
         onChange={onChange}
-        className="w-[100px] bg-input rounded-md border-border focus:ring-2 focus:ring-ring placeholder-muted-foreground transition-all duration-200"
+        className="w-full bg-input rounded-md border-border focus:ring-2 focus:ring-ring placeholder-muted-foreground transition-all duration-200"
       />
-      <span className="text-sm text-muted-foreground w-[80px] text-left">{unit}</span>
-      <Label className="w-16 text-right text-muted-foreground font-medium">Ref:</Label>
-      <span className="flex-1 text-sm text-foreground">{getReference(referenceKey, 'full')}</span>
+      <Label className="text-right text-muted-foreground font-medium">Ref:</Label>
+      <span className="text-sm text-foreground">{getReference(referenceKey, 'full')}</span>
     </div>
   );
 
@@ -454,8 +455,8 @@ const AddExamPage = () => {
                 <Input
                   id="examResult"
                   placeholder="Resultado do exame"
-                  value={examResult}
-                  onChange={(e) => setExamResult(e.target.value)}
+                  value={examResult} // Usando o estado examResult aqui
+                  onChange={(e) => setExamResult(e.target.value)} // Atualizando o estado examResult
                   className="bg-input rounded-md border-border focus:ring-2 focus:ring-ring placeholder-muted-foreground transition-all duration-200"
                 />
               </div>
