@@ -240,6 +240,16 @@ const AppointmentForm: React.FC<AppointmentFormProps> = ({
   const formRef = useRef<HTMLFormElement>(null);
   const autoSaveTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
+  // Sincroniza o estado `pesoAtual` do formulário com a prop `initialData?.pesoAtual`
+  // Isso garante que, ao reabrir ou salvar o formulário, o campo de peso reflita o valor mais recente do atendimento.
+  useEffect(() => {
+    if (initialData?.pesoAtual !== undefined && initialData.pesoAtual !== pesoAtual) {
+      setPesoAtual(initialData.pesoAtual);
+    } else if (initialData?.pesoAtual === undefined && pesoAtual !== '') {
+      setPesoAtual('');
+    }
+  }, [initialData?.pesoAtual]); // Depende apenas do valor específico da prop
+
   // Auto-save logic
   useEffect(() => {
     if (autoSaveTimeoutRef.current) {
