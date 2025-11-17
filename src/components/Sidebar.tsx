@@ -8,7 +8,7 @@ import {
 } from "@/components/ui/accordion";
 import { cn } from "@/lib/utils";
 import {
-  FaTachometerAlt, FaUsers, FaCalendarAlt, FaShoppingCart, FaFolder, FaPaw, FaPalette, FaDollarSign, FaBox, FaCog, FaSignOutAlt, FaMoneyBillWave, FaMoneyCheckAlt, FaSearchDollar, FaBoxOpen, FaCreditCard, FaTrophy, FaBalanceScale, FaFileInvoiceDollar, FaFileInvoice, FaTruck, FaExchangeAlt, FaTags, FaMoneyBillAlt, FaChartBar, FaWallet, FaChevronLeft, FaChevronRight, FaStethoscope // Adicionado FaStethoscope
+  FaTachometerAlt, FaUsers, FaCalendarAlt, FaShoppingCart, FaFolder, FaPaw, FaPalette, FaDollarSign, FaBox, FaCog, FaSignOutAlt, FaMoneyBillWave, FaMoneyCheckAlt, FaSearchDollar, FaBoxOpen, FaCreditCard, FaTrophy, FaBalanceScale, FaFileInvoiceDollar, FaFileInvoice, FaTruck, FaExchangeAlt, FaTags, FaMoneyBillAlt, FaChartBar, FaWallet, FaChevronLeft, FaChevronRight, FaStethoscope
 } from "react-icons/fa"; // Importar ícones de react-icons
 import SystemVetLogo from "./SystemVetLogo"; // Importar o novo componente de logo
 import { Button } from "@/components/ui/button"; // Importar Button
@@ -187,6 +187,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isMobileOpen, onCloseMobile, isDeskto
                         <item.icon className="h-4 w-4" />
                         {isDesktopOpen && item.title}
                       </div>
+                      {/* Renderiza o chevron apenas se o sidebar estiver aberto */}
                       {isDesktopOpen && <FaChevronRight className="h-4 w-4 shrink-0 transition-transform duration-200" />}
                     </AccordionTrigger>
                     {isDesktopOpen && ( // Renderiza sub-itens apenas se o sidebar estiver aberto
