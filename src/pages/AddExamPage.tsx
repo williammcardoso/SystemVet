@@ -234,8 +234,8 @@ const AddExamPage = () => {
     unit: string;
     placeholder?: string;
   }) => (
-    <div className="flex items-center gap-2 w-full"> {/* Adicionado w-full aqui */}
-      <Label htmlFor={id} className="w-[120px] text-left text-muted-foreground font-medium flex-shrink-0">
+    <div className="flex items-center gap-2 w-full">
+      <Label htmlFor={id} className="w-[100px] text-left text-muted-foreground font-medium flex-shrink-0">
         {label}
       </Label>
       <Input
@@ -244,11 +244,13 @@ const AddExamPage = () => {
         placeholder={placeholder}
         value={value}
         onChange={onChange}
-        className="w-[100px] bg-input rounded-md border-border focus:ring-2 focus:ring-ring placeholder-muted-foreground transition-all duration-200 flex-shrink-0"
+        className="w-[80px] bg-input rounded-md border-border focus:ring-2 focus:ring-ring placeholder-muted-foreground transition-all duration-200 flex-shrink-0"
       />
-      <span className="text-sm text-muted-foreground w-[80px] text-left flex-shrink-0">{unit}</span>
-      <Label className="w-16 text-right text-muted-foreground font-medium flex-shrink-0">Ref:</Label>
-      <span className="flex-1 text-sm text-foreground">{getReference(referenceKey, 'full')}</span>
+      <span className="text-sm text-muted-foreground w-[70px] text-left flex-shrink-0">{unit}</span>
+      <Label className="w-8 text-right text-muted-foreground font-medium flex-shrink-0">Ref:</Label>
+      <span className="flex-1 text-sm text-foreground whitespace-nowrap overflow-hidden text-ellipsis">
+        {getReference(referenceKey, 'full')}
+      </span>
     </div>
   );
 
@@ -270,14 +272,14 @@ const AddExamPage = () => {
     onAbsoluteChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
     referenceKey: string;
   }) => (
-    <div className="grid grid-cols-[120px_100px_30px_100px_30px_1fr] items-center gap-2 w-full"> {/* Adicionado w-full aqui */}
-      <Label className="text-left text-muted-foreground font-medium flex-shrink-0">{label}</Label>
-      <Input id={`${idPrefix}-relative`} type="text" value={relativeValue} onChange={onRelativeChange} className="w-[100px] bg-input flex-shrink-0" />
-      <span className="text-sm text-muted-foreground flex-shrink-0">%</span>
-      <Input id={`${idPrefix}-absolute`} type="text" value={absoluteValue} onChange={onAbsoluteChange} className="w-[100px] bg-input flex-shrink-0" />
-      <span className="text-sm text-muted-foreground flex-shrink-0">/µL</span>
-      <Label className="w-16 text-right text-muted-foreground font-medium flex-shrink-0">Ref:</Label>
-      <span className="flex-1 text-sm text-foreground">
+    <div className="flex items-center gap-2 w-full">
+      <Label className="w-[100px] text-left text-muted-foreground font-medium flex-shrink-0">{label}</Label>
+      <Input id={`${idPrefix}-relative`} type="text" value={relativeValue} onChange={onRelativeChange} className="w-[60px] bg-input flex-shrink-0" />
+      <span className="text-sm text-muted-foreground w-5 flex-shrink-0">%</span>
+      <Input id={`${idPrefix}-absolute`} type="text" value={absoluteValue} onChange={onAbsoluteChange} className="w-[80px] bg-input flex-shrink-0" />
+      <span className="text-sm text-muted-foreground w-10 flex-shrink-0">/µL</span>
+      <Label className="w-8 text-right text-muted-foreground font-medium flex-shrink-0">Ref:</Label>
+      <span className="flex-1 text-sm text-foreground whitespace-nowrap overflow-hidden text-ellipsis">
         {getReference(referenceKey, 'relative')} / {getReference(referenceKey, 'absolute')}
       </span>
     </div>
@@ -313,7 +315,7 @@ const AddExamPage = () => {
       <div className="flex-1 p-6">
         <Card className="shadow-sm border border-border rounded-md">
           <CardContent className="grid gap-4 py-4">
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-4"> {/* Alterado para 3 colunas em lg */}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
               <div className="space-y-2">
                 <Label htmlFor="examDate">Data do Exame</Label>
                 <Input
@@ -321,13 +323,13 @@ const AddExamPage = () => {
                   type="date"
                   value={examDate}
                   onChange={(e) => setExamDate(e.target.value)}
-                  className="bg-input rounded-md border-border focus:ring-2 focus:ring-ring placeholder-muted-foreground transition-all duration-200"
+                  className="bg-input rounded-md border-border focus:ring-2 focus:ring-ring placeholder-muted-foreground transition-all duration-200 max-w-xs"
                 />
               </div>
               <div className="space-y-2">
                 <Label htmlFor="examType">Tipo de Exame</Label>
                 <Select onValueChange={setExamType} value={examType}>
-                  <SelectTrigger id="examType" className="bg-input rounded-md border-border focus:ring-2 focus:ring-ring placeholder-muted-foreground transition-all duration-200">
+                  <SelectTrigger id="examType" className="bg-input rounded-md border-border focus:ring-2 focus:ring-ring placeholder-muted-foreground transition-all duration-200 max-w-xs">
                     <SelectValue placeholder="Selecione o tipo de exame" />
                   </SelectTrigger>
                   <SelectContent>
@@ -342,7 +344,7 @@ const AddExamPage = () => {
               <div className="space-y-2">
                 <Label htmlFor="examVet">Veterinário Solicitante</Label>
                 <Select onValueChange={setExamVet} value={examVet}>
-                  <SelectTrigger id="examVet" className="bg-input rounded-md border-border focus:ring-2 focus:ring-ring placeholder-muted-foreground transition-all duration-200">
+                  <SelectTrigger id="examVet" className="bg-input rounded-md border-border focus:ring-2 focus:ring-ring placeholder-muted-foreground transition-all duration-200 max-w-xs">
                     <SelectValue placeholder="Selecione o veterinário" />
                   </SelectTrigger>
                     <SelectContent>
@@ -361,17 +363,17 @@ const AddExamPage = () => {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
                   <div className="space-y-2">
                     <Label htmlFor="material">Material</Label>
-                    <Input id="material" value={material} onChange={(e) => setMaterial(e.target.value)} className="bg-input rounded-md border-border focus:ring-2 focus:ring-ring placeholder-muted-foreground transition-all duration-200" />
+                    <Input id="material" value={material} onChange={(e) => setMaterial(e.target.value)} className="bg-input rounded-md border-border focus:ring-2 focus:ring-ring placeholder-muted-foreground transition-all duration-200 max-w-xs" />
                   </div>
                   <div className="space-y-2">
                     <Label htmlFor="equipamento">Equipamento</Label>
-                    <Input id="equipamento" value={equipamento} onChange={(e) => setEquipamento(e.target.value)} className="bg-input rounded-md border-border focus:ring-2 focus:ring-ring placeholder-muted-foreground transition-all duration-200" />
+                    <Input id="equipamento" value={equipamento} onChange={(e) => setEquipamento(e.target.value)} className="bg-input rounded-md border-border focus:ring-2 focus:ring-ring placeholder-muted-foreground transition-all duration-200 max-w-xs" />
                   </div>
                 </div>
 
-                <div className="flex flex-col lg:flex-row gap-6 mt-6"> {/* Alterado para flex-row */}
+                <div className="flex flex-col lg:flex-row gap-6 mt-6">
                   {/* Eritrograma Section */}
-                  <Card className="bg-muted/50 shadow-sm border border-border rounded-md p-4 w-full lg:w-1/4"> {/* Ajuste de largura */}
+                  <Card className="bg-muted/50 shadow-sm border border-border rounded-md p-4 w-full lg:w-1/4">
                     <CardHeader className="pb-3">
                       <CardTitle className="flex items-center gap-2 text-lg font-semibold text-foreground">
                         <FaFlask className="h-5 w-5 text-primary" /> Eritrograma
@@ -395,7 +397,7 @@ const AddExamPage = () => {
                   </Card>
 
                   {/* Leucograma Section */}
-                  <Card className="bg-muted/50 shadow-sm border border-border rounded-md p-4 w-full lg:w-3/4"> {/* Ajuste de largura */}
+                  <Card className="bg-muted/50 shadow-sm border border-border rounded-md p-4 w-full lg:w-3/4">
                     <CardHeader className="pb-3">
                       <CardTitle className="flex items-center gap-2 text-lg font-semibold text-foreground">
                         <FaFlask className="h-5 w-5 text-primary" /> Leucograma
