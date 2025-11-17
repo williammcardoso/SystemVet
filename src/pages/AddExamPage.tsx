@@ -234,8 +234,8 @@ const AddExamPage = () => {
     unit: string;
     placeholder?: string;
   }) => (
-    <div className="flex items-center gap-2 w-full">
-      <Label htmlFor={id} className="w-[100px] text-left text-muted-foreground font-medium flex-shrink-0">
+    <div className="flex flex-wrap items-center gap-x-2 gap-y-1 w-full">
+      <Label htmlFor={id} className="min-w-[100px] text-left text-muted-foreground font-medium flex-shrink-0">
         {label}
       </Label>
       <Input
@@ -246,11 +246,13 @@ const AddExamPage = () => {
         onChange={onChange}
         className="w-[80px] bg-input rounded-md border-border focus:ring-2 focus:ring-ring placeholder-muted-foreground transition-all duration-200 flex-shrink-0"
       />
-      <span className="text-sm text-muted-foreground w-[70px] text-left flex-shrink-0">{unit}</span>
-      <Label className="w-8 text-right text-muted-foreground font-medium flex-shrink-0">Ref:</Label>
-      <span className="flex-1 text-sm text-foreground whitespace-nowrap overflow-hidden text-ellipsis">
-        {getReference(referenceKey, 'full')}
-      </span>
+      <span className="text-sm text-muted-foreground flex-shrink-0">{unit}</span>
+      <div className="flex-1 min-w-[150px] flex items-center gap-1 p-1 border border-border rounded-md bg-background text-xs text-foreground overflow-hidden">
+        <Label className="font-medium flex-shrink-0">Ref:</Label>
+        <span className="flex-1 whitespace-nowrap overflow-hidden text-ellipsis">
+          {getReference(referenceKey, 'full')}
+        </span>
+      </div>
     </div>
   );
 
@@ -272,17 +274,27 @@ const AddExamPage = () => {
     onAbsoluteChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
     referenceKey: string;
   }) => (
-    <div className="flex items-center gap-2 w-full">
-      <Label className="w-[100px] text-left text-muted-foreground font-medium flex-shrink-0">{label}</Label>
+    <div className="flex flex-wrap items-center gap-x-2 gap-y-1 w-full">
+      <Label className="min-w-[100px] text-left text-muted-foreground font-medium flex-shrink-0">{label}</Label>
       <Input id={`${idPrefix}-relative`} type="text" value={relativeValue} onChange={onRelativeChange} className="w-[60px] bg-input flex-shrink-0" />
-      <span className="text-sm text-muted-foreground w-5 flex-shrink-0">%</span>
+      <span className="text-sm text-muted-foreground flex-shrink-0">%</span>
       <Input id={`${idPrefix}-absolute`} type="text" value={absoluteValue} onChange={onAbsoluteChange} className="w-[80px] bg-input flex-shrink-0" />
-      <span className="text-sm text-muted-foreground w-10 flex-shrink-0">/µL</span>
-      <Label className="w-8 text-right text-muted-foreground font-medium flex-shrink-0">Ref:</Label>
-      {/* NOVO ESTILO PARA EXIBIÇÃO DA REFERÊNCIA */}
-      <div className="flex-1 flex flex-col items-start p-1 border border-border rounded-md bg-background text-xs text-foreground overflow-hidden">
-        <span className="whitespace-nowrap overflow-hidden text-ellipsis">Rel: {getReference(referenceKey, 'relative')}</span>
-        <span className="whitespace-nowrap overflow-hidden text-ellipsis">Abs: {getReference(referenceKey, 'absolute')}</span>
+      <span className="text-sm text-muted-foreground flex-shrink-0">/µL</span>
+
+      {/* Dois quadrados separados para referências */}
+      <div className="flex-1 min-w-[150px] flex flex-wrap gap-2 justify-end">
+        <div className="flex-1 min-w-[70px] max-w-[120px] flex flex-col items-start p-1 border border-border rounded-md bg-background text-xs text-foreground overflow-hidden">
+          <span className="font-medium flex-shrink-0">Rel:</span>
+          <span className="flex-1 whitespace-nowrap overflow-hidden text-ellipsis">
+            {getReference(referenceKey, 'relative')}
+          </span>
+        </div>
+        <div className="flex-1 min-w-[70px] max-w-[120px] flex flex-col items-start p-1 border border-border rounded-md bg-background text-xs text-foreground overflow-hidden">
+          <span className="font-medium flex-shrink-0">Abs:</span>
+          <span className="flex-1 whitespace-nowrap overflow-hidden text-ellipsis">
+            {getReference(referenceKey, 'absolute')}
+          </span>
+        </div>
       </div>
     </div>
   );
@@ -375,7 +387,7 @@ const AddExamPage = () => {
 
                 <div className="flex flex-col lg:flex-row gap-6 mt-6">
                   {/* Eritrograma Section */}
-                  <Card className="bg-muted/50 shadow-sm border border-border rounded-md p-4 w-full lg:w-[35%]"> {/* Ajuste de largura */}
+                  <Card className="bg-muted/50 shadow-sm border border-border rounded-md p-4 w-full lg:w-[35%]">
                     <CardHeader className="pb-3">
                       <CardTitle className="flex items-center gap-2 text-lg font-semibold text-foreground">
                         <FaFlask className="h-5 w-5 text-primary" /> Eritrograma
@@ -399,7 +411,7 @@ const AddExamPage = () => {
                   </Card>
 
                   {/* Leucograma Section */}
-                  <Card className="bg-muted/50 shadow-sm border border-border rounded-md p-4 w-full lg:w-[65%]"> {/* Ajuste de largura */}
+                  <Card className="bg-muted/50 shadow-sm border border-border rounded-md p-4 w-full lg:w-[65%]">
                     <CardHeader className="pb-3">
                       <CardTitle className="flex items-center gap-2 text-lg font-semibold text-foreground">
                         <FaFlask className="h-5 w-5 text-primary" /> Leucograma
