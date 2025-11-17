@@ -234,20 +234,21 @@ const AddExamPage = () => {
     unit: string;
     placeholder?: string;
   }) => (
-    <div className="grid grid-cols-[120px_1fr_auto_1fr] items-center gap-2">
-      <Label htmlFor={id} className="text-left text-muted-foreground font-medium">
+    <div className="flex items-center gap-2 w-full"> {/* Adicionado w-full aqui */}
+      <Label htmlFor={id} className="w-[120px] text-left text-muted-foreground font-medium flex-shrink-0">
         {label}
       </Label>
       <Input
         id={id}
-        type="text" // Alterado para tipo text
+        type="text"
         placeholder={placeholder}
         value={value}
         onChange={onChange}
-        className="w-full bg-input rounded-md border-border focus:ring-2 focus:ring-ring placeholder-muted-foreground transition-all duration-200"
+        className="w-[100px] bg-input rounded-md border-border focus:ring-2 focus:ring-ring placeholder-muted-foreground transition-all duration-200 flex-shrink-0"
       />
-      <Label className="text-right text-muted-foreground font-medium">Ref:</Label>
-      <span className="text-sm text-foreground">{getReference(referenceKey, 'full')}</span>
+      <span className="text-sm text-muted-foreground w-[80px] text-left flex-shrink-0">{unit}</span>
+      <Label className="w-16 text-right text-muted-foreground font-medium flex-shrink-0">Ref:</Label>
+      <span className="flex-1 text-sm text-foreground">{getReference(referenceKey, 'full')}</span>
     </div>
   );
 
@@ -269,13 +270,13 @@ const AddExamPage = () => {
     onAbsoluteChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
     referenceKey: string;
   }) => (
-    <div className="grid grid-cols-[120px_100px_30px_100px_30px_1fr] items-center gap-2">
-      <Label className="text-left text-muted-foreground font-medium">{label}</Label>
-      <Input id={`${idPrefix}-relative`} type="text" value={relativeValue} onChange={onRelativeChange} className="w-[100px] bg-input" />
-      <span className="text-sm text-muted-foreground">%</span>
-      <Input id={`${idPrefix}-absolute`} type="text" value={absoluteValue} onChange={onAbsoluteChange} className="w-[100px] bg-input" />
-      <span className="text-sm text-muted-foreground">/µL</span>
-      <Label className="w-16 text-right text-muted-foreground font-medium">Ref:</Label>
+    <div className="grid grid-cols-[120px_100px_30px_100px_30px_1fr] items-center gap-2 w-full"> {/* Adicionado w-full aqui */}
+      <Label className="text-left text-muted-foreground font-medium flex-shrink-0">{label}</Label>
+      <Input id={`${idPrefix}-relative`} type="text" value={relativeValue} onChange={onRelativeChange} className="w-[100px] bg-input flex-shrink-0" />
+      <span className="text-sm text-muted-foreground flex-shrink-0">%</span>
+      <Input id={`${idPrefix}-absolute`} type="text" value={absoluteValue} onChange={onAbsoluteChange} className="w-[100px] bg-input flex-shrink-0" />
+      <span className="text-sm text-muted-foreground flex-shrink-0">/µL</span>
+      <Label className="w-16 text-right text-muted-foreground font-medium flex-shrink-0">Ref:</Label>
       <span className="flex-1 text-sm text-foreground">
         {getReference(referenceKey, 'relative')} / {getReference(referenceKey, 'absolute')}
       </span>
@@ -312,7 +313,7 @@ const AddExamPage = () => {
       <div className="flex-1 p-6">
         <Card className="shadow-sm border border-border rounded-md">
           <CardContent className="grid gap-4 py-4">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-4"> {/* Alterado para 3 colunas em lg */}
               <div className="space-y-2">
                 <Label htmlFor="examDate">Data do Exame</Label>
                 <Input
@@ -368,9 +369,9 @@ const AddExamPage = () => {
                   </div>
                 </div>
 
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-6">
+                <div className="flex flex-col lg:flex-row gap-6 mt-6"> {/* Alterado para flex-row */}
                   {/* Eritrograma Section */}
-                  <Card className="bg-muted/50 shadow-sm border border-border rounded-md p-4">
+                  <Card className="bg-muted/50 shadow-sm border border-border rounded-md p-4 w-full lg:w-1/4"> {/* Ajuste de largura */}
                     <CardHeader className="pb-3">
                       <CardTitle className="flex items-center gap-2 text-lg font-semibold text-foreground">
                         <FaFlask className="h-5 w-5 text-primary" /> Eritrograma
@@ -394,7 +395,7 @@ const AddExamPage = () => {
                   </Card>
 
                   {/* Leucograma Section */}
-                  <Card className="bg-muted/50 shadow-sm border border-border rounded-md p-4">
+                  <Card className="bg-muted/50 shadow-sm border border-border rounded-md p-4 w-full lg:w-3/4"> {/* Ajuste de largura */}
                     <CardHeader className="pb-3">
                       <CardTitle className="flex items-center gap-2 text-lg font-semibold text-foreground">
                         <FaFlask className="h-5 w-5 text-primary" /> Leucograma
@@ -455,8 +456,8 @@ const AddExamPage = () => {
                 <Input
                   id="examResult"
                   placeholder="Resultado do exame"
-                  value={examResult} // Usando o estado examResult aqui
-                  onChange={(e) => setExamResult(e.target.value)} // Atualizando o estado examResult
+                  value={examResult}
+                  onChange={(e) => setExamResult(e.target.value)}
                   className="bg-input rounded-md border-border focus:ring-2 focus:ring-ring placeholder-muted-foreground transition-all duration-200"
                 />
               </div>
@@ -495,7 +496,6 @@ const AddExamPage = () => {
                 />
               </div>
             </div>
-            {/* Campos 'referenceTables' e 'conclusions' removidos */}
             <div className="space-y-2 col-span-full">
               <Label htmlFor="liberadoPor">Liberado por</Label>
               <Input
