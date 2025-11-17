@@ -217,15 +217,7 @@ const AddExamPage = () => {
   };
 
   // Componente auxiliar para renderizar uma linha de campo com referência
-  const ExamFieldWithReference = ({
-    id,
-    label,
-    value,
-    onChange,
-    referenceKey,
-    unit,
-    placeholder = "",
-  }: {
+  const ExamFieldWithReference: React.FC<{
     id: string;
     label: string;
     value: string;
@@ -233,9 +225,19 @@ const AddExamPage = () => {
     referenceKey: string;
     unit: string;
     placeholder?: string;
+    getReference: (param: string, type?: 'relative' | 'absolute' | 'full') => string;
+  }> = React.memo(({
+    id,
+    label,
+    value,
+    onChange,
+    referenceKey,
+    unit,
+    placeholder = "",
+    getReference,
   }) => (
-    <div className="flex flex-wrap items-center gap-x-2 gap-y-1 w-full">
-      <Label htmlFor={id} className="min-w-[100px] text-left text-muted-foreground font-medium flex-shrink-0">
+    <div className="flex items-center gap-2 w-full flex-nowrap">
+      <Label htmlFor={id} className="w-[100px] text-left text-muted-foreground font-medium flex-shrink-0">
         {label}
       </Label>
       <Input
@@ -246,26 +248,18 @@ const AddExamPage = () => {
         onChange={onChange}
         className="w-[80px] bg-input rounded-md border-border focus:ring-2 focus:ring-ring placeholder-muted-foreground transition-all duration-200 flex-shrink-0"
       />
-      <span className="text-sm text-muted-foreground flex-shrink-0">{unit}</span>
-      <div className="flex-1 min-w-[150px] flex items-center gap-1 p-1 border border-border rounded-md bg-background text-xs text-foreground overflow-hidden">
+      <span className="text-sm text-muted-foreground w-[70px] text-left flex-shrink-0">{unit}</span>
+      <div className="flex-1 flex items-center gap-1 p-1 border border-border rounded-md bg-background text-xs text-foreground overflow-hidden">
         <Label className="font-medium flex-shrink-0">Ref:</Label>
         <span className="flex-1 whitespace-nowrap overflow-hidden text-ellipsis">
           {getReference(referenceKey, 'full')}
         </span>
       </div>
     </div>
-  );
+  ));
 
   // Componente auxiliar para campos de leucócitos (relativo e absoluto)
-  const LeukocyteFieldWithReference = ({
-    idPrefix,
-    label,
-    relativeValue,
-    onRelativeChange,
-    absoluteValue,
-    onAbsoluteChange,
-    referenceKey,
-  }: {
+  const LeukocyteFieldWithReference: React.FC<{
     idPrefix: string;
     label: string;
     relativeValue: string;
@@ -273,31 +267,41 @@ const AddExamPage = () => {
     absoluteValue: string;
     onAbsoluteChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
     referenceKey: string;
+    getReference: (param: string, type?: 'relative' | 'absolute' | 'full') => string;
+  }> = React.memo(({
+    idPrefix,
+    label,
+    relativeValue,
+    onRelativeChange,
+    absoluteValue,
+    onAbsoluteChange,
+    referenceKey,
+    getReference,
   }) => (
-    <div className="flex flex-wrap items-center gap-x-2 gap-y-1 w-full">
-      <Label className="min-w-[100px] text-left text-muted-foreground font-medium flex-shrink-0">{label}</Label>
+    <div className="flex items-center gap-2 w-full flex-nowrap">
+      <Label className="w-[100px] text-left text-muted-foreground font-medium flex-shrink-0">{label}</Label>
       <Input id={`${idPrefix}-relative`} type="text" value={relativeValue} onChange={onRelativeChange} className="w-[60px] bg-input flex-shrink-0" />
-      <span className="text-sm text-muted-foreground flex-shrink-0">%</span>
+      <span className="text-sm text-muted-foreground w-5 flex-shrink-0">%</span>
       <Input id={`${idPrefix}-absolute`} type="text" value={absoluteValue} onChange={onAbsoluteChange} className="w-[80px] bg-input flex-shrink-0" />
-      <span className="text-sm text-muted-foreground flex-shrink-0">/µL</span>
+      <span className="text-sm text-muted-foreground w-10 flex-shrink-0">/µL</span>
 
       {/* Dois quadrados separados para referências */}
-      <div className="flex-1 min-w-[150px] flex flex-wrap gap-2 justify-end">
-        <div className="flex-1 min-w-[70px] max-w-[120px] flex flex-col items-start p-1 border border-border rounded-md bg-background text-xs text-foreground overflow-hidden">
-          <span className="font-medium flex-shrink-0">Rel:</span>
+      <div className="flex-1 flex flex-wrap gap-1 justify-end">
+        <div className="flex-1 min-w-[100px] max-w-[150px] flex flex-col items-start p-1 border border-border rounded-md bg-background text-xs text-foreground overflow-hidden">
+          <span className="font-medium flex-shrink-0">Relativo:</span>
           <span className="flex-1 whitespace-nowrap overflow-hidden text-ellipsis">
             {getReference(referenceKey, 'relative')}
           </span>
         </div>
-        <div className="flex-1 min-w-[70px] max-w-[120px] flex flex-col items-start p-1 border border-border rounded-md bg-background text-xs text-foreground overflow-hidden">
-          <span className="font-medium flex-shrink-0">Abs:</span>
+        <div className="flex-1 min-w-[100px] max-w-[150px] flex flex-col items-start p-1 border border-border rounded-md bg-background text-xs text-foreground overflow-hidden">
+          <span className="font-medium flex-shrink-0">Absoluto:</span>
           <span className="flex-1 whitespace-nowrap overflow-hidden text-ellipsis">
             {getReference(referenceKey, 'absolute')}
           </span>
         </div>
       </div>
     </div>
-  );
+  ));
 
 
   return (
@@ -394,14 +398,14 @@ const AddExamPage = () => {
                       </CardTitle>
                     </CardHeader>
                     <CardContent className="grid gap-4 pt-0">
-                      <ExamFieldWithReference id="eritrocitos" label="Eritrócitos" value={eritrocitos} onChange={(e) => setEritrocitos(e.target.value)} referenceKey="eritrocitos" unit="milhões/mm3" />
-                      <ExamFieldWithReference id="hemoglobina" label="Hemoglobina" value={hemoglobina} onChange={(e) => setHemoglobina(e.target.value)} referenceKey="hemoglobina" unit="g/dL" />
-                      <ExamFieldWithReference id="hematocrito" label="Hematócrito" value={hematocrito} onChange={(e) => setHematocrito(e.target.value)} referenceKey="hematocrito" unit="%" />
-                      <ExamFieldWithReference id="vcm" label="V.C.M." value={vcm} onChange={(e) => setVcm(e.target.value)} referenceKey="vcm" unit="fL" />
-                      <ExamFieldWithReference id="hcm" label="H.C.M." value={hcm} onChange={(e) => setHcm(e.target.value)} referenceKey="hcm" unit="pg" />
-                      <ExamFieldWithReference id="chcm" label="C.H.C.M." value={chcm} onChange={(e) => setChcm(e.target.value)} referenceKey="chcm" unit="%" />
-                      <ExamFieldWithReference id="proteinaTotal" label="Proteína total" value={proteinaTotal} onChange={(e) => setProteinaTotal(e.target.value)} referenceKey="proteinaTotal" unit="g/dL" />
-                      <ExamFieldWithReference id="hemaciasNucleadas" label="Hemácias nucleadas" value={hemaciasNucleadas} onChange={(e) => setHemaciasNucleadas(e.target.value)} referenceKey="hemaciasNucleadas" unit="" />
+                      <ExamFieldWithReference id="eritrocitos" label="Eritrócitos" value={eritrocitos} onChange={(e) => setEritrocitos(e.target.value)} referenceKey="eritrocitos" unit="milhões/mm3" getReference={getReference} />
+                      <ExamFieldWithReference id="hemoglobina" label="Hemoglobina" value={hemoglobina} onChange={(e) => setHemoglobina(e.target.value)} referenceKey="hemoglobina" unit="g/dL" getReference={getReference} />
+                      <ExamFieldWithReference id="hematocrito" label="Hematócrito" value={hematocrito} onChange={(e) => setHematocrito(e.target.value)} referenceKey="hematocrito" unit="%" getReference={getReference} />
+                      <ExamFieldWithReference id="vcm" label="V.C.M." value={vcm} onChange={(e) => setVcm(e.target.value)} referenceKey="vcm" unit="fL" getReference={getReference} />
+                      <ExamFieldWithReference id="hcm" label="H.C.M." value={hcm} onChange={(e) => setHcm(e.target.value)} referenceKey="hcm" unit="pg" getReference={getReference} />
+                      <ExamFieldWithReference id="chcm" label="C.H.C.M." value={chcm} onChange={(e) => setChcm(e.target.value)} referenceKey="chcm" unit="%" getReference={getReference} />
+                      <ExamFieldWithReference id="proteinaTotal" label="Proteína total" value={proteinaTotal} onChange={(e) => setProteinaTotal(e.target.value)} referenceKey="proteinaTotal" unit="g/dL" getReference={getReference} />
+                      <ExamFieldWithReference id="hemaciasNucleadas" label="Hemácias nucleadas" value={hemaciasNucleadas} onChange={(e) => setHemaciasNucleadas(e.target.value)} referenceKey="hemaciasNucleadas" unit="" getReference={getReference} />
 
                       <div className="space-y-2 col-span-full">
                         <Label htmlFor="observacoesSerieVermelha" className="text-muted-foreground font-medium">Observações série vermelha</Label>
@@ -418,16 +422,16 @@ const AddExamPage = () => {
                       </CardTitle>
                     </CardHeader>
                     <CardContent className="grid gap-4 pt-0">
-                      <ExamFieldWithReference id="leucocitosTotais" label="Leucócitos totais" value={leucocitosTotais} onChange={(e) => setLeucocitosTotais(e.target.value)} referenceKey="leucocitosTotais" unit="mil/µL" />
+                      <ExamFieldWithReference id="leucocitosTotais" label="Leucócitos totais" value={leucocitosTotais} onChange={(e) => setLeucocitosTotais(e.target.value)} referenceKey="leucocitosTotais" unit="mil/µL" getReference={getReference} />
                       
-                      <LeukocyteFieldWithReference idPrefix="mielocitos" label="Mielócitos" relativeValue={mielocitosRelativo} onRelativeChange={(e) => setMielocitosRelativo(e.target.value)} absoluteValue={mielocitosAbsoluto} onAbsoluteChange={(e) => setMielocitosAbsoluto(e.target.value)} referenceKey="mielocitos" />
-                      <LeukocyteFieldWithReference idPrefix="metamielocitos" label="Metamielócitos" relativeValue={metamielocitosRelativo} onRelativeChange={(e) => setMetamielocitosRelativo(e.target.value)} absoluteValue={metamielocitosAbsoluto} onAbsoluteChange={(e) => setMetamielocitosAbsoluto(e.target.value)} referenceKey="metamielocitos" />
-                      <LeukocyteFieldWithReference idPrefix="bastonetes" label="Bastonetes" relativeValue={bastonetesRelativo} onRelativeChange={(e) => setBastonetesRelativo(e.target.value)} absoluteValue={bastonetesAbsoluto} onAbsoluteChange={(e) => setBastonetesAbsoluto(e.target.value)} referenceKey="bastonetes" />
-                      <LeukocyteFieldWithReference idPrefix="segmentados" label="Segmentados" relativeValue={segmentadosRelativo} onRelativeChange={(e) => setSegmentadosRelativo(e.target.value)} absoluteValue={segmentadosAbsoluto} onAbsoluteChange={(e) => setSegmentadosAbsoluto(e.target.value)} referenceKey="segmentados" />
-                      <LeukocyteFieldWithReference idPrefix="eosinofilos" label="Eosinófilos" relativeValue={eosinofilosRelativo} onRelativeChange={(e) => setEosinofilosRelativo(e.target.value)} absoluteValue={eosinofilosAbsoluto} onAbsoluteChange={(e) => setEosinofilosAbsoluto(e.target.value)} referenceKey="eosinofilos" />
-                      <LeukocyteFieldWithReference idPrefix="basofilos" label="Basófilos" relativeValue={basofilosRelativo} onRelativeChange={(e) => setBasofilosRelativo(e.target.value)} absoluteValue={basofilosAbsoluto} onAbsoluteChange={(e) => setBasofilosAbsoluto(e.target.value)} referenceKey="basofilos" />
-                      <LeukocyteFieldWithReference idPrefix="linfocitos" label="Linfócitos" relativeValue={linfocitosRelativo} onRelativeChange={(e) => setLinfocitosRelativo(e.target.value)} absoluteValue={linfocitosAbsoluto} onAbsoluteChange={(e) => setLinfocitosAbsoluto(e.target.value)} referenceKey="linfocitos" />
-                      <LeukocyteFieldWithReference idPrefix="monocitos" label="Monócitos" relativeValue={monocitosRelativo} onRelativeChange={(e) => setMonocitosRelativo(e.target.value)} absoluteValue={monocitosAbsoluto} onAbsoluteChange={(e) => setMonocitosAbsoluto(e.target.value)} referenceKey="monocitos" />
+                      <LeukocyteFieldWithReference idPrefix="mielocitos" label="Mielócitos" relativeValue={mielocitosRelativo} onRelativeChange={(e) => setMielocitosRelativo(e.target.value)} absoluteValue={mielocitosAbsoluto} onAbsoluteChange={(e) => setMielocitosAbsoluto(e.target.value)} referenceKey="mielocitos" getReference={getReference} />
+                      <LeukocyteFieldWithReference idPrefix="metamielocitos" label="Metamielócitos" relativeValue={metamielocitosRelativo} onRelativeChange={(e) => setMetamielocitosRelativo(e.target.value)} absoluteValue={metamielocitosAbsoluto} onAbsoluteChange={(e) => setMetamielocitosAbsoluto(e.target.value)} referenceKey="metamielocitos" getReference={getReference} />
+                      <LeukocyteFieldWithReference idPrefix="bastonetes" label="Bastonetes" relativeValue={bastonetesRelativo} onRelativeChange={(e) => setBastonetesRelativo(e.target.value)} absoluteValue={bastonetesAbsoluto} onAbsoluteChange={(e) => setBastonetesAbsoluto(e.target.value)} referenceKey="bastonetes" getReference={getReference} />
+                      <LeukocyteFieldWithReference idPrefix="segmentados" label="Segmentados" relativeValue={segmentadosRelativo} onRelativeChange={(e) => setSegmentadosRelativo(e.target.value)} absoluteValue={segmentadosAbsoluto} onAbsoluteChange={(e) => setSegmentadosAbsoluto(e.target.value)} referenceKey="segmentados" getReference={getReference} />
+                      <LeukocyteFieldWithReference idPrefix="eosinofilos" label="Eosinófilos" relativeValue={eosinofilosRelativo} onRelativeChange={(e) => setEosinofilosRelativo(e.target.value)} absoluteValue={eosinofilosAbsoluto} onAbsoluteChange={(e) => setEosinofilosAbsoluto(e.target.value)} referenceKey="eosinofilos" getReference={getReference} />
+                      <LeukocyteFieldWithReference idPrefix="basofilos" label="Basófilos" relativeValue={basofilosRelativo} onRelativeChange={(e) => setBasofilosRelativo(e.target.value)} absoluteValue={basofilosAbsoluto} onAbsoluteChange={(e) => setBasofilosAbsoluto(e.target.value)} referenceKey="basofilos" getReference={getReference} />
+                      <LeukocyteFieldWithReference idPrefix="linfocitos" label="Linfócitos" relativeValue={linfocitosRelativo} onRelativeChange={(e) => setLinfocitosRelativo(e.target.value)} absoluteValue={linfocitosAbsoluto} onAbsoluteChange={(e) => setLinfocitosAbsoluto(e.target.value)} referenceKey="linfocitos" getReference={getReference} />
+                      <LeukocyteFieldWithReference idPrefix="monocitos" label="Monócitos" relativeValue={monocitosRelativo} onRelativeChange={(e) => setMonocitosRelativo(e.target.value)} absoluteValue={monocitosAbsoluto} onAbsoluteChange={(e) => setMonocitosAbsoluto(e.target.value)} referenceKey="monocitos" getReference={getReference} />
 
                       <div className="space-y-2 col-span-full">
                         <Label htmlFor="observacoesSerieBranca" className="text-muted-foreground font-medium">Observações série branca</Label>
@@ -445,7 +449,7 @@ const AddExamPage = () => {
                     </CardTitle>
                   </CardHeader>
                   <CardContent className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-0">
-                    <ExamFieldWithReference id="contagemPlaquetaria" label="Contagem plaquetária" value={contagemPlaquetaria} onChange={(e) => setContagemPlaquetaria(e.target.value)} referenceKey="contagemPlaquetaria" unit="/µL" />
+                    <ExamFieldWithReference id="contagemPlaquetaria" label="Contagem plaquetária" value={contagemPlaquetaria} onChange={(e) => setContagemPlaquetaria(e.target.value)} referenceKey="contagemPlaquetaria" unit="/µL" getReference={getReference} />
                     <div className="space-y-2 col-span-full">
                       <Label htmlFor="avaliacaoPlaquetaria" className="text-muted-foreground font-medium">Avaliação plaquetária</Label>
                       <Textarea id="avaliacaoPlaquetaria" placeholder="Avaliação qualitativa das plaquetas" value={avaliacaoPlaquetaria} onChange={(e) => setAvaliacaoPlaquetaria(e.target.value)} rows={2} className="bg-input rounded-md border-border focus:ring-2 focus:ring-ring placeholder-muted-foreground transition-all duration-200" />
