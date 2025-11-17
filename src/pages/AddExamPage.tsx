@@ -7,7 +7,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { showSuccess, showError } from "@/utils/toast"; // Importar funções de toast
-import { Card, CardContent } from "@/components/ui/card"; // Importar Card para envolver o formulário
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"; // Importar Card para envolver o formulário
 import { mockClients } from "@/mockData/clients"; // Importar mockClients para obter a espécie do animal
 
 // Mock data para tipos de exame e veterinários (duplicado por enquanto, idealmente viria de um contexto ou API)
@@ -32,26 +32,26 @@ interface HemogramReference {
 
 // Dados de referência para Hemograma (cão e gato)
 const hemogramReferences: Record<string, HemogramReference> = {
-  eritrocitos: { dog: "5.5 - 8.5", cat: "6.5 - 10.0" }, // milhões/mm3
-  hemoglobina: { dog: "12.0 - 18.0", cat: "9.0 - 15.0" }, // g/dL
-  hematocrito: { dog: "37 - 55", cat: "30 - 45" }, // %
-  vcm: { dog: "60.0 - 77.0", cat: "39.0 - 55.0" }, // fL
-  hcm: { dog: "19.5 - 24.5", cat: "13.0 - 17.0" }, // pg
-  chcm: { dog: "31 - 35", cat: "30 - 36" }, // %
-  proteinaTotal: { dog: "6.0 - 8.0", cat: "5.7 - 8.9" }, // g/dL
-  hemaciasNucleadas: { dog: "0", cat: "0" }, // Geralmente 0 para animais saudáveis
+  eritrocitos: { dog: "5.5 - 8.5 milhões/mm3", cat: "6.5 - 10.0 milhões/mm3" },
+  hemoglobina: { dog: "12.0 - 18.0 g/dL", cat: "9.0 - 15.0 g/dL" },
+  hematocrito: { dog: "37 - 55 %", cat: "30 - 45 %" },
+  vcm: { dog: "60.0 - 77.0 fL", cat: "39.0 - 55.0 fL" },
+  hcm: { dog: "19.5 - 24.5 pg", cat: "13.0 - 17.0 pg" },
+  chcm: { dog: "31 - 35 %", cat: "30 - 36 %" },
+  proteinaTotal: { dog: "6.0 - 8.0 g/dL", cat: "5.7 - 8.9 g/dL" },
+  hemaciasNucleadas: { dog: "0", cat: "0" },
 
-  leucocitos: { dog: "6.0 - 17.0", cat: "5.5 - 19.5" }, // mil/mm3
-  mielocitos: { dog: "0", cat: "0" }, // %
-  metamielocitos: { dog: "0", cat: "0" }, // %
-  bastonetes: { dog: "0 - 3", cat: "0 - 3" }, // %
-  segmentados: { dog: "60 - 77", cat: "35 - 75" }, // %
-  eosinofilos: { dog: "2 - 10", cat: "2 - 12" }, // %
-  basofilos: { dog: "/ raros", cat: "/ raros" }, // %
-  linfocitos: { dog: "12 - 30", cat: "20 - 55" }, // %
-  monocitos: { dog: "3 - 10", cat: "1 - 4" }, // %
+  leucocitos: { dog: "6.0 - 17.0 mil/mm3", cat: "5.5 - 19.5 mil/mm3" },
+  mielocitos: { dog: "0 - 0%", cat: "0 - 0%" },
+  metamielocitos: { dog: "0 - 0%", cat: "0 - 0%" },
+  bastonetes: { dog: "0 - 3% / 0 - 300 mil/mm3", cat: "0 - 3% / 0 - 300 mil/mm3" },
+  segmentados: { dog: "60 - 77% / 3.000 - 11.500 mil/mm3", cat: "35 - 75% / 2.500 - 12.500 mil/mm3" },
+  eosinofilos: { dog: "2 - 10% / 100 - 1.250 mil/mm3", cat: "2 - 12% / 100 - 1.500 mil/mm3" },
+  basofilos: { dog: "/ raros", cat: "/ raros" },
+  linfocitos: { dog: "12 - 30% / 1.000 - 4.800 mil/mm3", cat: "20 - 55% / 1.500 - 7.000 mil/mm3" },
+  monocitos: { dog: "3 - 10% / 150 - 1.350 mil/mm3", cat: "1 - 4% / 50 - 500 mil/mm3" },
 
-  contagemPlaquetaria: { dog: "166.000 - 575.000", cat: "150.000 - 600.000" }, // mil/mm3
+  contagemPlaquetaria: { dog: "166.000 - 575.000 mil/mm3", cat: "150.000 - 600.000 mil/mm3" },
 };
 
 const AddExamPage = () => {
@@ -65,6 +65,7 @@ const AddExamPage = () => {
   // Estado do formulário
   const [examDate, setExamDate] = useState<string>(new Date().toISOString().split('T')[0]);
   const [examType, setExamType] = useState<string | undefined>(undefined);
+  const [examResult, setExamResult] = useState<string>(""); // Para exames não-hemograma
   const [examVet, setExamVet] = useState<string | undefined>(undefined);
 
   // Novos campos gerais do exame
@@ -76,41 +77,40 @@ const AddExamPage = () => {
   const [hemoglobina, setHemoglobina] = useState<string>("");
   const [hematocrito, setHematocrito] = useState<string>("");
   const [vcm, setVcm] = useState<string>("");
-  const [hcm, setHcm] = useState<string>(""); // Novo campo
+  const [hcm, setHcm] = useState<string>("");
   const [chcm, setChcm] = useState<string>("");
-  const [proteinaTotal, setProteinaTotal] = useState<string>(""); // Renomeado
+  const [proteinaTotal, setProteinaTotal] = useState<string>("");
   const [hemaciasNucleadas, setHemaciasNucleadas] = useState<string>("");
-  const [observacoesSerieVermelha, setObservacoesSerieVermelha] = useState<string>(""); // Novo campo
+  const [observacoesSerieVermelha, setObservacoesSerieVermelha] = useState<string>("");
 
   // Campos específicos para Leucograma
   const [leucocitos, setLeucocitos] = useState<string>("");
   const [mielocitos, setMielocitos] = useState<string>("");
   const [metamielocitos, setMetamielocitos] = useState<string>("");
-  const [bastonetes, setBastonetes] = useState<string>(""); // Renomeado
+  const [bastonetes, setBastonetes] = useState<string>("");
   const [segmentados, setSegmentados] = useState<string>("");
   const [eosinofilos, setEosinofilos] = useState<string>("");
   const [basofilos, setBasofilos] = useState<string>("");
   const [linfocitos, setLinfocitos] = useState<string>("");
   const [monocitos, setMonocitos] = useState<string>("");
-  const [observacoesSerieBranca, setObservacoesSerieBranca] = useState<string>(""); // Novo campo
+  const [observacoesSerieBranca, setObservacoesSerieBranca] = useState<string>("");
 
   // Campos específicos para Plaquetas
-  const [contagemPlaquetaria, setContagemPlaquetaria] = useState<string>(""); // Renomeado
-  const [avaliacaoPlaquetaria, setAvaliacaoPlaquetaria] = useState<string>(""); // Novo campo
+  const [contagemPlaquetaria, setContagemPlaquetaria] = useState<string>("");
+  const [avaliacaoPlaquetaria, setAvaliacaoPlaquetaria] = useState<string>("");
 
   // Campos adicionais do exame
-  const [nota, setNota] = useState<string>(""); // Novo campo
+  const [nota, setNota] = useState<string>("");
   const [laboratory, setLaboratory] = useState<string>("");
   const [laboratoryDate, setLaboratoryDate] = useState<string>("");
-  const [observacoesGeraisExame, setObservacoesGeraisExame] = useState<string>(""); // Renomeado
+  const [observacoesGeraisExame, setObservacoesGeraisExame] = useState<string>("");
   const [referenceTables, setReferenceTables] = useState<string>("");
   const [conclusions, setConclusions] = useState<string>("");
-  const [liberadoPor, setLiberadoPor] = useState<string>("WILLIAM DE MORAES CARDOSO CRMV-SP 56895"); // Novo campo com valor padrão
+  const [liberadoPor, setLiberadoPor] = useState<string>("WILLIAM DE MORAES CARDOSO CRMV-SP 56895");
 
-  const getReference = (param: string, unit?: string) => {
+  const getReference = (param: string) => {
     if (!animalSpecies || !hemogramReferences[param]) return "N/A";
-    const refValue = hemogramReferences[param][animalSpecies];
-    return unit ? `${refValue} ${unit}` : refValue;
+    return hemogramReferences[param][animalSpecies];
   };
 
   const handleSaveExam = () => {
@@ -165,6 +165,43 @@ const AddExamPage = () => {
     showSuccess("Exame salvo com sucesso!");
     navigate(`/clients/${clientId}/animals/${animalId}/record`); // Voltar para o prontuário
   };
+
+  // Componente auxiliar para renderizar uma linha de campo com referência
+  const ExamFieldWithReference = ({
+    id,
+    label,
+    value,
+    onChange,
+    referenceKey,
+    unit,
+    type = "number",
+    placeholder = "",
+  }: {
+    id: string;
+    label: string;
+    value: string;
+    onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+    referenceKey: string;
+    unit: string;
+    type?: string;
+    placeholder?: string;
+  }) => (
+    <div className="grid grid-cols-[120px_1fr_auto_1fr] items-center gap-2">
+      <Label htmlFor={id} className="text-left text-muted-foreground font-medium">
+        {label}
+      </Label>
+      <Input
+        id={id}
+        type={type}
+        placeholder={placeholder}
+        value={value}
+        onChange={onChange}
+        className="w-full bg-input rounded-md border-border focus:ring-2 focus:ring-ring placeholder-muted-foreground transition-all duration-200"
+      />
+      <Label className="text-right text-muted-foreground font-medium">Ref:</Label>
+      <span className="text-sm text-foreground">{getReference(referenceKey)}</span>
+    </div>
+  );
 
   return (
     <div className="flex flex-col min-h-screen bg-background">
@@ -253,185 +290,70 @@ const AddExamPage = () => {
 
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-6">
                   {/* Eritrograma Section */}
-                  <div>
-                    <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
-                      <FaFlask className="h-5 w-5 text-primary" /> Eritrograma
-                    </h3>
-                    <div className="grid grid-cols-1 gap-4">
-                      <div className="flex items-center gap-2">
-                        <Label htmlFor="eritrocitos" className="w-32 text-right text-muted-foreground font-medium">Eritrócitos</Label>
-                        <Input id="eritrocitos" type="number" placeholder="" value={eritrocitos} onChange={(e) => setEritrocitos(e.target.value)} className="flex-1 bg-input rounded-md border-border focus:ring-2 focus:ring-ring placeholder-muted-foreground transition-all duration-200" />
-                        <span className="text-sm text-muted-foreground">(milhões/mm3)</span>
-                        <Label className="w-24 text-right text-muted-foreground font-medium">Ref:</Label>
-                        <span className="flex-1 text-sm text-foreground">{getReference('eritrocitos')}</span>
-                      </div>
-
-                      <div className="flex items-center gap-2">
-                        <Label htmlFor="hemoglobina" className="w-32 text-right text-muted-foreground font-medium">Hemoglobina</Label>
-                        <Input id="hemoglobina" type="number" placeholder="" value={hemoglobina} onChange={(e) => setHemoglobina(e.target.value)} className="flex-1 bg-input rounded-md border-border focus:ring-2 focus:ring-ring placeholder-muted-foreground transition-all duration-200" />
-                        <span className="text-sm text-muted-foreground">g/dL</span>
-                        <Label className="w-24 text-right text-muted-foreground font-medium">Ref:</Label>
-                        <span className="flex-1 text-sm text-foreground">{getReference('hemoglobina')}</span>
-                      </div>
-
-                      <div className="flex items-center gap-2">
-                        <Label htmlFor="hematocrito" className="w-32 text-right text-muted-foreground font-medium">Hematócrito</Label>
-                        <Input id="hematocrito" type="number" placeholder="" value={hematocrito} onChange={(e) => setHematocrito(e.target.value)} className="flex-1 bg-input rounded-md border-border focus:ring-2 focus:ring-ring placeholder-muted-foreground transition-all duration-200" />
-                        <span className="text-sm text-muted-foreground">%</span>
-                        <Label className="w-24 text-right text-muted-foreground font-medium">Ref:</Label>
-                        <span className="flex-1 text-sm text-foreground">{getReference('hematocrito')}</span>
-                      </div>
-
-                      <div className="flex items-center gap-2">
-                        <Label htmlFor="vcm" className="w-32 text-right text-muted-foreground font-medium">V.C.M.</Label>
-                        <Input id="vcm" type="number" placeholder="" value={vcm} onChange={(e) => setVcm(e.target.value)} className="flex-1 bg-input rounded-md border-border focus:ring-2 focus:ring-ring placeholder-muted-foreground transition-all duration-200" />
-                        <span className="text-sm text-muted-foreground">fL</span>
-                        <Label className="w-24 text-right text-muted-foreground font-medium">Ref:</Label>
-                        <span className="flex-1 text-sm text-foreground">{getReference('vcm')}</span>
-                      </div>
-
-                      <div className="flex items-center gap-2">
-                        <Label htmlFor="hcm" className="w-32 text-right text-muted-foreground font-medium">H.C.M.</Label>
-                        <Input id="hcm" type="number" placeholder="" value={hcm} onChange={(e) => setHcm(e.target.value)} className="flex-1 bg-input rounded-md border-border focus:ring-2 focus:ring-ring placeholder-muted-foreground transition-all duration-200" />
-                        <span className="text-sm text-muted-foreground">pg</span>
-                        <Label className="w-24 text-right text-muted-foreground font-medium">Ref:</Label>
-                        <span className="flex-1 text-sm text-foreground">{getReference('hcm')}</span>
-                      </div>
-
-                      <div className="flex items-center gap-2">
-                        <Label htmlFor="chcm" className="w-32 text-right text-muted-foreground font-medium">C.H.C.M.</Label>
-                        <Input id="chcm" type="number" placeholder="" value={chcm} onChange={(e) => setChcm(e.target.value)} className="flex-1 bg-input rounded-md border-border focus:ring-2 focus:ring-ring placeholder-muted-foreground transition-all duration-200" />
-                        <span className="text-sm text-muted-foreground">%</span>
-                        <Label className="w-24 text-right text-muted-foreground font-medium">Ref:</Label>
-                        <span className="flex-1 text-sm text-foreground">{getReference('chcm')}</span>
-                      </div>
-
-                      <div className="flex items-center gap-2">
-                        <Label htmlFor="proteinaTotal" className="w-32 text-right text-muted-foreground font-medium">Proteína total</Label>
-                        <Input id="proteinaTotal" type="number" placeholder="" value={proteinaTotal} onChange={(e) => setProteinaTotal(e.target.value)} className="flex-1 bg-input rounded-md border-border focus:ring-2 focus:ring-ring placeholder-muted-foreground transition-all duration-200" />
-                        <span className="text-sm text-muted-foreground">g/dL</span>
-                        <Label className="w-24 text-right text-muted-foreground font-medium">Ref:</Label>
-                        <span className="flex-1 text-sm text-foreground">{getReference('proteinaTotal')}</span>
-                      </div>
-
-                      <div className="flex items-center gap-2">
-                        <Label htmlFor="hemaciasNucleadas" className="w-32 text-right text-muted-foreground font-medium">Hemácias nucleadas</Label>
-                        <Input id="hemaciasNucleadas" type="number" placeholder="" value={hemaciasNucleadas} onChange={(e) => setHemaciasNucleadas(e.target.value)} className="flex-1 bg-input rounded-md border-border focus:ring-2 focus:ring-ring placeholder-muted-foreground transition-all duration-200" />
-                        <span className="text-sm text-muted-foreground"></span>
-                        <Label className="w-24 text-right text-muted-foreground font-medium">Ref:</Label>
-                        <span className="flex-1 text-sm text-foreground">{getReference('hemaciasNucleadas')}</span>
-                      </div>
+                  <Card className="bg-muted/50 shadow-sm border border-border rounded-md p-4">
+                    <CardHeader className="pb-3">
+                      <CardTitle className="flex items-center gap-2 text-lg font-semibold text-foreground">
+                        <FaFlask className="h-5 w-5 text-primary" /> Eritrograma
+                      </CardTitle>
+                    </CardHeader>
+                    <CardContent className="grid gap-4 pt-0">
+                      <ExamFieldWithReference id="eritrocitos" label="Eritrócitos" value={eritrocitos} onChange={(e) => setEritrocitos(e.target.value)} referenceKey="eritrocitos" unit="milhões/mm3" />
+                      <ExamFieldWithReference id="hemoglobina" label="Hemoglobina" value={hemoglobina} onChange={(e) => setHemoglobina(e.target.value)} referenceKey="hemoglobina" unit="g/dL" />
+                      <ExamFieldWithReference id="hematocrito" label="Hematócrito" value={hematocrito} onChange={(e) => setHematocrito(e.target.value)} referenceKey="hematocrito" unit="%" />
+                      <ExamFieldWithReference id="vcm" label="V.C.M." value={vcm} onChange={(e) => setVcm(e.target.value)} referenceKey="vcm" unit="fL" />
+                      <ExamFieldWithReference id="hcm" label="H.C.M." value={hcm} onChange={(e) => setHcm(e.target.value)} referenceKey="hcm" unit="pg" />
+                      <ExamFieldWithReference id="chcm" label="C.H.C.M." value={chcm} onChange={(e) => setChcm(e.target.value)} referenceKey="chcm" unit="%" />
+                      <ExamFieldWithReference id="proteinaTotal" label="Proteína total" value={proteinaTotal} onChange={(e) => setProteinaTotal(e.target.value)} referenceKey="proteinaTotal" unit="g/dL" />
+                      <ExamFieldWithReference id="hemaciasNucleadas" label="Hemácias nucleadas" value={hemaciasNucleadas} onChange={(e) => setHemaciasNucleadas(e.target.value)} referenceKey="hemaciasNucleadas" unit="" />
 
                       <div className="space-y-2 col-span-full">
                         <Label htmlFor="observacoesSerieVermelha" className="text-muted-foreground font-medium">Observações série vermelha</Label>
                         <Textarea id="observacoesSerieVermelha" placeholder="Observações sobre a série vermelha" value={observacoesSerieVermelha} onChange={(e) => setObservacoesSerieVermelha(e.target.value)} rows={2} className="bg-input rounded-md border-border focus:ring-2 focus:ring-ring placeholder-muted-foreground transition-all duration-200" />
                       </div>
-                    </div>
-                  </div>
+                    </CardContent>
+                  </Card>
 
                   {/* Leucograma Section */}
-                  <div>
-                    <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
-                      <FaFlask className="h-5 w-5 text-primary" /> Leucograma
-                    </h3>
-                    <div className="grid grid-cols-1 gap-4">
-                      <div className="flex items-center gap-2">
-                        <Label htmlFor="leucocitos" className="w-32 text-right text-muted-foreground font-medium">Leucócitos</Label>
-                        <Input id="leucocitos" type="number" placeholder="" value={leucocitos} onChange={(e) => setLeucocitos(e.target.value)} className="flex-1 bg-input rounded-md border-border focus:ring-2 focus:ring-ring placeholder-muted-foreground transition-all duration-200" />
-                        <span className="text-sm text-muted-foreground">(mil/mm3)</span>
-                        <Label className="w-24 text-right text-muted-foreground font-medium">Ref:</Label>
-                        <span className="flex-1 text-sm text-foreground">{getReference('leucocitos')}</span>
-                      </div>
-
-                      <div className="flex items-center gap-2">
-                        <Label htmlFor="mielocitos" className="w-32 text-right text-muted-foreground font-medium">Mielócitos</Label>
-                        <Input id="mielocitos" type="number" placeholder="" value={mielocitos} onChange={(e) => setMielocitos(e.target.value)} className="flex-1 bg-input rounded-md border-border focus:ring-2 focus:ring-ring placeholder-muted-foreground transition-all duration-200" />
-                        <span className="text-sm text-muted-foreground">%</span>
-                        <Label className="w-24 text-right text-muted-foreground font-medium">Ref:</Label>
-                        <span className="flex-1 text-sm text-foreground">{getReference('mielocitos')}</span>
-                      </div>
-
-                      <div className="flex items-center gap-2">
-                        <Label htmlFor="metamielocitos" className="w-32 text-right text-muted-foreground font-medium">Metamielócitos</Label>
-                        <Input id="metamielocitos" type="number" placeholder="" value={metamielocitos} onChange={(e) => setMetamielocitos(e.target.value)} className="flex-1 bg-input rounded-md border-border focus:ring-2 focus:ring-ring placeholder-muted-foreground transition-all duration-200" />
-                        <span className="text-sm text-muted-foreground">%</span>
-                        <Label className="w-24 text-right text-muted-foreground font-medium">Ref:</Label>
-                        <span className="flex-1 text-sm text-foreground">{getReference('metamielocitos')}</span>
-                      </div>
-
-                      <div className="flex items-center gap-2">
-                        <Label htmlFor="bastonetes" className="w-32 text-right text-muted-foreground font-medium">Bastonetes</Label>
-                        <Input id="bastonetes" type="number" placeholder="" value={bastonetes} onChange={(e) => setBastonetes(e.target.value)} className="flex-1 bg-input rounded-md border-border focus:ring-2 focus:ring-ring placeholder-muted-foreground transition-all duration-200" />
-                        <span className="text-sm text-muted-foreground">%</span>
-                        <Label className="w-24 text-right text-muted-foreground font-medium">Ref:</Label>
-                        <span className="flex-1 text-sm text-foreground">{getReference('bastonetes')}</span>
-                      </div>
-
-                      <div className="flex items-center gap-2">
-                        <Label htmlFor="segmentados" className="w-32 text-right text-muted-foreground font-medium">Segmentados</Label>
-                        <Input id="segmentados" type="number" placeholder="" value={segmentados} onChange={(e) => setSegmentados(e.target.value)} className="flex-1 bg-input rounded-md border-border focus:ring-2 focus:ring-ring placeholder-muted-foreground transition-all duration-200" />
-                        <span className="text-sm text-muted-foreground">%</span>
-                        <Label className="w-24 text-right text-muted-foreground font-medium">Ref:</Label>
-                        <span className="flex-1 text-sm text-foreground">{getReference('segmentados')}</span>
-                      </div>
-
-                      <div className="flex items-center gap-2">
-                        <Label htmlFor="eosinofilos" className="w-32 text-right text-muted-foreground font-medium">Eosinófilos</Label>
-                        <Input id="eosinofilos" type="number" placeholder="" value={eosinofilos} onChange={(e) => setEosinofilos(e.target.value)} className="flex-1 bg-input rounded-md border-border focus:ring-2 focus:ring-ring placeholder-muted-foreground transition-all duration-200" />
-                        <span className="text-sm text-muted-foreground">%</span>
-                        <Label className="w-24 text-right text-muted-foreground font-medium">Ref:</Label>
-                        <span className="flex-1 text-sm text-foreground">{getReference('eosinofilos')}</span>
-                      </div>
-
-                      <div className="flex items-center gap-2">
-                        <Label htmlFor="basofilos" className="w-32 text-right text-muted-foreground font-medium">Basófilos</Label>
-                        <Input id="basofilos" type="number" placeholder="" value={basofilos} onChange={(e) => setBasofilos(e.target.value)} className="flex-1 bg-input rounded-md border-border focus:ring-2 focus:ring-ring placeholder-muted-foreground transition-all duration-200" />
-                        <span className="text-sm text-muted-foreground">%</span>
-                        <Label className="w-24 text-right text-muted-foreground font-medium">Ref:</Label>
-                        <span className="flex-1 text-sm text-foreground">{getReference('basofilos')}</span>
-                      </div>
-
-                      <div className="flex items-center gap-2">
-                        <Label htmlFor="linfocitos" className="w-32 text-right text-muted-foreground font-medium">Linfócitos</Label>
-                        <Input id="linfocitos" type="number" placeholder="" value={linfocitos} onChange={(e) => setLinfocitos(e.target.value)} className="flex-1 bg-input rounded-md border-border focus:ring-2 focus:ring-ring placeholder-muted-foreground transition-all duration-200" />
-                        <span className="text-sm text-muted-foreground">%</span>
-                        <Label className="w-24 text-right text-muted-foreground font-medium">Ref:</Label>
-                        <span className="flex-1 text-sm text-foreground">{getReference('linfocitos')}</span>
-                      </div>
-
-                      <div className="flex items-center gap-2">
-                        <Label htmlFor="monocitos" className="w-32 text-right text-muted-foreground font-medium">Monócitos</Label>
-                        <Input id="monocitos" type="number" placeholder="" value={monocitos} onChange={(e) => setMonocitos(e.target.value)} className="flex-1 bg-input rounded-md border-border focus:ring-2 focus:ring-ring placeholder-muted-foreground transition-all duration-200" />
-                        <span className="text-sm text-muted-foreground">%</span>
-                        <Label className="w-24 text-right text-muted-foreground font-medium">Ref:</Label>
-                        <span className="flex-1 text-sm text-foreground">{getReference('monocitos')}</span>
-                      </div>
+                  <Card className="bg-muted/50 shadow-sm border border-border rounded-md p-4">
+                    <CardHeader className="pb-3">
+                      <CardTitle className="flex items-center gap-2 text-lg font-semibold text-foreground">
+                        <FaFlask className="h-5 w-5 text-primary" /> Leucograma
+                      </CardTitle>
+                    </CardHeader>
+                    <CardContent className="grid gap-4 pt-0">
+                      <ExamFieldWithReference id="leucocitos" label="Leucócitos" value={leucocitos} onChange={(e) => setLeucocitos(e.target.value)} referenceKey="leucocitos" unit="mil/mm3" />
+                      <ExamFieldWithReference id="mielocitos" label="Mielócitos" value={mielocitos} onChange={(e) => setMielocitos(e.target.value)} referenceKey="mielocitos" unit="%" />
+                      <ExamFieldWithReference id="metamielocitos" label="Metamielócitos" value={metamielocitos} onChange={(e) => setMetamielocitos(e.target.value)} referenceKey="metamielocitos" unit="%" />
+                      <ExamFieldWithReference id="bastonetes" label="Bastonetes" value={bastonetes} onChange={(e) => setBastonetes(e.target.value)} referenceKey="bastonetes" unit="%" />
+                      <ExamFieldWithReference id="segmentados" label="Segmentados" value={segmentados} onChange={(e) => setSegmentados(e.target.value)} referenceKey="segmentados" unit="%" />
+                      <ExamFieldWithReference id="eosinofilos" label="Eosinófilos" value={eosinofilos} onChange={(e) => setEosinofilos(e.target.value)} referenceKey="eosinofilos" unit="%" />
+                      <ExamFieldWithReference id="basofilos" label="Basófilos" value={basofilos} onChange={(e) => setBasofilos(e.target.value)} referenceKey="basofilos" unit="%" />
+                      <ExamFieldWithReference id="linfocitos" label="Linfócitos" value={linfocitos} onChange={(e) => setLinfocitos(e.target.value)} referenceKey="linfocitos" unit="%" />
+                      <ExamFieldWithReference id="monocitos" label="Monócitos" value={monocitos} onChange={(e) => setMonocitos(e.target.value)} referenceKey="monocitos" unit="%" />
 
                       <div className="space-y-2 col-span-full">
                         <Label htmlFor="observacoesSerieBranca" className="text-muted-foreground font-medium">Observações série branca</Label>
                         <Textarea id="observacoesSerieBranca" placeholder="Observações sobre a série branca" value={observacoesSerieBranca} onChange={(e) => setObservacoesSerieBranca(e.target.value)} rows={2} className="bg-input rounded-md border-border focus:ring-2 focus:ring-ring placeholder-muted-foreground transition-all duration-200" />
                       </div>
-                    </div>
-                  </div>
+                    </CardContent>
+                  </Card>
                 </div>
 
                 {/* Plaquetas Section */}
-                <h3 className="text-lg font-semibold mt-6 mb-4 flex items-center gap-2">
-                  <FaFlask className="h-5 w-5 text-primary" /> Plaquetas
-                </h3>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  <div className="flex items-center gap-2">
-                    <Label htmlFor="contagemPlaquetaria" className="w-32 text-right text-muted-foreground font-medium">Contagem plaquetária</Label>
-                    <Input id="contagemPlaquetaria" type="number" placeholder="" value={contagemPlaquetaria} onChange={(e) => setContagemPlaquetaria(e.target.value)} className="flex-1 bg-input rounded-md border-border focus:ring-2 focus:ring-ring placeholder-muted-foreground transition-all duration-200" />
-                    <span className="text-sm text-muted-foreground">(mil/mm3)</span>
-                    <Label className="w-24 text-right text-muted-foreground font-medium">Ref:</Label>
-                    <span className="flex-1 text-sm text-foreground">{getReference('contagemPlaquetaria')}</span>
-                  </div>
-                  <div className="space-y-2 col-span-full">
-                    <Label htmlFor="avaliacaoPlaquetaria" className="text-muted-foreground font-medium">Avaliação plaquetária</Label>
-                    <Textarea id="avaliacaoPlaquetaria" placeholder="Avaliação qualitativa das plaquetas" value={avaliacaoPlaquetaria} onChange={(e) => setAvaliacaoPlaquetaria(e.target.value)} rows={2} className="bg-input rounded-md border-border focus:ring-2 focus:ring-ring placeholder-muted-foreground transition-all duration-200" />
-                  </div>
-                </div>
+                <Card className="bg-muted/50 shadow-sm border border-border rounded-md p-4 mt-6">
+                  <CardHeader className="pb-3">
+                    <CardTitle className="flex items-center gap-2 text-lg font-semibold text-foreground">
+                      <FaFlask className="h-5 w-5 text-primary" /> Plaquetas
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-0">
+                    <ExamFieldWithReference id="contagemPlaquetaria" label="Contagem plaquetária" value={contagemPlaquetaria} onChange={(e) => setContagemPlaquetaria(e.target.value)} referenceKey="contagemPlaquetaria" unit="mil/mm3" />
+                    <div className="space-y-2 col-span-full">
+                      <Label htmlFor="avaliacaoPlaquetaria" className="text-muted-foreground font-medium">Avaliação plaquetária</Label>
+                      <Textarea id="avaliacaoPlaquetaria" placeholder="Avaliação qualitativa das plaquetas" value={avaliacaoPlaquetaria} onChange={(e) => setAvaliacaoPlaquetaria(e.target.value)} rows={2} className="bg-input rounded-md border-border focus:ring-2 focus:ring-ring placeholder-muted-foreground transition-all duration-200" />
+                    </div>
+                  </CardContent>
+                </Card>
 
                 {/* Campo Nota */}
                 <div className="space-y-2 col-span-full mt-6">
@@ -452,10 +374,9 @@ const AddExamPage = () => {
                 <Input
                   id="examResult"
                   placeholder="Resultado do exame"
-                  value={""} // Removido o estado examResult para não-hemograma, pois o foco é no hemograma
-                  onChange={(e) => {}} // Não faz nada, pois não é editável aqui
+                  value={examResult}
+                  onChange={(e) => setExamResult(e.target.value)}
                   className="bg-input rounded-md border-border focus:ring-2 focus:ring-ring placeholder-muted-foreground transition-all duration-200"
-                  disabled // Desabilitado para focar no hemograma
                 />
               </div>
             )}
