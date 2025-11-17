@@ -866,8 +866,13 @@ const PatientRecordPage = () => {
                             <FaEye className="h-4 w-4" />
                           </Button>
                         </div>
-                        <div className="flex items-center gap-1 text-sm text-muted-foreground">
-                          <FaCalendarAlt className="h-3 w-3" /> {formatDateTime(exam.date, exam.time)}
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-2 text-sm text-muted-foreground">
+                          <div className="flex items-center gap-1">
+                            <FaCalendarAlt className="h-3 w-3" /> {formatDateTime(exam.date, exam.time)}
+                          </div>
+                          <div className="flex items-center gap-1">
+                            <FaStethoscope className="h-3 w-3" /> {exam.vet}
+                          </div>
                         </div>
                       </Card>
                     ))}

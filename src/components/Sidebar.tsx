@@ -8,7 +8,7 @@ import {
 } from "@/components/ui/accordion";
 import { cn } from "@/lib/utils";
 import {
-  FaTachometerAlt, FaUsers, FaCalendarAlt, FaShoppingCart, FaFolder, FaPaw, FaPalette, FaDollarSign, FaBox, FaCog, FaSignOutAlt, FaMoneyBillWave, FaMoneyCheckAlt, FaSearchDollar, FaBoxOpen, FaCreditCard, FaTrophy, FaBalanceScale, FaFileInvoiceDollar, FaFileInvoice, FaTruck, FaExchangeAlt, FaTags, FaMoneyBillAlt, FaChartBar, FaWallet, FaChevronLeft, FaChevronRight // Adicionado FaWallet e ícones de chevron
+  FaTachometerAlt, FaUsers, FaCalendarAlt, FaShoppingCart, FaFolder, FaPaw, FaPalette, FaDollarSign, FaBox, FaCog, FaSignOutAlt, FaMoneyBillWave, FaMoneyCheckAlt, FaSearchDollar, FaBoxOpen, FaCreditCard, FaTrophy, FaBalanceScale, FaFileInvoiceDollar, FaFileInvoice, FaTruck, FaExchangeAlt, FaTags, FaMoneyBillAlt, FaChartBar, FaWallet, FaChevronLeft, FaChevronRight, FaStethoscope // Adicionado FaStethoscope
 } from "react-icons/fa"; // Importar ícones de react-icons
 import SystemVetLogo from "./SystemVetLogo"; // Importar o novo componente de logo
 import { Button } from "@/components/ui/button"; // Importar Button

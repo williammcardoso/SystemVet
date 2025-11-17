@@ -64,11 +64,15 @@ const AddExamPage = () => {
       return;
     }
 
+    const now = new Date();
+    const currentTime = now.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+
     // Aqui você faria a lógica para salvar o exame (enviar para uma API, etc.)
     // Por enquanto, apenas exibiremos um toast de sucesso.
     console.log("Salvando exame para Cliente:", clientId, "Animal:", animalId);
     console.log("Detalhes do exame:", {
       examDate,
+      time: currentTime, // Adicionado campo de hora
       examType,
       examVet,
       examResult: examType !== "Hemograma Completo" ? examResult : undefined,
@@ -303,7 +307,7 @@ const AddExamPage = () => {
                 id="conclusions"
                 placeholder="Conclusões do exame"
                 value={conclusions}
-                onChange={(e) => setConclusiones(e.target.value)}
+                onChange={(e) => setConclusions(e.target.value)}
                 rows={5}
                 className="bg-input rounded-md border-border focus:ring-2 focus:ring-ring placeholder-muted-foreground transition-all duration-200"
               />
