@@ -34,32 +34,7 @@ const styles = StyleSheet.create({
     fontSize: 10,
     color: "#333",
   },
-  clinicHeader: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    marginBottom: 20,
-    paddingBottom: 10,
-    borderBottomWidth: 1,
-    borderBottomColor: "#eee",
-  },
-  clinicInfoLeft: {
-    flexDirection: "row",
-    alignItems: "center",
-    gap: 10,
-  },
-  clinicName: {
-    fontSize: 16,
-    fontWeight: "bold",
-  },
-  clinicDetails: {
-    fontSize: 9,
-    color: "#666",
-  },
-  clinicAddressPhone: {
-    textAlign: "right",
-    fontSize: 9,
-    color: "#666",
-  },
+  // REMOVED: clinicHeader, clinicInfoLeft, clinicName, clinicDetails, clinicAddressPhone
   mainTitle: {
     fontSize: 20,
     textAlign: "center",
@@ -67,26 +42,7 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     marginBottom: 20,
   },
-  infoSectionContainer: {
-    flexDirection: "row",
-    gap: 10,
-    marginBottom: 20,
-  },
-  infoCard: {
-    flex: 1,
-    borderWidth: 1,
-    borderColor: "#ddd",
-    borderRadius: 5,
-    padding: 10,
-  },
-  infoTitle: {
-    fontSize: 11,
-    fontWeight: "bold",
-  },
-  infoText: {
-    fontSize: 10,
-    marginBottom: 2,
-  },
+  // REMOVED: infoSectionContainer, infoCard, infoTitle, infoText
   sectionTitle: {
     fontSize: 13,
     fontWeight: "bold",
@@ -103,98 +59,114 @@ const styles = StyleSheet.create({
     marginTop: 10,
     marginBottom: 5,
   },
-  // --- Novos estilos para o layout de colunas ---
+  // --- Layout de colunas para o corpo do laudo ---
   tableHeader: {
     flexDirection: "row",
     borderBottomWidth: 1,
     borderBottomColor: "#000",
     paddingBottom: 5,
-    marginBottom: 10,
+    marginBottom: 5,
     backgroundColor: "#f5f5f5",
   },
   headerCell: {
     fontSize: 9,
     fontWeight: "bold",
     color: "#333",
-    textAlign: "center",
-  },
-  headerCellIcon: {
-    width: 12,
-    marginRight: 5,
-  },
-  headerCellLabel: {
-    width: 100,
     textAlign: "left",
+    paddingLeft: 5,
+  },
+  headerCellName: {
+    width: 120, // NOME DO PARÂMETRO
   },
   headerCellResult: {
-    width: 130, // Ajustado para acomodar valor e unidade
+    width: 100, // RESULTADO
     textAlign: "right",
   },
   headerCellReference: {
-    width: 120, // Ajustado para acomodar faixa de referência
+    width: 120, // REFERÊNCIA
     textAlign: "right",
   },
   headerCellIndicator: {
-    flex: 1,
+    width: 130, // INDICADOR (120px para barra + 10px padding)
     textAlign: "center",
   },
   paramRow: {
     flexDirection: "row",
     alignItems: "center",
-    marginBottom: 5,
-    height: 25, // Altura fixa para parâmetros de linha única
+    marginBottom: 3,
+    minHeight: 18, // Altura mínima para cada linha
   },
-  leukocyteParamRow: {
-    flexDirection: "row",
-    alignItems: "center",
-    marginBottom: 5,
-    height: 40, // Altura maior para parâmetros de leucócitos (2 linhas)
-  },
-  paramIcon: {
-    width: 12,
-    height: 12,
-    marginRight: 5,
-    textAlign: 'center',
-  },
-  paramLabel: {
-    width: 100,
-    fontSize: 10,
+  paramName: {
+    width: 120,
+    fontSize: 9,
     color: "#333",
+    paddingLeft: 5,
   },
   paramResultContainer: {
-    width: 130, // Largura para a coluna de resultado
+    width: 100,
     flexDirection: 'column',
     alignItems: 'flex-end',
     justifyContent: 'center',
   },
   paramResultText: {
-    fontSize: 10,
+    fontSize: 9,
     fontWeight: "bold",
     textAlign: "right",
   },
   paramUnitText: {
-    fontSize: 8,
+    fontSize: 7,
     color: "#666",
     textAlign: "right",
   },
-  referenceRangeContainer: {
-    width: 120, // Largura para a coluna de valor de referência
+  paramReferenceContainer: {
+    width: 120,
     flexDirection: 'column',
     alignItems: 'flex-end',
     justifyContent: 'center',
   },
-  referenceRangeText: {
-    fontSize: 8,
+  paramReferenceText: {
+    fontSize: 7,
     color: "#666",
     textAlign: "right",
   },
   indicatorColumn: {
-    flex: 1, // Ocupa o restante do espaço
+    width: 130, // Largura para o indicador
     flexDirection: 'row',
     alignItems: 'center',
-    marginLeft: 10,
+    justifyContent: 'center',
   },
-  // --- Fim dos novos estilos ---
+  // --- Estilos para o Indicador (Barra) ---
+  indicatorBarBackground: {
+    width: 120, // Largura fixa da barra
+    height: 8,
+    backgroundColor: '#e0e0e0', // Fundo cinza claro
+    borderRadius: 2,
+    position: 'relative',
+    overflow: 'hidden',
+  },
+  indicatorBarNormalRange: {
+    position: 'absolute',
+    height: '100%',
+    backgroundColor: '#ccffcc', // Faixa verde para o intervalo normal
+    borderRadius: 2,
+  },
+  indicatorMarker: {
+    position: 'absolute',
+    fontSize: 12, // Tamanho do ponto "●"
+    top: -2, // Ajuste vertical para centralizar o ponto
+    width: 8, // Largura do ponto para centralização
+    textAlign: 'center',
+  },
+  // --- Cores para Resultados e Marcadores ---
+  resultNormal: {
+    color: "#000000", // Preto
+  },
+  resultHigh: {
+    color: "#dc3545", // Vermelho
+  },
+  resultLow: {
+    color: "#007bff", // Azul
+  },
   observationText: {
     fontSize: 10,
     lineHeight: 1.4,
@@ -234,94 +206,71 @@ const styles = StyleSheet.create({
     fontSize: 10,
     color: "#333",
   },
-  iconCheck: {
-    color: "#28a745", // Green
-  },
-  iconExclamation: {
-    color: "#ffc107", // Yellow/Orange
-  },
-  resultNormal: {
-    color: "#000000", // Preto explícito para valores normais
-  },
-  resultHigh: {
-    color: "#dc3545", // Red
-  },
-  resultLow: {
-    color: "#007bff", // Blue
-  },
-  referenceBarContainer: {
-    flex: 1,
-    height: 8,
-    backgroundColor: "#f0f0f0",
-    borderRadius: 4,
-    position: "relative",
-    overflow: "hidden",
-  },
-  referenceBarSegment: {
-    position: "absolute",
-    height: "100%",
-    borderRadius: 4,
-  },
-  referenceBarLow: {
-    backgroundColor: "#ffcccc", // Light red
-  },
-  referenceBarNormal: {
-    backgroundColor: "#ccffcc", // Light green
-  },
-  referenceBarHigh: {
-    backgroundColor: "#ffcccc", // Light red
-  },
-  referenceBarIndicator: {
-    position: "absolute",
-    width: 2,
-    height: "100%",
-    backgroundColor: "#333",
-    zIndex: 1,
-  },
 });
 
-// Componente para renderizar o ícone de status (agora usa caracteres de texto)
-const StatusIcon = ({ isNormal }: { isNormal: boolean }) => (
-  <Text style={[styles.paramIcon, isNormal ? styles.iconCheck : styles.iconExclamation]}>
-    {isNormal ? "✓" : "⚠"}
-  </Text>
-);
-
-// Componente para a barra de referência
-interface ReferenceBarProps {
-  value: number;
-  min: number;
-  max: number;
-  isNormal: boolean;
+// Componente para o Indicador (Barra com faixa verde e marcador de ponto)
+interface IndicatorBarProps {
+  value: string | undefined;
+  minRef: number;
+  maxRef: number;
+  valueStatus: 'normal' | 'high' | 'low' | 'invalid';
 }
 
-const ReferenceBar = ({ value, min, max, isNormal }: ReferenceBarProps) => {
-  let vMin = min;
-  let vMax = max;
-  if (vMax === vMin) {
-    const delta = Math.max(1, Math.abs(vMin) * 0.1 || 1);
-    vMin = vMin - delta;
-    vMax = vMax + delta;
+const IndicatorBar: React.FC<IndicatorBarProps> = ({ value, minRef, maxRef, valueStatus }) => {
+  const BAR_WIDTH = 120;
+  const BAR_HEIGHT = 8;
+
+  const numValue = normalizeNumber(value);
+
+  // Determine marker color based on valueStatus
+  let markerColor = styles.resultNormal.color;
+  if (valueStatus === 'high') markerColor = styles.resultHigh.color;
+  if (valueStatus === 'low') markerColor = styles.resultLow.color;
+
+  // --- Cálculo das posições para a faixa verde e o marcador ---
+  let visualMin = minRef;
+  let visualMax = maxRef;
+
+  // Ajuste para casos onde minRef === maxRef para evitar divisão por zero e ter uma visualização mínima
+  if (visualMax === visualMin) {
+    const delta = Math.max(1, Math.abs(visualMin) * 0.1 || 1);
+    visualMin = visualMin - delta;
+    visualMax = visualMax + delta;
   }
 
-  const bufferFactor = 0.2;
-  const visualMin = vMin - (vMax - vMin) * bufferFactor;
-  const visualMax = vMax + (vMax - vMin) * bufferFactor;
-  const totalVisualRange = visualMax - visualMin;
+  // Expandir o range visual para acomodar valores fora da referência
+  const rangeBuffer = (visualMax - visualMin) * 0.2; // 20% de buffer em cada lado
+  const effectiveVisualMin = visualMin - rangeBuffer;
+  const effectiveVisualMax = visualMax + rangeBuffer;
+  const totalEffectiveRange = effectiveVisualMax - effectiveVisualMin;
 
-  const clampPercent = (p: number) => Math.max(0, Math.min(100, p));
+  let greenBarLeft = 0;
+  let greenBarWidth = 0;
+  let markerPosition = 0;
 
-  const valuePosition = clampPercent(((value - visualMin) / totalVisualRange) * 100);
-  const minPosition = clampPercent(((vMin - visualMin) / totalVisualRange) * 100);
-  const maxPosition = clampPercent(((vMax - visualMin) / totalVisualRange) * 100);
+  if (totalEffectiveRange > 0) {
+    greenBarLeft = ((visualMin - effectiveVisualMin) / totalEffectiveRange) * BAR_WIDTH;
+    greenBarWidth = ((visualMax - visualMin) / totalEffectiveRange) * BAR_WIDTH;
+    markerPosition = ((numValue - effectiveVisualMin) / totalEffectiveRange) * BAR_WIDTH;
+  } else { // Fallback para ranges inválidos ou zero, centraliza tudo
+    greenBarLeft = BAR_WIDTH / 2 - 5; // Pequeno segmento central
+    greenBarWidth = 10;
+    markerPosition = BAR_WIDTH / 2;
+  }
+
+  // Clampar posições para garantir que estejam dentro dos limites da barra
+  greenBarLeft = Math.max(0, Math.min(BAR_WIDTH - greenBarWidth, greenBarLeft));
+  greenBarWidth = Math.max(0, greenBarWidth);
+  markerPosition = Math.max(0, Math.min(BAR_WIDTH, markerPosition));
 
   return (
-    <View style={styles.referenceBarContainer}>
-      <View style={[styles.referenceBarSegment, styles.referenceBarLow, { left: 0, width: `${minPosition}%` }]} />
-      <View style={[styles.referenceBarSegment, styles.referenceBarNormal, { left: `${minPosition}%`, width: `${maxPosition - minPosition}%` }]} />
-      <View style={[styles.referenceBarSegment, styles.referenceBarHigh, { left: `${maxPosition}%`, width: `${100 - maxPosition}%` }]} />
-
-      <View style={[styles.referenceBarIndicator, { left: `${valuePosition}%`, backgroundColor: isNormal ? '#28a745' : '#dc3545' }]} />
+    <View style={styles.indicatorBarBackground}>
+      {greenBarWidth > 0 && (
+        <View style={[styles.indicatorBarNormalRange, { left: greenBarLeft, width: greenBarWidth }]} />
+      )}
+      {!isNaN(numValue) && (
+        <Text style={[styles.indicatorMarker, { left: markerPosition - (styles.indicatorMarker.fontSize as number / 2) }]}>●</Text>
+      )}
     </View>
   );
 };
@@ -348,7 +297,7 @@ export const ExamReportPdfContent = ({
     return 'low';
   };
 
-  // Renderiza um parâmetro de hemograma de valor único (Eritrócitos, RDW, Plaquetas)
+  // Renderiza um parâmetro de hemograma de valor único
   const renderHemogramParam = (
     label: string,
     value: string | undefined,
@@ -359,7 +308,6 @@ export const ExamReportPdfContent = ({
 
     const ref = getReferenceRange(referenceKey);
     const valueStatus = getValueStatus(value, ref);
-    const isNormal = valueStatus === 'normal';
 
     let resultStyle;
     switch (valueStatus) {
@@ -371,18 +319,17 @@ export const ExamReportPdfContent = ({
 
     return (
       <View style={styles.paramRow}>
-        <StatusIcon isNormal={isNormal} />
-        <Text style={styles.paramLabel}>{label}</Text>
+        <Text style={styles.paramName}>{label}</Text>
         <View style={styles.paramResultContainer}>
           <Text style={[styles.paramResultText, resultStyle]}>{value}</Text>
           <Text style={styles.paramUnitText}>{unit}</Text>
         </View>
-        <View style={styles.referenceRangeContainer}>
-          <Text style={styles.referenceRangeText}>{ref?.full}</Text>
+        <View style={styles.paramReferenceContainer}>
+          <Text style={styles.paramReferenceText}>{ref?.full || 'N/A'}</Text>
         </View>
         <View style={styles.indicatorColumn}>
           {ref && ref.min !== undefined && ref.max !== undefined && !isNaN(normalizeNumber(value)) ? (
-            <ReferenceBar value={normalizeNumber(value)} min={ref.min} max={ref.max} isNormal={isNormal} />
+            <IndicatorBar value={value} minRef={ref.min} maxRef={ref.max} valueStatus={valueStatus} />
           ) : null}
         </View>
       </View>
@@ -405,10 +352,6 @@ export const ExamReportPdfContent = ({
     const relValueStatus = getValueStatus(relativeValue, relRef);
     const absValueStatus = getValueStatus(absoluteValue, absRef);
 
-    const isRelNormal = relValueStatus === 'normal';
-    const isAbsNormal = absValueStatus === 'normal';
-    const isOverallNormal = isRelNormal && isAbsNormal;
-
     let relResultStyle;
     switch (relValueStatus) {
       case 'normal': relResultStyle = styles.resultNormal; break;
@@ -425,27 +368,26 @@ export const ExamReportPdfContent = ({
       default: absResultStyle = styles.resultNormal;
     }
 
-    // Para o indicador, usaremos o valor absoluto e sua referência
-    const indicatorValue = normalizeNumber(absoluteValue);
+    // O indicador usará o valor absoluto para posicionamento e cor
+    const indicatorValue = absoluteValue;
     const indicatorMin = absRef?.min;
     const indicatorMax = absRef?.max;
-    const isIndicatorNormal = absValueStatus === 'normal';
+    const indicatorValueStatus = absValueStatus;
 
     return (
-      <View style={styles.leukocyteParamRow}>
-        <StatusIcon isNormal={isOverallNormal} />
-        <Text style={styles.paramLabel}>{label}</Text>
+      <View style={styles.paramRow}>
+        <Text style={styles.paramName}>{label}</Text>
         <View style={styles.paramResultContainer}>
           <Text style={[styles.paramResultText, relResultStyle]}>{relativeValue}%</Text>
           <Text style={[styles.paramResultText, absResultStyle]}>{absoluteValue}/µL</Text>
         </View>
-        <View style={styles.referenceRangeContainer}>
-          <Text style={styles.referenceRangeText}>{relRef?.relative}</Text>
-          <Text style={styles.referenceRangeText}>{absRef?.absolute}</Text>
+        <View style={styles.paramReferenceContainer}>
+          <Text style={styles.paramReferenceText}>{relRef?.relative || 'N/A'}</Text>
+          <Text style={styles.paramReferenceText}>{absRef?.absolute || 'N/A'}</Text>
         </View>
         <View style={styles.indicatorColumn}>
-          {indicatorValue !== undefined && indicatorMin !== undefined && indicatorMax !== undefined && !isNaN(indicatorValue) ? (
-            <ReferenceBar value={indicatorValue} min={indicatorMin} max={indicatorMax} isNormal={isIndicatorNormal} />
+          {indicatorMin !== undefined && indicatorMax !== undefined && !isNaN(normalizeNumber(indicatorValue)) ? (
+            <IndicatorBar value={indicatorValue} minRef={indicatorMin} maxRef={indicatorMax} valueStatus={indicatorValueStatus} />
           ) : null}
         </View>
       </View>
@@ -455,66 +397,19 @@ export const ExamReportPdfContent = ({
   return (
     <Document>
       <Page size="A4" style={styles.page}>
-        {/* Header da Clínica */}
-        <View style={styles.clinicHeader} fixed>
-          <View style={styles.clinicInfoLeft}>
-            <View>
-              <Text style={styles.clinicName}>{mockCompanySettings.companyName}</Text>
-              <Text style={styles.clinicDetails}>CRMV {mockCompanySettings.crmv}</Text>
-              <Text style={styles.clinicDetails}>Registro no MAPA {mockCompanySettings.mapaRegistration}</Text>
-            </View>
-          </View>
-          <View style={styles.clinicAddressPhone}>
-            <Text>{mockCompanySettings.address}</Text>
-            <Text>{mockCompanySettings.city} - CEP: {mockCompanySettings.zipCode}</Text>
-            <Text>Telefone: {mockCompanySettings.phone}</Text>
-          </View>
-        </View>
-
-        <Text style={styles.mainTitle}>LAUDO DE EXAME</Text>
-
-        {/* Informações do Animal e Tutor */}
-        <View style={styles.infoSectionContainer}>
-          <View style={styles.infoCard}>
-            <Text style={styles.infoTitle}>Animal</Text>
-            <Text style={styles.infoText}>ID: {animalId}</Text>
-            <Text style={styles.infoText}>Nome: {animalName}</Text>
-            <Text style={styles.infoText}>Espécie: {animalSpecies}</Text>
-          </View>
-          <View style={styles.infoCard}>
-            <Text style={styles.infoTitle}>Tutor</Text>
-            <Text style={styles.infoText}>Nome: {tutorName}</Text>
-            <Text style={styles.infoText}>Endereço: {tutorAddress || "Não informado"}</Text>
-          </View>
-        </View>
-
-        {/* Informações Gerais do Exame */}
-        <View style={styles.infoSectionContainer}>
-          <View style={styles.infoCard}>
-            <Text style={styles.infoTitle}>Detalhes do Exame</Text>
-            <Text style={styles.infoText}>Tipo: {exam.type}</Text>
-            <Text style={styles.infoText}>Data: {formatDateToPortuguese(new Date(exam.date))}</Text>
-            <Text style={styles.infoText}>Veterinário Solicitante: {exam.vet}</Text>
-            {exam.material && <Text style={styles.infoText}>Material: {exam.material}</Text>}
-            {exam.equipamento && <Text style={styles.infoText}>Equipamento: {exam.equipamento}</Text>}
-          </View>
-          <View style={styles.infoCard}>
-            <Text style={styles.infoTitle}>Laboratório</Text>
-            {exam.laboratory && <Text style={styles.infoText}>Nome: {exam.laboratory}</Text>}
-            {exam.laboratoryDate && <Text style={styles.infoText}>Data do Resultado: {formatDateToPortuguese(new Date(exam.laboratoryDate))}</Text>}
-            {exam.liberadoPor && <Text style={styles.infoText}>Liberado por: {exam.liberadoPor}</Text>}
-          </View>
-        </View>
+        {/* REMOVED: Header da Clínica */}
+        {/* REMOVED: mainTitle */}
+        {/* REMOVED: Informações do Animal e Tutor */}
+        {/* REMOVED: Informações Gerais do Exame */}
 
         {exam.type === "Hemograma Completo" ? (
           <>
             {/* Tabela de Cabeçalho para os parâmetros */}
             <View style={styles.tableHeader}>
-              <Text style={styles.headerCellIcon}></Text>
-              <Text style={[styles.headerCell, styles.headerCellLabel]}>Nome</Text>
-              <Text style={[styles.headerCell, styles.headerCellResult]}>Resultado</Text>
-              <Text style={[styles.headerCell, styles.headerCellReference]}>Valor de Referência</Text>
-              <Text style={[styles.headerCell, styles.headerCellIndicator]}>Indicador (+)</Text>
+              <Text style={[styles.headerCell, styles.headerCellName]}>NOME DO PARÂMETRO</Text>
+              <Text style={[styles.headerCell, styles.headerCellResult]}>RESULTADO</Text>
+              <Text style={[styles.headerCell, styles.headerCellReference]}>REFERÊNCIA</Text>
+              <Text style={[styles.headerCell, styles.headerCellIndicator]}>INDICADOR</Text>
             </View>
 
             {/* Série Vermelha */}
