@@ -1,3 +1,4 @@
+280000).">
 import React from "react";
 import { Document, Page, View, Text, StyleSheet, Font } from "@react-pdf/renderer";
 import { mockCompanySettings } from "@/mockData/settings";
@@ -19,6 +20,11 @@ const formatDateToPortuguese = (date: Date) => {
   const options: Intl.DateTimeFormatOptions = { day: '2-digit', month: 'long', year: 'numeric' };
   const formattedDate = date.toLocaleDateString('pt-BR', options);
   return formattedDate.toUpperCase();
+};
+
+// ADDED: normalizador de números (remove separador de milhar e troca vírgula por ponto)
+const normalizeNumber = (raw: string) => {
+  return parseFloat(raw.replace(/\./g, '').replace(',', '.'));
 };
 
 const styles = StyleSheet.create({
@@ -229,18 +235,29 @@ interface ReferenceBarProps {
 }
 
 const ReferenceBar = ({ value, min, max, isNormal }: ReferenceBarProps) => {
-  // Define um "buffer" para a visualização da barra, para que valores fora da faixa ainda sejam visíveis
+  // ADDED: proteção para intervalos com min === max (evita divisão por zero)
+  let vMin = min;
+  let vMax = max;
+  if (vMax === vMin) {
+    const delta = Math.max(1, Math.abs(vMin) * 0.1 || 1); // intervalo mínimo artificial
+    vMin = vMin - delta;
+    vMax = vMax + delta;
+  }
+
+  // Define um "buffer" para a visualização da barra
   const bufferFactor = 0.2; // 20% do range total para cada lado
-  const visualMin = min - (max - min) * bufferFactor;
-  const visualMax = max + (max - min) * bufferFactor;
+  const visualMin = vMin - (vMax - vMin) * bufferFactor;
+  const visualMax = vMax + (vMax - vMin) * bufferFactor;
   const totalVisualRange = visualMax - visualMin;
 
-  // Calcula a posição do valor dentro do range visual (0-100%)
-  const valuePosition = Math.max(0, Math.min(100, ((value - visualMin) / totalVisualRange) * 100));
+  const clampPercent = (p: number) => Math.max(0, Math.min(100, p));
+
+  // Calcula a posição do valor dentro do range visual (0-100%), com clamp
+  const valuePosition = clampPercent(((value - visualMin) / totalVisualRange) * 100);
 
   // Calcula as posições dos limites min e max dentro do range visual
-  const minPosition = Math.max(0, Math.min(100, ((min - visualMin) / totalVisualRange) * 100));
-  const maxPosition = Math.max(0, Math.min(100, ((max - visualMin) / totalVisualRange) * 100));
+  const minPosition = clampPercent(((vMin - visualMin) / totalVisualRange) * 100);
+  const maxPosition = clampPercent(((vMax - visualMin) / totalVisualRange) * 100);
 
   return (
     <View style={styles.referenceBarContainer}>
@@ -270,8 +287,8 @@ export const ExamReportPdfContent = ({
   };
 
   const checkValueStatus = (value: string | undefined, ref: HemogramReferenceValue | undefined): boolean => {
-    if (!value || !ref || ref.min === undefined || ref.max === undefined) return true; // Assume normal if no ref or value
-    const numValue = parseFloat(value.replace(',', '.'));
+    if (!value || !ref || ref.min === undefined || ref.max === undefined) return true; // Assume normal if no ref ou não há valor
+    const numValue = normalizeNumber(value);
     return numValue >= ref.min && numValue <= ref.max;
   };
 
@@ -310,13 +327,13 @@ export const ExamReportPdfContent = ({
           <Text style={styles.paramUnit}>{absoluteUnit}</Text>
           <View style={styles.referenceBarContainer}>
             {ref && ref.min !== undefined && ref.max !== undefined && value ? (
-              <ReferenceBar value={parseFloat(value.replace(',', '.'))} min={ref.min} max={ref.max} isNormal={isNormal} />
+              <ReferenceBar value={normalizeNumber(value)} min={ref.min} max={ref.max} isNormal={isNormal} />
             ) : null}
           </View>
           <Text style={styles.referenceValues}>{ref?.relative}</Text>
           <View style={styles.referenceBarContainer}>
             {absoluteRef && absoluteRef.min !== undefined && absoluteRef.max !== undefined && absoluteValue ? (
-              <ReferenceBar value={parseFloat(absoluteValue.replace(',', '.'))} min={absoluteRef.min} max={absoluteRef.max} isNormal={isAbsoluteNormal} />
+              <ReferenceBar value={normalizeNumber(absoluteValue)} min={absoluteRef.min} max={absoluteRef.max} isNormal={isAbsoluteNormal} />
             ) : null}
           </View>
           <Text style={styles.referenceValues}>{absoluteRef?.absolute}</Text>
@@ -332,7 +349,7 @@ export const ExamReportPdfContent = ({
         <Text style={styles.paramUnit}>{displayUnit}</Text>
         <View style={styles.referenceBarContainer}>
           {ref && ref.min !== undefined && ref.max !== undefined && value ? (
-            <ReferenceBar value={parseFloat(value.replace(',', '.'))} min={ref.min} max={ref.max} isNormal={isNormal} />
+            <ReferenceBar value={normalizeNumber(value)} min={ref.min} max={ref.max} isNormal={isNormal} />
           ) : null}
         </View>
         <Text style={styles.referenceValues}>{displayReference}</Text>
