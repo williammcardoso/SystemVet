@@ -1,16 +1,16 @@
 import React, { useState, useEffect } from "react";
 import { Link, useParams, useNavigate } from "react-router-dom";
-import { FaArrowLeft, FaTimes, FaSave, FaCalendarAlt, FaFlask } from "react-icons/fa"; // Importar ícones de react-icons
+import { FaArrowLeft, FaTimes, FaSave, FaCalendarAlt, FaFlask, FaEdit } from "react-icons/fa";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { showSuccess, showError } from "@/utils/toast"; // Importar funções de toast
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"; // Importar Card para envolver o formulário
-import { mockClients } from "@/mockData/clients"; // Importar mockClients para obter a espécie do animal
-import { ExamEntry } from "@/types/exam"; // Importar a interface ExamEntry
-import { addMockExam, updateMockExam, mockExams } from "@/mockData/exams"; // Importar funções de mock de exames
+import { showSuccess, showError } from "@/utils/toast";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { mockClients } from "@/mockData/clients";
+import { ExamEntry } from "@/types/exam";
+import { updateMockExam, mockExams } from "@/mockData/exams";
 
 // Mock data para tipos de exame e veterinários (duplicado por enquanto, idealmente viria de um contexto ou API)
 const mockExamTypes = [
@@ -30,7 +30,7 @@ const mockVets = [
 interface HemogramReferenceValue {
   relative?: string;
   absolute?: string;
-  full?: string; // For non-leukocyte fields
+  full?: string;
   min?: number;
   max?: number;
 }
@@ -180,8 +180,8 @@ const LeukocyteFieldWithReference = React.memo(({
 ));
 
 
-const AddExamPage = () => {
-  const { clientId, animalId } = useParams<{ clientId: string; animalId: string }>();
+const EditExamPage = () => {
+  const { clientId, animalId, examId } = useParams<{ clientId: string; animalId: string; examId: string }>();
   const navigate = useNavigate();
 
   const currentClient = mockClients.find(c => c.id === clientId);
@@ -191,7 +191,7 @@ const AddExamPage = () => {
   // Estado do formulário
   const [examDate, setExamDate] = useState<string>(new Date().toISOString().split('T')[0]);
   const [examType, setExamType] = useState<string | undefined>(undefined);
-  const [examResult, setExamResult] = useState<string>(""); // Reintroduzido o estado examResult
+  const [examResult, setExamResult] = useState<string>("");
   const [examVet, setExamVet] = useState<string | undefined>(undefined);
 
   // Novos campos gerais do exame
@@ -210,7 +210,7 @@ const AddExamPage = () => {
   const [observacoesSerieVermelha, setObservacoesSerieVermelha] = useState<string>("");
 
   // Campos específicos para Leucograma
-  const [leucocitosTotais, setLeucocitosTotais] = useState<string>(""); // Renomeado
+  const [leucocitosTotais, setLeucocitosTotais] = useState<string>("");
   const [mielocitosRelativo, setMielocitosRelativo] = useState<string>("");
   const [mielocitosAbsoluto, setMielocitosAbsoluto] = useState<string>("");
   const [metamielocitosRelativo, setMetamielocitosRelativo] = useState<string>("");
@@ -240,6 +240,55 @@ const AddExamPage = () => {
   const [observacoesGeraisExame, setObservacoesGeraisExame] = useState<string>("");
   const [liberadoPor, setLiberadoPor] = useState<string>("WILLIAM DE MORAES CARDOSO CRMV-SP 56895");
 
+  useEffect(() => {
+    const existingExam = mockExams.find(e => e.id === examId);
+    if (existingExam) {
+      setExamDate(existingExam.date);
+      setExamType(existingExam.type);
+      setExamResult(existingExam.result || "");
+      setExamVet(existingExam.vet);
+      setMaterial(existingExam.material || "SANGUE COM E.D.T.A.");
+      setEquipamento(existingExam.equipamento || "");
+      setEritrocitos(existingExam.eritrocitos || "");
+      setHemoglobina(existingExam.hemoglobina || "");
+      setHematocrito(existingExam.hematocrito || "");
+      setVcm(existingExam.vcm || "");
+      setHcm(existingExam.hcm || "");
+      setChcm(existingExam.chcm || "");
+      setProteinaTotal(existingExam.proteinaTotal || "");
+      setHemaciasNucleadas(existingExam.hemaciasNucleadas || "");
+      setObservacoesSerieVermelha(existingExam.observacoesSerieVermelha || "");
+      setLeucocitosTotais(existingExam.leucocitosTotais || "");
+      setMielocitosRelativo(existingExam.mielocitosRelativo || "");
+      setMielocitosAbsoluto(existingExam.mielocitosAbsoluto || "");
+      setMetamielocitosRelativo(existingExam.metamielocitosRelativo || "");
+      setMetamielocitosAbsoluto(existingExam.metamielocitosAbsoluto || "");
+      setBastonetesRelativo(existingExam.bastonetesRelativo || "");
+      setBastonetesAbsoluto(existingExam.bastonetesAbsoluto || "");
+      setSegmentadosRelativo(existingExam.segmentadosRelativo || "");
+      setSegmentadosAbsoluto(existingExam.segmentadosAbsoluto || "");
+      setEosinofilosRelativo(existingExam.eosinofilosRelativo || "");
+      setEosinofilosAbsoluto(existingExam.eosinofilosAbsoluto || "");
+      setBasofilosRelativo(existingExam.basofilosRelativo || "");
+      setBasofilosAbsoluto(existingExam.basofilosAbsoluto || "");
+      setLinfocitosRelativo(existingExam.linfocitosRelativo || "");
+      setLinfocitosAbsoluto(existingExam.linfocitosAbsoluto || "");
+      setMonocitosRelativo(existingExam.monocitosRelativo || "");
+      setMonocitosAbsoluto(existingExam.monocitosAbsoluto || "");
+      setObservacoesSerieBranca(existingExam.observacoesSerieBranca || "");
+      setContagemPlaquetaria(existingExam.contagemPlaquetaria || "");
+      setAvaliacaoPlaquetaria(existingExam.avaliacaoPlaquetaria || "");
+      setNota(existingExam.nota || "");
+      setLaboratory(existingExam.laboratory || "");
+      setLaboratoryDate(existingExam.laboratoryDate || "");
+      setObservacoesGeraisExame(existingExam.observacoesGeraisExame || "");
+      setLiberadoPor(existingExam.liberadoPor || "WILLIAM DE MORAES CARDOSO CRMV-SP 56895");
+    } else {
+      toast.error("Exame não encontrado para edição.");
+      navigate(`/clients/${clientId}/animals/${animalId}/record`);
+    }
+  }, [examId, clientId, animalId, navigate]);
+
   const getReference = (param: string, type?: 'relative' | 'absolute' | 'full') => {
     if (!animalSpecies || !hemogramReferences[param]) return "N/A";
 
@@ -264,8 +313,8 @@ const AddExamPage = () => {
     const now = new Date();
     const currentTime = now.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
 
-    const newExam: ExamEntry = {
-      id: `exam-${Date.now()}`, // Gerar um ID único
+    const updatedExam: ExamEntry = {
+      id: examId, // Manter o ID existente
       date: examDate,
       time: currentTime,
       type: examType,
@@ -309,8 +358,8 @@ const AddExamPage = () => {
       liberadoPor: liberadoPor.trim() || undefined,
     };
 
-    addMockExam(newExam); // Adiciona o novo exame ao mock
-    showSuccess("Exame salvo com sucesso!");
+    updateMockExam(updatedExam); // Atualiza o exame no mock
+    showSuccess("Exame atualizado com sucesso!");
     navigate(`/clients/${clientId}/animals/${animalId}/record`); // Voltar para o prontuário
   };
 
@@ -323,10 +372,10 @@ const AddExamPage = () => {
           <div className="flex items-center gap-4">
             <div>
               <h1 className="text-2xl font-semibold flex items-center gap-3 text-foreground group">
-                <FaFlask className="h-5 w-5 text-muted-foreground" /> Adicionar Exame
+                <FaEdit className="h-5 w-5 text-muted-foreground" /> Editar Exame
               </h1>
               <p className="text-sm text-muted-foreground mt-1 mb-4">
-                Registre um novo exame para o animal.
+                Edite os detalhes do exame para o animal.
               </p>
             </div>
           </div>
@@ -337,7 +386,7 @@ const AddExamPage = () => {
           </Link>
         </div>
         <p className="text-sm text-muted-foreground">
-          Painel &gt; Clientes &gt; Animal &gt; Prontuário &gt; Adicionar Exame
+          Painel &gt; Clientes &gt; Animal &gt; Prontuário &gt; Editar Exame
         </p>
       </div>
 
@@ -408,7 +457,7 @@ const AddExamPage = () => {
                         <FaFlask className="h-5 w-5 text-primary" /> Eritrograma
                       </CardTitle>
                     </CardHeader>
-                    <CardContent className="grid gap-4 pt-0 px-2"> {/* Ajustado padding horizontal */}
+                    <CardContent className="grid gap-4 pt-0 px-2">
                       <ExamFieldWithReference getReference={getReference} id="eritrocitos" label="Eritrócitos" value={eritrocitos} onChange={(e) => setEritrocitos(e.target.value)} referenceKey="eritrocitos" unit="milhões/mm3" />
                       <ExamFieldWithReference getReference={getReference} id="hemoglobina" label="Hemoglobina" value={hemoglobina} onChange={(e) => setHemoglobina(e.target.value)} referenceKey="hemoglobina" unit="g/dL" />
                       <ExamFieldWithReference getReference={getReference} id="hematocrito" label="Hematócrito" value={hematocrito} onChange={(e) => setHematocrito(e.target.value)} referenceKey="hematocrito" unit="%" />
@@ -432,7 +481,7 @@ const AddExamPage = () => {
                         <FaFlask className="h-5 w-5 text-primary" /> Leucograma
                       </CardTitle>
                     </CardHeader>
-                    <CardContent className="grid gap-4 pt-0 px-2"> {/* Ajustado padding horizontal */}
+                    <CardContent className="grid gap-4 pt-0 px-2">
                       <ExamFieldWithReference getReference={getReference} id="leucocitosTotais" label="Leucócitos totais" value={leucocitosTotais} onChange={(e) => setLeucocitosTotais(e.target.value)} referenceKey="leucocitosTotais" unit="mil/µL" labelWidth="w-[110px]" inputWidth="w-[90px]" />
                       
                       <LeukocyteFieldWithReference getReference={getReference} idPrefix="mielocitos" label="Mielócitos" relativeValue={mielocitosRelativo} onRelativeChange={(e) => setMielocitosRelativo(e.target.value)} absoluteValue={mielocitosAbsoluto} onAbsoluteChange={(e) => setMielocitosAbsoluto(e.target.value)} referenceKey="mielocitos" />
@@ -459,7 +508,7 @@ const AddExamPage = () => {
                       <FaFlask className="h-5 w-5 text-primary" /> Plaquetas
                     </CardTitle>
                   </CardHeader>
-                  <CardContent className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-0 px-2"> {/* Ajustado padding horizontal */}
+                  <CardContent className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-0 px-2">
                     <ExamFieldWithReference getReference={getReference} id="contagemPlaquetaria" label="Contagem plaquetária" value={contagemPlaquetaria} onChange={(e) => setContagemPlaquetaria(e.target.value)} referenceKey="contagemPlaquetaria" unit="/µL" inputWidth="w-[90px]" />
                     <div className="space-y-2 col-span-full">
                       <Label htmlFor="avaliacaoPlaquetaria" className="text-muted-foreground font-medium">Avaliação plaquetária</Label>
@@ -554,4 +603,4 @@ const AddExamPage = () => {
   );
 };
 
-export default AddExamPage;
+export default EditExamPage;
