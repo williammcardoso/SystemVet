@@ -1,5 +1,6 @@
 import React from "react";
 import { Document, Page, View, Text, StyleSheet, Font } from "@react-pdf/renderer";
+import { mockCompanySettings } from "@/mockData/settings"; // Importar mockCompanySettings
 import { ExamEntry, HemogramReference, HemogramReferenceValue, ExamReportData } from "@/types/exam";
 import { hemogramReferences } from "@/constants/examReferences"; // Importar hemogramReferences do novo arquivo
 
@@ -14,6 +15,13 @@ Font.register({
   ],
 });
 
+// Helper function to format date
+const formatDateToPortuguese = (date: Date) => {
+  const options: Intl.DateTimeFormatOptions = { day: '2-digit', month: 'long', year: 'numeric' };
+  const formattedDate = date.toLocaleDateString('pt-BR', options);
+  return formattedDate.toUpperCase();
+};
+
 // Normalizador de números (remove separador de milhar e troca vírgula por ponto)
 const normalizeNumber = (raw: string | undefined) => {
   if (!raw) return NaN;
@@ -27,6 +35,60 @@ const styles = StyleSheet.create({
     fontFamily: "Exo",
     fontSize: 10,
     color: "#333",
+  },
+  // Clinic Header (restored)
+  clinicHeader: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    marginBottom: 20,
+    paddingBottom: 10,
+    borderBottomWidth: 1,
+    borderBottomColor: "#eee",
+  },
+  clinicInfoLeft: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 10,
+  },
+  clinicName: {
+    fontSize: 16,
+    fontWeight: "bold",
+  },
+  clinicDetails: {
+    fontSize: 9,
+    color: "#666",
+  },
+  clinicAddressPhone: {
+    textAlign: "right",
+    fontSize: 9,
+    color: "#666",
+  },
+  mainTitle: {
+    fontSize: 20,
+    textAlign: "center",
+    fontFamily: "Exo",
+    fontWeight: "bold",
+    marginBottom: 20,
+  },
+  infoSectionContainer: {
+    flexDirection: "row",
+    gap: 10,
+    marginBottom: 20,
+  },
+  infoCard: {
+    flex: 1,
+    borderWidth: 1,
+    borderColor: "#ddd",
+    borderRadius: 5,
+    padding: 10,
+  },
+  infoTitle: {
+    fontSize: 11,
+    fontWeight: "bold",
+  },
+  infoText: {
+    fontSize: 10,
+    marginBottom: 2,
   },
   sectionTitle: {
     fontSize: 13,
@@ -67,13 +129,13 @@ const styles = StyleSheet.create({
     width: 100, // RESULTADO
     textAlign: "right",
   },
-  headerCellReference: {
-    width: 120, // REFERÊNCIA
-    textAlign: "right",
-  },
-  headerCellIndicator: {
+  headerCellIndicator: { // Swapped order
     width: 130, // INDICADOR (120px para barra + 10px padding)
     textAlign: "center",
+  },
+  headerCellReference: { // Swapped order
+    width: 120, // REFERÊNCIA
+    textAlign: "right",
   },
   paramRow: {
     flexDirection: "row",
@@ -98,12 +160,8 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     textAlign: "right",
   },
-  paramUnitText: {
-    fontSize: 7,
-    color: "#666",
-    textAlign: "right",
-  },
-  paramReferenceContainer: {
+  // REMOVED: paramUnitText
+  paramReferenceContainer: { // Swapped order
     width: 120,
     flexDirection: 'column',
     alignItems: 'flex-end',
@@ -114,7 +172,7 @@ const styles = StyleSheet.create({
     color: "#666",
     textAlign: "right",
   },
-  indicatorColumn: {
+  indicatorColumn: { // Swapped order
     width: 130, // Largura para o indicador
     flexDirection: 'row',
     alignItems: 'center',
@@ -124,7 +182,7 @@ const styles = StyleSheet.create({
   indicatorBarBackground: {
     width: 120, // Largura fixa da barra
     height: 8,
-    backgroundColor: '#e0e0e0', // Fundo cinza claro
+    backgroundColor: '#ffe0e0', // Fundo vermelho claro
     borderRadius: 2,
     position: 'relative',
     overflow: 'hidden',
@@ -263,7 +321,7 @@ const IndicatorBar: React.FC<IndicatorBarProps> = ({ value, minRef, maxRef, valu
 
 export const ExamReportPdfContent = ({
   animalName, animalId, animalSpecies, tutorName, tutorAddress, exam,
-}: ExamReportData) => { // Removido hemogramReferences das props, pois será importado
+}: ExamReportData) => {
   const currentDate = new Date();
   const speciesKey = animalSpecies === "Canino" ? "dog" : animalSpecies === "Felino" ? "cat" : undefined;
 
@@ -277,9 +335,9 @@ export const ExamReportPdfContent = ({
     const numValue = normalizeNumber(value);
     if (isNaN(numValue)) return 'invalid';
 
-    if (numValue >= ref.min && numValue <= ref.max) return 'normal';
+    if (numValue < ref.min) return 'low';
     if (numValue > ref.max) return 'high';
-    return 'low';
+    return 'normal'; // If not low and not high, it's normal
   };
 
   // Renderiza um parâmetro de hemograma de valor único
@@ -306,16 +364,15 @@ export const ExamReportPdfContent = ({
       <View style={styles.paramRow}>
         <Text style={styles.paramName}>{label}</Text>
         <View style={styles.paramResultContainer}>
-          <Text style={[styles.paramResultText, resultStyle]}>{value}</Text>
-          <Text style={styles.paramUnitText}>{unit}</Text>
+          <Text style={[styles.paramResultText, resultStyle]}>{value} {unit}</Text> {/* Combined value and unit */}
         </View>
-        <View style={styles.paramReferenceContainer}>
-          <Text style={styles.paramReferenceText}>{ref?.full || 'N/A'}</Text>
-        </View>
-        <View style={styles.indicatorColumn}>
+        <View style={styles.indicatorColumn}> {/* Swapped order */}
           {ref && ref.min !== undefined && ref.max !== undefined && !isNaN(normalizeNumber(value)) ? (
             <IndicatorBar value={value} minRef={ref.min} maxRef={ref.max} valueStatus={valueStatus} />
           ) : null}
+        </View>
+        <View style={styles.paramReferenceContainer}> {/* Swapped order */}
+          <Text style={styles.paramReferenceText}>{ref?.full || 'N/A'}</Text>
         </View>
       </View>
     );
@@ -366,14 +423,14 @@ export const ExamReportPdfContent = ({
           <Text style={[styles.paramResultText, relResultStyle]}>{relativeValue}%</Text>
           <Text style={[styles.paramResultText, absResultStyle]}>{absoluteValue}/µL</Text>
         </View>
-        <View style={styles.paramReferenceContainer}>
-          <Text style={styles.paramReferenceText}>{relRef?.relative || 'N/A'}</Text>
-          <Text style={styles.paramReferenceText}>{absRef?.absolute || 'N/A'}</Text>
-        </View>
-        <View style={styles.indicatorColumn}>
+        <View style={styles.indicatorColumn}> {/* Swapped order */}
           {indicatorMin !== undefined && indicatorMax !== undefined && !isNaN(normalizeNumber(indicatorValue)) ? (
             <IndicatorBar value={indicatorValue} minRef={indicatorMin} maxRef={indicatorMax} valueStatus={indicatorValueStatus} />
           ) : null}
+        </View>
+        <View style={styles.paramReferenceContainer}> {/* Swapped order */}
+          <Text style={styles.paramReferenceText}>{relRef?.relative || 'N/A'}</Text>
+          <Text style={styles.paramReferenceText}>{absRef?.absolute || 'N/A'}</Text>
         </View>
       </View>
     );
@@ -382,14 +439,60 @@ export const ExamReportPdfContent = ({
   return (
     <Document>
       <Page size="A4" style={styles.page}>
+        {/* Header da Clínica (Restored) */}
+        <View style={styles.clinicHeader} fixed>
+          <View style={styles.clinicInfoLeft}>
+            {/* <Image src={mockCompanySettings.logoUrl} style={styles.clinicLogo} /> */}
+            <View>
+              <Text style={styles.clinicName}>{mockCompanySettings.companyName}</Text>
+              <Text style={styles.clinicDetails}>CRMV {mockCompanySettings.crmv}</Text>
+              <Text style={styles.clinicDetails}>Registro no MAPA {mockCompanySettings.mapaRegistration}</Text>
+            </View>
+          </View>
+          <View style={styles.clinicAddressPhone}>
+            <Text>{mockCompanySettings.address}</Text>
+            <Text>{mockCompanySettings.city} - CEP: {mockCompanySettings.zipCode}</Text>
+            <Text>Telefone: {mockCompanySettings.phone}</Text>
+          </View>
+        </View>
+
+        <Text style={styles.mainTitle}>LAUDO DE EXAME</Text>
+
+        {/* Informações do Animal e Tutor (Restored) */}
+        <View style={styles.infoSectionContainer}>
+          <View style={styles.infoCard}>
+            <Text style={styles.infoTitle}>Animal</Text>
+            <Text style={styles.infoText}>ID: {animalId}</Text>
+            <Text style={styles.infoText}>Nome: {animalName}</Text>
+            <Text style={styles.infoText}>Espécie: {animalSpecies}</Text>
+          </View>
+          <View style={styles.infoCard}>
+            <Text style={styles.infoTitle}>Tutor</Text>
+            <Text style={styles.infoText}>Nome: {tutorName}</Text>
+            <Text style={styles.infoText}>Endereço: {tutorAddress || "Não informado"}</Text>
+          </View>
+        </View>
+
+        {/* General Exam Info (Restored) */}
+        <Text style={styles.sectionTitle}>INFORMAÇÕES GERAIS DO EXAME</Text>
+        <View style={{ flexDirection: 'row', flexWrap: 'wrap', marginBottom: 10 }}>
+          <Text style={[styles.infoText, { width: '50%' }]}>Data do Exame: {exam.date}</Text>
+          <Text style={[styles.infoText, { width: '50%' }]}>Tipo de Exame: {exam.type}</Text>
+          <Text style={[styles.infoText, { width: '50%' }]}>Veterinário Solicitante: {exam.vet}</Text>
+          {exam.material && <Text style={[styles.infoText, { width: '50%' }]}>Material: {exam.material}</Text>}
+          {exam.equipamento && <Text style={[styles.infoText, { width: '50%' }]}>Equipamento: {exam.equipamento}</Text>}
+          {exam.laboratory && <Text style={[styles.infoText, { width: '50%' }]}>Laboratório: {exam.laboratory}</Text>}
+          {exam.laboratoryDate && <Text style={[styles.infoText, { width: '50%' }]}>Data do Resultado: {exam.laboratoryDate}</Text>}
+        </View>
+
         {exam.type === "Hemograma Completo" ? (
           <>
-            {/* Tabela de Cabeçalho para os parâmetros */}
+            {/* Tabela de Cabeçalho para os parâmetros (inverted) */}
             <View style={styles.tableHeader}>
               <Text style={[styles.headerCell, styles.headerCellName]}>NOME DO PARÂMETRO</Text>
               <Text style={[styles.headerCell, styles.headerCellResult]}>RESULTADO</Text>
-              <Text style={[styles.headerCell, styles.headerCellReference]}>REFERÊNCIA</Text>
-              <Text style={[styles.headerCell, styles.headerCellIndicator]}>INDICADOR</Text>
+              <Text style={[styles.headerCell, styles.headerCellIndicator]}>INDICADOR</Text> {/* Swapped */}
+              <Text style={[styles.headerCell, styles.headerCellReference]}>REFERÊNCIA</Text> {/* Swapped */}
             </View>
 
             {/* Série Vermelha */}
@@ -467,7 +570,7 @@ export const ExamReportPdfContent = ({
         {/* Rodapé */}
         <View style={styles.footerContainer} fixed>
           <Text style={styles.dateText}>
-            Data de Emissão: {new Date().toLocaleDateString('pt-BR', { day: '2-digit', month: 'long', year: 'numeric' }).toUpperCase()}
+            Data de Emissão: {formatDateToPortuguese(currentDate)}
           </Text>
           <View style={styles.signatureBlock}>
             <View style={styles.signatureLine}/>
