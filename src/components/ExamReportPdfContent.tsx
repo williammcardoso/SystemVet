@@ -116,6 +116,7 @@ const styles = StyleSheet.create({
   paramLabel: {
     width: 120,
     fontSize: 10,
+    color: "#333", // Alterado para cinza mais escuro
   },
   paramResult: {
     width: 80,
@@ -214,7 +215,7 @@ const styles = StyleSheet.create({
   },
   // ADDED: Estilos para o texto do resultado com base no status
   resultNormal: {
-    color: "#333", // Dark gray/black
+    color: "#000000", // Preto explícito para valores normais
   },
   resultHigh: {
     color: "#dc3545", // Red
