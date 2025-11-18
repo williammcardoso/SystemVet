@@ -137,7 +137,7 @@ const AddExamPage = () => {
   const isEditing = !!examId; // Determinar se está em modo de edição
 
   const currentClient = mockClients.find(c => c.id === clientId);
-  const currentAnimal = currentClient?.animals.find(a => c.id === animalId);
+  const currentAnimal = currentClient?.animals.find(a => a.id === animalId); // CORRIGIDO: a => a.id === animalId
   const animalSpecies = currentAnimal?.species === "Canino" ? "dog" : currentAnimal?.species === "Felino" ? "cat" : undefined;
 
   // Estado do formulário
