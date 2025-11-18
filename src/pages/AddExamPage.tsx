@@ -93,8 +93,6 @@ interface ExamFieldWithReferenceProps {
   unit: string;
   placeholder?: string;
   getReference: (param: string, type?: 'relative' | 'absolute' | 'full') => string;
-  labelWidth?: string; // Nova prop para largura do label
-  inputWidth?: string; // Nova prop para largura do input
 }
 
 const ExamFieldWithReference = React.memo(({
@@ -106,11 +104,9 @@ const ExamFieldWithReference = React.memo(({
   unit,
   placeholder = "",
   getReference,
-  labelWidth = "w-[90px]", // Default
-  inputWidth = "w-[70px]", // Default
 }: ExamFieldWithReferenceProps) => (
   <div className="flex items-center gap-x-2 w-full flex-nowrap">
-    <Label htmlFor={id} className={`${labelWidth} text-left text-muted-foreground font-medium flex-shrink-0`}>
+    <Label htmlFor={id} className="w-[90px] text-left text-muted-foreground font-medium flex-shrink-0">
       {label}
     </Label>
     <Input
@@ -119,7 +115,7 @@ const ExamFieldWithReference = React.memo(({
       placeholder={placeholder}
       value={value}
       onChange={onChange}
-      className={`${inputWidth} bg-input rounded-md border-border focus:ring-2 focus:ring-ring placeholder-muted-foreground transition-all duration-200 flex-shrink-0`}
+      className="w-[70px] bg-input rounded-md border-border focus:ring-2 focus:ring-ring placeholder-muted-foreground transition-all duration-200 flex-shrink-0"
     />
     <span className="text-xs text-muted-foreground w-[50px] text-left flex-shrink-0 whitespace-nowrap">{unit}</span>
     <div className="flex-1 flex items-center p-1 border border-border rounded-md bg-background text-xs text-foreground overflow-hidden whitespace-nowrap text-ellipsis">
@@ -403,7 +399,7 @@ const AddExamPage = () => {
                         <FaFlask className="h-5 w-5 text-primary" /> Eritrograma
                       </CardTitle>
                     </CardHeader>
-                    <CardContent className="grid gap-4 pt-0 px-2"> {/* Reduzido padding horizontal */}
+                    <CardContent className="grid gap-4 pt-0 px-2">
                       <ExamFieldWithReference getReference={getReference} id="eritrocitos" label="Eritrócitos" value={eritrocitos} onChange={(e) => setEritrocitos(e.target.value)} referenceKey="eritrocitos" unit="milhões/mm3" />
                       <ExamFieldWithReference getReference={getReference} id="hemoglobina" label="Hemoglobina" value={hemoglobina} onChange={(e) => setHemoglobina(e.target.value)} referenceKey="hemoglobina" unit="g/dL" />
                       <ExamFieldWithReference getReference={getReference} id="hematocrito" label="Hematócrito" value={hematocrito} onChange={(e) => setHematocrito(e.target.value)} referenceKey="hematocrito" unit="%" />
@@ -427,7 +423,7 @@ const AddExamPage = () => {
                         <FaFlask className="h-5 w-5 text-primary" /> Leucograma
                       </CardTitle>
                     </CardHeader>
-                    <CardContent className="grid gap-4 pt-0 px-2"> {/* Reduzido padding horizontal */}
+                    <CardContent className="grid gap-4 pt-0 px-2">
                       <ExamFieldWithReference getReference={getReference} id="leucocitosTotais" label="Leucócitos totais" value={leucocitosTotais} onChange={(e) => setLeucocitosTotais(e.target.value)} referenceKey="leucocitosTotais" unit="mil/µL" labelWidth="w-[110px]" inputWidth="w-[90px]" />
                       
                       <LeukocyteFieldWithReference getReference={getReference} idPrefix="mielocitos" label="Mielócitos" relativeValue={mielocitosRelativo} onRelativeChange={(e) => setMielocitosRelativo(e.target.value)} absoluteValue={mielocitosAbsoluto} onAbsoluteChange={(e) => setMielocitosAbsoluto(e.target.value)} referenceKey="mielocitos" />
@@ -454,7 +450,7 @@ const AddExamPage = () => {
                       <FaFlask className="h-5 w-5 text-primary" /> Plaquetas
                     </CardTitle>
                   </CardHeader>
-                  <CardContent className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-0 px-2"> {/* Reduzido padding horizontal */}
+                  <CardContent className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-0 px-2">
                     <ExamFieldWithReference getReference={getReference} id="contagemPlaquetaria" label="Contagem plaquetária" value={contagemPlaquetaria} onChange={(e) => setContagemPlaquetaria(e.target.value)} referenceKey="contagemPlaquetaria" unit="/µL" inputWidth="w-[90px]" />
                     <div className="space-y-2 col-span-full">
                       <Label htmlFor="avaliacaoPlaquetaria" className="text-muted-foreground font-medium">Avaliação plaquetária</Label>
@@ -500,7 +496,7 @@ const AddExamPage = () => {
                 className="bg-input rounded-md border-border focus:ring-2 focus:ring-ring placeholder-muted-foreground transition-all duration-200"
               />
             </div>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4"> {/* Alterado para 3 colunas */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               <div className="space-y-2">
                 <Label htmlFor="laboratory">Laboratório</Label>
                 <Input
