@@ -212,9 +212,15 @@ const styles = StyleSheet.create({
   iconExclamation: {
     color: "#ffc107", // Yellow/Orange
   },
-  // Estilos para o texto do resultado quando alterado
-  resultAltered: {
+  // ADDED: Estilos para o texto do resultado com base no status
+  resultNormal: {
+    color: "#333", // Dark gray/black
+  },
+  resultHigh: {
     color: "#dc3545", // Red
+  },
+  resultLow: {
+    color: "#007bff", // Blue
   },
 });
 
@@ -285,10 +291,15 @@ export const ExamReportPdfContent = ({
     return hemogramReferences[param][speciesKey];
   };
 
-  const checkValueStatus = (value: string | undefined, ref: HemogramReferenceValue | undefined): boolean => {
-    if (!value || !ref || ref.min === undefined || ref.max === undefined) return true; // Assume normal if no ref ou não há valor
+  // UPDATED: Função para verificar o status do valor (normal, alto, baixo)
+  const getValueStatus = (value: string | undefined, ref: HemogramReferenceValue | undefined): 'normal' | 'high' | 'low' | 'invalid' => {
+    if (!value || !ref || ref.min === undefined || ref.max === undefined) return 'invalid';
     const numValue = normalizeNumber(value);
-    return numValue >= ref.min && numValue <= ref.max;
+    if (isNaN(numValue)) return 'invalid';
+
+    if (numValue >= ref.min && numValue <= ref.max) return 'normal';
+    if (numValue > ref.max) return 'high';
+    return 'low'; // numValue < ref.min
   };
 
   const renderHemogramParam = (
@@ -304,8 +315,23 @@ export const ExamReportPdfContent = ({
     if (!value && !absoluteValue) return null;
 
     const ref = getReferenceRange(referenceKey);
-    const isNormal = checkValueStatus(value, ref);
-    const resultStyle = isNormal ? {} : styles.resultAltered;
+    const valueStatus = getValueStatus(value, ref);
+    const isNormal = valueStatus === 'normal';
+
+    let resultStyle;
+    switch (valueStatus) {
+      case 'normal':
+        resultStyle = styles.resultNormal;
+        break;
+      case 'high':
+        resultStyle = styles.resultHigh;
+        break;
+      case 'low':
+        resultStyle = styles.resultLow;
+        break;
+      default:
+        resultStyle = styles.resultNormal; // Default para normal se inválido
+    }
 
     let displayValue = value;
     let displayUnit = unit;
@@ -313,8 +339,23 @@ export const ExamReportPdfContent = ({
 
     if (isRelative && absoluteValue !== undefined && absoluteReferenceKey) {
       const absoluteRef = getReferenceRange(absoluteReferenceKey);
-      const isAbsoluteNormal = checkValueStatus(absoluteValue, absoluteRef);
-      const absoluteResultStyle = isAbsoluteNormal ? {} : styles.resultAltered;
+      const absoluteValueStatus = getValueStatus(absoluteValue, absoluteRef);
+      const isAbsoluteNormal = absoluteValueStatus === 'normal';
+
+      let absoluteResultStyle;
+      switch (absoluteValueStatus) {
+        case 'normal':
+          absoluteResultStyle = styles.resultNormal;
+          break;
+        case 'high':
+          absoluteResultStyle = styles.resultHigh;
+          break;
+        case 'low':
+          absoluteResultStyle = styles.resultLow;
+          break;
+        default:
+          absoluteResultStyle = styles.resultNormal;
+      }
 
       return (
         <View style={styles.paramRow}>
