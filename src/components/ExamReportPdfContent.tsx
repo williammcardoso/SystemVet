@@ -24,6 +24,7 @@ const formatDateToPortuguese = (date: Date) => {
 // Normalizador de números (remove separador de milhar e troca vírgula por ponto)
 const normalizeNumber = (raw: string | undefined) => {
   if (!raw) return NaN;
+  // Substitui vírgula por ponto para parseFloat e remove pontos de milhar
   return parseFloat(raw.replace(/\./g, '').replace(',', '.'));
 };
 
@@ -35,13 +36,7 @@ const styles = StyleSheet.create({
     color: "#333",
   },
   // REMOVED: clinicHeader, clinicInfoLeft, clinicName, clinicDetails, clinicAddressPhone
-  mainTitle: {
-    fontSize: 20,
-    textAlign: "center",
-    fontFamily: "Exo",
-    fontWeight: "bold",
-    marginBottom: 20,
-  },
+  // REMOVED: mainTitle
   // REMOVED: infoSectionContainer, infoCard, infoTitle, infoText
   sectionTitle: {
     fontSize: 13,
@@ -249,8 +244,8 @@ const IndicatorBar: React.FC<IndicatorBarProps> = ({ value, minRef, maxRef, valu
   let markerPosition = 0;
 
   if (totalEffectiveRange > 0) {
-    greenBarLeft = ((visualMin - effectiveVisualMin) / totalEffectiveRange) * BAR_WIDTH;
-    greenBarWidth = ((visualMax - visualMin) / totalEffectiveRange) * BAR_WIDTH;
+    greenBarLeft = ((minRef - effectiveVisualMin) / totalEffectiveRange) * BAR_WIDTH;
+    greenBarWidth = ((maxRef - minRef) / totalEffectiveRange) * BAR_WIDTH;
     markerPosition = ((numValue - effectiveVisualMin) / totalEffectiveRange) * BAR_WIDTH;
   } else { // Fallback para ranges inválidos ou zero, centraliza tudo
     greenBarLeft = BAR_WIDTH / 2 - 5; // Pequeno segmento central
@@ -269,7 +264,7 @@ const IndicatorBar: React.FC<IndicatorBarProps> = ({ value, minRef, maxRef, valu
         <View style={[styles.indicatorBarNormalRange, { left: greenBarLeft, width: greenBarWidth }]} />
       )}
       {!isNaN(numValue) && (
-        <Text style={[styles.indicatorMarker, { left: markerPosition - (styles.indicatorMarker.fontSize as number / 2) }]}>●</Text>
+        <Text style={[styles.indicatorMarker, { left: markerPosition - (styles.indicatorMarker.fontSize as number / 2), color: markerColor }]}>●</Text>
       )}
     </View>
   );
@@ -439,7 +434,7 @@ export const ExamReportPdfContent = ({
             {exam.segmentadosRelativo && renderLeukocyteParam("Segmentados", exam.segmentadosRelativo, exam.segmentadosAbsoluto, "segmentados", "segmentados")}
             {exam.eosinofilosRelativo && renderLeukocyteParam("Eosinófilos", exam.eosinofilosRelativo, exam.eosinofilosAbsoluto, "eosinofilos", "eosinofilos")}
             {exam.basofilosRelativo && renderLeukocyteParam("Basófilos", exam.basofilosRelativo, exam.basofilosAbsoluto, "basofilos", "basofilos")}
-            {exam.linfocitosRelativo && renderLeukocyteParam("Linfócitos", exam.linfocitosRelativo, exam.linfocitosAbsoluto, "linfocitos", "linfocitos")}
+            {exam.linfocitosRelativo && renderLeFukocyteParam("Linfócitos", exam.linfocitosRelativo, exam.linfocitosAbsoluto, "linfocitos", "linfocitos")}
             {exam.monocitosRelativo && renderLeukocyteParam("Monócitos", exam.monocitosRelativo, exam.monocitosAbsoluto, "monocitos", "monocitos")}
             {exam.observacoesSerieBranca && (
               <View style={{ marginTop: 10 }}>
