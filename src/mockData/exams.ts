@@ -15,6 +15,7 @@ export let mockExams: ExamEntry[] = [
     vcm: "69.4",
     hcm: "23.4",
     chcm: "33.7",
+    rdw: "12.5", // Adicionado RDW
     proteinaTotal: "7.2",
     hemaciasNucleadas: "0",
     observacoesSerieVermelha: "Discreta anisocitose.",
@@ -68,6 +69,7 @@ export let mockExams: ExamEntry[] = [
     vcm: "75.0",
     hcm: "25.0",
     chcm: "33.3",
+    rdw: "15.0", // Adicionado RDW
     proteinaTotal: "6.5",
     hemaciasNucleadas: "0",
     observacoesSerieVermelha: "Anemia leve.",

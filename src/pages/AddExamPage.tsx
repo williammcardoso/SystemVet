@@ -48,6 +48,7 @@ const hemogramReferences: Record<string, HemogramReference> = {
   vcm: { dog: { full: "60.0 - 77.0 fL", min: 60.0, max: 77.0 }, cat: { full: "39.0 - 55.0 fL", min: 39.0, max: 55.0 } },
   hcm: { dog: { full: "19.5 - 24.5 pg", min: 19.5, max: 24.5 }, cat: { full: "13.0 - 17.0 pg", min: 13.0, max: 17.0 } },
   chcm: { dog: { full: "31 - 35 %", min: 31, max: 35 }, cat: { full: "30 - 36 %", min: 30, max: 36 } },
+  rdw: { dog: { full: "11.5 - 14.5 %", min: 11.5, max: 14.5 }, cat: { full: "11.5 - 14.5 %", min: 11.5, max: 14.5 } }, // Adicionado RDW
   proteinaTotal: { dog: { full: "6.0 - 8.0 g/dL", min: 6.0, max: 8.0 }, cat: { full: "5.7 - 8.9 g/dL", min: 5.7, max: 8.9 } },
   hemaciasNucleadas: { dog: { full: "0", min: 0, max: 0 }, cat: { full: "0", min: 0, max: 0 } },
 
@@ -73,8 +74,8 @@ const hemogramReferences: Record<string, HemogramReference> = {
     cat: { relative: "2 - 12 %", absolute: "100 - 1.500 /µL", min: 2, max: 12 }
   },
   basofilos: {
-    dog: { relative: "/ raros", absolute: "/ raros", min: 0, max: 0 }, // Assuming 0 for rare
-    cat: { relative: "/ raros", absolute: "/ raros", min: 0, max: 0 }
+    dog: { relative: "/ raros", absolute: "/ raros", min: 0, max: 0.5 }, // Assuming 0 for rare
+    cat: { relative: "/ raros", absolute: "/ raros", min: 0, max: 0.5 }
   },
   linfocitos: {
     dog: { relative: "12 - 30 %", absolute: "1.000 - 4.800 /µL", min: 12, max: 30 },
@@ -203,6 +204,7 @@ const AddExamPage = () => {
   const [vcm, setVcm] = useState<string>("");
   const [hcm, setHcm] = useState<string>("");
   const [chcm, setChcm] = useState<string>("");
+  const [rdw, setRdw] = useState<string>(""); // Adicionado RDW
   const [proteinaTotal, setProteinaTotal] = useState<string>("");
   const [hemaciasNucleadas, setHemaciasNucleadas] = useState<string>("");
   const [observacoesSerieVermelha, setObservacoesSerieVermelha] = useState<string>("");
@@ -254,6 +256,7 @@ const AddExamPage = () => {
         setVcm(examToEdit.vcm || "");
         setHcm(examToEdit.hcm || "");
         setChcm(examToEdit.chcm || "");
+        setRdw(examToEdit.rdw || ""); // Carregar RDW
         setProteinaTotal(examToEdit.proteinaTotal || "");
         setHemaciasNucleadas(examToEdit.hemaciasNucleadas || "");
         setObservacoesSerieVermelha(examToEdit.observacoesSerieVermelha || "");
@@ -329,6 +332,7 @@ const AddExamPage = () => {
       vcm: vcm.trim() || undefined,
       hcm: hcm.trim() || undefined,
       chcm: chcm.trim() || undefined,
+      rdw: rdw.trim() || undefined, // Salvar RDW
       proteinaTotal: proteinaTotal.trim() || undefined,
       hemaciasNucleadas: hemaciasNucleadas.trim() || undefined,
       observacoesSerieVermelha: observacoesSerieVermelha.trim() || undefined,
@@ -472,6 +476,7 @@ const AddExamPage = () => {
                       <ExamFieldWithReference getReference={getReference} id="vcm" label="V.C.M." value={vcm} onChange={(e) => setVcm(e.target.value)} referenceKey="vcm" unit="fL" />
                       <ExamFieldWithReference getReference={getReference} id="hcm" label="H.C.M." value={hcm} onChange={(e) => setHcm(e.target.value)} referenceKey="hcm" unit="pg" />
                       <ExamFieldWithReference getReference={getReference} id="chcm" label="C.H.C.M." value={chcm} onChange={(e) => setChcm(e.target.value)} referenceKey="chcm" unit="%" />
+                      <ExamFieldWithReference getReference={getReference} id="rdw" label="R.D.W." value={rdw} onChange={(e) => setRdw(e.target.value)} referenceKey="rdw" unit="%" /> {/* Adicionado RDW */}
                       <ExamFieldWithReference getReference={getReference} id="proteinaTotal" label="Proteína total" value={proteinaTotal} onChange={(e) => setProteinaTotal(e.target.value)} referenceKey="proteinaTotal" unit="g/dL" />
                       <ExamFieldWithReference getReference={getReference} id="hemaciasNucleadas" label="Hemácias nucleadas" value={hemaciasNucleadas} onChange={(e) => setHemaciasNucleadas(e.target.value)} referenceKey="hemaciasNucleadas" unit="" />
 

@@ -21,8 +21,9 @@ const formatDateToPortuguese = (date: Date) => {
   return formattedDate.toUpperCase();
 };
 
-// ADDED: normalizador de números (remove separador de milhar e troca vírgula por ponto)
-const normalizeNumber = (raw: string) => {
+// Normalizador de números (remove separador de milhar e troca vírgula por ponto)
+const normalizeNumber = (raw: string | undefined) => {
+  if (!raw) return NaN;
   return parseFloat(raw.replace(/\./g, '').replace(',', '.'));
 };
 
@@ -102,71 +103,98 @@ const styles = StyleSheet.create({
     marginTop: 10,
     marginBottom: 5,
   },
+  // --- Novos estilos para o layout de colunas ---
+  tableHeader: {
+    flexDirection: "row",
+    borderBottomWidth: 1,
+    borderBottomColor: "#000",
+    paddingBottom: 5,
+    marginBottom: 10,
+    backgroundColor: "#f5f5f5",
+  },
+  headerCell: {
+    fontSize: 9,
+    fontWeight: "bold",
+    color: "#333",
+    textAlign: "center",
+  },
+  headerCellIcon: {
+    width: 12,
+    marginRight: 5,
+  },
+  headerCellLabel: {
+    width: 100,
+    textAlign: "left",
+  },
+  headerCellResult: {
+    width: 130, // Ajustado para acomodar valor e unidade
+    textAlign: "right",
+  },
+  headerCellReference: {
+    width: 120, // Ajustado para acomodar faixa de referência
+    textAlign: "right",
+  },
+  headerCellIndicator: {
+    flex: 1,
+    textAlign: "center",
+  },
   paramRow: {
     flexDirection: "row",
     alignItems: "center",
     marginBottom: 5,
+    height: 25, // Altura fixa para parâmetros de linha única
+  },
+  leukocyteParamRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginBottom: 5,
+    height: 40, // Altura maior para parâmetros de leucócitos (2 linhas)
   },
   paramIcon: {
     width: 12,
     height: 12,
     marginRight: 5,
-    textAlign: 'center', // Centraliza o caractere
+    textAlign: 'center',
   },
   paramLabel: {
-    width: 120,
+    width: 100,
     fontSize: 10,
-    color: "#333", // Alterado para cinza mais escuro
+    color: "#333",
   },
-  paramResult: {
-    width: 80,
+  paramResultContainer: {
+    width: 130, // Largura para a coluna de resultado
+    flexDirection: 'column',
+    alignItems: 'flex-end',
+    justifyContent: 'center',
+  },
+  paramResultText: {
     fontSize: 10,
     fontWeight: "bold",
     textAlign: "right",
   },
-  paramUnit: {
-    width: 40,
+  paramUnitText: {
     fontSize: 8,
     color: "#666",
-    marginLeft: 2,
-  },
-  referenceBarContainer: {
-    flex: 1,
-    height: 8,
-    backgroundColor: "#f0f0f0",
-    borderRadius: 4,
-    marginLeft: 10,
-    position: "relative",
-    overflow: "hidden",
-  },
-  referenceBarSegment: {
-    position: "absolute",
-    height: "100%",
-    borderRadius: 4,
-  },
-  referenceBarLow: {
-    backgroundColor: "#ffcccc", // Light red
-  },
-  referenceBarNormal: {
-    backgroundColor: "#ccffcc", // Light green
-  },
-  referenceBarHigh: {
-    backgroundColor: "#ffcccc", // Light red
-  },
-  referenceBarIndicator: {
-    position: "absolute",
-    width: 2,
-    height: "100%",
-    backgroundColor: "#333",
-    zIndex: 1,
-  },
-  referenceValues: {
-    width: 100,
-    fontSize: 8,
-    color: "#666",
-    marginLeft: 5,
     textAlign: "right",
   },
+  referenceRangeContainer: {
+    width: 120, // Largura para a coluna de valor de referência
+    flexDirection: 'column',
+    alignItems: 'flex-end',
+    justifyContent: 'center',
+  },
+  referenceRangeText: {
+    fontSize: 8,
+    color: "#666",
+    textAlign: "right",
+  },
+  indicatorColumn: {
+    flex: 1, // Ocupa o restante do espaço
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginLeft: 10,
+  },
+  // --- Fim dos novos estilos ---
   observationText: {
     fontSize: 10,
     lineHeight: 1.4,
@@ -206,14 +234,12 @@ const styles = StyleSheet.create({
     fontSize: 10,
     color: "#333",
   },
-  // Estilos para ícones no PDF (agora caracteres de texto)
   iconCheck: {
     color: "#28a745", // Green
   },
   iconExclamation: {
     color: "#ffc107", // Yellow/Orange
   },
-  // ADDED: Estilos para o texto do resultado com base no status
   resultNormal: {
     color: "#000000", // Preto explícito para valores normais
   },
@@ -222,6 +248,35 @@ const styles = StyleSheet.create({
   },
   resultLow: {
     color: "#007bff", // Blue
+  },
+  referenceBarContainer: {
+    flex: 1,
+    height: 8,
+    backgroundColor: "#f0f0f0",
+    borderRadius: 4,
+    position: "relative",
+    overflow: "hidden",
+  },
+  referenceBarSegment: {
+    position: "absolute",
+    height: "100%",
+    borderRadius: 4,
+  },
+  referenceBarLow: {
+    backgroundColor: "#ffcccc", // Light red
+  },
+  referenceBarNormal: {
+    backgroundColor: "#ccffcc", // Light green
+  },
+  referenceBarHigh: {
+    backgroundColor: "#ffcccc", // Light red
+  },
+  referenceBarIndicator: {
+    position: "absolute",
+    width: 2,
+    height: "100%",
+    backgroundColor: "#333",
+    zIndex: 1,
   },
 });
 
@@ -241,40 +296,31 @@ interface ReferenceBarProps {
 }
 
 const ReferenceBar = ({ value, min, max, isNormal }: ReferenceBarProps) => {
-  // ADDED: proteção para intervalos com min === max (evita divisão por zero)
   let vMin = min;
   let vMax = max;
   if (vMax === vMin) {
-    const delta = Math.max(1, Math.abs(vMin) * 0.1 || 1); // intervalo mínimo artificial
+    const delta = Math.max(1, Math.abs(vMin) * 0.1 || 1);
     vMin = vMin - delta;
     vMax = vMax + delta;
   }
 
-  // Define um "buffer" para a visualização da barra
-  const bufferFactor = 0.2; // 20% do range total para cada lado
+  const bufferFactor = 0.2;
   const visualMin = vMin - (vMax - vMin) * bufferFactor;
   const visualMax = vMax + (vMax - vMin) * bufferFactor;
   const totalVisualRange = visualMax - visualMin;
 
   const clampPercent = (p: number) => Math.max(0, Math.min(100, p));
 
-  // Calcula a posição do valor dentro do range visual (0-100%), com clamp
   const valuePosition = clampPercent(((value - visualMin) / totalVisualRange) * 100);
-
-  // Calcula as posições dos limites min e max dentro do range visual
   const minPosition = clampPercent(((vMin - visualMin) / totalVisualRange) * 100);
   const maxPosition = clampPercent(((vMax - visualMin) / totalVisualRange) * 100);
 
   return (
     <View style={styles.referenceBarContainer}>
-      {/* Segmento de "baixo" (antes do min) */}
       <View style={[styles.referenceBarSegment, styles.referenceBarLow, { left: 0, width: `${minPosition}%` }]} />
-      {/* Segmento "normal" (entre min e max) */}
       <View style={[styles.referenceBarSegment, styles.referenceBarNormal, { left: `${minPosition}%`, width: `${maxPosition - minPosition}%` }]} />
-      {/* Segmento de "alto" (depois do max) */}
       <View style={[styles.referenceBarSegment, styles.referenceBarHigh, { left: `${maxPosition}%`, width: `${100 - maxPosition}%` }]} />
 
-      {/* Indicador do valor atual */}
       <View style={[styles.referenceBarIndicator, { left: `${valuePosition}%`, backgroundColor: isNormal ? '#28a745' : '#dc3545' }]} />
     </View>
   );
@@ -292,7 +338,6 @@ export const ExamReportPdfContent = ({
     return hemogramReferences[param][speciesKey];
   };
 
-  // UPDATED: Função para verificar o status do valor (normal, alto, baixo)
   const getValueStatus = (value: string | undefined, ref: HemogramReferenceValue | undefined): 'normal' | 'high' | 'low' | 'invalid' => {
     if (!value || !ref || ref.min === undefined || ref.max === undefined) return 'invalid';
     const numValue = normalizeNumber(value);
@@ -300,20 +345,17 @@ export const ExamReportPdfContent = ({
 
     if (numValue >= ref.min && numValue <= ref.max) return 'normal';
     if (numValue > ref.max) return 'high';
-    return 'low'; // numValue < ref.min
+    return 'low';
   };
 
+  // Renderiza um parâmetro de hemograma de valor único (Eritrócitos, RDW, Plaquetas)
   const renderHemogramParam = (
     label: string,
     value: string | undefined,
     unit: string,
     referenceKey: string,
-    isRelative?: boolean,
-    absoluteValue?: string | undefined,
-    absoluteUnit?: string,
-    absoluteReferenceKey?: string,
   ) => {
-    if (!value && !absoluteValue) return null;
+    if (!value) return null;
 
     const ref = getReferenceRange(referenceKey);
     const valueStatus = getValueStatus(value, ref);
@@ -321,79 +363,91 @@ export const ExamReportPdfContent = ({
 
     let resultStyle;
     switch (valueStatus) {
-      case 'normal':
-        resultStyle = styles.resultNormal;
-        break;
-      case 'high':
-        resultStyle = styles.resultHigh;
-        break;
-      case 'low':
-        resultStyle = styles.resultLow;
-        break;
-      default:
-        resultStyle = styles.resultNormal; // Default para normal se inválido
-    }
-
-    let displayValue = value;
-    let displayUnit = unit;
-    let displayReference = ref?.full;
-
-    if (isRelative && absoluteValue !== undefined && absoluteReferenceKey) {
-      const absoluteRef = getReferenceRange(absoluteReferenceKey);
-      const absoluteValueStatus = getValueStatus(absoluteValue, absoluteRef);
-      const isAbsoluteNormal = absoluteValueStatus === 'normal';
-
-      let absoluteResultStyle;
-      switch (absoluteValueStatus) {
-        case 'normal':
-          absoluteResultStyle = styles.resultNormal;
-          break;
-        case 'high':
-          absoluteResultStyle = styles.resultHigh;
-          break;
-        case 'low':
-          absoluteResultStyle = styles.resultLow;
-          break;
-        default:
-          absoluteResultStyle = styles.resultNormal;
-      }
-
-      return (
-        <View style={styles.paramRow}>
-          <StatusIcon isNormal={isNormal && isAbsoluteNormal} />
-          <Text style={styles.paramLabel}>{label}</Text>
-          <Text style={[styles.paramResult, resultStyle]}>{displayValue}</Text>
-          <Text style={styles.paramUnit}>%</Text>
-          <Text style={[styles.paramResult, absoluteResultStyle]}>{absoluteValue}</Text>
-          <Text style={styles.paramUnit}>{absoluteUnit}</Text>
-          <View style={styles.referenceBarContainer}>
-            {ref && ref.min !== undefined && ref.max !== undefined && value ? (
-              <ReferenceBar value={normalizeNumber(value)} min={ref.min} max={ref.max} isNormal={isNormal} />
-            ) : null}
-          </View>
-          <Text style={styles.referenceValues}>{ref?.relative}</Text>
-          <View style={styles.referenceBarContainer}>
-            {absoluteRef && absoluteRef.min !== undefined && absoluteRef.max !== undefined && absoluteValue ? (
-              <ReferenceBar value={normalizeNumber(absoluteValue)} min={absoluteRef.min} max={absoluteRef.max} isNormal={isAbsoluteNormal} />
-            ) : null}
-          </View>
-          <Text style={styles.referenceValues}>{absoluteRef?.absolute}</Text>
-        </View>
-      );
+      case 'normal': resultStyle = styles.resultNormal; break;
+      case 'high': resultStyle = styles.resultHigh; break;
+      case 'low': resultStyle = styles.resultLow; break;
+      default: resultStyle = styles.resultNormal;
     }
 
     return (
       <View style={styles.paramRow}>
         <StatusIcon isNormal={isNormal} />
         <Text style={styles.paramLabel}>{label}</Text>
-        <Text style={[styles.paramResult, resultStyle]}>{displayValue}</Text>
-        <Text style={styles.paramUnit}>{displayUnit}</Text>
-        <View style={styles.referenceBarContainer}>
-          {ref && ref.min !== undefined && ref.max !== undefined && value ? (
+        <View style={styles.paramResultContainer}>
+          <Text style={[styles.paramResultText, resultStyle]}>{value}</Text>
+          <Text style={styles.paramUnitText}>{unit}</Text>
+        </View>
+        <View style={styles.referenceRangeContainer}>
+          <Text style={styles.referenceRangeText}>{ref?.full}</Text>
+        </View>
+        <View style={styles.indicatorColumn}>
+          {ref && ref.min !== undefined && ref.max !== undefined && !isNaN(normalizeNumber(value)) ? (
             <ReferenceBar value={normalizeNumber(value)} min={ref.min} max={ref.max} isNormal={isNormal} />
           ) : null}
         </View>
-        <Text style={styles.referenceValues}>{displayReference}</Text>
+      </View>
+    );
+  };
+
+  // Renderiza um parâmetro de leucograma com valores relativo e absoluto
+  const renderLeukocyteParam = (
+    label: string,
+    relativeValue: string | undefined,
+    absoluteValue: string | undefined,
+    relativeReferenceKey: string,
+    absoluteReferenceKey: string,
+  ) => {
+    if (!relativeValue && !absoluteValue) return null;
+
+    const relRef = getReferenceRange(relativeReferenceKey);
+    const absRef = getReferenceRange(absoluteReferenceKey);
+
+    const relValueStatus = getValueStatus(relativeValue, relRef);
+    const absValueStatus = getValueStatus(absoluteValue, absRef);
+
+    const isRelNormal = relValueStatus === 'normal';
+    const isAbsNormal = absValueStatus === 'normal';
+    const isOverallNormal = isRelNormal && isAbsNormal;
+
+    let relResultStyle;
+    switch (relValueStatus) {
+      case 'normal': relResultStyle = styles.resultNormal; break;
+      case 'high': relResultStyle = styles.resultHigh; break;
+      case 'low': relResultStyle = styles.resultLow; break;
+      default: relResultStyle = styles.resultNormal;
+    }
+
+    let absResultStyle;
+    switch (absValueStatus) {
+      case 'normal': absResultStyle = styles.resultNormal; break;
+      case 'high': absResultStyle = styles.resultHigh; break;
+      case 'low': absResultStyle = styles.resultLow; break;
+      default: absResultStyle = styles.resultNormal;
+    }
+
+    // Para o indicador, usaremos o valor absoluto e sua referência
+    const indicatorValue = normalizeNumber(absoluteValue);
+    const indicatorMin = absRef?.min;
+    const indicatorMax = absRef?.max;
+    const isIndicatorNormal = absValueStatus === 'normal';
+
+    return (
+      <View style={styles.leukocyteParamRow}>
+        <StatusIcon isNormal={isOverallNormal} />
+        <Text style={styles.paramLabel}>{label}</Text>
+        <View style={styles.paramResultContainer}>
+          <Text style={[styles.paramResultText, relResultStyle]}>{relativeValue}%</Text>
+          <Text style={[styles.paramResultText, absResultStyle]}>{absoluteValue}/µL</Text>
+        </View>
+        <View style={styles.referenceRangeContainer}>
+          <Text style={styles.referenceRangeText}>{relRef?.relative}</Text>
+          <Text style={styles.referenceRangeText}>{absRef?.absolute}</Text>
+        </View>
+        <View style={styles.indicatorColumn}>
+          {indicatorValue !== undefined && indicatorMin !== undefined && indicatorMax !== undefined && !isNaN(indicatorValue) ? (
+            <ReferenceBar value={indicatorValue} min={indicatorMin} max={indicatorMax} isNormal={isIndicatorNormal} />
+          ) : null}
+        </View>
       </View>
     );
   };
@@ -454,16 +508,25 @@ export const ExamReportPdfContent = ({
 
         {exam.type === "Hemograma Completo" ? (
           <>
+            {/* Tabela de Cabeçalho para os parâmetros */}
+            <View style={styles.tableHeader}>
+              <Text style={styles.headerCellIcon}></Text>
+              <Text style={[styles.headerCell, styles.headerCellLabel]}>Nome</Text>
+              <Text style={[styles.headerCell, styles.headerCellResult]}>Resultado</Text>
+              <Text style={[styles.headerCell, styles.headerCellReference]}>Valor de Referência</Text>
+              <Text style={[styles.headerCell, styles.headerCellIndicator]}>Indicador (+)</Text>
+            </View>
+
             {/* Série Vermelha */}
-            <Text style={styles.sectionTitle}>Série Vermelha</Text>
-            {renderHemogramParam("Eritrócitos totais", exam.eritrocitos, "M/mm3", "eritrocitos")}
+            <Text style={styles.sectionTitle}>ERITROGRAMA</Text>
+            {renderHemogramParam("Eritrócitos", exam.eritrocitos, "M/mm3", "eritrocitos")}
             {renderHemogramParam("Hemoglobina", exam.hemoglobina, "g/dL", "hemoglobina")}
             {renderHemogramParam("Hematócrito", exam.hematocrito, "%", "hematocrito")}
             {renderHemogramParam("VCM", exam.vcm, "fL", "vcm")}
             {renderHemogramParam("HCM", exam.hcm, "pg", "hcm")}
             {renderHemogramParam("CHCM", exam.chcm, "g/dL", "chcm")}
-            {/* RDW não está no mock, mas se estivesse, seria assim: */}
-            {/* {renderHemogramParam("RDW", exam.rdw, "%", "rdw")} */}
+            {renderHemogramParam("RDW", exam.rdw, "%", "rdw")}
+            {exam.proteinaTotal && renderHemogramParam("Proteína total", exam.proteinaTotal, "g/dL", "proteinaTotal")}
             {exam.hemaciasNucleadas && renderHemogramParam("Hemácias nucleadas", exam.hemaciasNucleadas, "", "hemaciasNucleadas")}
             {exam.observacoesSerieVermelha && (
               <View style={{ marginTop: 10 }}>
@@ -473,16 +536,16 @@ export const ExamReportPdfContent = ({
             )}
 
             {/* Série Branca */}
-            <Text style={styles.sectionTitle}>Série Branca</Text>
-            {renderHemogramParam("Leucócitos totais", exam.leucocitosTotais, "M/mm3", "leucocitosTotais")}
-            {renderHemogramParam("Mielócitos", exam.mielocitosRelativo, "%", "mielocitos", true, exam.mielocitosAbsoluto, "/µL", "mielocitos")}
-            {renderHemogramParam("Metamielócitos", exam.metamielocitosRelativo, "%", "metamielocitos", true, exam.metamielocitosAbsoluto, "/µL", "metamielocitos")}
-            {renderHemogramParam("Bastonetes", exam.bastonetesRelativo, "%", "bastonetes", true, exam.bastonetesAbsoluto, "/µL", "bastonetes")}
-            {renderHemogramParam("Segmentados", exam.segmentadosRelativo, "%", "segmentados", true, exam.segmentadosAbsoluto, "/µL", "segmentados")}
-            {renderHemogramParam("Eosinófilos", exam.eosinofilosRelativo, "%", "eosinofilos", true, exam.eosinofilosAbsoluto, "/µL", "eosinofilos")}
-            {renderHemogramParam("Basófilos", exam.basofilosRelativo, "%", "basofilos", true, exam.basofilosAbsoluto, "/µL", "basofilos")}
-            {renderHemogramParam("Linfócitos", exam.linfocitosRelativo, "%", "linfocitos", true, exam.linfocitosAbsoluto, "/µL", "linfocitos")}
-            {renderHemogramParam("Monócitos", exam.monocitosRelativo, "%", "monocitos", true, exam.monocitosAbsoluto, "/µL", "monocitos")}
+            <Text style={styles.sectionTitle}>LEUCOGRAMA</Text>
+            {renderHemogramParam("Leucócitos totais", exam.leucocitosTotais, "mil/µL", "leucocitosTotais")}
+            {exam.mielocitosRelativo && renderLeukocyteParam("Mielócitos", exam.mielocitosRelativo, exam.mielocitosAbsoluto, "mielocitos", "mielocitos")}
+            {exam.metamielocitosRelativo && renderLeukocyteParam("Metamielócitos", exam.metamielocitosRelativo, exam.metamielocitosAbsoluto, "metamielocitos", "metamielocitos")}
+            {exam.bastonetesRelativo && renderLeukocyteParam("Bastonetes", exam.bastonetesRelativo, exam.bastonetesAbsoluto, "bastonetes", "bastonetes")}
+            {exam.segmentadosRelativo && renderLeukocyteParam("Segmentados", exam.segmentadosRelativo, exam.segmentadosAbsoluto, "segmentados", "segmentados")}
+            {exam.eosinofilosRelativo && renderLeukocyteParam("Eosinófilos", exam.eosinofilosRelativo, exam.eosinofilosAbsoluto, "eosinofilos", "eosinofilos")}
+            {exam.basofilosRelativo && renderLeukocyteParam("Basófilos", exam.basofilosRelativo, exam.basofilosAbsoluto, "basofilos", "basofilos")}
+            {exam.linfocitosRelativo && renderLeukocyteParam("Linfócitos", exam.linfocitosRelativo, exam.linfocitosAbsoluto, "linfocitos", "linfocitos")}
+            {exam.monocitosRelativo && renderLeukocyteParam("Monócitos", exam.monocitosRelativo, exam.monocitosAbsoluto, "monocitos", "monocitos")}
             {exam.observacoesSerieBranca && (
               <View style={{ marginTop: 10 }}>
                 <Text style={styles.subsectionTitle}>Observações da Série Branca:</Text>
@@ -491,8 +554,8 @@ export const ExamReportPdfContent = ({
             )}
 
             {/* Série Plaquetária */}
-            <Text style={styles.sectionTitle}>Série Plaquetária</Text>
-            {renderHemogramParam("Plaquetas totais", exam.contagemPlaquetaria, "M/mm3", "contagemPlaquetaria")}
+            <Text style={styles.sectionTitle}>PLAQUETOGRAMA</Text>
+            {renderHemogramParam("Plaquetas totais", exam.contagemPlaquetaria, "/µL", "contagemPlaquetaria")}
             {exam.avaliacaoPlaquetaria && (
               <View style={{ marginTop: 10 }}>
                 <Text style={styles.subsectionTitle}>Avaliação Plaquetária:</Text>

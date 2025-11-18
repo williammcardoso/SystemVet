@@ -16,6 +16,7 @@ export interface ExamEntry {
   vcm?: string;
   hcm?: string;
   chcm?: string;
+  rdw?: string; // Adicionado RDW
   proteinaTotal?: string;
   hemaciasNucleadas?: string;
   observacoesSerieVermelha?: string;
