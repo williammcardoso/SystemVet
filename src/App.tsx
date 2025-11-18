@@ -11,7 +11,6 @@ import AddAnimalPage from "./pages/AddAnimalPage";
 import ClientDetailPage from "./pages/ClientDetailPage";
 import PatientRecordPage from "./pages/PatientRecordPage";
 import AddExamPage from "./pages/AddExamPage";
-import EditExamPage from "./pages/EditExamPage"; // Importar a nova página de edição de exame
 import AddPrescriptionPage from "./pages/AddPrescriptionPage";
 import AddAppointmentPage from "./pages/AddAppointmentPage"; // Importar a nova página de atendimento
 import AppointmentViewPage from "./pages/AppointmentViewPage"; // Importar a nova página de visualização de atendimento
@@ -23,6 +22,7 @@ import UserSettingsPage from "./pages/settings/UserSettingsPage";
 import AgendaPage from "./pages/AgendaPage";
 import FinancialPage from "./pages/FinancialPage";
 import NotFound from "./pages/NotFound";
+import { ThemeProvider } from "./components/ThemeProvider";
 
 // Sales Pages
 import SalesPage from "./pages/sales/SalesPage";
@@ -70,7 +70,6 @@ const App = () => (
               <Route path="/clients/:clientId" element={<ClientDetailPage />} />
               <Route path="/clients/:clientId/animals/:animalId/record" element={<PatientRecordPage />} />
               <Route path="/clients/:clientId/animals/:animalId/add-exam" element={<AddExamPage />} />
-              <Route path="/clients/:clientId/animals/:animalId/edit-exam/:examId" element={<EditExamPage />} /> {/* Nova rota para editar exame */}
               <Route path="/clients/:clientId/animals/:animalId/edit" element={<AddAnimalPage />} /> {/* Nova rota para editar animal */}
               <Route path="/clients/:clientId/animals/:animalId/add-prescription" element={<AddPrescriptionPage />} />
               <Route path="/clients/:clientId/animals/:animalId/edit-prescription/:prescriptionId" element={<AddPrescriptionPage />} />

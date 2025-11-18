@@ -1,6 +1,6 @@
 import React from "react";
 import { Document, Page, View, Text, StyleSheet, Font } from "@react-pdf/renderer";
-// Removido FaCheckCircle e FaExclamationCircle de react-icons/fa
+import { FaCheckCircle, FaExclamationCircle } from "react-icons/fa"; // Importar ícones para o PDF
 import { mockCompanySettings } from "@/mockData/settings";
 import { ExamEntry, HemogramReference, HemogramReferenceValue, ExamReportData } from "@/types/exam";
 
@@ -107,8 +107,6 @@ const styles = StyleSheet.create({
     width: 12,
     height: 12,
     marginRight: 5,
-    fontSize: 10, // Ajustado para o tamanho do caractere
-    textAlign: 'center', // Centraliza o caractere
   },
   paramLabel: {
     width: 120,
@@ -215,10 +213,14 @@ const styles = StyleSheet.create({
   },
 });
 
-// Componente para renderizar o ícone de status (agora com caracteres de texto)
+// Componente para renderizar o ícone de status
 const StatusIcon = ({ isNormal }: { isNormal: boolean }) => (
-  <Text style={[styles.paramIcon, { color: isNormal ? styles.iconCheck.color : styles.iconExclamation.color }]}>
-    {isNormal ? "✓" : "✗"}
+  <Text style={styles.paramIcon}>
+    {isNormal ? (
+      <FaCheckCircle style={styles.iconCheck} />
+    ) : (
+      <FaExclamationCircle style={styles.iconExclamation} />
+    )}
   </Text>
 );
 

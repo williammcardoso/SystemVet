@@ -97,8 +97,6 @@ interface ExamFieldWithReferenceProps {
   unit: string;
   placeholder?: string;
   getReference: (param: string, type?: 'relative' | 'absolute' | 'full') => string;
-  labelWidth?: string; // Nova prop para largura do label
-  inputWidth?: string; // Nova prop para largura do input
 }
 
 const ExamFieldWithReference = React.memo(({
@@ -110,11 +108,9 @@ const ExamFieldWithReference = React.memo(({
   unit,
   placeholder = "",
   getReference,
-  labelWidth = "w-[90px]", // Default
-  inputWidth = "w-[70px]", // Default
 }: ExamFieldWithReferenceProps) => (
   <div className="flex items-center gap-x-2 w-full flex-nowrap">
-    <Label htmlFor={id} className={`${labelWidth} text-left text-muted-foreground font-medium flex-shrink-0`}>
+    <Label htmlFor={id} className="w-[90px] text-left text-muted-foreground font-medium flex-shrink-0">
       {label}
     </Label>
     <Input
@@ -123,7 +119,7 @@ const ExamFieldWithReference = React.memo(({
       placeholder={placeholder}
       value={value}
       onChange={onChange}
-      className={`${inputWidth} bg-input rounded-md border-border focus:ring-2 focus:ring-ring placeholder-muted-foreground transition-all duration-200 flex-shrink-0`}
+      className="w-[90px] bg-input rounded-md border-border focus:ring-2 focus:ring-ring placeholder-muted-foreground transition-all duration-200 flex-shrink-0"
     />
     <span className="text-xs text-muted-foreground w-[50px] text-left flex-shrink-0 whitespace-nowrap">{unit}</span>
     <div className="flex-1 flex items-center p-1 border border-border rounded-md bg-background text-xs text-foreground overflow-hidden whitespace-nowrap text-ellipsis">
@@ -433,7 +429,7 @@ const AddExamPage = () => {
                       </CardTitle>
                     </CardHeader>
                     <CardContent className="grid gap-4 pt-0 px-2"> {/* Ajustado padding horizontal */}
-                      <ExamFieldWithReference getReference={getReference} id="leucocitosTotais" label="Leucócitos totais" value={leucocitosTotais} onChange={(e) => setLeucocitosTotais(e.target.value)} referenceKey="leucocitosTotais" unit="mil/µL" labelWidth="w-[110px]" inputWidth="w-[90px]" />
+                      <ExamFieldWithReference getReference={getReference} id="leucocitosTotais" label="Leucócitos totais" value={leucocitosTotais} onChange={(e) => setLeucocitosTotais(e.target.value)} referenceKey="leucocitosTotais" unit="mil/µL" />
                       
                       <LeukocyteFieldWithReference getReference={getReference} idPrefix="mielocitos" label="Mielócitos" relativeValue={mielocitosRelativo} onRelativeChange={(e) => setMielocitosRelativo(e.target.value)} absoluteValue={mielocitosAbsoluto} onAbsoluteChange={(e) => setMielocitosAbsoluto(e.target.value)} referenceKey="mielocitos" />
                       <LeukocyteFieldWithReference getReference={getReference} idPrefix="metamielocitos" label="Metamielócitos" relativeValue={metamielocitosRelativo} onRelativeChange={(e) => setMetamielocitosRelativo(e.target.value)} absoluteValue={metamielocitosAbsoluto} onAbsoluteChange={(e) => setMetamielocitosAbsoluto(e.target.value)} referenceKey="metamielocitos" />
@@ -460,7 +456,7 @@ const AddExamPage = () => {
                     </CardTitle>
                   </CardHeader>
                   <CardContent className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-0 px-2"> {/* Ajustado padding horizontal */}
-                    <ExamFieldWithReference getReference={getReference} id="contagemPlaquetaria" label="Contagem plaquetária" value={contagemPlaquetaria} onChange={(e) => setContagemPlaquetaria(e.target.value)} referenceKey="contagemPlaquetaria" unit="/µL" inputWidth="w-[90px]" />
+                    <ExamFieldWithReference getReference={getReference} id="contagemPlaquetaria" label="Contagem plaquetária" value={contagemPlaquetaria} onChange={(e) => setContagemPlaquetaria(e.target.value)} referenceKey="contagemPlaquetaria" unit="/µL" />
                     <div className="space-y-2 col-span-full">
                       <Label htmlFor="avaliacaoPlaquetaria" className="text-muted-foreground font-medium">Avaliação plaquetária</Label>
                       <Textarea id="avaliacaoPlaquetaria" placeholder="Avaliação qualitativa das plaquetas" value={avaliacaoPlaquetaria} onChange={(e) => setAvaliacaoPlaquetaria(e.target.value)} rows={2} className="bg-input rounded-md border-border focus:ring-2 focus:ring-ring placeholder-muted-foreground transition-all duration-200" />
