@@ -237,7 +237,7 @@ const AddExamPage = () => {
     getReference,
   }) => (
     <div className="flex items-center gap-x-2 w-full flex-nowrap">
-      <Label htmlFor={id} className="w-[110px] text-left text-muted-foreground font-medium flex-shrink-0">
+      <Label htmlFor={id} className="w-[90px] text-left text-muted-foreground font-medium flex-shrink-0"> {/* Ajustado largura do label */}
         {label}
       </Label>
       <Input
@@ -248,7 +248,7 @@ const AddExamPage = () => {
         onChange={onChange}
         className="w-[60px] bg-input rounded-md border-border focus:ring-2 focus:ring-ring placeholder-muted-foreground transition-all duration-200 flex-shrink-0"
       />
-      <span className="text-sm text-muted-foreground w-[70px] text-left flex-shrink-0 whitespace-nowrap">{unit}</span>
+      <span className="text-[0.65rem] text-muted-foreground w-[50px] text-left flex-shrink-0 whitespace-nowrap">{unit}</span> {/* Ajustado largura e fonte da unidade */}
       <div className="flex-1 flex items-center p-1 border border-border rounded-md bg-background text-[0.65rem] text-foreground overflow-hidden whitespace-nowrap text-ellipsis">
         {getReference(referenceKey, 'full')}
       </div>
@@ -276,21 +276,21 @@ const AddExamPage = () => {
     getReference,
   }) => (
     <div className="flex flex-wrap items-center gap-x-2 gap-y-1 w-full">
-      <Label className="min-w-[100px] text-left text-muted-foreground font-medium flex-shrink-0">{label}</Label>
+      <Label className="min-w-[80px] text-left text-muted-foreground font-medium flex-shrink-0">{label}</Label> {/* Ajustado min-w do label */}
       <Input id={`${idPrefix}-relative`} type="text" value={relativeValue} onChange={onRelativeChange} className="w-[60px] bg-input flex-shrink-0" />
-      <span className="text-sm text-muted-foreground flex-shrink-0">%</span>
+      <span className="text-[0.65rem] text-muted-foreground flex-shrink-0">%</span> {/* Ajustado fonte da unidade */}
       <Input id={`${idPrefix}-absolute`} type="text" value={absoluteValue} onChange={onAbsoluteChange} className="w-[80px] bg-input flex-shrink-0" />
-      <span className="text-sm text-muted-foreground flex-shrink-0">/µL</span>
+      <span className="text-[0.65rem] text-muted-foreground flex-shrink-0">/µL</span> {/* Ajustado fonte da unidade */}
 
       {/* Dois quadrados separados para referências */}
-      <div className="flex-1 min-w-[150px] flex flex-wrap gap-1 justify-end">
-        <div className="flex-1 min-w-[100px] max-w-[150px] flex flex-col items-start p-1 border border-border rounded-md bg-background text-[0.65rem] text-foreground overflow-hidden">
+      <div className="flex-1 flex flex-wrap gap-1 justify-end">
+        <div className="flex-1 flex flex-col items-start p-1 border border-border rounded-md bg-background text-[0.65rem] text-foreground overflow-hidden"> {/* Removido min-w e max-w */}
           <span className="font-medium flex-shrink-0">Relativo:</span>
           <span className="flex-1 whitespace-nowrap overflow-hidden text-ellipsis">
             {getReference(referenceKey, 'relative')}
           </span>
         </div>
-        <div className="flex-1 min-w-[100px] max-w-[150px] flex flex-col items-start p-1 border border-border rounded-md bg-background text-[0.65rem] text-foreground overflow-hidden">
+        <div className="flex-1 flex flex-col items-start p-1 border border-border rounded-md bg-background text-[0.65rem] text-foreground overflow-hidden"> {/* Removido min-w e max-w */}
           <span className="font-medium flex-shrink-0">Absoluto:</span>
           <span className="flex-1 whitespace-nowrap overflow-hidden text-ellipsis">
             {getReference(referenceKey, 'absolute')}
@@ -388,7 +388,7 @@ const AddExamPage = () => {
 
                 <div className="flex flex-col lg:flex-row gap-6 mt-6">
                   {/* Eritrograma Section */}
-                  <Card className="bg-muted/50 shadow-sm border border-border rounded-md p-4 w-full lg:w-[35%]">
+                  <Card className="bg-muted/50 shadow-sm border border-border rounded-md p-4 w-full lg:w-[45%]"> {/* Alterado para 45% */}
                     <CardHeader className="pb-3">
                       <CardTitle className="flex items-center gap-2 text-lg font-semibold text-foreground">
                         <FaFlask className="h-5 w-5 text-primary" /> Eritrograma
@@ -412,7 +412,7 @@ const AddExamPage = () => {
                   </Card>
 
                   {/* Leucograma Section */}
-                  <Card className="bg-muted/50 shadow-sm border border-border rounded-md p-4 w-full lg:w-[65%]">
+                  <Card className="bg-muted/50 shadow-sm border border-border rounded-md p-4 w-full lg:w-[55%]"> {/* Alterado para 55% */}
                     <CardHeader className="pb-3">
                       <CardTitle className="flex items-center gap-2 text-lg font-semibold text-foreground">
                         <FaFlask className="h-5 w-5 text-primary" /> Leucograma
