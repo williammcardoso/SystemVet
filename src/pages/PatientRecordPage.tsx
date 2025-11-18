@@ -35,6 +35,8 @@ import {
 } from "@/components/ui/dropdown-menu"; // Importar DropdownMenu
 import { pdf } from "@react-pdf/renderer"; // Importar pdf para impressão
 import { PrescriptionPdfContent } from "@/components/PrescriptionPdfContent"; // Importar o componente de conteúdo do PDF
+// ADDED: Import do conteúdo de PDF do exame
+import { ExamReportPdfContent } from "@/components/ExamReportPdfContent";
 import { FinancialTransaction, mockFinancialTransactions } from "@/mockData/financial"; // Importar mock data financeiro
 import { AppointmentEntry, BaseAppointmentDetails, ConsultationDetails } from "@/types/appointment"; // Importar a nova interface de atendimento
 import { mockClients, updateAnimalDetails } from "@/mockData/clients"; // Importar o mock de clientes centralizado e updateAnimalDetails
@@ -391,8 +393,8 @@ const PatientRecordPage = () => {
   };
 
   const handleEditExam = (examId: string) => {
-    // Implementar navegação para uma página de edição de exame, se houver
-    toast.info(`Funcionalidade de edição para o exame ${examId} em desenvolvimento.`);
+    // UPDATED: Navegar para a página de edição de exame
+    navigate(`/clients/${clientId}/animals/${animalId}/edit-exam/${examId}`);
   };
 
 
