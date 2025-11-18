@@ -1,7 +1,7 @@
 import React from "react";
 import { Document, Page, View, Text, StyleSheet, Font } from "@react-pdf/renderer";
-import { mockCompanySettings } from "@/mockData/settings";
 import { ExamEntry, HemogramReference, HemogramReferenceValue, ExamReportData } from "@/types/exam";
+import { hemogramReferences } from "@/constants/examReferences"; // Importar hemogramReferences do novo arquivo
 
 // Registrando a fonte Exo com pesos regular, bold, italic e bold-italic
 Font.register({
@@ -13,13 +13,6 @@ Font.register({
     { src: '/fonts/Exo-BoldItalic.ttf', fontStyle: 'italic', fontWeight: 700, format: 'truetype' },
   ],
 });
-
-// Helper function to format date
-const formatDateToPortuguese = (date: Date) => {
-  const options: Intl.DateTimeFormatOptions = { day: '2-digit', month: 'long', year: 'numeric' };
-  const formattedDate = date.toLocaleDateString('pt-BR', options);
-  return formattedDate.toUpperCase();
-};
 
 // Normalizador de números (remove separador de milhar e troca vírgula por ponto)
 const normalizeNumber = (raw: string | undefined) => {
@@ -35,9 +28,6 @@ const styles = StyleSheet.create({
     fontSize: 10,
     color: "#333",
   },
-  // REMOVED: clinicHeader, clinicInfoLeft, clinicName, clinicDetails, clinicAddressPhone
-  // REMOVED: mainTitle
-  // REMOVED: infoSectionContainer, infoCard, infoTitle, infoText
   sectionTitle: {
     fontSize: 13,
     fontWeight: "bold",
@@ -272,8 +262,8 @@ const IndicatorBar: React.FC<IndicatorBarProps> = ({ value, minRef, maxRef, valu
 
 
 export const ExamReportPdfContent = ({
-  animalName, animalId, animalSpecies, tutorName, tutorAddress, exam, hemogramReferences,
-}: ExamReportData) => {
+  animalName, animalId, animalSpecies, tutorName, tutorAddress, exam,
+}: ExamReportData) => { // Removido hemogramReferences das props, pois será importado
   const currentDate = new Date();
   const speciesKey = animalSpecies === "Canino" ? "dog" : animalSpecies === "Felino" ? "cat" : undefined;
 
@@ -392,11 +382,6 @@ export const ExamReportPdfContent = ({
   return (
     <Document>
       <Page size="A4" style={styles.page}>
-        {/* REMOVED: Header da Clínica */}
-        {/* REMOVED: mainTitle */}
-        {/* REMOVED: Informações do Animal e Tutor */}
-        {/* REMOVED: Informações Gerais do Exame */}
-
         {exam.type === "Hemograma Completo" ? (
           <>
             {/* Tabela de Cabeçalho para os parâmetros */}
@@ -434,7 +419,7 @@ export const ExamReportPdfContent = ({
             {exam.segmentadosRelativo && renderLeukocyteParam("Segmentados", exam.segmentadosRelativo, exam.segmentadosAbsoluto, "segmentados", "segmentados")}
             {exam.eosinofilosRelativo && renderLeukocyteParam("Eosinófilos", exam.eosinofilosRelativo, exam.eosinofilosAbsoluto, "eosinofilos", "eosinofilos")}
             {exam.basofilosRelativo && renderLeukocyteParam("Basófilos", exam.basofilosRelativo, exam.basofilosAbsoluto, "basofilos", "basofilos")}
-            {exam.linfocitosRelativo && renderLeFukocyteParam("Linfócitos", exam.linfocitosRelativo, exam.linfocitosAbsoluto, "linfocitos", "linfocitos")}
+            {exam.linfocitosRelativo && renderLeukocyteParam("Linfócitos", exam.linfocitosRelativo, exam.linfocitosAbsoluto, "linfocitos", "linfocitos")}
             {exam.monocitosRelativo && renderLeukocyteParam("Monócitos", exam.monocitosRelativo, exam.monocitosAbsoluto, "monocitos", "monocitos")}
             {exam.observacoesSerieBranca && (
               <View style={{ marginTop: 10 }}>
@@ -482,7 +467,7 @@ export const ExamReportPdfContent = ({
         {/* Rodapé */}
         <View style={styles.footerContainer} fixed>
           <Text style={styles.dateText}>
-            Data de Emissão: {formatDateToPortuguese(currentDate)}
+            Data de Emissão: {new Date().toLocaleDateString('pt-BR', { day: '2-digit', month: 'long', year: 'numeric' }).toUpperCase()}
           </Text>
           <View style={styles.signatureBlock}>
             <View style={styles.signatureLine}/>
