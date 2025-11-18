@@ -40,6 +40,8 @@ import { AppointmentEntry, BaseAppointmentDetails, ConsultationDetails } from "@
 import { mockClients, updateAnimalDetails } from "@/mockData/clients"; // Importar o mock de clientes centralizado e updateAnimalDetails
 import { Client, Animal, WeightEntry } from "@/types/client"; // Importar as interfaces Client, Animal e WeightEntry
 import { mockAppointments } from "@/pages/AddAppointmentPage"; // Importar mockAppointments do AddAppointmentPage
+import { ExamEntry, ExamReportData } from "@/types/exam"; // Importar a interface ExamEntry e ExamReportData
+import { mockExams } from "@/mockData/exams"; // Importar mockExams
 
 // Mock data para tipos de exame e veterinários
 const mockExamTypes = [
@@ -55,54 +57,7 @@ const mockVets = [
   { id: "3", "name": "Dr. Souza" },
 ];
 
-// Interface para Exames (incluindo campos de hemograma)
-interface ExamEntry {
-  id: string;
-  date: string;
-  time: string; // Adicionado campo de hora
-  type: string;
-  result: string;
-  vet: string;
-  // Campos específicos para Hemograma
-  hemacias?: number;
-  volumeGlobular?: number;
-  hemoglobina?: number;
-  vgm?: number;
-  chgm?: number;
-  plaquetas?: number;
-  formasTotais?: number;
-  hemaciasNucleadas?: number;
-  leucocitos?: number;
-  bastoes?: number;
-  segmentados?: number;
-  linfocitos?: number;
-  monocitos?: number;
-  eosinofilos?: number;
-  basofilos?: number;
-  // Campos adicionais
-  examObservations?: string;
-  operator?: string;
-  referenceDate?: string;
-  referenceTables?: string;
-  conclusions?: string;
-}
-
-// Mock data para as novas abas
-interface DocumentEntry {
-  id: string;
-  date: string;
-  time: string; // Adicionado campo de hora
-  name: string;
-  fileUrl: string;
-}
-
-interface ObservationEntry {
-  id: string;
-  date: string;
-  time: string; // Adicionado campo de hora
-  observation: string;
-}
-
+// Mock data para vacinas (apenas para exibição, não para gerenciamento completo)
 const mockVaccines = [
   { id: "vac1", date: "2024-03-10", time: "11:00", type: "V8", nextDue: "2025-03-10", vet: "Dra. Costa" },
 ];
@@ -118,6 +73,53 @@ interface TimelineEvent {
   link?: string; // Opcional, para navegar para detalhes
   badgeColor?: string; // Opcional, para customizar a cor do badge
 }
+
+// Dados de referência para Hemograma (cão e gato) - Duplicado aqui para o PDF, idealmente viria de um lugar centralizado
+const hemogramReferences: Record<string, { dog: any; cat: any }> = {
+  eritrocitos: { dog: { full: "5.5 - 8.5 milhões/mm3", min: 5.5, max: 8.5 }, cat: { full: "6.5 - 10.0 milhões/mm3", min: 6.5, max: 10.0 } },
+  hemoglobina: { dog: { full: "12.0 - 18.0 g/dL", min: 12.0, max: 18.0 }, cat: { full: "9.0 - 15.0 g/dL", min: 9.0, max: 15.0 } },
+  hematocrito: { dog: { full: "37 - 55 %", min: 37, max: 55 }, cat: { full: "30 - 45 %", min: 30, max: 45 } },
+  vcm: { dog: { full: "60.0 - 77.0 fL", min: 60.0, max: 77.0 }, cat: { full: "39.0 - 55.0 fL", min: 39.0, max: 55.0 } },
+  hcm: { dog: { full: "19.5 - 24.5 pg", min: 19.5, max: 24.5 }, cat: { full: "13.0 - 17.0 pg", min: 13.0, max: 17.0 } },
+  chcm: { dog: { full: "31 - 35 %", min: 31, max: 35 }, cat: { full: "30 - 36 %", min: 30, max: 36 } },
+  proteinaTotal: { dog: { full: "6.0 - 8.0 g/dL", min: 6.0, max: 8.0 }, cat: { full: "5.7 - 8.9 g/dL", min: 5.7, max: 8.9 } },
+  hemaciasNucleadas: { dog: { full: "0", min: 0, max: 0 }, cat: { full: "0", min: 0, max: 0 } },
+
+  leucocitosTotais: { dog: { full: "6.0 - 17.0 mil/µL", min: 6.0, max: 17.0 }, cat: { full: "5.5 - 19.5 mil/µL", min: 5.5, max: 19.5 } },
+  mielocitos: {
+    dog: { relative: "0 %", absolute: "0 /µL", min: 0, max: 0 },
+    cat: { relative: "0 %", absolute: "0 /µL", min: 0, max: 0 }
+  },
+  metamielocitos: {
+    dog: { relative: "0 %", absolute: "0 /µL", min: 0, max: 0 },
+    cat: { relative: "0 %", absolute: "0 /µL", min: 0, max: 0 }
+  },
+  bastonetes: {
+    dog: { relative: "0 - 3 %", absolute: "0 - 300 /µL", min: 0, max: 3 },
+    cat: { relative: "0 - 3 %", absolute: "0 - 300 /µL", min: 0, max: 3 }
+  },
+  segmentados: {
+    dog: { relative: "60 - 77 %", absolute: "3.000 - 11.500 /µL", min: 60, max: 77 },
+    cat: { relative: "35 - 75 %", absolute: "2.500 - 12.500 /µL", min: 35, max: 75 }
+  },
+  eosinofilos: {
+    dog: { relative: "2 - 10 %", absolute: "100 - 1.250 /µL", min: 2, max: 10 },
+    cat: { relative: "2 - 12 %", absolute: "100 - 1.500 /µL", min: 2, max: 12 }
+  },
+  basofilos: {
+    dog: { relative: "/ raros", absolute: "/ raros", min: 0, max: 0 }, // Assuming 0 for rare
+    cat: { relative: "/ raros", absolute: "/ raros", min: 0, max: 0 }
+  },
+  linfocitos: {
+    dog: { relative: "12 - 30 %", absolute: "1.000 - 4.800 /µL", min: 12, max: 30 },
+    cat: { relative: "20 - 55 %", absolute: "1.500 - 7.000 /µL", min: 20, max: 55 }
+  },
+  monocitos: {
+    dog: { relative: "3 - 10 %", absolute: "150 - 1.350 /µL", min: 3, max: 10 },
+    cat: { relative: "1 - 4 %", absolute: "50 - 500 /µL", min: 1, max: 4 }
+  },
+  contagemPlaquetaria: { dog: { full: "166.000 - 575.000 /µL", min: 166000, max: 575000 }, cat: { full: "150.000 - 600.000 /µL", min: 150000, max: 600000 } },
+};
 
 
 // Helper function to calculate age
@@ -215,37 +217,13 @@ const PatientRecordPage = () => {
   const [newObservation, setNewObservation] = useState<string>("");
 
   // State para a lista de exames e o modal de adição
-  const [examsList, setExamsList] = useState<ExamEntry[]>([]); // Inicialmente vazio, pois a adição é feita em outra página
-  const [isAddExamDialogOpen, setIsAddExamDialogOpen] = useState(false);
-  const [newExamDate, setNewExamDate] = useState<string>(new Date().toISOString().split('T')[0]);
-  const [newExamType, setNewExamType] = useState<string | undefined>(undefined);
-  const [newExamResult, setNewExamResult] = useState<string>("");
-  const [newExamVet, setNewExamVet] = useState<string | undefined>(undefined);
+  const [examsList, setExamsList] = useState<ExamEntry[]>(mockExams.filter(exam => exam.id.startsWith('exam'))); // Inicialmente vazio, pois a adição é feita em outra página
+  
+  // Use useEffect to update the state if mockExams changes (e.e., after a save)
+  useEffect(() => {
+    setExamsList([...mockExams]); // Create a new array reference to trigger re-render
+  }, [mockExams, animalId]); // Dependência em mockExams para re-renderizar quando ele é alterado
 
-  // Campos específicos para Hemograma
-  const [newHemacias, setNewHemacias] = useState<string>("");
-  const [newVolumeGlobular, setNewVolumeGlobular] = useState<string>("");
-  const [newHemoglobina, setNewHemoglobina] = useState<string>("");
-  const [newVGM, setNewVGM] = useState<string>("");
-  const [newCHGM, setNewCHGM] = useState<string>("");
-  const [newPlaquetas, setNewPlaquetas] = useState<string>("");
-  const [newFormasTotais, setNewFormasTotais] = useState<string>("");
-  const [newHemaciasNucleadas, setNewHemaciasNucleadas] = useState<string>("");
-
-  const [newLeucocitos, setNewLeucocitos] = useState<string>("");
-  const [newBastoes, setNewBastoes] = useState<string>("");
-  const [newSegmentados, setNewSegmentados] = useState<string>("");
-  const [newLinfocitos, setNewLinfocitos] = useState<string>("");
-  const [newMonocitos, setNewMonocitos] = useState<string>("");
-  const [newEosinofilos, setNewEosinofilos] = useState<string>("");
-  const [newBasofilos, setNewBasofilos] = useState<string>("");
-
-  // Campos adicionais
-  const [newExamObservations, setNewExamObservations] = useState<string>("");
-  const [newOperator, setNewOperator] = useState<string>("");
-  const [newReferenceDate, setNewReferenceDate] = useState<string>("");
-  const [newReferenceTables, setNewReferenceTables] = useState<string>("");
-  const [newConclusions, setNewConclusions] = useState<string>("");
 
   // Filtrar transações financeiras relacionadas a este animal
   const animalFinancialTransactions = mockFinancialTransactions.filter(
@@ -313,6 +291,7 @@ const PatientRecordPage = () => {
       setDocuments([...documents, newEntry]);
       setNewDocumentName("");
       setNewDocumentFile(null);
+      toast.success("Anexo adicionado!");
     }
   };
 
@@ -330,82 +309,27 @@ const PatientRecordPage = () => {
     }
   };
 
-  const handleAddExam = () => {
-    if (!newExamDate || !newExamType || !newExamVet) {
-      toast.error("Por favor, preencha a data, tipo de exame e veterinário.");
-      return;
+  // Handlers para Atendimentos (atualizados para a nova página)
+  const handleAddAppointmentClick = () => {
+    navigate(`/clients/${clientId}/animals/${animalId}/add-appointment`);
+  };
+
+  const handleViewAppointmentClick = (appointment: AppointmentEntry) => {
+    navigate(`/clients/${clientId}/animals/${animalId}/view-appointment/${appointment.id}`);
+  };
+
+  const handleDeleteAppointment = (id: string) => {
+    // Remove from mockAppointments directly
+    const index = mockAppointments.findIndex(app => app.id === id);
+    if (index > -1) {
+      mockAppointments.splice(index, 1);
+      setAnimalAppointments(mockAppointments.filter(app => app.animalId === animalId)); // Update local state
+      toast.info("Atendimento excluído.");
     }
+  };
 
-    const now = new Date();
-    let examData: ExamEntry = {
-      id: String(examsList.length + 1),
-      date: newExamDate,
-      time: now.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' }),
-      type: newExamType,
-      result: newExamResult, // Default result for non-hemogram
-      vet: newExamVet,
-      examObservations: newExamObservations,
-      operator: newOperator,
-      referenceDate: newReferenceDate,
-      referenceTables: newReferenceTables,
-      conclusions: newConclusions,
-    };
-
-    if (newExamType === "Hemograma Completo") {
-      examData = {
-        ...examData,
-        hemacias: parseFloat(newHemacias) || undefined,
-        volumeGlobular: parseFloat(newVolumeGlobular) || undefined,
-        hemoglobina: parseFloat(newHemoglobina) || undefined,
-        vgm: parseFloat(newVGM) || undefined,
-        chgm: parseFloat(newCHGM) || undefined,
-        plaquetas: parseFloat(newPlaquetas) || undefined,
-        formasTotais: parseFloat(newFormasTotais) || undefined,
-        hemaciasNucleadas: parseFloat(newHemaciasNucleadas) || undefined,
-        leucocitos: parseFloat(newLeucocitos) || undefined,
-        bastoes: parseFloat(newBastoes) || undefined,
-        segmentados: parseFloat(newSegmentados) || undefined,
-        linfocitos: parseFloat(newLinfocitos) || undefined,
-        monocitos: parseFloat(newMonocitos) || undefined,
-        eosinofilos: parseFloat(newEosinofilos) || undefined,
-        basofilos: parseFloat(newBasofilos) || undefined,
-      };
-      // Summarize hemogram results for the table display
-      examData.result = `Hemograma: Hemácias ${newHemacias}, Leucócitos ${newLeucocitos}, Plaquetas ${newPlaquetas}`;
-    } else {
-      if (!newExamResult.trim()) {
-        toast.error("Por favor, preencha o resultado do exame.");
-        return;
-      }
-    }
-
-    setExamsList([...examsList, examData]);
-    setIsAddExamDialogOpen(false);
-    // Resetar campos do formulário
-    setNewExamDate(new Date().toISOString().split('T')[0]);
-    setNewExamType(undefined);
-    setNewExamResult("");
-    setNewExamVet(undefined);
-    setNewHemacias("");
-    setNewVolumeGlobular("");
-    setNewHemoglobina("");
-    setNewVGM("");
-    setNewCHGM("");
-    setNewPlaquetas("");
-    setNewFormasTotais("");
-    setNewHemaciasNucleadas("");
-    setNewLeucocitos("");
-    setNewBastoes("");
-    setNewSegmentados("");
-    setNewLinfocitos("");
-    setNewMonocitos("");
-    setNewEosinofilos("");
-    setNewBasofilos("");
-    setNewExamObservations("");
-    setNewOperator("");
-    setNewReferenceDate("");
-    setNewReferenceTables("");
-    setNewConclusions("");
+  const handleEditAnimal = () => {
+    navigate(`/clients/${clientId}/animals/${animalId}/edit`);
   };
 
   const handlePrintSinglePrescription = async (rx: PrescriptionEntry) => {
@@ -440,28 +364,37 @@ const PatientRecordPage = () => {
     toast.success("Receita enviada para impressão!");
   };
 
-  // Handlers para Atendimentos (atualizados para a nova página)
-  const handleAddAppointmentClick = () => {
-    navigate(`/clients/${clientId}/animals/${animalId}/add-appointment`);
-  };
-
-  const handleViewAppointmentClick = (appointment: AppointmentEntry) => {
-    navigate(`/clients/${clientId}/animals/${animalId}/view-appointment/${appointment.id}`);
-  };
-
-  const handleDeleteAppointment = (id: string) => {
-    // Remove from mockAppointments directly
-    const index = mockAppointments.findIndex(app => app.id === id);
-    if (index > -1) {
-      mockAppointments.splice(index, 1);
-      setAnimalAppointments(mockAppointments.filter(app => app.animalId === animalId)); // Update local state
-      toast.info("Atendimento excluído.");
+  const handlePrintExam = async (exam: ExamEntry) => {
+    if (!currentClient || !currentAnimal) {
+      toast.error("Erro: Dados do cliente ou animal não disponíveis para impressão.");
+      return;
     }
+
+    const tutorAddress = `${currentClient.address.street}, ${currentClient.address.number} - ${currentClient.address.city} - ${currentClient.address.state}`;
+
+    const blob = await pdf(
+      <ExamReportPdfContent
+        animalName={currentAnimal.name}
+        animalId={currentAnimal.id}
+        animalSpecies={currentAnimal.species}
+        tutorName={currentClient.name}
+        tutorAddress={tutorAddress}
+        exam={exam}
+        hemogramReferences={hemogramReferences}
+      />
+    ).toBlob();
+
+    const url = URL.createObjectURL(blob);
+    window.open(url, '_blank');
+    URL.revokeObjectURL(url);
+    toast.success("Laudo de exame enviado para impressão!");
   };
 
-  const handleEditAnimal = () => {
-    navigate(`/clients/${clientId}/animals/${animalId}/edit`);
+  const handleEditExam = (examId: string) => {
+    // Implementar navegação para uma página de edição de exame, se houver
+    toast.info(`Funcionalidade de edição para o exame ${examId} em desenvolvimento.`);
   };
+
 
   // Lógica para a Linha do Tempo
   const allTimelineEvents: TimelineEvent[] = [];
@@ -489,7 +422,7 @@ const PatientRecordPage = () => {
       date: exam.date,
       time: exam.time,
       type: 'Exame',
-      description: `${exam.type}: ${exam.result}`,
+      description: `${exam.type}: ${exam.result || 'Ver detalhes'}`,
       icon: FaFlask,
       // link: `/clients/${clientId}/animals/${animalId}/view-exam/${exam.id}`, // Se houver uma página de visualização de exame
       badgeColor: "bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-200",
@@ -859,12 +792,17 @@ const PatientRecordPage = () => {
                               {exam.type}
                             </Badge>
                             <p className="text-lg font-semibold text-foreground">
-                              {exam.result}
+                              {exam.type === "Hemograma Completo" ? "Hemograma Completo" : exam.result || "Ver detalhes"}
                             </p>
                           </div>
-                          <Button variant="ghost" size="icon" className="rounded-md hover:bg-muted hover:text-foreground transition-colors duration-200">
-                            <FaEye className="h-4 w-4" />
-                          </Button>
+                          <div className="flex gap-2">
+                            <Button variant="ghost" size="icon" onClick={() => handlePrintExam(exam)} className="rounded-md hover:bg-muted hover:text-foreground transition-colors duration-200">
+                              <FaPrint className="h-4 w-4" />
+                            </Button>
+                            <Button variant="ghost" size="icon" onClick={() => handleEditExam(exam.id)} className="rounded-md hover:bg-muted hover:text-foreground transition-colors duration-200">
+                              <FaEdit className="h-4 w-4" />
+                            </Button>
+                          </div>
                         </div>
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-2 text-sm text-muted-foreground">
                           <div className="flex items-center gap-1">
@@ -882,212 +820,6 @@ const PatientRecordPage = () => {
                 )}
               </CardContent>
             </Card>
-
-            <Dialog open={isAddExamDialogOpen} onOpenChange={setIsAddExamDialogOpen}>
-              <DialogContent className="sm:max-w-[700px] bg-card shadow-sm border border-border rounded-md">
-                <DialogHeader>
-                  <DialogTitle className="text-lg font-semibold text-foreground">Adicionar Novo Exame</DialogTitle>
-                  <DialogDescription className="text-sm text-muted-foreground">
-                    Preencha os detalhes do exame para adicionar ao prontuário.
-                  </DialogDescription>
-                </DialogHeader>
-                <div className="grid gap-4 py-4">
-                  <div className="grid grid-cols-1 sm:grid-cols-4 items-center gap-4">
-                    <Label htmlFor="examDate" className="sm:text-right text-muted-foreground font-medium">
-                      Data
-                    </Label>
-                    <Input
-                      id="examDate"
-                      type="date"
-                      value={newExamDate}
-                      onChange={(e) => setNewExamDate(e.target.value)}
-                      className="col-span-3 bg-input rounded-md border-border focus:ring-2 focus:ring-ring placeholder-muted-foreground transition-all duration-200"
-                    />
-                  </div>
-                  <div className="grid grid-cols-1 sm:grid-cols-4 items-center gap-4">
-                    <Label htmlFor="examType" className="sm:text-right text-muted-foreground font-medium">
-                      Tipo de Exame
-                    </Label>
-                    <Select onValueChange={setNewExamType} value={newExamType} >
-                      <SelectTrigger id="examType" className="col-span-3 bg-input rounded-md border-border focus:ring-2 focus:ring-ring placeholder-muted-foreground transition-all duration-200">
-                        <SelectValue placeholder="Selecione o tipo de exame" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        {mockExamTypes.map((type) => (
-                          <SelectItem key={type.id} value={type.name}>
-                            {type.name}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                  </div>
-                  <div className="grid grid-cols-1 sm:grid-cols-4 items-center gap-4">
-                    <Label htmlFor="examVet" className="sm:text-right text-muted-foreground font-medium">
-                      Veterinário
-                    </Label>
-                    <Select onValueChange={setNewExamVet} value={newExamVet}>
-                      <SelectTrigger id="examVet" className="col-span-3 bg-input rounded-md border-border focus:ring-2 focus:ring-ring placeholder-muted-foreground transition-all duration-200">
-                        <SelectValue placeholder="Selecione o veterinário" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        {mockVets.map((vet) => (
-                          <SelectItem key={vet.id} value={vet.name}>
-                            {vet.name}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                  </div>
-
-                  {newExamType === "Hemograma Completo" ? (
-                    <>
-                      <h3 className="col-span-4 text-lg font-semibold mt-4 mb-2 text-foreground">Eritrograma</h3>
-                      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 col-span-4 gap-4">
-                        <div className="space-y-2">
-                          <Label htmlFor="hemacias" className="text-muted-foreground font-medium">Hemácias (m/mm3)</Label>
-                          <Input id="hemacias" type="number" placeholder="Ex: 5.5" value={newHemacias} onChange={(e) => setNewHemacias(e.target.value)} className="bg-input rounded-md border-border focus:ring-2 focus:ring-ring placeholder-muted-foreground transition-all duration-200" />
-                        </div>
-                        <div className="space-y-2">
-                          <Label htmlFor="volumeGlobular" className="text-muted-foreground font-medium">Volume globular (%)</Label>
-                          <Input id="volumeGlobular" type="number" placeholder="Ex: 37" value={newVolumeGlobular} onChange={(e) => setNewVolumeGlobular(e.target.value)} className="bg-input rounded-md border-border focus:ring-2 focus:ring-ring placeholder-muted-foreground transition-all duration-200" />
-                        </div>
-                        <div className="space-y-2">
-                          <Label htmlFor="hemoglobina" className="text-muted-foreground font-medium">Hemoglobina (g/dL)</Label>
-                          <Input id="hemoglobina" type="number" placeholder="Ex: 12.0" value={newHemoglobina} onChange={(e) => setNewHemoglobina(e.target.value)} className="bg-input rounded-md border-border focus:ring-2 focus:ring-ring placeholder-muted-foreground transition-all duration-200" />
-                        </div>
-                        <div className="space-y-2">
-                          <Label htmlFor="vgm" className="text-muted-foreground font-medium">VGM (fL)</Label>
-                          <Input id="vgm" type="number" placeholder="Ex: 60.0" value={newVGM} onChange={(e) => setNewVGM(e.target.value)} className="bg-input rounded-md border-border focus:ring-2 focus:ring-ring placeholder-muted-foreground transition-all duration-200" />
-                        </div>
-                        <div className="space-y-2">
-                          <Label htmlFor="chgm" className="text-muted-foreground font-medium">CHGM (%)</Label>
-                          <Input id="chgm" type="number" placeholder="Ex: 31" value={newCHGM} onChange={(e) => setNewCHGM(e.target.value)} className="bg-input rounded-md border-border focus:ring-2 focus:ring-ring placeholder-muted-foreground transition-all duration-200" />
-                        </div>
-                        <div className="space-y-2">
-                          <Label htmlFor="plaquetas" className="text-muted-foreground font-medium">Plaquetas (m/mm3)</Label>
-                          <Input id="plaquetas" type="number" placeholder="Ex: 300" value={newPlaquetas} onChange={(e) => setNewPlaquetas(e.target.value)} className="bg-input rounded-md border-border focus:ring-2 focus:ring-ring placeholder-muted-foreground transition-all duration-200" />
-                        </div>
-                        <div className="space-y-2">
-                          <Label htmlFor="formasTotais" className="text-muted-foreground font-medium">Formas totais (m/mm3)</Label>
-                          <Input id="formasTotais" type="number" placeholder="Ex: 6.0" value={newFormasTotais} onChange={(e) => setNewFormasTotais(e.target.value)} className="bg-input rounded-md border-border focus:ring-2 focus:ring-ring placeholder-muted-foreground transition-all duration-200" />
-                        </div>
-                        <div className="space-y-2">
-                          <Label htmlFor="hemaciasNucleadas">Hemácias nucleadas (g/dL)</Label>
-                          <Input id="hemaciasNucleadas" type="number" placeholder="Ex: 0" value={newHemaciasNucleadas} onChange={(e) => setNewHemaciasNucleadas(e.target.value)} className="bg-input rounded-md border-border focus:ring-2 focus:ring-ring placeholder-muted-foreground transition-all duration-200" />
-                        </div>
-                      </div>
-
-                      <h3 className="col-span-4 text-lg font-semibold mt-4 mb-2 text-foreground">Leucograma</h3>
-                      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-                        <div className="space-y-2">
-                          <Label htmlFor="leucocitos" className="text-muted-foreground font-medium">Leucócitos (m/mm3)</Label>
-                          <Input id="leucocitos" type="number" placeholder="Ex: 6.0" value={newLeucocitos} onChange={(e) => setNewLeucocitos(e.target.value)} className="bg-input rounded-md border-border focus:ring-2 focus:ring-ring placeholder-muted-foreground transition-all duration-200" />
-                        </div>
-                        <div className="space-y-2">
-                          <Label htmlFor="bastoes" className="text-muted-foreground font-medium">Bastões (%)</Label>
-                          <Input id="bastoes" type="number" placeholder="Ex: 0" value={newBastoes} onChange={(e) => setNewBastoes(e.target.value)} className="bg-input rounded-md border-border focus:ring-2 focus:ring-ring placeholder-muted-foreground transition-all duration-200" />
-                        </div>
-                        <div className="space-y-2">
-                          <Label htmlFor="segmentados">Segmentados (%)</Label>
-                          <Input id="segmentados" type="number" placeholder="Ex: 60" value={newSegmentados} onChange={(e) => setNewSegmentados(e.target.value)} className="bg-input rounded-md border-border focus:ring-2 focus:ring-ring placeholder-muted-foreground transition-all duration-200" />
-                        </div>
-                        <div className="space-y-2">
-                          <Label htmlFor="linfocitos">Linfócitos (%)</Label>
-                          <Input id="linfocitos" type="number" placeholder="Ex: 30" value={newLinfocitos} onChange={(e) => setNewLinfocitos(e.target.value)} className="bg-input rounded-md border-border focus:ring-2 focus:ring-ring placeholder-muted-foreground transition-all duration-200" />
-                        </div>
-                        <div className="space-y-2">
-                          <Label htmlFor="monocitos">Monócitos (%)</Label>
-                          <Input id="monocitos" type="number" placeholder="Ex: 3" value={newMonocitos} onChange={(e) => setNewMonocitos(e.target.value)} className="bg-input rounded-md border-border focus:ring-2 focus:ring-ring placeholder-muted-foreground transition-all duration-200" />
-                        </div>
-                        <div className="space-y-2">
-                          <Label htmlFor="eosinofilos">Eosinófilos (%)</Label>
-                          <Input id="eosinofilos" type="number" placeholder="Ex: 2" value={newEosinofilos} onChange={(e) => setNewEosinofilos(e.target.value)} className="bg-input rounded-md border-border focus:ring-2 focus:ring-ring placeholder-muted-foreground transition-all duration-200" />
-                        </div>
-                        <div className="space-y-2">
-                          <Label htmlFor="basofilos">Basófilos (%)</Label>
-                          <Input id="basofilos" type="number" placeholder="Ex: 1" value={newBasofilos} onChange={(e) => setNewBasofilos(e.target.value)} className="bg-input rounded-md border-border focus:ring-2 focus:ring-ring placeholder-muted-foreground transition-all duration-200" />
-                        </div>
-                      </div>
-                    </>
-                  ) : (
-                    <div className="space-y-2 col-span-full">
-                      <Label htmlFor="examResult" className="text-muted-foreground font-medium">Resultado</Label>
-                      <Input
-                        id="examResult"
-                        placeholder="Resultado do exame"
-                        value={newExamResult}
-                        onChange={(e) => setNewExamResult(e.target.value)}
-                        className="bg-input rounded-md border-border focus:ring-2 focus:ring-ring placeholder-muted-foreground transition-all duration-200"
-                      />
-                    </div>
-                  )}
-
-                  <div className="space-y-2 col-span-full mt-4">
-                    <Label htmlFor="examObservations" className="text-muted-foreground font-medium">Observações</Label>
-                    <Textarea
-                      id="examObservations"
-                      placeholder="Observações gerais do exame"
-                      value={newExamObservations}
-                      onChange={(e) => setNewExamObservations(e.target.value)}
-                      rows={3}
-                      className="bg-input rounded-md border-border focus:ring-2 focus:ring-ring placeholder-muted-foreground transition-all duration-200"
-                    />
-                  </div>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div className="space-y-2">
-                      <Label htmlFor="operator" className="text-muted-foreground font-medium">Operador</Label>
-                      <Input
-                        id="operator"
-                        placeholder="Nome do operador"
-                        value={newOperator}
-                        onChange={(e) => setNewOperator(e.target.value)}
-                        className="bg-input rounded-md border-border focus:ring-2 focus:ring-ring placeholder-muted-foreground transition-all duration-200"
-                      />
-                    </div>
-                    <div className="space-y-2">
-                      <Label htmlFor="referenceDate" className="text-muted-foreground font-medium">Data de Referência</Label>
-                      <Input
-                        id="referenceDate"
-                        type="date"
-                        value={newReferenceDate}
-                        onChange={(e) => setNewReferenceDate(e.target.value)}
-                        className="bg-input rounded-md border-border focus:ring-2 focus:ring-ring placeholder-muted-foreground transition-all duration-200"
-                      />
-                    </div>
-                  </div>
-                  <div className="space-y-2 col-span-full">
-                    <Label htmlFor="referenceTables" className="text-muted-foreground font-medium">Tabelas de referência</Label>
-                    <Textarea
-                      id="referenceTables"
-                      placeholder="Tabelas de referência"
-                      value={newReferenceTables}
-                      onChange={(e) => setNewReferenceTables(e.target.value)}
-                      rows={3}
-                      className="bg-input rounded-md border-border focus:ring-2 focus:ring-ring placeholder-muted-foreground transition-all duration-200"
-                    />
-                  </div>
-                  <div className="space-y-2 col-span-full">
-                    <Label htmlFor="conclusions" className="text-muted-foreground font-medium">Conclusões</Label>
-                    <Textarea
-                      id="conclusions"
-                      placeholder="Conclusões do exame"
-                      value={newConclusions}
-                      onChange={(e) => setNewConclusions(e.target.value)}
-                      rows={5}
-                      className="bg-input rounded-md border-border focus:ring-2 focus:ring-ring placeholder-muted-foreground transition-all duration-200"
-                    />
-                  </div>
-                </div>
-                <DialogFooter>
-                  <Button variant="outline" onClick={() => setIsAddExamDialogOpen(false)} className="bg-card border border-border text-foreground hover:bg-muted rounded-md transition-all duration-200 shadow-sm hover:shadow-md">
-                    <FaTimes className="mr-2 h-4 w-4" /> Cancelar
-                  </Button>
-                  <Button onClick={handleAddExam} className="bg-primary text-primary-foreground hover:bg-primary/90 rounded-md font-semibold transition-all duration-200 shadow-md hover:shadow-lg">
-                    <FaSave className="mr-2 h-4 w-4" /> Salvar Exame
-                  </Button>
-                </DialogFooter>
-              </DialogContent>
-            </Dialog>
           </TabsContent>
 
           <TabsContent value="sales" className="mt-4">
@@ -1402,7 +1134,6 @@ const PatientRecordPage = () => {
                 <div className="mb-4">
                   <Textarea
                     placeholder="Adicione uma nova observação..."
-                    rows={3}
                     value={newObservation}
                     onChange={(e) => setNewObservation(e.target.value)}
                     className="bg-input rounded-md border-border focus:ring-2 focus:ring-ring placeholder-muted-foreground transition-all duration-200"

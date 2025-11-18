@@ -9,6 +9,8 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { showSuccess, showError } from "@/utils/toast"; // Importar funções de toast
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"; // Importar Card para envolver o formulário
 import { mockClients } from "@/mockData/clients"; // Importar mockClients para obter a espécie do animal
+import { ExamEntry } from "@/types/exam"; // Importar a interface ExamEntry
+import { addMockExam, updateMockExam, mockExams } from "@/mockData/exams"; // Importar funções de mock de exames
 
 // Mock data para tipos de exame e veterinários (duplicado por enquanto, idealmente viria de um contexto ou API)
 const mockExamTypes = [
@@ -29,6 +31,8 @@ interface HemogramReferenceValue {
   relative?: string;
   absolute?: string;
   full?: string; // For non-leukocyte fields
+  min?: number;
+  max?: number;
 }
 
 interface HemogramReference {
@@ -38,49 +42,49 @@ interface HemogramReference {
 
 // Dados de referência para Hemograma (cão e gato)
 const hemogramReferences: Record<string, HemogramReference> = {
-  eritrocitos: { dog: { full: "5.5 - 8.5 milhões/mm3" }, cat: { full: "6.5 - 10.0 milhões/mm3" } },
-  hemoglobina: { dog: { full: "12.0 - 18.0 g/dL" }, cat: { full: "9.0 - 15.0 g/dL" } },
-  hematocrito: { dog: { full: "37 - 55 %" }, cat: { full: "30 - 45 %" } },
-  vcm: { dog: { full: "60.0 - 77.0 fL" }, cat: { full: "39.0 - 55.0 fL" } },
-  hcm: { dog: { full: "19.5 - 24.5 pg" }, cat: { full: "13.0 - 17.0 pg" } },
-  chcm: { dog: { full: "31 - 35 %" }, cat: { full: "30 - 36 %" } },
-  proteinaTotal: { dog: { full: "6.0 - 8.0 g/dL" }, cat: { full: "5.7 - 8.9 g/dL" } },
-  hemaciasNucleadas: { dog: { full: "0" }, cat: { full: "0" } },
+  eritrocitos: { dog: { full: "5.5 - 8.5 milhões/mm3", min: 5.5, max: 8.5 }, cat: { full: "6.5 - 10.0 milhões/mm3", min: 6.5, max: 10.0 } },
+  hemoglobina: { dog: { full: "12.0 - 18.0 g/dL", min: 12.0, max: 18.0 }, cat: { full: "9.0 - 15.0 g/dL", min: 9.0, max: 15.0 } },
+  hematocrito: { dog: { full: "37 - 55 %", min: 37, max: 55 }, cat: { full: "30 - 45 %", min: 30, max: 45 } },
+  vcm: { dog: { full: "60.0 - 77.0 fL", min: 60.0, max: 77.0 }, cat: { full: "39.0 - 55.0 fL", min: 39.0, max: 55.0 } },
+  hcm: { dog: { full: "19.5 - 24.5 pg", min: 19.5, max: 24.5 }, cat: { full: "13.0 - 17.0 pg", min: 13.0, max: 17.0 } },
+  chcm: { dog: { full: "31 - 35 %", min: 31, max: 35 }, cat: { full: "30 - 36 %", min: 30, max: 36 } },
+  proteinaTotal: { dog: { full: "6.0 - 8.0 g/dL", min: 6.0, max: 8.0 }, cat: { full: "5.7 - 8.9 g/dL", min: 5.7, max: 8.9 } },
+  hemaciasNucleadas: { dog: { full: "0", min: 0, max: 0 }, cat: { full: "0", min: 0, max: 0 } },
 
-  leucocitosTotais: { dog: { full: "6.0 - 17.0 mil/µL" }, cat: { full: "5.5 - 19.5 mil/µL" } },
+  leucocitosTotais: { dog: { full: "6.0 - 17.0 mil/µL", min: 6.0, max: 17.0 }, cat: { full: "5.5 - 19.5 mil/µL", min: 5.5, max: 19.5 } },
   mielocitos: {
-    dog: { relative: "0 %", absolute: "0 /µL" },
-    cat: { relative: "0 %", absolute: "0 /µL" }
+    dog: { relative: "0 %", absolute: "0 /µL", min: 0, max: 0 },
+    cat: { relative: "0 %", absolute: "0 /µL", min: 0, max: 0 }
   },
   metamielocitos: {
-    dog: { relative: "0 %", absolute: "0 /µL" },
-    cat: { relative: "0 %", absolute: "0 /µL" }
+    dog: { relative: "0 %", absolute: "0 /µL", min: 0, max: 0 },
+    cat: { relative: "0 %", absolute: "0 /µL", min: 0, max: 0 }
   },
   bastonetes: {
-    dog: { relative: "0 - 3 %", absolute: "0 - 300 /µL" },
-    cat: { relative: "0 - 3 %", absolute: "0 - 300 /µL" }
+    dog: { relative: "0 - 3 %", absolute: "0 - 300 /µL", min: 0, max: 3 },
+    cat: { relative: "0 - 3 %", absolute: "0 - 300 /µL", min: 0, max: 3 }
   },
   segmentados: {
-    dog: { relative: "60 - 77 %", absolute: "3.000 - 11.500 /µL" },
-    cat: { relative: "35 - 75 %", absolute: "2.500 - 12.500 /µL" }
+    dog: { relative: "60 - 77 %", absolute: "3.000 - 11.500 /µL", min: 60, max: 77 },
+    cat: { relative: "35 - 75 %", absolute: "2.500 - 12.500 /µL", min: 35, max: 75 }
   },
   eosinofilos: {
-    dog: { relative: "2 - 10 %", absolute: "100 - 1.250 /µL" },
-    cat: { relative: "2 - 12 %", absolute: "100 - 1.500 /µL" }
+    dog: { relative: "2 - 10 %", absolute: "100 - 1.250 /µL", min: 2, max: 10 },
+    cat: { relative: "2 - 12 %", absolute: "100 - 1.500 /µL", min: 2, max: 12 }
   },
   basofilos: {
-    dog: { relative: "/ raros", absolute: "/ raros" },
-    cat: { relative: "/ raros", absolute: "/ raros" }
+    dog: { relative: "/ raros", absolute: "/ raros", min: 0, max: 0 }, // Assuming 0 for rare
+    cat: { relative: "/ raros", absolute: "/ raros", min: 0, max: 0 }
   },
   linfocitos: {
-    dog: { relative: "12 - 30 %", absolute: "1.000 - 4.800 /µL" },
-    cat: { relative: "20 - 55 %", absolute: "1.500 - 7.000 /µL" }
+    dog: { relative: "12 - 30 %", absolute: "1.000 - 4.800 /µL", min: 12, max: 30 },
+    cat: { relative: "20 - 55 %", absolute: "1.500 - 7.000 /µL", min: 20, max: 55 }
   },
   monocitos: {
-    dog: { relative: "3 - 10 %", absolute: "150 - 1.350 /µL" },
-    cat: { relative: "1 - 4 %", absolute: "50 - 500 /µL" }
+    dog: { relative: "3 - 10 %", absolute: "150 - 1.350 /µL", min: 3, max: 10 },
+    cat: { relative: "1 - 4 %", absolute: "50 - 500 /µL", min: 1, max: 4 }
   },
-  contagemPlaquetaria: { dog: { full: "166.000 - 575.000 /µL" }, cat: { full: "150.000 - 600.000 /µL" } },
+  contagemPlaquetaria: { dog: { full: "166.000 - 575.000 /µL", min: 166000, max: 575000 }, cat: { full: "150.000 - 600.000 /µL", min: 150000, max: 600000 } },
 };
 
 // Componente auxiliar para renderizar uma linha de campo com referência
@@ -256,51 +260,52 @@ const AddExamPage = () => {
     const now = new Date();
     const currentTime = now.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
 
-    console.log("Salvando exame para Cliente:", clientId, "Animal:", animalId);
-    console.log("Detalhes do exame:", {
-      examDate,
+    const newExam: ExamEntry = {
+      id: `exam-${Date.now()}`, // Gerar um ID único
+      date: examDate,
       time: currentTime,
-      examType,
-      examVet,
-      material,
-      equipamento,
-      eritrocitos: examType === "Hemograma Completo" ? eritrocitos : undefined,
-      hemoglobina: examType === "Hemograma Completo" ? hemoglobina : undefined,
-      hematocrito: examType === "Hemograma Completo" ? hematocrito : undefined,
-      vcm: examType === "Hemograma Completo" ? vcm : undefined,
-      hcm: examType === "Hemograma Completo" ? hcm : undefined,
-      chcm: examType === "Hemograma Completo" ? chcm : undefined,
-      proteinaTotal: examType === "Hemograma Completo" ? proteinaTotal : undefined,
-      hemaciasNucleadas: examType === "Hemograma Completo" ? hemaciasNucleadas : undefined,
-      observacoesSerieVermelha: examType === "Hemograma Completo" ? observacoesSerieVermelha : undefined,
-      leucocitosTotais: examType === "Hemograma Completo" ? leucocitosTotais : undefined,
-      mielocitosRelativo: examType === "Hemograma Completo" ? mielocitosRelativo : undefined,
-      mielocitosAbsoluto: examType === "Hemograma Completo" ? mielocitosAbsoluto : undefined,
-      metamielocitosRelativo: examType === "Hemograma Completo" ? metamielocitosRelativo : undefined,
-      metamielocitosAbsoluto: examType === "Hemograma Completo" ? metamielocitosAbsoluto : undefined,
-      bastonetesRelativo: examType === "Hemograma Completo" ? bastonetesRelativo : undefined,
-      bastonetesAbsoluto: examType === "Hemograma Completo" ? bastonetesAbsoluto : undefined,
-      segmentadosRelativo: examType === "Hemograma Completo" ? segmentadosRelativo : undefined,
-      segmentadosAbsoluto: examType === "Hemograma Completo" ? segmentadosAbsoluto : undefined,
-      eosinofilosRelativo: examType === "Hemograma Completo" ? eosinofilosRelativo : undefined,
-      eosinofilosAbsoluto: examType === "Hemograma Completo" ? eosinofilosAbsoluto : undefined,
-      basofilosRelativo: examType === "Hemograma Completo" ? basofilosRelativo : undefined,
-      basofilosAbsoluto: examType === "Hemograma Completo" ? basofilosAbsoluto : undefined,
-      linfocitosRelativo: examType === "Hemograma Completo" ? linfocitosRelativo : undefined,
-      linfocitosAbsoluto: examType === "Hemograma Completo" ? linfocitosAbsoluto : undefined,
-      monocitosRelativo: examType === "Hemograma Completo" ? monocitosRelativo : undefined,
-      monocitosAbsoluto: examType === "Hemograma Completo" ? monocitosAbsoluto : undefined,
-      observacoesSerieBranca: examType === "Hemograma Completo" ? observacoesSerieBranca : undefined,
-      contagemPlaquetaria: examType === "Hemograma Completo" ? contagemPlaquetaria : undefined,
-      avaliacaoPlaquetaria: examType === "Hemograma Completo" ? avaliacaoPlaquetaria : undefined,
-      nota,
-      laboratory,
-      laboratoryDate,
-      observacoesGeraisExame,
-      examResult: examType !== "Hemograma Completo" ? examResult : undefined, // Salva examResult apenas se não for hemograma
-      liberadoPor,
-    });
+      type: examType,
+      vet: examVet,
+      material: material.trim() || undefined,
+      equipamento: equipamento.trim() || undefined,
+      eritrocitos: eritrocitos.trim() || undefined,
+      hemoglobina: hemoglobina.trim() || undefined,
+      hematocrito: hematocrito.trim() || undefined,
+      vcm: vcm.trim() || undefined,
+      hcm: hcm.trim() || undefined,
+      chcm: chcm.trim() || undefined,
+      proteinaTotal: proteinaTotal.trim() || undefined,
+      hemaciasNucleadas: hemaciasNucleadas.trim() || undefined,
+      observacoesSerieVermelha: observacoesSerieVermelha.trim() || undefined,
+      leucocitosTotais: leucocitosTotais.trim() || undefined,
+      mielocitosRelativo: mielocitosRelativo.trim() || undefined,
+      mielocitosAbsoluto: mielocitosAbsoluto.trim() || undefined,
+      metamielocitosRelativo: metamielocitosRelativo.trim() || undefined,
+      metamielocitosAbsoluto: metamielocitosAbsoluto.trim() || undefined,
+      bastonetesRelativo: bastonetesRelativo.trim() || undefined,
+      bastonetesAbsoluto: bastonetesAbsoluto.trim() || undefined,
+      segmentadosRelativo: segmentadosRelativo.trim() || undefined,
+      segmentadosAbsoluto: segmentadosAbsoluto.trim() || undefined,
+      eosinofilosRelativo: eosinofilosRelativo.trim() || undefined,
+      eosinofilosAbsoluto: eosinofilosAbsoluto.trim() || undefined,
+      basofilosRelativo: basofilosRelativo.trim() || undefined,
+      basofilosAbsoluto: basofilosAbsoluto.trim() || undefined,
+      linfocitosRelativo: linfocitosRelativo.trim() || undefined,
+      linfocitosAbsoluto: linfocitosAbsoluto.trim() || undefined,
+      monocitosRelativo: monocitosRelativo.trim() || undefined,
+      monocitosAbsoluto: monocitosAbsoluto.trim() || undefined,
+      observacoesSerieBranca: observacoesSerieBranca.trim() || undefined,
+      contagemPlaquetaria: contagemPlaquetaria.trim() || undefined,
+      avaliacaoPlaquetaria: avaliacaoPlaquetaria.trim() || undefined,
+      nota: nota.trim() || undefined,
+      laboratory: laboratory.trim() || undefined,
+      laboratoryDate: laboratoryDate.trim() || undefined,
+      observacoesGeraisExame: observacoesGeraisExame.trim() || undefined,
+      result: examType !== "Hemograma Completo" ? examResult.trim() || undefined : undefined,
+      liberadoPor: liberadoPor.trim() || undefined,
+    };
 
+    addMockExam(newExam); // Adiciona o novo exame ao mock
     showSuccess("Exame salvo com sucesso!");
     navigate(`/clients/${clientId}/animals/${animalId}/record`); // Voltar para o prontuário
   };
@@ -424,7 +429,7 @@ const AddExamPage = () => {
                       </CardTitle>
                     </CardHeader>
                     <CardContent className="grid gap-4 pt-0 px-2"> {/* Ajustado padding horizontal */}
-                      <ExamFieldWithReference getReference={getReference} id="leucocitosTotais" label="Leucócitos totais" value={leucocitosTotais} onChange={(e) => setLeucocitosTotais(e.target.value)} referenceKey="leucocitosTotais" unit="mil/µL" labelWidth="w-[110px]" inputWidth="w-[90px]" />
+                      <ExamFieldWithReference getReference={getReference} id="leucocitosTotais" label="Leucócitos totais" value={leucocitosTotais} onChange={(e) => setLeucocitosTotais(e.target.value)} referenceKey="leucocitosTotais" unit="mil/µL" />
                       
                       <LeukocyteFieldWithReference getReference={getReference} idPrefix="mielocitos" label="Mielócitos" relativeValue={mielocitosRelativo} onRelativeChange={(e) => setMielocitosRelativo(e.target.value)} absoluteValue={mielocitosAbsoluto} onAbsoluteChange={(e) => setMielocitosAbsoluto(e.target.value)} referenceKey="mielocitos" />
                       <LeukocyteFieldWithReference getReference={getReference} idPrefix="metamielocitos" label="Metamielócitos" relativeValue={metamielocitosRelativo} onRelativeChange={(e) => setMetamielocitosRelativo(e.target.value)} absoluteValue={metamielocitosAbsoluto} onAbsoluteChange={(e) => setMetamielocitosAbsoluto(e.target.value)} referenceKey="metamielocitos" />
@@ -461,7 +466,7 @@ const AddExamPage = () => {
 
                 {/* Campo Nota */}
                 <div className="space-y-2 col-span-full mt-6">
-                  <Label htmlFor="nota" className="text-foreground font-medium">Nota</Label> {/* Corrigido para text-foreground */}
+                  <Label htmlFor="nota" className="text-foreground font-medium">Nota</Label>
                   <Textarea
                     id="nota"
                     placeholder="Adicione observações sobre as alterações do exame"
@@ -496,7 +501,7 @@ const AddExamPage = () => {
                 className="bg-input rounded-md border-border focus:ring-2 focus:ring-ring placeholder-muted-foreground transition-all duration-200"
               />
             </div>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4"> {/* Alterado para 3 colunas */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               <div className="space-y-2">
                 <Label htmlFor="laboratory">Laboratório</Label>
                 <Input
