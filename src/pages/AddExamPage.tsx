@@ -403,7 +403,7 @@ const AddExamPage = () => {
                         <FaFlask className="h-5 w-5 text-primary" /> Eritrograma
                       </CardTitle>
                     </CardHeader>
-                    <CardContent className="grid gap-4 pt-0">
+                    <CardContent className="grid gap-4 pt-0 px-2"> {/* Reduzido padding horizontal */}
                       <ExamFieldWithReference getReference={getReference} id="eritrocitos" label="Eritrócitos" value={eritrocitos} onChange={(e) => setEritrocitos(e.target.value)} referenceKey="eritrocitos" unit="milhões/mm3" />
                       <ExamFieldWithReference getReference={getReference} id="hemoglobina" label="Hemoglobina" value={hemoglobina} onChange={(e) => setHemoglobina(e.target.value)} referenceKey="hemoglobina" unit="g/dL" />
                       <ExamFieldWithReference getReference={getReference} id="hematocrito" label="Hematócrito" value={hematocrito} onChange={(e) => setHematocrito(e.target.value)} referenceKey="hematocrito" unit="%" />
@@ -427,7 +427,7 @@ const AddExamPage = () => {
                         <FaFlask className="h-5 w-5 text-primary" /> Leucograma
                       </CardTitle>
                     </CardHeader>
-                    <CardContent className="grid gap-4 pt-0 px-3"> {/* Reduzido padding horizontal */}
+                    <CardContent className="grid gap-4 pt-0 px-2"> {/* Reduzido padding horizontal */}
                       <ExamFieldWithReference getReference={getReference} id="leucocitosTotais" label="Leucócitos totais" value={leucocitosTotais} onChange={(e) => setLeucocitosTotais(e.target.value)} referenceKey="leucocitosTotais" unit="mil/µL" labelWidth="w-[110px]" inputWidth="w-[90px]" />
                       
                       <LeukocyteFieldWithReference getReference={getReference} idPrefix="mielocitos" label="Mielócitos" relativeValue={mielocitosRelativo} onRelativeChange={(e) => setMielocitosRelativo(e.target.value)} absoluteValue={mielocitosAbsoluto} onAbsoluteChange={(e) => setMielocitosAbsoluto(e.target.value)} referenceKey="mielocitos" />
@@ -454,7 +454,7 @@ const AddExamPage = () => {
                       <FaFlask className="h-5 w-5 text-primary" /> Plaquetas
                     </CardTitle>
                   </CardHeader>
-                  <CardContent className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-0">
+                  <CardContent className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-0 px-2"> {/* Reduzido padding horizontal */}
                     <ExamFieldWithReference getReference={getReference} id="contagemPlaquetaria" label="Contagem plaquetária" value={contagemPlaquetaria} onChange={(e) => setContagemPlaquetaria(e.target.value)} referenceKey="contagemPlaquetaria" unit="/µL" inputWidth="w-[90px]" />
                     <div className="space-y-2 col-span-full">
                       <Label htmlFor="avaliacaoPlaquetaria" className="text-muted-foreground font-medium">Avaliação plaquetária</Label>
@@ -465,7 +465,7 @@ const AddExamPage = () => {
 
                 {/* Campo Nota */}
                 <div className="space-y-2 col-span-full mt-6">
-                  <Label htmlFor="nota" className="text-muted-foreground font-medium">Nota</Label>
+                  <Label htmlFor="nota" className="text-foreground font-medium">Nota</Label>
                   <Textarea
                     id="nota"
                     placeholder="Adicione observações sobre as alterações do exame"
@@ -500,7 +500,7 @@ const AddExamPage = () => {
                 className="bg-input rounded-md border-border focus:ring-2 focus:ring-ring placeholder-muted-foreground transition-all duration-200"
               />
             </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4"> {/* Alterado para 3 colunas */}
               <div className="space-y-2">
                 <Label htmlFor="laboratory">Laboratório</Label>
                 <Input
@@ -521,15 +521,15 @@ const AddExamPage = () => {
                   className="bg-input rounded-md border-border focus:ring-2 focus:ring-2 focus:ring-ring placeholder-muted-foreground transition-all duration-200"
                 />
               </div>
-            </div>
-            <div className="space-y-2 col-span-full">
-              <Label htmlFor="liberadoPor">Liberado por</Label>
-              <Input
-                id="liberadoPor"
-                value={liberadoPor}
-                onChange={(e) => setLiberadoPor(e.target.value)}
-                className="bg-input rounded-md border-border focus:ring-2 focus:ring-ring placeholder-muted-foreground transition-all duration-200"
-              />
+              <div className="space-y-2">
+                <Label htmlFor="liberadoPor">Liberado por</Label>
+                <Input
+                  id="liberadoPor"
+                  value={liberadoPor}
+                  onChange={(e) => setLiberadoPor(e.target.value)}
+                  className="bg-input rounded-md border-border focus:ring-2 focus:ring-ring placeholder-muted-foreground transition-all duration-200"
+                />
+              </div>
             </div>
           </CardContent>
         </Card>
