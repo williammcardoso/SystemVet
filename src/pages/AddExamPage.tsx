@@ -84,7 +84,7 @@ const hemogramReferences: Record<string, HemogramReference> = {
 };
 
 // Componente auxiliar para renderizar uma linha de campo com referência
-const ExamFieldWithReference: React.FC<{
+interface ExamFieldWithReferenceProps {
   id: string;
   label: string;
   value: string;
@@ -93,7 +93,9 @@ const ExamFieldWithReference: React.FC<{
   unit: string;
   placeholder?: string;
   getReference: (param: string, type?: 'relative' | 'absolute' | 'full') => string;
-}> = React.memo(({
+}
+
+const ExamFieldWithReference = React.memo(({
   id,
   label,
   value,
@@ -102,7 +104,7 @@ const ExamFieldWithReference: React.FC<{
   unit,
   placeholder = "",
   getReference,
-}) => (
+}: ExamFieldWithReferenceProps) => (
   <div className="flex items-center gap-x-2 w-full flex-nowrap">
     <Label htmlFor={id} className="w-[90px] text-left text-muted-foreground font-medium flex-shrink-0">
       {label}
@@ -123,7 +125,7 @@ const ExamFieldWithReference: React.FC<{
 ));
 
 // Componente auxiliar para campos de leucócitos (relativo e absoluto)
-const LeukocyteFieldWithReference: React.FC<{
+interface LeukocyteFieldWithReferenceProps {
   idPrefix: string;
   label: string;
   relativeValue: string;
@@ -132,7 +134,9 @@ const LeukocyteFieldWithReference: React.FC<{
   onAbsoluteChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   referenceKey: string;
   getReference: (param: string, type?: 'relative' | 'absolute' | 'full') => string;
-}> = React.memo(({
+}
+
+const LeukocyteFieldWithReference = React.memo(({
   idPrefix,
   label,
   relativeValue,
@@ -141,7 +145,7 @@ const LeukocyteFieldWithReference: React.FC<{
   onAbsoluteChange,
   referenceKey,
   getReference,
-}) => (
+}: LeukocyteFieldWithReferenceProps) => (
   <div className="flex flex-wrap items-center gap-x-2 gap-y-1 w-full">
     <Label className="min-w-[80px] text-left text-muted-foreground font-medium flex-shrink-0">{label}</Label>
     <Input id={`${idPrefix}-relative`} type="text" value={relativeValue} onChange={onRelativeChange} className="w-[60px] bg-input flex-shrink-0" />
@@ -164,7 +168,8 @@ const LeukocyteFieldWithReference: React.FC<{
         </span>
       </div>
     </div>
-  ));
+  </div>
+));
 
 
 const AddExamPage = () => {
