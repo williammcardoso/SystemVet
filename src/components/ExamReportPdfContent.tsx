@@ -1,6 +1,5 @@
 import React from "react";
 import { Document, Page, View, Text, StyleSheet, Font } from "@react-pdf/renderer";
-import { FaCheckCircle, FaExclamationCircle } from "react-icons/fa"; // Importar ícones para o PDF
 import { mockCompanySettings } from "@/mockData/settings";
 import { ExamEntry, HemogramReference, HemogramReferenceValue, ExamReportData } from "@/types/exam";
 
@@ -107,6 +106,7 @@ const styles = StyleSheet.create({
     width: 12,
     height: 12,
     marginRight: 5,
+    textAlign: 'center', // Centraliza o caractere
   },
   paramLabel: {
     width: 120,
@@ -200,7 +200,7 @@ const styles = StyleSheet.create({
     fontSize: 10,
     color: "#333",
   },
-  // Estilos para ícones no PDF
+  // Estilos para ícones no PDF (agora caracteres de texto)
   iconCheck: {
     color: "#28a745", // Green
   },
@@ -213,14 +213,10 @@ const styles = StyleSheet.create({
   },
 });
 
-// Componente para renderizar o ícone de status
+// Componente para renderizar o ícone de status (agora usa caracteres de texto)
 const StatusIcon = ({ isNormal }: { isNormal: boolean }) => (
-  <Text style={styles.paramIcon}>
-    {isNormal ? (
-      <FaCheckCircle style={styles.iconCheck} />
-    ) : (
-      <FaExclamationCircle style={styles.iconExclamation} />
-    )}
+  <Text style={[styles.paramIcon, isNormal ? styles.iconCheck : styles.iconExclamation]}>
+    {isNormal ? "✓" : "⚠"}
   </Text>
 );
 
@@ -233,24 +229,30 @@ interface ReferenceBarProps {
 }
 
 const ReferenceBar = ({ value, min, max, isNormal }: ReferenceBarProps) => {
-  const totalRange = max - min;
-  const valuePosition = ((value - min) / totalRange) * 100;
+  // Define um "buffer" para a visualização da barra, para que valores fora da faixa ainda sejam visíveis
+  const bufferFactor = 0.2; // 20% do range total para cada lado
+  const visualMin = min - (max - min) * bufferFactor;
+  const visualMax = max + (max - min) * bufferFactor;
+  const totalVisualRange = visualMax - visualMin;
 
-  // Calculate segment widths
-  const lowSegmentWidth = Math.max(0, Math.min(100, ((0 - min) / totalRange) * 100)); // Assuming 0 is the absolute minimum for visual representation
-  const normalSegmentWidth = Math.max(0, Math.min(100, ((max - min) / totalRange) * 100));
-  const highSegmentWidth = Math.max(0, Math.min(100, ((max - max) / totalRange) * 100)); // Assuming max is the absolute maximum
+  // Calcula a posição do valor dentro do range visual (0-100%)
+  const valuePosition = Math.max(0, Math.min(100, ((value - visualMin) / totalVisualRange) * 100));
 
-  // Adjust for cases where value is outside min/max
-  const indicatorPosition = Math.max(0, Math.min(100, ((value - min) / totalRange) * 100));
+  // Calcula as posições dos limites min e max dentro do range visual
+  const minPosition = Math.max(0, Math.min(100, ((min - visualMin) / totalVisualRange) * 100));
+  const maxPosition = Math.max(0, Math.min(100, ((max - visualMin) / totalVisualRange) * 100));
 
   return (
     <View style={styles.referenceBarContainer}>
-      <View style={[styles.referenceBarSegment, styles.referenceBarLow, { left: 0, width: `${Math.max(0, Math.min(100, ((min - (min - (max-min)*0.2)) / (totalRange + (max-min)*0.4)) * 100))}%` }]} />
-      <View style={[styles.referenceBarSegment, styles.referenceBarNormal, { left: `${Math.max(0, Math.min(100, ((min - (min - (max-min)*0.2)) / (totalRange + (max-min)*0.4)) * 100))}%`, width: `${Math.max(0, Math.min(100, (totalRange / (totalRange + (max-min)*0.4)) * 100))}%` }]} />
-      <View style={[styles.referenceBarSegment, styles.referenceBarHigh, { left: `${Math.max(0, Math.min(100, ((max - (min - (max-min)*0.2)) / (totalRange + (max-min)*0.4)) * 100))}%`, width: `${Math.max(0, Math.min(100, (((max + (max-min)*0.2) - max) / (totalRange + (max-min)*0.4)) * 100))}%` }]} />
+      {/* Segmento de "baixo" (antes do min) */}
+      <View style={[styles.referenceBarSegment, styles.referenceBarLow, { left: 0, width: `${minPosition}%` }]} />
+      {/* Segmento "normal" (entre min e max) */}
+      <View style={[styles.referenceBarSegment, styles.referenceBarNormal, { left: `${minPosition}%`, width: `${maxPosition - minPosition}%` }]} />
+      {/* Segmento de "alto" (depois do max) */}
+      <View style={[styles.referenceBarSegment, styles.referenceBarHigh, { left: `${maxPosition}%`, width: `${100 - maxPosition}%` }]} />
 
-      <View style={[styles.referenceBarIndicator, { left: `${indicatorPosition}%`, backgroundColor: isNormal ? '#28a745' : '#dc3545' }]} />
+      {/* Indicador do valor atual */}
+      <View style={[styles.referenceBarIndicator, { left: `${valuePosition}%`, backgroundColor: isNormal ? '#28a745' : '#dc3545' }]} />
     </View>
   );
 };

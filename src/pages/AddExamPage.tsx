@@ -177,8 +177,10 @@ const LeukocyteFieldWithReference = React.memo(({
 
 
 const AddExamPage = () => {
-  const { clientId, animalId } = useParams<{ clientId: string; animalId: string }>();
+  const { clientId, animalId, examId } = useParams<{ clientId: string; animalId: string; examId?: string }>(); // Obter examId da URL
   const navigate = useNavigate();
+
+  const isEditing = !!examId; // Determinar se está em modo de edição
 
   const currentClient = mockClients.find(c => c.id === clientId);
   const currentAnimal = currentClient?.animals.find(a => a.id === animalId);
@@ -236,6 +238,59 @@ const AddExamPage = () => {
   const [observacoesGeraisExame, setObservacoesGeraisExame] = useState<string>("");
   const [liberadoPor, setLiberadoPor] = useState<string>("WILLIAM DE MORAES CARDOSO CRMV-SP 56895");
 
+  // Carregar dados do exame se estiver em modo de edição
+  useEffect(() => {
+    if (isEditing && examId) {
+      const examToEdit = mockExams.find(e => e.id === examId);
+      if (examToEdit) {
+        setExamDate(examToEdit.date);
+        setExamType(examToEdit.type);
+        setExamVet(examToEdit.vet);
+        setMaterial(examToEdit.material || "");
+        setEquipamento(examToEdit.equipamento || "");
+        setEritrocitos(examToEdit.eritrocitos || "");
+        setHemoglobina(examToEdit.hemoglobina || "");
+        setHematocrito(examToEdit.hematocrito || "");
+        setVcm(examToEdit.vcm || "");
+        setHcm(examToEdit.hcm || "");
+        setChcm(examToEdit.chcm || "");
+        setProteinaTotal(examToEdit.proteinaTotal || "");
+        setHemaciasNucleadas(examToEdit.hemaciasNucleadas || "");
+        setObservacoesSerieVermelha(examToEdit.observacoesSerieVermelha || "");
+        setLeucocitosTotais(examToEdit.leucocitosTotais || "");
+        setMielocitosRelativo(examToEdit.mielocitosRelativo || "");
+        setMielocitosAbsoluto(examToEdit.mielocitosAbsoluto || "");
+        setMetamielocitosRelativo(examToEdit.metamielocitosRelativo || "");
+        setMetamielocitosAbsoluto(examToEdit.metamielocitosAbsoluto || "");
+        setBastonetesRelativo(examToEdit.bastonetesRelativo || "");
+        setBastonetesAbsoluto(examToEdit.bastonetesAbsoluto || "");
+        setSegmentadosRelativo(examToEdit.segmentadosRelativo || "");
+        setSegmentadosAbsoluto(examToEdit.segmentadosAbsoluto || "");
+        setEosinofilosRelativo(examToEdit.eosinofilosRelativo || "");
+        setEosinofilosAbsoluto(examToEdit.eosinofilosAbsoluto || "");
+        setBasofilosRelativo(examToEdit.basofilosRelativo || "");
+        setBasofilosAbsoluto(examToEdit.basofilosAbsoluto || "");
+        setLinfocitosRelativo(examToEdit.linfocitosRelativo || "");
+        setLinfocitosAbsoluto(examToEdit.linfocitosAbsoluto || "");
+        setMonocitosRelativo(examToEdit.monocitosRelativo || "");
+        setMonocitosAbsoluto(examToEdit.monocitosAbsoluto || "");
+        setObservacoesSerieBranca(examToEdit.observacoesSerieBranca || "");
+        setContagemPlaquetaria(examToEdit.contagemPlaquetaria || "");
+        setAvaliacaoPlaquetaria(examToEdit.avaliacaoPlaquetaria || "");
+        setNota(examToEdit.nota || "");
+        setLaboratory(examToEdit.laboratory || "");
+        setLaboratoryDate(examToEdit.laboratoryDate || "");
+        setObservacoesGeraisExame(examToEdit.observacoesGeraisExame || "");
+        setExamResult(examToEdit.result || "");
+        setLiberadoPor(examToEdit.liberadoPor || "WILLIAM DE MORAES CARDOSO CRMV-SP 56895");
+      } else {
+        showError("Exame não encontrado para edição.");
+        navigate(`/clients/${clientId}/animals/${animalId}/record`);
+      }
+    }
+  }, [isEditing, examId, clientId, animalId, navigate]);
+
+
   const getReference = (param: string, type?: 'relative' | 'absolute' | 'full') => {
     if (!animalSpecies || !hemogramReferences[param]) return "N/A";
 
@@ -260,8 +315,8 @@ const AddExamPage = () => {
     const now = new Date();
     const currentTime = now.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
 
-    const newExam: ExamEntry = {
-      id: `exam-${Date.now()}`, // Gerar um ID único
+    const examData: ExamEntry = {
+      id: examId || `exam-${Date.now()}`, // Usar examId existente ou gerar novo
       date: examDate,
       time: currentTime,
       type: examType,
@@ -305,11 +360,17 @@ const AddExamPage = () => {
       liberadoPor: liberadoPor.trim() || undefined,
     };
 
-    addMockExam(newExam); // Adiciona o novo exame ao mock
-    showSuccess("Exame salvo com sucesso!");
+    if (isEditing && examId) {
+      updateMockExam(examData); // Atualiza o exame existente
+      showSuccess("Exame atualizado com sucesso!");
+    } else {
+      addMockExam(examData); // Adiciona um novo exame
+      showSuccess("Exame salvo com sucesso!");
+    }
     navigate(`/clients/${clientId}/animals/${animalId}/record`); // Voltar para o prontuário
   };
 
+  const pageTitle = isEditing ? "Editar Exame" : "Adicionar Exame";
 
   return (
     <div className="flex flex-col min-h-screen bg-background">
@@ -319,10 +380,10 @@ const AddExamPage = () => {
           <div className="flex items-center gap-4">
             <div>
               <h1 className="text-2xl font-semibold flex items-center gap-3 text-foreground group">
-                <FaFlask className="h-5 w-5 text-muted-foreground" /> Adicionar Exame
+                <FaFlask className="h-5 w-5 text-muted-foreground" /> {pageTitle}
               </h1>
               <p className="text-sm text-muted-foreground mt-1 mb-4">
-                Registre um novo exame para o animal.
+                {isEditing ? "Edite os detalhes do exame para o animal." : "Registre um novo exame para o animal."}
               </p>
             </div>
           </div>
@@ -333,7 +394,7 @@ const AddExamPage = () => {
           </Link>
         </div>
         <p className="text-sm text-muted-foreground">
-          Painel &gt; Clientes &gt; Animal &gt; Prontuário &gt; Adicionar Exame
+          Painel &gt; Clientes &gt; Animal &gt; Prontuário &gt; {pageTitle}
         </p>
       </div>
 
